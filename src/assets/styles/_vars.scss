@@ -8,12 +8,12 @@ $font-roboto: "Roboto";
 :root {
   color-scheme: light;
 
-  --color-header-text: #ffffff;
-  --color-header-bg: #2e2e2e;
-
   --color-btn-text: #ffffff;
   --color-btn-bg: #c63031;
   --color-btn-bg-hover: #8a2122;
+
+  --color-header-text: #ffffff;
+  --color-header-bg: #2e2e2e;
 
   --color-wrapper-bg: #ffffff;
 
@@ -23,6 +23,8 @@ $font-roboto: "Roboto";
 // Class for dark theme colors
 .dark-theme {
   color-scheme: dark;
+
+  --color-header-bg: #272727;
 
   --color-wrapper-bg: #353535;
 

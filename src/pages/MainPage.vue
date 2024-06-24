@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="main-page">
     <ExampleComponent />
   </div>
 </template>
@@ -8,4 +8,8 @@
 import ExampleComponent from "@/components/ExampleComponent.vue";
 </script>
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+.main-page {
+  flex-grow: 1;
+}
+</style>
