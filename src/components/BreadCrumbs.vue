@@ -1,5 +1,5 @@
 <template>
-  <v-breadcrumbs :items="items" divider="$next" class="bread-crumbs">
+  <v-breadcrumbs :items="items" divider="$next">
     <template v-slot:prepend>
       <v-icon>mdi-home-outline</v-icon>
     </template>
@@ -29,8 +29,4 @@ const items = reactive([
 ]);
 </script>
 
-<style lang="scss" scopped>
-.bread-crumbs {
-  font-family: $font-roboto;
-}
-</style>
+<style lang="scss" scopped></style>
