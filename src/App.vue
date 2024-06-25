@@ -34,5 +34,6 @@ const currTheme = ref("dark");
   display: flex;
   flex-direction: column;
   background-color: var(--color-wrapper-bg);
+  font-family: $font-roboto;
 }
 </style>
