@@ -23,6 +23,7 @@
     "vuetify": "^3.6.10"
   },
   "devDependencies": {
+    "@mdi/font": "^7.4.47",
     "@types/jest": "^27.0.1",
     "@typescript-eslint/eslint-plugin": "^5.4.0",
     "@typescript-eslint/parser": "^5.4.0",
