@@ -5,6 +5,7 @@ module.exports = defineConfig({
     loaderOptions: {
       sass: {
         additionalData: `
+          @import "@/../node_modules/vuetify/_styles.scss";
           @import "@/assets/styles/global";
         `,
       },

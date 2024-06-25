@@ -1,15 +1,18 @@
 <template>
-  <div class="global-container" :class="{ 'dark-theme': currTheme === 'dark' }">
+  <div
+    class="global-container"
+    :class="{ 'dark-theme': theme.global.name.value === 'appDark' }"
+  >
     <AppHeader />
     <router-view />
   </div>
 </template>
 
 <script setup lang="ts">
-import { ref } from "vue";
+import { useTheme } from "vuetify";
 import AppHeader from "@/components/AppHeader.vue";
 
-const currTheme = ref("dark");
+const theme = useTheme();
 </script>
 
 <style lang="scss" scoped>

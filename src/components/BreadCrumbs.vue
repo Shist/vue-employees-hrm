@@ -11,9 +11,6 @@
 
 <script setup lang="ts">
 import { reactive } from "vue";
-import { useThemeStore } from "@/store/useThemeStore";
-
-const theme = useThemeStore();
 
 const items = reactive([
   {

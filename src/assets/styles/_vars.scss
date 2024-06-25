@@ -3,7 +3,6 @@
 
 // Fonts
 $font-roboto: "Roboto";
-$body-font-family: "Roboto";
 
 // Global variables of the app
 :root {
@@ -12,6 +11,8 @@ $body-font-family: "Roboto";
   --color-btn-text: #ffffff;
   --color-btn-bg: #c63031;
   --color-btn-bg-hover: #8a2122;
+
+  --color-input-borders: #c63031;
 
   --color-header-text: #ffffff;
   --color-header-bg: #2e2e2e;
