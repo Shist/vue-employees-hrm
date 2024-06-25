@@ -31,7 +31,7 @@ const router = createRouter({
 
 router.beforeEach((to, from, next) => {
   //const userUid = store.state.userData.userUid;
-  const userUid = "we have some not-null id";
+  const userUid = null;
 
   if (to.meta.requiresAuth) {
     !userUid ? next("/sign-in") : next();
