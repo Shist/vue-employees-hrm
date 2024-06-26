@@ -4,13 +4,17 @@
     :class="{ 'dark-theme': theme.global.name.value === 'appDark' }"
   >
     <AppHeader />
-    <router-view />
+    <main class="app-main">
+      <BreadCrumbs v-if="$route.meta.hasBreadcrumbs" />
+      <router-view />
+    </main>
   </div>
 </template>
 
 <script setup lang="ts">
 import { useTheme } from "vuetify";
 import AppHeader from "@/components/AppHeader.vue";
+import BreadCrumbs from "@/components/BreadCrumbs.vue";
 
 const theme = useTheme();
 </script>
@@ -38,5 +42,10 @@ const theme = useTheme();
   flex-direction: column;
   background-color: var(--color-wrapper-bg);
   font-family: $font-roboto;
+}
+
+.app-main {
+  flex-grow: 1;
+  padding: 10px 20px;
 }
 </style>

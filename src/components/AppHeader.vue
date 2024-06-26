@@ -1,7 +1,7 @@
 <template>
-  <div class="app-header">
+  <header class="app-header">
     <h2 class="app-header__headline">This is app header</h2>
-  </div>
+  </header>
 </template>
 
 <script setup lang="ts"></script>

@@ -1,6 +1,5 @@
 <template>
   <div class="main-page">
-    <BreadCrumbs />
     <v-text-field
       v-model="search"
       label="Search"
@@ -23,7 +22,7 @@
           class="main-page__table-img-avatar"
         />
       </template>
-      <template v-slot:[`item.options`]>
+      <template v-slot:[`item.options`]="{ item }">
         <v-menu>
           <template v-slot:activator="{ props }">
             <v-btn
@@ -33,7 +32,7 @@
             ></v-btn>
           </template>
           <v-list>
-            <v-list-item @click="console.log('Profile')">
+            <v-list-item @click="() => openUserProfile(item)">
               <v-list-item-title class="main-page__popup-menu-label">
                 Profile
               </v-list-item-title>
@@ -56,8 +55,29 @@
 </template>
 
 <script setup lang="ts">
-import { ref, reactive } from "vue";
-import BreadCrumbs from "@/components/BreadCrumbs.vue";
+import { ref, reactive, Reactive } from "vue";
+import { useBreadCrumbsStore } from "@/store/breadCrumbs";
+import { useRouter } from "vue-router";
+import IUserData from "@/types/IUserData";
+
+const { breadcrumbsItems } = useBreadCrumbsStore();
+
+const router = useRouter();
+
+function openUserProfile(userData: IUserData) {
+  breadcrumbsItems[1].disabled = false;
+
+  breadcrumbsItems.push({
+    crumbNum: 3,
+    title: `${userData.firstName} ${userData.lastName}`,
+    disabled: true,
+    to: {
+      path: `/users/${userData.id}`,
+    },
+  });
+
+  router.push(`/users/${userData.id}`);
+}
 
 const search = ref("");
 const headers = reactive([
@@ -69,8 +89,9 @@ const headers = reactive([
   { key: "position", title: "Position" },
   { key: "options", sortable: false },
 ]);
-const employees = reactive([
+const employees: Reactive<IUserData[]> = reactive([
   {
+    id: 1,
     avatar: "employee-1.png",
     firstName: "Pavel",
     lastName: "Zhukouski",
@@ -79,6 +100,7 @@ const employees = reactive([
     position: "Vue Engineer",
   },
   {
+    id: 2,
     avatar: "employee-2.png",
     firstName: "Aliaksei",
     lastName: "Yuryeu",
@@ -87,6 +109,7 @@ const employees = reactive([
     position: "Vue Engineer",
   },
   {
+    id: 1,
     avatar: "employee-1.png",
     firstName: "Pavel",
     lastName: "Zhukouski",
@@ -95,6 +118,7 @@ const employees = reactive([
     position: "Vue Engineer",
   },
   {
+    id: 2,
     avatar: "employee-2.png",
     firstName: "Aliaksei",
     lastName: "Yuryeu",
@@ -103,6 +127,7 @@ const employees = reactive([
     position: "Vue Engineer",
   },
   {
+    id: 1,
     avatar: "employee-1.png",
     firstName: "Pavel",
     lastName: "Zhukouski",
@@ -111,6 +136,7 @@ const employees = reactive([
     position: "Vue Engineer",
   },
   {
+    id: 2,
     avatar: "employee-2.png",
     firstName: "Aliaksei",
     lastName: "Yuryeu",
@@ -119,6 +145,7 @@ const employees = reactive([
     position: "Vue Engineer",
   },
   {
+    id: 1,
     avatar: "employee-1.png",
     firstName: "Pavel",
     lastName: "Zhukouski",
@@ -127,6 +154,7 @@ const employees = reactive([
     position: "Vue Engineer",
   },
   {
+    id: 2,
     avatar: "employee-2.png",
     firstName: "Aliaksei",
     lastName: "Yuryeu",
@@ -135,6 +163,7 @@ const employees = reactive([
     position: "Vue Engineer",
   },
   {
+    id: 1,
     avatar: "employee-1.png",
     firstName: "Pavel",
     lastName: "Zhukouski",
@@ -143,6 +172,7 @@ const employees = reactive([
     position: "Vue Engineer",
   },
   {
+    id: 2,
     avatar: "employee-2.png",
     firstName: "Aliaksei",
     lastName: "Yuryeu",
@@ -151,6 +181,7 @@ const employees = reactive([
     position: "Vue Engineer",
   },
   {
+    id: 1,
     avatar: "employee-1.png",
     firstName: "Pavel",
     lastName: "Zhukouski",
@@ -159,6 +190,7 @@ const employees = reactive([
     position: "Vue Engineer",
   },
   {
+    id: 2,
     avatar: "employee-2.png",
     firstName: "Aliaksei",
     lastName: "Yuryeu",
@@ -171,8 +203,6 @@ const employees = reactive([
 
 <style lang="scss" scoped>
 .main-page {
-  flex-grow: 1;
-  padding: 20px;
   &__text-field-wrapper {
     margin-left: 20px;
     max-width: 320px;
