@@ -5,7 +5,6 @@
         :title="item.title"
         :disabled="item.disabled"
         :to="item.to"
-        @click="() => updateBreadCrumbs((item as IBreadCrumbsItem).crumbNum)"
         :class="{'red-breadcrumb': (item as IBreadCrumbsItem).crumbNum === 3}"
       >
         <v-icon
@@ -24,13 +23,22 @@
 </template>
 
 <script setup lang="ts">
+import { watch } from "vue";
+import { useRoute } from "vue-router";
 import { useBreadCrumbsStore } from "@/store/breadCrumbs";
 import IBreadCrumbsItem from "@/types/IBreadCrumbsItem";
+import { BREAD_CRUMBS_NAMES } from "@/constants/breadCrumbsNames";
+
+type IBreadCrumbName = keyof typeof BREAD_CRUMBS_NAMES;
 
 const { breadcrumbsItems } = useBreadCrumbsStore();
 
-function updateBreadCrumbs(crumbNum: number) {
-  if (crumbNum === 1) {
+const route = useRoute();
+
+watch(route, updateBreadCrumbs);
+
+function updateBreadCrumbs() {
+  if (route.name === "main" /*|| route.name === "user-profile"*/) {
     breadcrumbsItems.splice(1);
     breadcrumbsItems.push({
       crumbNum: 2,
@@ -40,9 +48,28 @@ function updateBreadCrumbs(crumbNum: number) {
         path: "/users",
       },
     });
-  } else {
-    breadcrumbsItems.splice(crumbNum);
-    breadcrumbsItems[breadcrumbsItems.length - 1].disabled = true;
+  } else if (typeof route.name === "string") {
+    // Think over
+    // const [sectionName, sectionTab] = route.name.split("-");
+    // breadcrumbsItems.splice(1);
+    // breadcrumbsItems.push({
+    //   crumbNum: 2,
+    //   title: BREAD_CRUMBS_NAMES[sectionName as IBreadCrumbName],
+    //   disabled: false,
+    //   to: {
+    //     path: `/${sectionName}s`,
+    //   },
+    // });
+    // if (route.params.id) {
+    //   breadcrumbsItems.push({
+    //     crumbNum: 3,
+    //     title: BREAD_CRUMBS_NAMES[sectionName as IBreadCrumbName],
+    //     disabled: true,
+    //     to: {
+    //       path: `/${sectionName}s/${route.params.id}/${sectionTab}`,
+    //     },
+    //   });
+    // }
   }
 }
 </script>
