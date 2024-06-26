@@ -6,16 +6,19 @@ import SignUpPage from "@/pages/SignUpPage.vue";
 const routes: Array<RouteRecordRaw> = [
   {
     path: "/",
+    name: "main",
     component: MainPage,
     meta: { requiresAuth: true },
   },
   {
     path: "/sign-in",
+    name: "login",
     component: SignInPage,
     meta: { requiresAuth: false },
   },
   {
     path: "/sign-up",
+    name: "register",
     component: SignUpPage,
     meta: { requiresAuth: false },
   },
@@ -31,7 +34,7 @@ const router = createRouter({
 
 router.beforeEach((to, from, next) => {
   //const userUid = store.state.userData.userUid;
-  const userUid = "we have some not-null id";
+  const userUid = null;
 
   if (to.meta.requiresAuth) {
     !userUid ? next("/sign-in") : next();
