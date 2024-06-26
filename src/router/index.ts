@@ -14,6 +14,7 @@ const routes: Array<RouteRecordRaw> = [
   },
   {
     path: "/users",
+    name: "main",
     component: MainPage,
     meta: { requiresAuth: true, hasBreadcrumbs: true, hasTabs: false },
   },
@@ -22,21 +23,25 @@ const routes: Array<RouteRecordRaw> = [
     children: [
       {
         path: "",
+        name: "user-profile",
         component: UserProfilePage,
         meta: { requiresAuth: true, hasBreadcrumbs: true, hasTabs: "userTabs" },
       },
       {
         path: "skills",
+        name: "user-skills",
         component: UserSkillsPage,
         meta: { requiresAuth: true, hasBreadcrumbs: true, hasTabs: "userTabs" },
       },
       {
         path: "languages",
+        name: "user-languages",
         component: UserLanguagesPage,
         meta: { requiresAuth: true, hasBreadcrumbs: true, hasTabs: "userTabs" },
       },
       {
         path: "cvs",
+        name: "user-cvs",
         component: UserCVsPage,
         meta: { requiresAuth: true, hasBreadcrumbs: true, hasTabs: "userTabs" },
       },
@@ -44,11 +49,13 @@ const routes: Array<RouteRecordRaw> = [
   },
   {
     path: "/sign-in",
+    name: "login",
     component: SignInPage,
     meta: { requiresAuth: false, hasBreadcrumbs: false, hasTabs: false },
   },
   {
     path: "/sign-up",
+    name: "register",
     component: SignUpPage,
     meta: { requiresAuth: false, hasBreadcrumbs: false, hasTabs: false },
   },
