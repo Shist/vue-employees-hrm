@@ -7,6 +7,7 @@
       prepend-inner-icon="mdi-magnify"
       variant="outlined"
       single-line
+      class="main-page__text-field-wrapper"
     >
     </v-text-field>
     <v-data-table
@@ -171,6 +172,11 @@ const employees = reactive([
 <style lang="scss" scoped>
 .main-page {
   flex-grow: 1;
+  padding: 20px;
+  &__text-field-wrapper {
+    margin-left: 20px;
+    max-width: 320px;
+  }
   &__data-table {
     background-color: var(--color-wrapper-bg);
   }
@@ -187,5 +193,22 @@ const employees = reactive([
   &__popup-menu-label {
     font-family: $font-roboto;
   }
+}
+
+:deep(.main-page__text-field-wrapper .v-field__outline__start) {
+  transition: 0.3s;
+}
+:deep(.main-page__text-field-wrapper .v-field__outline__end) {
+  transition: 0.3s;
+}
+:deep(
+    .main-page__text-field-wrapper .v-field--active .v-field__outline__start
+  ) {
+  border-block: 1px solid var(--color-input-borders);
+  border-left: 1px solid var(--color-input-borders);
+}
+:deep(.main-page__text-field-wrapper .v-field--active .v-field__outline__end) {
+  border-block: 1px solid var(--color-input-borders);
+  border-right: 1px solid var(--color-input-borders);
 }
 </style>
