@@ -2,14 +2,15 @@
 @import "@/assets/fonts/Roboto-Regular/font-roboto-regular.css";
 
 // Fonts
-$font-roboto: "Roboto";
+$font-roboto: "Roboto", Helvetica, Arial, sans-serif;
 
 // Global variables of the app
 :root {
   color-scheme: light;
 
   --color-btn-text: #ffffff;
-  --color-btn-bg: #c63031;
+
+  --color-btn-bg: #c62f31;
   --color-btn-bg-hover: #8a2122;
 
   --color-tab-btn-border: #414141;
@@ -22,6 +23,7 @@ $font-roboto: "Roboto";
   --color-wrapper-bg: #ffffff;
 
   --color-text: #2e2e2e;
+  --color-text-red: #c62f31;
 }
 
 // Class for dark theme colors

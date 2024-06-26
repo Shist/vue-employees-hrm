@@ -1,66 +1,43 @@
 <template>
   <div class="auth">
     <h1 class="auth__title">{{ props.title }}</h1>
+    <p class="auth__subtitle">{{ props.subtitleText }}</p>
+
     <form @submit.prevent="submitForm" class="auth__form" novalidate>
-      <div class="auth__lable">
-        <label>
-          <input
-            v-model="formData.email"
-            type="email"
-            name="email"
-            class="auth__input"
-            placeholder="Your email address"
-            autocomplete="on"
-          />
-        </label>
-        <div class="input__errors">
-          <p
-            v-for="err in v$.email.$errors"
-            :key="err.$uid"
-            class="auth__input-error"
-          >
-            {{ err.$message }}
-          </p>
-        </div>
-      </div>
-      <div class="auth__lable">
-        <label>
-          <input
-            v-model="formData.password"
-            type="password"
-            name="password"
-            class="auth__input"
-            placeholder="Password"
-            autocomplete="on"
-          />
-        </label>
-        <div class="input__errors">
-          <p
-            v-for="err in v$.password.$errors"
-            :key="err.$uid"
-            class="auth__input-error"
-          >
-            {{ err.$message }}
-          </p>
-        </div>
-      </div>
+      <v-text-field
+        v-model="formData.email"
+        class="auth__input"
+        label="Email"
+        variant="outlined"
+        :error-messages="formErrors.email"
+      ></v-text-field>
+      <br />
+      <v-text-field
+        v-model="formData.password"
+        class="auth__input"
+        label="Password"
+        variant="outlined"
+        :type="showPassword ? 'text' : 'password'"
+        :append-inner-icon="showPassword ? 'mdi-eye' : 'mdi-eye-off'"
+        @click:append-inner="handleShowPassword"
+        :error-messages="formErrors.password"
+      ></v-text-field>
       <div class="auth__form-error">
-        <p v-if="error" class="auth__form-error-text">{{ error }}</p>
+        <p v-if="serverError" class="auth__form-error-text">
+          {{ serverError }}
+        </p>
       </div>
-      <button
+      <v-btn
         type="submit"
         class="auth__button"
         :disabled="isLoading || v$.$errors.length > 0"
       >
         {{ props.buttonText }}
-      </button>
+      </v-btn>
     </form>
-    <p class="auth__subtitle">
-      {{ props.subtitleText }}
-      <router-link to="/sign-up" class="auth__link">{{
-        props.linkText
-      }}</router-link>
-    </p>
+    <router-link :to="handleAuthLink" class="auth__link">{{
+      props.linkText
+    }}</router-link>
   </div>
 </template>
 
@@ -75,6 +52,8 @@ import {
   PASSWORD_MINLENGTH_FIELD,
   PASSWORD_REQUIRED_FIELD,
 } from "../constants/errorMessage";
+import { IForm } from "@/types/IForm";
+import { useValidationErrors } from "@/composables/useValidationErrors";
 
 const props = defineProps({
   title: { type: String, required: true },
@@ -86,12 +65,17 @@ const props = defineProps({
 const route = useRoute();
 const router = useRouter();
 
-const formData = reactive({
+const formData = reactive<IForm>({
   email: "",
   password: "",
 });
 const isLoading = ref<boolean>(false);
-const error = ref<string | null>(null);
+const serverError = ref<string | null>(null);
+const showPassword = ref<boolean>(false);
+
+const handleAuthLink = computed<string>(() => {
+  return route.fullPath === "/sign-in" ? "/sign-up" : "/sign-in";
+});
 
 const rules = computed(() => {
   return {
@@ -106,44 +90,134 @@ const rules = computed(() => {
   };
 });
 
+const formErrors = computed(() => useValidationErrors<IForm>(v$.value.$errors));
+
+const handleShowPassword = () => {
+  return (showPassword.value = !showPassword.value);
+};
+
 const v$ = useVuelidate(rules, formData);
 
-// const handleAuthRoute = computed<string>(() => {
-//   return route.fullPath === "/signin" ? "/register" : "/signin";
-// });
+const submitForm = async (): Promise<void> => {
+  const isFormCorrect = await v$.value.$validate();
 
-// const submitForm = async (): Promise<void> => {
-//   const isFormCorrect = await v$.value.$validate();
+  if (isFormCorrect) {
+    isLoading.value = true;
 
-//   if (isFormCorrect) {
-//     isLoading.value = true;
-
-//     try {
-//       if (route.fullPath === "/signin") {
-//         await authStore.loginUser(formData.email, formData.password);
-//       } else {
-//         await authStore.registerUser(formData.email, formData.password);
-//       }
-//       router.push("/");
-//     } catch (err) {
-//       error.value = err.message;
-//     } finally {
-//       isLoading.value = false;
-//     }
-//   } else {
-//     return;
-//   }
-// };
+    try {
+      if (route.fullPath === "/sign-in") {
+        // await authStore.loginUser(formData.email, formData.password);
+        console.log("call login user method");
+      } else {
+        // await authStore.registerUser(formData.email, formData.password);
+        console.log("call register user method");
+      }
+      // router.push("/");
+      console.log("change route to main");
+    } catch (err: unknown) {
+      if (err instanceof Error) {
+        serverError.value = err.message;
+      }
+    } finally {
+      isLoading.value = false;
+    }
+  } else {
+    return;
+  }
+};
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
 .auth {
   display: flex;
   flex-direction: column;
-  max-width: 560px;
+  gap: 25px;
+  max-width: 615px;
   margin: 0 auto;
-  justify-content: center;
+  justify-content: flex-start;
   align-items: center;
-  /* height: 100%; */
+  min-height: 400px;
+  &__title {
+    @include default-text(34px, 1.2);
+  }
+  &__subtitle {
+    @include default-text(16px, 1.235);
+  }
+  &__form {
+    width: 90%;
+    padding-top: 20px;
+    text-align: center;
+    &auth__input {
+      width: 100%;
+    }
+  }
+  &__input-error {
+    color: var(--color-text-red);
+  }
+  .input__errors {
+    height: 35px;
+    padding: 5px 0 0 0;
+  }
+  &__input-error {
+    margin: 0;
+    color: rgb(237, 69, 69);
+    height: 12px;
+    padding: 0 15px 0 15px;
+    font-size: 12px;
+  }
+  &__form-error {
+    height: 40px;
+    margin: 5px 0 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: rgb(237, 69, 69);
+    padding: 0 15px 0 15px;
+  }
+  &__form-error-text {
+    margin: 0;
+    font-size: 12px;
+  }
+  &__button {
+    @include default-text(14px, 1.235);
+    width: 100%;
+    background-color: var(--color-btn-bg);
+    border-radius: 0;
+  }
+  &__link {
+    text-decoration: none;
+    color: var(--color-text-red);
+  }
+  &__link:hover {
+    cursor: pointer;
+    opacity: 0.8;
+  }
+}
+
+:deep(.auth__input .v-field__outline__start) {
+  border-radius: 0;
+}
+:deep(.auth__input .v-field__outline__end) {
+  border-radius: 0;
+}
+:deep(.auth__input .v-field__outline__notch) {
+  border-radius: 0;
+}
+:deep(.auth__input .v-field--active .v-field__outline__start) {
+  border-block: 1px solid var(--color-input-borders);
+  border-left: 1px solid var(--color-input-borders);
+}
+:deep(.auth__input .v-field--active .v-field__outline__notch::before) {
+  border-top: 1px solid var(--color-input-borders);
+}
+:deep(.auth__input .v-field--active .v-field__outline__notch::after) {
+  border-bottom: 1px solid var(--color-input-borders);
+}
+:deep(.auth__input .v-field--active .v-field__outline__end) {
+  border-block: 1px solid var(--color-input-borders);
+  border-right: 1px solid var(--color-input-borders);
+}
+:deep(.auth__input .v-field--focused .v-field-label) {
+  color: var(--color-input-borders);
 }
 </style>

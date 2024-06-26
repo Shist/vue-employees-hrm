@@ -3,8 +3,8 @@
     <auth-form
       title="Welcome Back"
       subtitleText="Hello again! Sign in to continue."
-      buttonText="Signin"
-      linkText="Go to Sign Up"
+      buttonText="SIGN IN"
+      linkText="I DON'T HAVE AN ACCOUNT"
     />
   </div>
 </template>
@@ -15,7 +15,7 @@ import AuthForm from "../components/AuthForm.vue";
 
 <style lang="scss" scoped>
 .sign-in {
-  padding-top: 50px;
+  padding-top: 100px;
   flex-grow: 1;
 }
 </style>

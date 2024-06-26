@@ -6,16 +6,19 @@ import SignUpPage from "@/pages/SignUpPage.vue";
 const routes: Array<RouteRecordRaw> = [
   {
     path: "/",
+    name: "main",
     component: MainPage,
     meta: { requiresAuth: true },
   },
   {
     path: "/sign-in",
+    name: "login",
     component: SignInPage,
     meta: { requiresAuth: false },
   },
   {
     path: "/sign-up",
+    name: "register",
     component: SignUpPage,
     meta: { requiresAuth: false },
   },

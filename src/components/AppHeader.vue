@@ -5,7 +5,7 @@
         variant="text"
         class="app-header__btn"
         :class="[isActive === 'login' ? 'app-header__btn-active' : '']"
-        @click="handleIsActive('login')"
+        @click="handleIsActive"
       >
         LOGIN
       </v-btn>
@@ -13,7 +13,7 @@
         variant="text"
         class="app-header__btn"
         :class="[isActive === 'signup' ? 'app-header__btn-active' : '']"
-        @click="handleIsActive('signup')"
+        @click="handleIsActive"
       >
         SIGNUP
       </v-btn>
@@ -22,12 +22,22 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from "vue";
+import { computed } from "vue";
+import { useRoute, useRouter } from "vue-router";
 
-const isActive = ref<string>("login");
+const router = useRouter();
+const route = useRoute();
 
-const handleIsActive = (page: string) => {
-  isActive.value = page;
+const isActive = computed(() => {
+  return route.fullPath === "/sign-in" ? "login" : "signup";
+});
+
+const handleIsActive = () => {
+  if (isActive.value === "login") {
+    router.push({ name: "register" });
+  } else {
+    router.push({ name: "login" });
+  }
 };
 </script>
 
@@ -49,7 +59,8 @@ const handleIsActive = (page: string) => {
     min-height: 48px;
     margin-top: auto;
     .app-header__btn {
-      @include default-text(0.875rem, 1.25);
+      @include default-text(14px, 1.25);
+      letter-spacing: normal;
       padding: 12px 16px;
       min-height: 48px;
       max-width: 150px;
