@@ -1,6 +1,9 @@
 import { createRouter, createWebHistory, RouteRecordRaw } from "vue-router";
 import MainPage from "@/pages/MainPage.vue";
-import UserPage from "@/pages/UserPage.vue";
+import UserProfilePage from "@/pages/UserProfilePage.vue";
+import UserSkillsPage from "@/pages/UserSkillsPage.vue";
+import UserLanguagesPage from "@/pages/UserLanguagesPage.vue";
+import UserCVsPage from "@/pages/UserCVsPage.vue";
 import SignInPage from "@/pages/SignInPage.vue";
 import SignUpPage from "@/pages/SignUpPage.vue";
 
@@ -12,44 +15,42 @@ const routes: Array<RouteRecordRaw> = [
   {
     path: "/users",
     component: MainPage,
-    meta: { requiresAuth: true, hasBreadcrumbs: true },
+    meta: { requiresAuth: true, hasBreadcrumbs: true, hasTabs: false },
   },
   {
     path: "/users/:id",
-    component: UserPage,
-    meta: { requiresAuth: true, hasBreadcrumbs: true },
-    //   children: [
-    //     {
-    //       path: "",
-    //       component: ProfilePage,
-    //       meta: { requiresAuth: true, hasBreadcrumbs: true },
-    //     },
-    //     {
-    //       path: "/skills",
-    //       component: SkillsPage,
-    //       meta: { requiresAuth: true, hasBreadcrumbs: true },
-    //     },
-    //     {
-    //       path: "/languages",
-    //       component: LanguagesPage,
-    //       meta: { requiresAuth: true, hasBreadcrumbs: true },
-    //     },
-    //     {
-    //       path: "/cvs",
-    //       component: CVsPage,
-    //       meta: { requiresAuth: true, hasBreadcrumbs: true },
-    //     },
-    //   ],
+    children: [
+      {
+        path: "",
+        component: UserProfilePage,
+        meta: { requiresAuth: true, hasBreadcrumbs: true, hasTabs: "userTabs" },
+      },
+      {
+        path: "skills",
+        component: UserSkillsPage,
+        meta: { requiresAuth: true, hasBreadcrumbs: true, hasTabs: "userTabs" },
+      },
+      {
+        path: "languages",
+        component: UserLanguagesPage,
+        meta: { requiresAuth: true, hasBreadcrumbs: true, hasTabs: "userTabs" },
+      },
+      {
+        path: "cvs",
+        component: UserCVsPage,
+        meta: { requiresAuth: true, hasBreadcrumbs: true, hasTabs: "userTabs" },
+      },
+    ],
   },
   {
     path: "/sign-in",
     component: SignInPage,
-    meta: { requiresAuth: false, hasBreadcrumbs: false },
+    meta: { requiresAuth: false, hasBreadcrumbs: false, hasTabs: false },
   },
   {
     path: "/sign-up",
     component: SignUpPage,
-    meta: { requiresAuth: false, hasBreadcrumbs: false },
+    meta: { requiresAuth: false, hasBreadcrumbs: false, hasTabs: false },
   },
 ];
 

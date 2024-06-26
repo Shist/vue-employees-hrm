@@ -6,6 +6,7 @@
     <AppHeader />
     <main class="app-main">
       <BreadCrumbs v-if="$route.meta.hasBreadcrumbs" />
+      <AppTabs v-if="$route.meta.hasTabs" />
       <router-view />
     </main>
   </div>
@@ -15,6 +16,7 @@
 import { useTheme } from "vuetify";
 import AppHeader from "@/components/AppHeader.vue";
 import BreadCrumbs from "@/components/BreadCrumbs.vue";
+import AppTabs from "@/components/AppTabs.vue";
 
 const theme = useTheme();
 </script>
