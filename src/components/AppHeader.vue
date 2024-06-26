@@ -40,6 +40,7 @@ const handleIsActive = (page: string) => {
   align-items: center;
   &__headline {
     @include default-headline(32px, 32px);
+    color: var(--color-header-text);
   }
   &__buttons {
     width: 100%;
