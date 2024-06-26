@@ -11,6 +11,7 @@ export const useBreadCrumbsStore = defineStore("breadCrumbs", () => {
       to: {
         path: "/users",
       },
+      crumbIconName: "home-outline",
     },
     {
       crumbNum: 2,

@@ -5,4 +5,5 @@ export default interface IBreadCrumbsItem {
   to: {
     path: string;
   };
+  crumbIconName?: string;
 }

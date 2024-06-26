@@ -74,6 +74,7 @@ function openUserProfile(userData: IUserData) {
     to: {
       path: `/users/${userData.id}`,
     },
+    crumbIconName: "account-outline",
   });
 
   router.push(`/users/${userData.id}`);
