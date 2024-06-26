@@ -151,27 +151,13 @@ const submitForm = async (): Promise<void> => {
       width: 100%;
     }
   }
-  &__input-error {
-    color: var(--color-text-red);
-  }
-  .input__errors {
-    height: 35px;
-    padding: 5px 0 0 0;
-  }
-  &__input-error {
-    margin: 0;
-    color: rgb(237, 69, 69);
-    height: 12px;
-    padding: 0 15px 0 15px;
-    font-size: 12px;
-  }
   &__form-error {
     height: 40px;
     margin: 5px 0 0;
     display: flex;
     align-items: center;
     justify-content: center;
-    color: rgb(237, 69, 69);
+    color: var(--color-text-error);
     padding: 0 15px 0 15px;
   }
   &__form-error-text {
