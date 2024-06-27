@@ -1,6 +1,5 @@
 <template>
   <div class="main-page">
-    <BreadCrumbs />
     <v-text-field
       v-model="search"
       label="Search"
@@ -12,7 +11,7 @@
     </v-text-field>
     <v-data-table
       :headers="headers"
-      :items="employees"
+      :items="users"
       :search="search"
       :class="{ 'main-page__data-table': true }"
       hide-details
@@ -23,7 +22,7 @@
           class="main-page__table-img-avatar"
         />
       </template>
-      <template v-slot:[`item.options`]>
+      <template v-slot:[`item.options`]="{ item }">
         <v-menu>
           <template v-slot:activator="{ props }">
             <v-btn
@@ -33,7 +32,7 @@
             ></v-btn>
           </template>
           <v-list>
-            <v-list-item @click="console.log('Profile')">
+            <v-list-item @click="() => openUserProfile(item.id)">
               <v-list-item-title class="main-page__popup-menu-label">
                 Profile
               </v-list-item-title>
@@ -57,9 +56,18 @@
 
 <script setup lang="ts">
 import { ref, reactive } from "vue";
-import BreadCrumbs from "@/components/BreadCrumbs.vue";
+import { useRouter } from "vue-router";
+import { ROUTES } from "@/constants/router";
+import { useUsersStore } from "@/store/users";
+
+const router = useRouter();
+
+function openUserProfile(userId: number) {
+  router.push(`${ROUTES.USERS.PATH}/${userId}`);
+}
 
 const search = ref("");
+
 const headers = reactive([
   { key: "avatar", sortable: false },
   { key: "firstName", title: "First Name" },
@@ -69,110 +77,11 @@ const headers = reactive([
   { key: "position", title: "Position" },
   { key: "options", sortable: false },
 ]);
-const employees = reactive([
-  {
-    avatar: "employee-1.png",
-    firstName: "Pavel",
-    lastName: "Zhukouski",
-    email: "pavel.zhukouski@innowise.com",
-    department: "Vue",
-    position: "Vue Engineer",
-  },
-  {
-    avatar: "employee-2.png",
-    firstName: "Aliaksei",
-    lastName: "Yuryeu",
-    email: "aliaksei.yuryeu@innowise.com",
-    department: "Vue",
-    position: "Vue Engineer",
-  },
-  {
-    avatar: "employee-1.png",
-    firstName: "Pavel",
-    lastName: "Zhukouski",
-    email: "pavel.zhukouski@innowise.com",
-    department: "Vue",
-    position: "Vue Engineer",
-  },
-  {
-    avatar: "employee-2.png",
-    firstName: "Aliaksei",
-    lastName: "Yuryeu",
-    email: "aliaksei.yuryeu@innowise.com",
-    department: "Vue",
-    position: "Vue Engineer",
-  },
-  {
-    avatar: "employee-1.png",
-    firstName: "Pavel",
-    lastName: "Zhukouski",
-    email: "pavel.zhukouski@innowise.com",
-    department: "Vue",
-    position: "Vue Engineer",
-  },
-  {
-    avatar: "employee-2.png",
-    firstName: "Aliaksei",
-    lastName: "Yuryeu",
-    email: "aliaksei.yuryeu@innowise.com",
-    department: "Vue",
-    position: "Vue Engineer",
-  },
-  {
-    avatar: "employee-1.png",
-    firstName: "Pavel",
-    lastName: "Zhukouski",
-    email: "pavel.zhukouski@innowise.com",
-    department: "Vue",
-    position: "Vue Engineer",
-  },
-  {
-    avatar: "employee-2.png",
-    firstName: "Aliaksei",
-    lastName: "Yuryeu",
-    email: "aliaksei.yuryeu@innowise.com",
-    department: "Vue",
-    position: "Vue Engineer",
-  },
-  {
-    avatar: "employee-1.png",
-    firstName: "Pavel",
-    lastName: "Zhukouski",
-    email: "pavel.zhukouski@innowise.com",
-    department: "Vue",
-    position: "Vue Engineer",
-  },
-  {
-    avatar: "employee-2.png",
-    firstName: "Aliaksei",
-    lastName: "Yuryeu",
-    email: "aliaksei.yuryeu@innowise.com",
-    department: "Vue",
-    position: "Vue Engineer",
-  },
-  {
-    avatar: "employee-1.png",
-    firstName: "Pavel",
-    lastName: "Zhukouski",
-    email: "pavel.zhukouski@innowise.com",
-    department: "Vue",
-    position: "Vue Engineer",
-  },
-  {
-    avatar: "employee-2.png",
-    firstName: "Aliaksei",
-    lastName: "Yuryeu",
-    email: "aliaksei.yuryeu@innowise.com",
-    department: "Vue",
-    position: "Vue Engineer",
-  },
-]);
+const { users } = useUsersStore();
 </script>
 
 <style lang="scss" scoped>
 .main-page {
-  flex-grow: 1;
-  padding: 20px;
   &__text-field-wrapper {
     margin-left: 20px;
     max-width: 320px;

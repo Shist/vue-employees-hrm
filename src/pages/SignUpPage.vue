@@ -10,12 +10,11 @@
 </template>
 
 <script setup lang="ts">
-import AuthForm from "../components/AuthForm.vue";
+import AuthForm from "@/components/AuthForm.vue";
 </script>
 
 <style lang="scss" scoped>
 .sign-up {
-  flex-grow: 1;
   padding-top: 100px;
 }
 </style>

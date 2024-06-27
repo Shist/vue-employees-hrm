@@ -1,26 +1,165 @@
 import { createRouter, createWebHistory, RouteRecordRaw } from "vue-router";
-import MainPage from "@/pages/MainPage.vue";
-import SignInPage from "@/pages/SignInPage.vue";
-import SignUpPage from "@/pages/SignUpPage.vue";
+import { ROUTES } from "@/constants/router";
+import { TAB_NAMES } from "@/constants/tabs";
+import pages from "@/pages";
 
 const routes: Array<RouteRecordRaw> = [
   {
-    path: "/",
-    name: "main",
-    component: MainPage,
-    meta: { requiresAuth: true },
+    path: ROUTES.MAIN.PATH,
+    name: ROUTES.MAIN.NAME,
+    redirect: ROUTES.USERS.PATH,
   },
   {
-    path: "/sign-in",
-    name: "login",
-    component: SignInPage,
-    meta: { requiresAuth: false },
+    path: ROUTES.SIGN_IN.PATH,
+    name: ROUTES.SIGN_IN.NAME,
+    component: pages.SignInPage,
+    meta: { requiresAuth: false, hasBreadcrumbs: false, hasTabs: false },
   },
   {
-    path: "/sign-up",
-    name: "register",
-    component: SignUpPage,
-    meta: { requiresAuth: false },
+    path: ROUTES.SIGN_UP.PATH,
+    name: ROUTES.SIGN_UP.NAME,
+    component: pages.SignUpPage,
+    meta: { requiresAuth: false, hasBreadcrumbs: false, hasTabs: false },
+  },
+  {
+    path: ROUTES.SETTINGS.PATH,
+    name: ROUTES.SETTINGS.NAME,
+    component: pages.SettingsPage,
+    meta: { requiresAuth: true, hasBreadcrumbs: true, hasTabs: false },
+  },
+  {
+    path: ROUTES.USERS.PATH,
+    name: ROUTES.USERS.NAME,
+    component: pages.UsersPage,
+    meta: { requiresAuth: true, hasBreadcrumbs: true, hasTabs: false },
+  },
+  {
+    path: ROUTES.USER_BY_ID.PATH,
+    name: ROUTES.USER_BY_ID.NAME,
+    children: [
+      {
+        path: ROUTES.USER_PROFILE.PATH,
+        name: ROUTES.USER_PROFILE.NAME,
+        component: pages.UserProfilePage,
+        meta: {
+          requiresAuth: true,
+          hasBreadcrumbs: true,
+          hasTabs: TAB_NAMES.USER,
+        },
+      },
+      {
+        path: ROUTES.USER_SKILLS.PATH,
+        name: ROUTES.USER_SKILLS.NAME,
+        component: pages.UserSkillsPage,
+        meta: {
+          requiresAuth: true,
+          hasBreadcrumbs: true,
+          hasTabs: TAB_NAMES.USER,
+        },
+      },
+      {
+        path: ROUTES.USER_LANGUAGES.PATH,
+        name: ROUTES.USER_LANGUAGES.NAME,
+        component: pages.UserLanguagesPage,
+        meta: {
+          requiresAuth: true,
+          hasBreadcrumbs: true,
+          hasTabs: TAB_NAMES.USER,
+        },
+      },
+      {
+        path: ROUTES.USER_CVS.PATH,
+        name: ROUTES.USER_CVS.NAME,
+        component: pages.UserCVsPage,
+        meta: {
+          requiresAuth: true,
+          hasBreadcrumbs: true,
+          hasTabs: TAB_NAMES.USER,
+        },
+      },
+    ],
+  },
+  {
+    path: ROUTES.PROJECTS.PATH,
+    name: ROUTES.PROJECTS.NAME,
+    component: pages.ProjectsPage,
+    meta: { requiresAuth: true, hasBreadcrumbs: true, hasTabs: false },
+  },
+  {
+    path: ROUTES.CVS.PATH,
+    name: ROUTES.CVS.NAME,
+    component: pages.CVsPage,
+    meta: { requiresAuth: true, hasBreadcrumbs: true, hasTabs: false },
+  },
+  {
+    path: ROUTES.CV_BY_ID.PATH,
+    name: ROUTES.CV_BY_ID.NAME,
+    children: [
+      {
+        path: ROUTES.CV_DETAILS.PATH,
+        name: ROUTES.CV_DETAILS.NAME,
+        component: pages.CVDetailsPage,
+        meta: {
+          requiresAuth: true,
+          hasBreadcrumbs: true,
+          hasTabs: TAB_NAMES.CV,
+        },
+      },
+      {
+        path: ROUTES.CV_SKILLS.PATH,
+        name: ROUTES.CV_SKILLS.NAME,
+        component: pages.CVSkillsPage,
+        meta: {
+          requiresAuth: true,
+          hasBreadcrumbs: true,
+          hasTabs: TAB_NAMES.CV,
+        },
+      },
+      {
+        path: ROUTES.CV_PROJECTS.PATH,
+        name: ROUTES.CV_PROJECTS.NAME,
+        component: pages.CVProjectsPage,
+        meta: {
+          requiresAuth: true,
+          hasBreadcrumbs: true,
+          hasTabs: TAB_NAMES.CV,
+        },
+      },
+      {
+        path: ROUTES.CV_PREVIEW.PATH,
+        name: ROUTES.CV_PREVIEW.NAME,
+        component: pages.CVPreviewPage,
+        meta: {
+          requiresAuth: true,
+          hasBreadcrumbs: true,
+          hasTabs: TAB_NAMES.CV,
+        },
+      },
+    ],
+  },
+  {
+    path: ROUTES.DEPARTMENTS.PATH,
+    name: ROUTES.DEPARTMENTS.NAME,
+    component: pages.DepartmentsPage,
+    meta: { requiresAuth: true, hasBreadcrumbs: true, hasTabs: false },
+  },
+  {
+    path: ROUTES.POSITIONS.PATH,
+    name: ROUTES.POSITIONS.NAME,
+    component: pages.PositionsPage,
+    meta: { requiresAuth: true, hasBreadcrumbs: true, hasTabs: false },
+  },
+  {
+    path: ROUTES.SKILLS.PATH,
+    name: ROUTES.SKILLS.NAME,
+    component: pages.SkillsPage,
+    meta: { requiresAuth: true, hasBreadcrumbs: true, hasTabs: false },
+  },
+  {
+    path: ROUTES.LANGUAGES.PATH,
+    name: ROUTES.LANGUAGES.NAME,
+    component: pages.LanguagesPage,
+    meta: { requiresAuth: true, hasBreadcrumbs: true, hasTabs: false },
   },
 ];
 
@@ -34,12 +173,12 @@ const router = createRouter({
 
 router.beforeEach((to, from, next) => {
   //const userUid = store.state.userData.userUid;
-  const userUid = null;
+  const userUid = "we have some not-null id"; // "we have some not-null id"
 
   if (to.meta.requiresAuth) {
-    !userUid ? next("/sign-in") : next();
+    !userUid ? next(ROUTES.SIGN_IN.PATH) : next();
   } else {
-    userUid ? next("/") : next();
+    userUid ? next(ROUTES.USERS.PATH) : next();
   }
 });
 
