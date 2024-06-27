@@ -43,7 +43,7 @@
 
 <script setup lang="ts">
 import { computed, reactive, ref } from "vue";
-import { useRoute, useRouter } from "vue-router";
+import { useRoute } from "vue-router";
 import useVuelidate from "@vuelidate/core";
 import { required, minLength, email, helpers } from "@vuelidate/validators";
 import {
@@ -63,7 +63,6 @@ const props = defineProps({
 });
 
 const route = useRoute();
-const router = useRouter();
 
 const formData = reactive<IForm>({
   email: "",
