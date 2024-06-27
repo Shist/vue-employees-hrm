@@ -3,24 +3,28 @@
     <v-tab
       :value="ROUTES.USER_PROFILE.NAME"
       @click="() => openUserInfoRoute(ROUTES.USER_PROFILE.PATH)"
+      class="app-tab"
     >
       Profile
     </v-tab>
     <v-tab
       :value="ROUTES.USER_SKILLS.NAME"
       @click="() => openUserInfoRoute(ROUTES.USER_SKILLS.PATH)"
+      class="app-tab"
     >
       Skills
     </v-tab>
     <v-tab
       :value="ROUTES.USER_LANGUAGES.NAME"
       @click="() => openUserInfoRoute(ROUTES.USER_LANGUAGES.PATH)"
+      class="app-tab"
     >
       Languages
     </v-tab>
     <v-tab
       :value="ROUTES.USER_CVS.NAME"
       @click="() => openUserInfoRoute(ROUTES.USER_CVS.PATH)"
+      class="app-tab"
     >
       CVs
     </v-tab>
@@ -120,4 +124,9 @@ function openCVInfoRoute(routePath: string) {
 }
 </script>
 
-<style lang="scss" scopped></style>
+<style lang="scss" scopped>
+.v-btn.app-tab {
+  max-width: 150px;
+  width: 100%;
+}
+</style>
