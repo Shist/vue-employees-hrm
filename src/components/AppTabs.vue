@@ -76,7 +76,7 @@ function updateTabs() {
 
   if (section === ROUTES.USERS.PATH.slice(1)) {
     switch (tab) {
-      case undefined:
+      case ROUTES.USER_PROFILE.PATH:
         userTabs.value = ROUTES.USER_PROFILE.NAME;
         break;
       case ROUTES.USER_SKILLS.PATH:
@@ -91,7 +91,7 @@ function updateTabs() {
     }
   } else if (section === ROUTES.CVS.PATH.slice(1)) {
     switch (tab) {
-      case undefined:
+      case ROUTES.CV_DETAILS.PATH:
         cvsTabs.value = ROUTES.CV_DETAILS.NAME;
         break;
       case ROUTES.CV_SKILLS.PATH:

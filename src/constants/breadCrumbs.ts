@@ -19,9 +19,11 @@ export const SECTIONS_ICONS = {
 };
 
 export const TABS_NAMES = {
+  [ROUTES.USER_PROFILE.PATH]: "Profile",
   [ROUTES.USER_SKILLS.PATH]: "Skills",
   [ROUTES.USER_LANGUAGES.PATH]: "Languages",
   [ROUTES.USER_CVS.PATH]: "CVs",
+  [ROUTES.CV_DETAILS.PATH]: "Details",
   [ROUTES.CV_SKILLS.PATH]: "Skills",
   [ROUTES.CV_PROJECTS.PATH]: "Projects",
   [ROUTES.CV_PREVIEW.PATH]: "Preview",
