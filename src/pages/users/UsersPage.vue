@@ -11,7 +11,7 @@
     </v-text-field>
     <v-data-table
       :headers="headers"
-      :items="employees"
+      :items="users"
       :search="search"
       :class="{ 'main-page__data-table': true }"
       hide-details
@@ -32,7 +32,7 @@
             ></v-btn>
           </template>
           <v-list>
-            <v-list-item @click="() => openUserProfile(item)">
+            <v-list-item @click="() => openUserProfile(item.id)">
               <v-list-item-title class="main-page__popup-menu-label">
                 Profile
               </v-list-item-title>
@@ -55,32 +55,19 @@
 </template>
 
 <script setup lang="ts">
-import { ref, reactive, Reactive } from "vue";
-import { useBreadCrumbsStore } from "@/store/breadCrumbs";
+import { ref, reactive } from "vue";
 import { useRouter } from "vue-router";
-import IUserData from "@/types/IUserData";
-
-const { breadcrumbsItems } = useBreadCrumbsStore();
+import { ROUTES } from "@/constants/router";
+import { useUsersStore } from "@/store/users";
 
 const router = useRouter();
 
-function openUserProfile(userData: IUserData) {
-  breadcrumbsItems[1].disabled = false;
-
-  breadcrumbsItems.push({
-    crumbNum: 3,
-    title: `${userData.firstName} ${userData.lastName}`,
-    disabled: true,
-    to: {
-      path: `/users/${userData.id}`,
-    },
-    crumbIconName: "account-outline",
-  });
-
-  router.push(`/users/${userData.id}`);
+function openUserProfile(userId: number) {
+  router.push(`${ROUTES.USERS.PATH}/${userId}`);
 }
 
 const search = ref("");
+
 const headers = reactive([
   { key: "avatar", sortable: false },
   { key: "firstName", title: "First Name" },
@@ -90,116 +77,7 @@ const headers = reactive([
   { key: "position", title: "Position" },
   { key: "options", sortable: false },
 ]);
-const employees: Reactive<IUserData[]> = reactive([
-  {
-    id: 1,
-    avatar: "employee-1.png",
-    firstName: "Pavel",
-    lastName: "Zhukouski",
-    email: "pavel.zhukouski@innowise.com",
-    department: "Vue",
-    position: "Vue Engineer",
-  },
-  {
-    id: 2,
-    avatar: "employee-2.png",
-    firstName: "Aliaksei",
-    lastName: "Yuryeu",
-    email: "aliaksei.yuryeu@innowise.com",
-    department: "Vue",
-    position: "Vue Engineer",
-  },
-  {
-    id: 1,
-    avatar: "employee-1.png",
-    firstName: "Pavel",
-    lastName: "Zhukouski",
-    email: "pavel.zhukouski@innowise.com",
-    department: "Vue",
-    position: "Vue Engineer",
-  },
-  {
-    id: 2,
-    avatar: "employee-2.png",
-    firstName: "Aliaksei",
-    lastName: "Yuryeu",
-    email: "aliaksei.yuryeu@innowise.com",
-    department: "Vue",
-    position: "Vue Engineer",
-  },
-  {
-    id: 1,
-    avatar: "employee-1.png",
-    firstName: "Pavel",
-    lastName: "Zhukouski",
-    email: "pavel.zhukouski@innowise.com",
-    department: "Vue",
-    position: "Vue Engineer",
-  },
-  {
-    id: 2,
-    avatar: "employee-2.png",
-    firstName: "Aliaksei",
-    lastName: "Yuryeu",
-    email: "aliaksei.yuryeu@innowise.com",
-    department: "Vue",
-    position: "Vue Engineer",
-  },
-  {
-    id: 1,
-    avatar: "employee-1.png",
-    firstName: "Pavel",
-    lastName: "Zhukouski",
-    email: "pavel.zhukouski@innowise.com",
-    department: "Vue",
-    position: "Vue Engineer",
-  },
-  {
-    id: 2,
-    avatar: "employee-2.png",
-    firstName: "Aliaksei",
-    lastName: "Yuryeu",
-    email: "aliaksei.yuryeu@innowise.com",
-    department: "Vue",
-    position: "Vue Engineer",
-  },
-  {
-    id: 1,
-    avatar: "employee-1.png",
-    firstName: "Pavel",
-    lastName: "Zhukouski",
-    email: "pavel.zhukouski@innowise.com",
-    department: "Vue",
-    position: "Vue Engineer",
-  },
-  {
-    id: 2,
-    avatar: "employee-2.png",
-    firstName: "Aliaksei",
-    lastName: "Yuryeu",
-    email: "aliaksei.yuryeu@innowise.com",
-    department: "Vue",
-    position: "Vue Engineer",
-  },
-  {
-    id: 1,
-    avatar: "employee-1.png",
-    firstName: "Pavel",
-    lastName: "Zhukouski",
-    email: "pavel.zhukouski@innowise.com",
-    department: "Vue",
-    position: "Vue Engineer",
-  },
-  {
-    id: 2,
-    avatar: "employee-2.png",
-    firstName: "Aliaksei",
-    lastName: "Yuryeu",
-    email: "aliaksei.yuryeu@innowise.com",
-    department: "Vue",
-    position: "Vue Engineer",
-  },
-]);
+const { users } = useUsersStore();
 </script>
 
 <style lang="scss" scoped>
