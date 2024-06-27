@@ -1,36 +1,80 @@
 <template>
-  <v-tabs v-if="$route.meta.hasTabs === 'userTabs'" v-model="userTabs">
-    <v-tab value="profile" @click="() => openUserInfoRoute('')">
+  <v-tabs v-if="$route.meta.hasTabs === TAB_NAMES.USER" v-model="userTabs">
+    <v-tab
+      :value="ROUTES.USER_PROFILE.NAME"
+      @click="() => openUserInfoRoute(ROUTES.USER_PROFILE.PATH)"
+    >
       Profile
     </v-tab>
-    <v-tab value="skills" @click="() => openUserInfoRoute('/skills')">
+    <v-tab
+      :value="ROUTES.USER_SKILLS.NAME"
+      @click="() => openUserInfoRoute(ROUTES.USER_SKILLS.PATH)"
+    >
       Skills
     </v-tab>
-    <v-tab value="languages" @click="() => openUserInfoRoute('/languages')">
+    <v-tab
+      :value="ROUTES.USER_LANGUAGES.NAME"
+      @click="() => openUserInfoRoute(ROUTES.USER_LANGUAGES.PATH)"
+    >
       Languages
     </v-tab>
-    <v-tab value="cvs" @click="() => openUserInfoRoute('/cvs')">CVs</v-tab>
+    <v-tab
+      :value="ROUTES.USER_CVS.NAME"
+      @click="() => openUserInfoRoute(ROUTES.USER_CVS.PATH)"
+    >
+      CVs
+    </v-tab>
   </v-tabs>
-  <v-tabs v-if="$route.meta.hasTabs === 'cvsTabs'" v-model="cvsTabs">
-    <v-tab value="details">Details</v-tab>
-    <v-tab value="skills">Skills</v-tab>
-    <v-tab value="projects">Projects</v-tab>
-    <v-tab value="preview">Preview</v-tab>
+  <v-tabs v-if="$route.meta.hasTabs === TAB_NAMES.CV" v-model="cvsTabs">
+    <v-tab
+      :value="ROUTES.CV_DETAILS.NAME"
+      @click="() => openCVInfoRoute(ROUTES.CV_DETAILS.PATH)"
+    >
+      Details
+    </v-tab>
+    <v-tab
+      :value="ROUTES.CV_SKILLS.NAME"
+      @click="() => openCVInfoRoute(ROUTES.CV_SKILLS.PATH)"
+    >
+      Skills
+    </v-tab>
+    <v-tab
+      :value="ROUTES.CV_PROJECTS.NAME"
+      @click="() => openCVInfoRoute(ROUTES.CV_PROJECTS.PATH)"
+    >
+      Projects
+    </v-tab>
+    <v-tab
+      :value="ROUTES.CV_PREVIEW.NAME"
+      @click="() => openCVInfoRoute(ROUTES.CV_PREVIEW.PATH)"
+    >
+      Preview
+    </v-tab>
   </v-tabs>
 </template>
 
 <script setup lang="ts">
 import { ref } from "vue";
 import { useRouter } from "vue-router";
+import { ROUTES } from "@/constants/router";
+import { TAB_NAMES } from "@/constants/tabs";
 
-const userTabs = ref("profile");
-const cvsTabs = ref("details");
+const userTabs = ref(ROUTES.USER_PROFILE.NAME);
+
+const cvsTabs = ref(ROUTES.CV_DETAILS.NAME);
 
 const router = useRouter();
 
-function openUserInfoRoute(routeName: string) {
-  const currentUserId = router.currentRoute.value.params.id;
-  router.replace(`/users/${currentUserId}${routeName}`);
+function openUserInfoRoute(routePath: string) {
+  if (routePath) routePath = `/${routePath}`;
+  const currentUserId = router.currentRoute.value.params.userId;
+  router.replace(`${ROUTES.USERS.PATH}/${currentUserId}${routePath}`);
+}
+
+function openCVInfoRoute(routePath: string) {
+  if (routePath) routePath = `/${routePath}`;
+  const currentCVId = router.currentRoute.value.params.cvId;
+  router.replace(`${ROUTES.CVS.PATH}/${currentCVId}${routePath}`);
 }
 </script>
 

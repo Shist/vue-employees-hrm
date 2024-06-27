@@ -60,13 +60,13 @@ function updateBreadCrumbs() {
     //     path: `/${sectionName}s`,
     //   },
     // });
-    // if (route.params.id) {
+    // if (route.params.userId) {
     //   breadcrumbsItems.push({
     //     crumbNum: 3,
     //     title: BREAD_CRUMBS_NAMES[sectionName as IBreadCrumbName],
     //     disabled: true,
     //     to: {
-    //       path: `/${sectionName}s/${route.params.id}/${sectionTab}`,
+    //       path: `/${sectionName}s/${route.params.userId}/${sectionTab}`,
     //     },
     //   });
     // }
