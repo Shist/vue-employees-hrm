@@ -43,7 +43,8 @@
 
 <script setup lang="ts">
 import { computed, reactive, ref } from "vue";
-import { useRoute, useRouter } from "vue-router";
+import { useRoute } from "vue-router";
+import { ROUTES } from "@/constants/router";
 import useVuelidate from "@vuelidate/core";
 import { required, minLength, email, helpers } from "@vuelidate/validators";
 import {
@@ -51,7 +52,7 @@ import {
   EMAIL_TYPE_FIELD,
   PASSWORD_MINLENGTH_FIELD,
   PASSWORD_REQUIRED_FIELD,
-} from "../constants/errorMessage";
+} from "@/constants/errorMessage";
 import { IForm } from "@/types/IForm";
 import { IAuthForm } from "@/types/IAuthForm";
 import { useValidationErrors } from "@/composables/useValidationErrors";
@@ -59,7 +60,6 @@ import { useValidationErrors } from "@/composables/useValidationErrors";
 const props = defineProps<IAuthForm>();
 
 const route = useRoute();
-const router = useRouter();
 
 const formData = reactive<IForm>({
   email: "",
@@ -70,7 +70,9 @@ const serverError = ref<string | null>(null);
 const showPassword = ref<boolean>(false);
 
 const handleAuthLink = computed<string>(() => {
-  return route.fullPath === "/sign-in" ? "/sign-up" : "/sign-in";
+  return route.fullPath === ROUTES.SIGN_IN.PATH
+    ? ROUTES.SIGN_UP.PATH
+    : ROUTES.SIGN_IN.PATH;
 });
 
 const rules = computed(() => {
@@ -113,7 +115,7 @@ const submitForm = async (): Promise<void> => {
     isLoading.value = true;
 
     try {
-      if (route.fullPath === "/sign-in") {
+      if (route.fullPath === ROUTES.SIGN_IN.PATH) {
         // await authStore.loginUser(formData.email, formData.password);
         console.log("call login user method");
       } else {

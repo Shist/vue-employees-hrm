@@ -1,7 +1,20 @@
 <template>
-  <v-breadcrumbs :items="items" divider="$next">
-    <template v-slot:prepend>
-      <v-icon>mdi-home-outline</v-icon>
+  <v-breadcrumbs :items="breadcrumbsItems" divider="$next">
+    <template v-slot:item="{ item }">
+      <v-breadcrumbs-item
+        :title="item.title"
+        :disabled="item.disabled"
+        :to="item.to"
+        :class="{'red-breadcrumb': (item as IBreadCrumbsItem).crumbNum === 3}"
+      >
+        <v-icon
+          v-if="(item as IBreadCrumbsItem).crumbIconName"
+          class="breadcrumbs-user-icon"
+        >
+          {{ `mdi-${(item as IBreadCrumbsItem).crumbIconName}` }}
+        </v-icon>
+        <span>{{ item.title }}</span>
+      </v-breadcrumbs-item>
     </template>
     <template v-slot:divider>
       <v-icon>mdi-chevron-right</v-icon>
@@ -10,20 +23,115 @@
 </template>
 
 <script setup lang="ts">
-import { reactive } from "vue";
+import { reactive, Reactive, watch } from "vue";
+import { useRoute } from "vue-router";
+import { ROUTES } from "@/constants/router";
+import IBreadCrumbsItem from "@/types/IBreadCrumbsItem";
+import {
+  SECTIONS_NAMES,
+  SECTIONS_ICONS,
+  TABS_NAMES,
+} from "@/constants/breadCrumbs";
+import { useUsersStore } from "@/store/users";
+import { useCVsStore } from "@/store/cvs";
 
-const items = reactive([
-  {
-    title: "Home",
+const breadcrumbsItems: Reactive<IBreadCrumbsItem[]> = reactive([]);
+
+const route = useRoute();
+
+watch(route, updateBreadCrumbs);
+
+updateBreadCrumbs();
+
+function updateBreadCrumbs() {
+  const [section, id, tab] = route.fullPath.slice(1).split("/");
+
+  breadcrumbsItems.splice(0, breadcrumbsItems.length);
+
+  breadcrumbsItems.push({
+    crumbNum: 1,
+    title: SECTIONS_NAMES.HOME,
     disabled: false,
-    href: "breadcrumbs_home",
-  },
-  {
-    title: "Employees",
-    disabled: true,
-    href: "breadcrumbs_employees",
-  },
-]);
+    to: {
+      path: ROUTES.USERS.PATH,
+    },
+    crumbIconName: SECTIONS_ICONS.HOME,
+  });
+
+  if (section) {
+    breadcrumbsItems.push({
+      crumbNum: 2,
+      title: SECTIONS_NAMES[section],
+      disabled: id === undefined,
+      to: {
+        path: `/${section}`,
+      },
+    });
+  }
+
+  if (id) {
+    breadcrumbsItems.push({
+      crumbNum: 3,
+      title: "Loading...",
+      disabled: tab === undefined,
+      to: {
+        path: `/${section}/${id}`,
+      },
+      crumbIconName: SECTIONS_ICONS[section],
+    });
+
+    const { getUserById } = useUsersStore();
+    const { getCVById } = useCVsStore();
+
+    switch (section) {
+      case ROUTES.USERS.PATH.slice(1):
+        getUserById(Number(id))
+          .then((userData) => {
+            if (!userData) throw new Error("Empty user data!");
+            breadcrumbsItems[2].title = `${userData?.firstName} ${userData?.lastName}`;
+          })
+          .catch(() => {
+            breadcrumbsItems[2].title = `❌ Loading Error`;
+          });
+        break;
+      case ROUTES.CVS.PATH.slice(1):
+        getCVById(Number(id))
+          .then((cvData) => {
+            if (!cvData) throw new Error("Empty CV data!");
+            breadcrumbsItems[2].title = `${cvData?.name}`;
+          })
+          .catch(() => {
+            breadcrumbsItems[2].title = `❌ Loading Error`;
+          });
+        break;
+    }
+  }
+
+  if (tab) {
+    breadcrumbsItems.push({
+      crumbNum: 4,
+      title: TABS_NAMES[tab],
+      disabled: true,
+      to: {
+        path: `/${section}/${id}`,
+      },
+    });
+  }
+}
 </script>
 
-<style lang="scss" scopped></style>
+<style lang="scss" scopped>
+.v-breadcrumbs-item > .v-breadcrumbs-item--link > .breadcrumbs-user-icon {
+  margin-right: 10px;
+  min-width: 24px;
+  min-height: 24px;
+  &::before {
+    min-width: 24px;
+    min-height: 24px;
+    font-size: 24px;
+  }
+}
+.red-breadcrumb > .v-breadcrumbs-item--link {
+  color: var(--color-active-text);
+}
+</style>
