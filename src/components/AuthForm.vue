@@ -152,6 +152,20 @@ const submitForm = async (): Promise<void> => {
     &auth__input {
       width: 100%;
     }
+    .auth__button {
+      font-family: $font-roboto;
+      font-size: 14px;
+      line-height: 1.235;
+      width: 100%;
+      background-color: var(--color-btn-bg);
+      border-radius: 0;
+      &:hover {
+        background-color: var(--color-btn-bg-hover);
+      }
+      &:disabled {
+        filter: grayscale(50%);
+      }
+    }
   }
   &__form-error {
     height: 40px;
@@ -166,12 +180,6 @@ const submitForm = async (): Promise<void> => {
     margin: 0;
     font-size: 12px;
   }
-  &__button {
-    @include default-text(14px, 1.235);
-    width: 100%;
-    background-color: var(--color-btn-bg);
-    border-radius: 0;
-  }
   &__link {
     text-decoration: none;
     color: var(--color-text-red);
@@ -184,28 +192,36 @@ const submitForm = async (): Promise<void> => {
 
 :deep(.auth__input .v-field__outline__start) {
   border-radius: 0;
+  transition: 0.3s;
 }
 :deep(.auth__input .v-field__outline__end) {
   border-radius: 0;
+  transition: 0.3s;
 }
-:deep(.auth__input .v-field__outline__notch) {
-  border-radius: 0;
-}
-:deep(.auth__input .v-field--active .v-field__outline__start) {
+:deep(.v-field--focused .v-field__outline__start) {
   border-block: 1px solid var(--color-input-borders);
   border-left: 1px solid var(--color-input-borders);
 }
-:deep(.auth__input .v-field--active .v-field__outline__notch::before) {
-  border-top: 1px solid var(--color-input-borders);
-}
-:deep(.auth__input .v-field--active .v-field__outline__notch::after) {
-  border-bottom: 1px solid var(--color-input-borders);
-}
-:deep(.auth__input .v-field--active .v-field__outline__end) {
+:deep(.v-field--focused .v-field__outline__end) {
   border-block: 1px solid var(--color-input-borders);
   border-right: 1px solid var(--color-input-borders);
 }
-:deep(.auth__input .v-field--focused .v-field-label) {
-  color: var(--color-input-borders);
+:deep(.auth__input .v-field__outline__notch::before) {
+  transition: 0.3s;
+}
+:deep(.v-field--focused .v-field__outline__notch::before) {
+  border-top: 1px solid var(--color-input-borders);
+}
+:deep(.auth__input .v-field__outline__notch::after) {
+  transition: 0.3s;
+}
+:deep(.v-field--focused .v-field__outline__notch::after) {
+  border-bottom: 1px solid var(--color-input-borders);
+}
+:deep(.auth__input .v-field-label) {
+  transition: background-color 0.3s;
+}
+:deep(.v-field--focused .v-field-label) {
+  color: var(--color-active-text);
 }
 </style>

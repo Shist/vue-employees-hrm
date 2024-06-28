@@ -23,7 +23,7 @@ export const useUsersStore = defineStore("users", () => {
       position: "Vue Engineer",
     },
     {
-      id: 1,
+      id: 3,
       avatar: "employee-1.png",
       firstName: "Pavel",
       lastName: "Zhukouski",
@@ -32,7 +32,7 @@ export const useUsersStore = defineStore("users", () => {
       position: "Vue Engineer",
     },
     {
-      id: 2,
+      id: 4,
       avatar: "employee-2.png",
       firstName: "Aliaksei",
       lastName: "Yuryeu",
@@ -41,7 +41,7 @@ export const useUsersStore = defineStore("users", () => {
       position: "Vue Engineer",
     },
     {
-      id: 1,
+      id: 5,
       avatar: "employee-1.png",
       firstName: "Pavel",
       lastName: "Zhukouski",
@@ -50,7 +50,7 @@ export const useUsersStore = defineStore("users", () => {
       position: "Vue Engineer",
     },
     {
-      id: 2,
+      id: 6,
       avatar: "employee-2.png",
       firstName: "Aliaksei",
       lastName: "Yuryeu",
@@ -59,7 +59,7 @@ export const useUsersStore = defineStore("users", () => {
       position: "Vue Engineer",
     },
     {
-      id: 1,
+      id: 7,
       avatar: "employee-1.png",
       firstName: "Pavel",
       lastName: "Zhukouski",
@@ -68,7 +68,7 @@ export const useUsersStore = defineStore("users", () => {
       position: "Vue Engineer",
     },
     {
-      id: 2,
+      id: 8,
       avatar: "employee-2.png",
       firstName: "Aliaksei",
       lastName: "Yuryeu",
@@ -77,7 +77,7 @@ export const useUsersStore = defineStore("users", () => {
       position: "Vue Engineer",
     },
     {
-      id: 1,
+      id: 9,
       avatar: "employee-1.png",
       firstName: "Pavel",
       lastName: "Zhukouski",
@@ -86,7 +86,7 @@ export const useUsersStore = defineStore("users", () => {
       position: "Vue Engineer",
     },
     {
-      id: 2,
+      id: 10,
       avatar: "employee-2.png",
       firstName: "Aliaksei",
       lastName: "Yuryeu",
@@ -95,7 +95,7 @@ export const useUsersStore = defineStore("users", () => {
       position: "Vue Engineer",
     },
     {
-      id: 1,
+      id: 11,
       avatar: "employee-1.png",
       firstName: "Pavel",
       lastName: "Zhukouski",
@@ -104,7 +104,7 @@ export const useUsersStore = defineStore("users", () => {
       position: "Vue Engineer",
     },
     {
-      id: 2,
+      id: 12,
       avatar: "employee-2.png",
       firstName: "Aliaksei",
       lastName: "Yuryeu",
