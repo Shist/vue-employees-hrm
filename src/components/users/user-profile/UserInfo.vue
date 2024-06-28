@@ -27,6 +27,7 @@
       ></v-text-field>
       <v-select
         v-model="department"
+        :items="departmentsItems"
         label="Department"
         variant="outlined"
         class="user-info__text-field-wrapper"
@@ -49,7 +50,14 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from "vue";
+import { ref, computed } from "vue";
+import { useDepartmentsStore } from "@/store/departments";
+
+const { departments } = useDepartmentsStore();
+const departmentsItems = computed(() => [
+  { title: "No department", value: null },
+  ...departments.map((dep) => ({ title: dep.name, value: dep.id })),
+]);
 
 const firstName = ref(null);
 const lastName = ref(null);
@@ -91,6 +99,7 @@ const position = ref(null);
   &__info-inputs-form {
     display: grid;
     gap: 32px;
+    grid-template-columns: 1fr 1fr;
     grid-template-areas:
       ".    ."
       ".    ."
