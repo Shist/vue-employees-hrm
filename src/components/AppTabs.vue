@@ -76,6 +76,7 @@ watch(route, updateTabs);
 updateTabs();
 
 function updateTabs() {
+  // eslint-disable-next-line
   const [section, id, tab] = route.fullPath.slice(1).split("/");
 
   if (section === ROUTES.USERS.PATH.slice(1)) {

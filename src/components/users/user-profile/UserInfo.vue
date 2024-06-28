@@ -43,8 +43,9 @@
         type="submit"
         class="user-info__form-submit-btn"
         :disabled="!firstName && !lastName && !department && !position"
+        @click.prevent="submitChanges"
       >
-        Update
+        UPDATE
       </v-btn>
     </form>
   </div>
@@ -72,6 +73,10 @@ const positionsItems = computed(() => [
   { title: "No position", value: null },
   ...positions.map((pos) => ({ title: pos.name, value: pos.id })),
 ]);
+
+function submitChanges() {
+  // TODO - send new user data to server
+}
 </script>
 
 <style lang="scss" scoped>
@@ -113,7 +118,8 @@ const positionsItems = computed(() => [
       ".    ."
       ".    ."
       ".    btn";
-    @media (max-width: 768px) {
+    @media (max-width: $tablet-l) {
+      grid-template-columns: 1fr;
       grid-template-areas:
         "."
         "."
@@ -121,11 +127,52 @@ const positionsItems = computed(() => [
         "."
         "btn";
     }
-    .user-info__text-field-wrapper {
-    }
     .user-info__form-submit-btn {
       grid-area: btn;
+      background-color: var(--color-btn-bg);
+      border-radius: 0;
+      &:hover {
+        background-color: var(--color-btn-bg-hover);
+      }
+      &:disabled {
+        filter: grayscale(50%);
+      }
     }
   }
+}
+
+:deep(.user-info__text-field-wrapper .v-field__outline__start) {
+  border-radius: 0;
+  transition: 0.3s;
+}
+:deep(.user-info__text-field-wrapper .v-field__outline__end) {
+  border-radius: 0;
+  transition: 0.3s;
+}
+:deep(.v-field--focused .v-field__outline__start) {
+  border-block: 1px solid var(--color-input-borders);
+  border-left: 1px solid var(--color-input-borders);
+}
+:deep(.v-field--focused .v-field__outline__end) {
+  border-block: 1px solid var(--color-input-borders);
+  border-right: 1px solid var(--color-input-borders);
+}
+:deep(.user-info__text-field-wrapper .v-field__outline__notch::before) {
+  transition: 0.3s;
+}
+:deep(.v-field--focused .v-field__outline__notch::before) {
+  border-top: 1px solid var(--color-input-borders);
+}
+:deep(.user-info__text-field-wrapper .v-field__outline__notch::after) {
+  transition: 0.3s;
+}
+:deep(.v-field--focused .v-field__outline__notch::after) {
+  border-bottom: 1px solid var(--color-input-borders);
+}
+:deep(.user-info__text-field-wrapper .v-field-label) {
+  transition: background-color 0.3s;
+}
+:deep(.v-field--focused .v-field-label) {
+  color: var(--color-active-text);
 }
 </style>
