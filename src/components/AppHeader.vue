@@ -169,7 +169,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed, onMounted, ref } from "vue";
+import { computed, onMounted, ref, watch } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import { ROUTES } from "@/constants/router";
 import { useUsersStore } from "@/store/users";
@@ -223,6 +223,22 @@ onMounted(() => {
   setTimeout(async (): Promise<void> => {
     user.value = await userStore.getUserById(1);
   }, 1000);
+});
+
+watch(drawer, (newValue, oldValue) => {
+  if (document.body.offsetHeight > window.innerHeight) {
+    document.querySelector(".v-toolbar")?.classList.add("app-header__padding");
+    document.querySelector(".app-main")?.classList.add("app__padding-main");
+  }
+  if (newValue) {
+    document.documentElement.style.overflowY = "hidden";
+  } else if (oldValue) {
+    document.documentElement.style.overflowY = "auto";
+    document
+      .querySelector(".v-toolbar")
+      ?.classList.remove("app-header__padding");
+    document.querySelector(".app-main")?.classList.remove("app__padding-main");
+  }
 });
 </script>
 
@@ -292,5 +308,12 @@ onMounted(() => {
 }
 .toolbar > .v-layout > .v-navigation-drawer__scrim {
   opacity: 0.5;
+}
+.app-header__padding {
+  padding-right: 31px;
+}
+.global-container[data-v-7ba5bd90] > .app-main.app__padding-main {
+  background-color: #353535;
+  padding-right: 31px;
 }
 </style>
