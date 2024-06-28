@@ -34,6 +34,7 @@
       ></v-select>
       <v-select
         v-model="position"
+        :items="positionsItems"
         label="Position"
         variant="outlined"
         class="user-info__text-field-wrapper"
@@ -52,17 +53,25 @@
 <script setup lang="ts">
 import { ref, computed } from "vue";
 import { useDepartmentsStore } from "@/store/departments";
+import { usePositionsStore } from "@/store/positions";
 
+const firstName = ref(null);
+
+const lastName = ref(null);
+
+const department = ref(null);
 const { departments } = useDepartmentsStore();
 const departmentsItems = computed(() => [
   { title: "No department", value: null },
   ...departments.map((dep) => ({ title: dep.name, value: dep.id })),
 ]);
 
-const firstName = ref(null);
-const lastName = ref(null);
-const department = ref(null);
 const position = ref(null);
+const { positions } = usePositionsStore();
+const positionsItems = computed(() => [
+  { title: "No position", value: null },
+  ...positions.map((pos) => ({ title: pos.name, value: pos.id })),
+]);
 </script>
 
 <style lang="scss" scoped>
