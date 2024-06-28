@@ -76,7 +76,7 @@ const handleAuthLink = computed<string>(() => {
 });
 
 const rules = computed(() => {
-  return route.fullPath === "/sign-up"
+  return route.fullPath === ROUTES.SIGN_UP.PATH
     ? {
         email: {
           required: helpers.withMessage(EMAIL_REQUIRED_FIELD, required),
