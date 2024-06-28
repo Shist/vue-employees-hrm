@@ -54,14 +54,10 @@ import {
   PASSWORD_REQUIRED_FIELD,
 } from "@/constants/errorMessage";
 import { IForm } from "@/types/IForm";
+import { IAuthForm } from "@/types/IAuthForm";
 import { useValidationErrors } from "@/composables/useValidationErrors";
 
-const props = defineProps({
-  title: { type: String, required: true },
-  buttonText: { type: String, required: true },
-  subtitleText: { type: String, required: true },
-  linkText: { type: String, required: true },
-});
+const props = defineProps<IAuthForm>();
 
 const route = useRoute();
 
@@ -80,16 +76,28 @@ const handleAuthLink = computed<string>(() => {
 });
 
 const rules = computed(() => {
-  return {
-    email: {
-      required: helpers.withMessage(EMAIL_REQUIRED_FIELD, required),
-      email: helpers.withMessage(EMAIL_TYPE_FIELD, email),
-    },
-    password: {
-      required: helpers.withMessage(PASSWORD_REQUIRED_FIELD, required),
-      minLength: helpers.withMessage(PASSWORD_MINLENGTH_FIELD, minLength(6)),
-    },
-  };
+  return route.fullPath === ROUTES.SIGN_UP.PATH
+    ? {
+        email: {
+          required: helpers.withMessage(EMAIL_REQUIRED_FIELD, required),
+          email: helpers.withMessage(EMAIL_TYPE_FIELD, email),
+        },
+        password: {
+          required: helpers.withMessage(PASSWORD_REQUIRED_FIELD, required),
+          minLength: helpers.withMessage(
+            PASSWORD_MINLENGTH_FIELD,
+            minLength(6)
+          ),
+        },
+      }
+    : {
+        email: {
+          required: helpers.withMessage(EMAIL_REQUIRED_FIELD, required),
+        },
+        password: {
+          required: helpers.withMessage(PASSWORD_REQUIRED_FIELD, required),
+        },
+      };
 });
 
 const formErrors = computed(() => useValidationErrors<IForm>(v$.value.$errors));
