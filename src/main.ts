@@ -5,9 +5,6 @@ import { createPinia } from "pinia";
 import vuetifyConfig from "@/plugins/vuetify";
 import Vue3Toasity from "vue3-toastify";
 import toastifyConfig from "@/plugins/toastifyConfig";
-import "@/assets/styles/reset.css";
-import "@/assets/styles/reset-html-overflow.css";
-import "@mdi/font/css/materialdesignicons.css";
 
 createApp(App)
   .use(router)

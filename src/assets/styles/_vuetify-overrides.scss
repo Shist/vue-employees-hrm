@@ -1,0 +1,10 @@
+@import "~vuetify/styles/settings/_variables.scss";
+
+// Override the primary color
+$primary: #ff0000;
+
+// Customize the `v-btn` style
+.v-btn {
+  background-color: $primary;
+  color: white;
+}
