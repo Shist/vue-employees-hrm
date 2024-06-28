@@ -1,0 +1,33 @@
+import {
+  VBtn,
+  VImg,
+  VIcon,
+  VTextField,
+  VSelect,
+  VDataTable,
+  VBreadcrumbs,
+  VBreadcrumbsItem,
+  VMenu,
+  VList,
+  VListItem,
+  VListItemTitle,
+  VTabs,
+  VTab,
+} from "vuetify/components";
+
+export default {
+  VBtn,
+  VImg,
+  VIcon,
+  VTextField,
+  VSelect,
+  VDataTable,
+  VBreadcrumbs,
+  VBreadcrumbsItem,
+  VMenu,
+  VList,
+  VListItem,
+  VListItemTitle,
+  VTabs,
+  VTab,
+};

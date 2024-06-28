@@ -106,9 +106,11 @@ const { users } = useUsersStore();
 
 :deep(.main-page__text-field-wrapper .v-field__outline__start) {
   transition: 0.3s;
+  border-radius: 0;
 }
 :deep(.main-page__text-field-wrapper .v-field__outline__end) {
   transition: 0.3s;
+  border-radius: 0;
 }
 :deep(
     .main-page__text-field-wrapper .v-field--active .v-field__outline__start

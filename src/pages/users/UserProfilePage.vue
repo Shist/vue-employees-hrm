@@ -1,12 +1,22 @@
 <template>
-  <h2 class="page-headline">This is User Profile page</h2>
+  <div class="user-profile">
+    <AvatarUpload />
+    <UserInfo />
+  </div>
 </template>
 
-<script setup lang="ts"></script>
+<script setup lang="ts">
+import AvatarUpload from "@/components/users/user-profile/AvatarUpload.vue";
+import UserInfo from "@/components/users/user-profile/UserInfo.vue";
+</script>
 
 <style lang="scss" scoped>
-.page-headline {
-  @include default-headline(36px, 36px);
-  padding: 20px;
+.user-profile {
+  margin: 0 auto;
+  padding: 64px 24px;
+  max-width: 850px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 </style>

@@ -1,3 +1,8 @@
+export const ROUTES_IDS = {
+  USER: ":userId",
+  CV: ":cvId",
+};
+
 export const ROUTES = {
   MAIN: {
     PATH: "/",
@@ -20,11 +25,11 @@ export const ROUTES = {
     NAME: "users",
   },
   USER_BY_ID: {
-    PATH: "/users/:userId",
+    PATH: `/users/${ROUTES_IDS.USER}`,
     NAME: "user-by-id",
   },
   USER_PROFILE: {
-    PATH: "",
+    PATH: "profile",
     NAME: "user-profile",
   },
   USER_SKILLS: {
@@ -48,11 +53,11 @@ export const ROUTES = {
     NAME: "cvs",
   },
   CV_BY_ID: {
-    PATH: "/cvs/:cvId",
+    PATH: `/cvs/${ROUTES_IDS.CV}`,
     NAME: "cv-by-id",
   },
   CV_DETAILS: {
-    PATH: "",
+    PATH: "details",
     NAME: "cv-details",
   },
   CV_SKILLS: {

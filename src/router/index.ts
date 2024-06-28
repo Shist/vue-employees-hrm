@@ -36,6 +36,7 @@ const routes: Array<RouteRecordRaw> = [
   {
     path: ROUTES.USER_BY_ID.PATH,
     name: ROUTES.USER_BY_ID.NAME,
+    redirect: (to) => `${to.fullPath}/${ROUTES.USER_PROFILE.PATH}`,
     children: [
       {
         path: ROUTES.USER_PROFILE.PATH,
@@ -94,6 +95,7 @@ const routes: Array<RouteRecordRaw> = [
   {
     path: ROUTES.CV_BY_ID.PATH,
     name: ROUTES.CV_BY_ID.NAME,
+    redirect: (to) => `${to.fullPath}/${ROUTES.CV_DETAILS.PATH}`,
     children: [
       {
         path: ROUTES.CV_DETAILS.PATH,

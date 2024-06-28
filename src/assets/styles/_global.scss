@@ -7,3 +7,8 @@
   pointer-events: none;
   filter: grayscale(50%);
 }
+
+// Class which is needed to set half-transparent green filter to some wrappers
+.green-filter-bg {
+  background-color: rgba(var(--color-wrapper-bg-green-filter), 0.1);
+}
