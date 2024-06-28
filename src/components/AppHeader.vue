@@ -41,7 +41,7 @@
 
         <v-icon style="color: #767676">mdi-web</v-icon>
 
-        <div class="toolbar__language">
+        <div class="toolbar__language text-white">
           <v-select :items="locations" v-model="location">
             <template v-slot:item="{ props, item }">
               <v-list-item v-bind="props" :title="item.raw.value"></v-list-item>
@@ -49,7 +49,7 @@
           </v-select>
         </div>
 
-        <p v-if="user" class="toolbar__email">
+        <p v-if="user" class="toolbar__email text-white">
           {{ `${user.firstName} ` + `${user.lastName}` }}
         </p>
         <v-skeleton-loader
