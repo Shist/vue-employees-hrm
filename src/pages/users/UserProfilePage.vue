@@ -1,11 +1,13 @@
 <template>
   <div class="user-profile">
     <AvatarUpload />
+    <UserInfo />
   </div>
 </template>
 
 <script setup lang="ts">
-import AvatarUpload from "@/components/AvatarUpload.vue";
+import AvatarUpload from "@/components/users/user-profile/AvatarUpload.vue";
+import UserInfo from "@/components/users/user-profile/UserInfo.vue";
 </script>
 
 <style lang="scss" scoped>
