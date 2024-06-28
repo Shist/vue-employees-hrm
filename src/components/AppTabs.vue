@@ -1,5 +1,9 @@
 <template>
-  <v-tabs v-if="$route.meta.hasTabs === TAB_NAMES.USER" v-model="userTabs">
+  <v-tabs
+    v-if="$route.meta.hasTabs === TAB_NAMES.USER"
+    v-model="userTabs"
+    color="var(--color-active-text)"
+  >
     <v-tab
       :value="ROUTES.USER_PROFILE.NAME"
       @click="() => openUserInfoRoute(ROUTES.USER_PROFILE.PATH)"
