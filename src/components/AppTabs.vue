@@ -33,28 +33,36 @@
       CVs
     </v-tab>
   </v-tabs>
-  <v-tabs v-if="$route.meta.hasTabs === TAB_NAMES.CV" v-model="cvsTabs">
+  <v-tabs
+    v-if="$route.meta.hasTabs === TAB_NAMES.CV"
+    v-model="cvsTabs"
+    color="var(--color-active-text)"
+  >
     <v-tab
       :value="ROUTES.CV_DETAILS.NAME"
       @click="() => openCVInfoRoute(ROUTES.CV_DETAILS.PATH)"
+      class="app-tab"
     >
       Details
     </v-tab>
     <v-tab
       :value="ROUTES.CV_SKILLS.NAME"
       @click="() => openCVInfoRoute(ROUTES.CV_SKILLS.PATH)"
+      class="app-tab"
     >
       Skills
     </v-tab>
     <v-tab
       :value="ROUTES.CV_PROJECTS.NAME"
       @click="() => openCVInfoRoute(ROUTES.CV_PROJECTS.PATH)"
+      class="app-tab"
     >
       Projects
     </v-tab>
     <v-tab
       :value="ROUTES.CV_PREVIEW.NAME"
       @click="() => openCVInfoRoute(ROUTES.CV_PREVIEW.PATH)"
+      class="app-tab"
     >
       Preview
     </v-tab>
