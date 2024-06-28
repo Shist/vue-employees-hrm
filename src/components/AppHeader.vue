@@ -72,7 +72,7 @@
             </v-btn>
           </template>
           <v-card>
-            <v-card-text class="d-flex flex-lg-column flex-sm-wrap">
+            <v-card-text class="d-flex flex-lg-column flex-sm-wrap align-start">
               <v-btn
                 v-if="user"
                 prepend-icon="mdi-account-circle"

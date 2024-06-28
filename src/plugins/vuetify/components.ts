@@ -13,6 +13,16 @@ import {
   VListItemTitle,
   VTabs,
   VTab,
+  VToolbar,
+  VAppBarNavIcon,
+  VSpacer,
+  VSkeletonLoader,
+  VAvatar,
+  VDivider,
+  VCardText,
+  VCard,
+  VNavigationDrawer,
+  VLayout,
 } from "vuetify/components";
 
 export default {
@@ -30,4 +40,14 @@ export default {
   VListItemTitle,
   VTabs,
   VTab,
+  VToolbar,
+  VAppBarNavIcon,
+  VSpacer,
+  VSkeletonLoader,
+  VAvatar,
+  VDivider,
+  VCardText,
+  VCard,
+  VNavigationDrawer,
+  VLayout,
 };

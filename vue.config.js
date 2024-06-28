@@ -15,7 +15,6 @@ module.exports = defineConfig({
       sass: {
         additionalData: `
           @import "@/assets/styles/reset.css";
-          @import "vuetify/styles";
           @import "@mdi/font/css/materialdesignicons.css";
           @import "@/assets/styles/global";
         `,

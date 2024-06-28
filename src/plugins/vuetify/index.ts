@@ -4,6 +4,7 @@ import { appDarkTheme } from "@/plugins/vuetify/themeDarkConfig";
 import { aliases, mdi } from "vuetify/iconsets/mdi";
 import components from "@/plugins/vuetify/components";
 import appTheme from "@/utils/theme";
+import "vuetify/styles";
 
 export default createVuetify({
   components,
