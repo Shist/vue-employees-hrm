@@ -32,6 +32,7 @@
         class="toolbar__wrapper"
         :elevation="7"
         color="var(--color-header-bg)"
+        :style="{ paddingRight: scrollbarWidth }"
       >
         <v-app-bar-nav-icon
           @click="handleNavigationShow"
@@ -170,17 +171,21 @@
 </template>
 
 <script setup lang="ts">
-import { computed, onMounted, ref } from "vue";
+import { computed, onMounted, ref, watch } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import { ROUTES } from "@/constants/router";
 import { useUsersStore } from "@/store/users";
 import IUserData from "@/types/IUserData";
 import { NAVIGATION__ITEMS } from "@/constants/navigationItems";
 import { INavigationItem } from "@/types/INavigationItem";
+import { useScrollbarWidth } from "@/store/scrollbarWidth";
+import { storeToRefs } from "pinia";
 
 const router = useRouter();
 const route = useRoute();
 const userStore = useUsersStore();
+
+const { scrollbarWidth } = storeToRefs(useScrollbarWidth());
 
 const locations = ref([
   { title: "EN", value: "English" },
@@ -224,6 +229,20 @@ onMounted(() => {
   setTimeout(async (): Promise<void> => {
     user.value = await userStore.getUserById(1);
   }, 1000);
+});
+
+watch(drawer, (newValue, oldValue) => {
+  if (document.body.offsetHeight > window.innerHeight) {
+    scrollbarWidth.value = `${
+      20 + window.innerWidth - document.body.offsetWidth
+    }px`;
+  }
+  if (newValue) {
+    document.documentElement.style.overflowY = "hidden";
+  } else if (oldValue) {
+    document.documentElement.style.overflowY = "auto";
+    scrollbarWidth.value = undefined;
+  }
 });
 </script>
 

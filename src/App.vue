@@ -4,7 +4,7 @@
     :class="{ 'dark-theme': theme.global.name.value === 'appDark' }"
   >
     <AppHeader />
-    <main class="app-main">
+    <main class="app-main" :style="{ paddingRight: scrollbarWidth }">
       <BreadCrumbs v-if="$route.meta.hasBreadcrumbs" />
       <AppTabs v-if="$route.meta.hasTabs" />
       <router-view />
@@ -17,6 +17,10 @@ import { useTheme } from "vuetify";
 import AppHeader from "@/components/AppHeader.vue";
 import BreadCrumbs from "@/components/BreadCrumbs.vue";
 import AppTabs from "@/components/AppTabs.vue";
+import { useScrollbarWidth } from "@/store/scrollbarWidth";
+import { storeToRefs } from "pinia";
+
+const { scrollbarWidth } = storeToRefs(useScrollbarWidth());
 
 const theme = useTheme();
 </script>
