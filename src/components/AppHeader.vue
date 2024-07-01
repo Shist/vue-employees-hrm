@@ -1,5 +1,6 @@
 <template>
-  <div v-if="!$route.meta.requiresAuth" class="app-header">
+  <div v-if="$route.meta.notFound" class="empty-header"></div>
+  <div v-else-if="!$route.meta.requiresAuth" class="app-header">
     <v-toolbar class="app-header" :elevation="7" color="var(--color-header-bg)">
       <div class="app-header__buttons">
         <v-btn
@@ -227,6 +228,13 @@ onMounted(() => {
 </script>
 
 <style lang="scss" scopped>
+.empty-header {
+  height: 64px;
+  background-color: var(--color-header-bg);
+  box-shadow: 0px 4px 5px -2px rgba(0, 0, 0, 0.2),
+    0px 7px 10px 1px rgba(0, 0, 0, 0.14), 0px 2px 16px 1px rgba(0, 0, 0, 0.12);
+}
+
 .app-header {
   color: var(--color-header-text);
   &__buttons {

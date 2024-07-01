@@ -8,6 +8,7 @@ import DepartmentsPage from "@/pages/DepartmentsPage.vue";
 import PositionsPage from "@/pages/PositionsPage.vue";
 import SkillsPage from "@/pages/SkillsPage.vue";
 import LanguagesPage from "@/pages/LanguagesPage.vue";
+import NotFoundPage from "@/pages/NotFoundPage.vue";
 
 export default {
   SignInPage,
@@ -20,4 +21,5 @@ export default {
   PositionsPage,
   SkillsPage,
   LanguagesPage,
+  NotFoundPage,
 };

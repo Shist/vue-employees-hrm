@@ -163,6 +163,12 @@ const routes: Array<RouteRecordRaw> = [
     component: pages.LanguagesPage,
     meta: { requiresAuth: true, hasBreadcrumbs: true, hasTabs: false },
   },
+  {
+    path: ROUTES.NOT_FOUND.PATH,
+    name: ROUTES.NOT_FOUND.NAME,
+    component: pages.NotFoundPage,
+    meta: { notFound: true, hasBreadcrumbs: false, hasTabs: false },
+  },
 ];
 
 const router = createRouter({
@@ -177,7 +183,9 @@ router.beforeEach((to, from, next) => {
   //const userUid = store.state.userData.userUid;
   const userUid = "we have some not-null id"; // "we have some not-null id"
 
-  if (to.meta.requiresAuth) {
+  if (to.name === ROUTES.NOT_FOUND.NAME) {
+    next();
+  } else if (to.meta.requiresAuth) {
     !userUid ? next(ROUTES.SIGN_IN.PATH) : next();
   } else {
     userUid ? next(ROUTES.USERS.PATH) : next();

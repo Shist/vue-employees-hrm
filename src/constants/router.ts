@@ -88,4 +88,8 @@ export const ROUTES = {
     PATH: "/languages",
     NAME: "languages",
   },
+  NOT_FOUND: {
+    PATH: "/:pathMatch(.*)*",
+    NAME: "not-found",
+  },
 };
