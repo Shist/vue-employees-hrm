@@ -31,6 +31,7 @@
         class="toolbar__wrapper"
         :elevation="7"
         color="var(--color-header-bg)"
+        :style="{ paddingRight: scrollbarWidth }"
       >
         <v-app-bar-nav-icon
           @click="handleNavigationShow"
@@ -176,10 +177,14 @@ import { useUsersStore } from "@/store/users";
 import IUserData from "@/types/IUserData";
 import { NAVIGATION__ITEMS } from "@/constants/navigationItems";
 import { INavigationItem } from "@/types/INavigationItem";
+import { useScrollbarWidth } from "@/store/scrollbarWidth";
+import { storeToRefs } from "pinia";
 
 const router = useRouter();
 const route = useRoute();
 const userStore = useUsersStore();
+
+const { scrollbarWidth } = storeToRefs(useScrollbarWidth());
 
 const locations = ref([
   { title: "EN", value: "English" },
@@ -227,17 +232,15 @@ onMounted(() => {
 
 watch(drawer, (newValue, oldValue) => {
   if (document.body.offsetHeight > window.innerHeight) {
-    document.querySelector(".v-toolbar")?.classList.add("app-header__padding");
-    document.querySelector(".app-main")?.classList.add("app__padding-main");
+    scrollbarWidth.value = `${
+      20 + window.innerWidth - document.body.offsetWidth
+    }px`;
   }
   if (newValue) {
     document.documentElement.style.overflowY = "hidden";
   } else if (oldValue) {
     document.documentElement.style.overflowY = "auto";
-    document
-      .querySelector(".v-toolbar")
-      ?.classList.remove("app-header__padding");
-    document.querySelector(".app-main")?.classList.remove("app__padding-main");
+    scrollbarWidth.value = undefined;
   }
 });
 </script>
@@ -308,12 +311,5 @@ watch(drawer, (newValue, oldValue) => {
 }
 .toolbar > .v-layout > .v-navigation-drawer__scrim {
   opacity: 0.5;
-}
-.app-header__padding {
-  padding-right: 31px;
-}
-.global-container[data-v-7ba5bd90] > .app-main.app__padding-main {
-  background-color: #353535;
-  padding-right: 31px;
 }
 </style>
