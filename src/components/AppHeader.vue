@@ -136,7 +136,7 @@
           variant="flat"
           color="var(--color-wrapper-bg)"
           router
-          :to="ROUTES.USERS.NAME"
+          :to="ROUTES.USERS.PATH"
         >
           <v-icon size="x-large" class="mr-8 ml-4">mdi-home-outline</v-icon>
           Home
