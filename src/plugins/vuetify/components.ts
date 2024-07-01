@@ -21,8 +21,10 @@ import {
   VDivider,
   VCardText,
   VCard,
+  VCardItem,
   VNavigationDrawer,
   VLayout,
+  VProgressLinear,
 } from "vuetify/components";
 
 export default {
@@ -48,6 +50,8 @@ export default {
   VDivider,
   VCardText,
   VCard,
+  VCardItem,
   VNavigationDrawer,
   VLayout,
+  VProgressLinear,
 };

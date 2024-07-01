@@ -6,8 +6,8 @@
 </template>
 
 <script setup lang="ts">
-import AvatarUpload from "@/components/users/user-profile/AvatarUpload.vue";
-import UserInfo from "@/components/users/user-profile/UserInfo.vue";
+import AvatarUpload from "@/components/user/profile/AvatarUpload.vue";
+import UserInfo from "@/components/user/profile/UserInfo.vue";
 </script>
 
 <style lang="scss" scoped>

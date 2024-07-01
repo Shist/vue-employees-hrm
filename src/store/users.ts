@@ -1,6 +1,7 @@
 import { defineStore } from "pinia";
 import { reactive, Reactive } from "vue";
 import IUserData from "@/types/IUserData";
+import { Mastery } from "@/types/ISkillMastery";
 
 export const useUsersStore = defineStore("users", () => {
   const users: Reactive<IUserData[]> = reactive([
@@ -12,6 +13,38 @@ export const useUsersStore = defineStore("users", () => {
       email: "pavel.zhukouski@innowise.com",
       department: "Vue",
       position: "Vue Engineer",
+      skills: [
+        {
+          name: "MySQL",
+          category: "Database management system",
+          mastery: Mastery.Novice,
+        },
+        {
+          name: "HTML/CSS",
+          category: "Programming technologies",
+          mastery: Mastery.Proficient,
+        },
+        {
+          name: "JavaScript",
+          category: "Programming technologies",
+          mastery: Mastery.Expert,
+        },
+        {
+          name: "React",
+          category: "Programming technologies",
+          mastery: Mastery.Advanced,
+        },
+        {
+          name: "Vue",
+          category: "Programming technologies",
+          mastery: Mastery.Proficient,
+        },
+        {
+          name: "Git",
+          category: "Source control systems",
+          mastery: Mastery.Completent,
+        },
+      ],
     },
     {
       id: 2,
@@ -21,6 +54,7 @@ export const useUsersStore = defineStore("users", () => {
       email: "aliaksei.yuryeu@innowise.com",
       department: "Vue",
       position: "Vue Engineer",
+      skills: [],
     },
     {
       id: 3,
@@ -30,6 +64,7 @@ export const useUsersStore = defineStore("users", () => {
       email: "pavel.zhukouski@innowise.com",
       department: "Vue",
       position: "Vue Engineer",
+      skills: [],
     },
     {
       id: 4,
@@ -39,6 +74,7 @@ export const useUsersStore = defineStore("users", () => {
       email: "aliaksei.yuryeu@innowise.com",
       department: "Vue",
       position: "Vue Engineer",
+      skills: [],
     },
     {
       id: 5,
@@ -48,6 +84,7 @@ export const useUsersStore = defineStore("users", () => {
       email: "pavel.zhukouski@innowise.com",
       department: "Vue",
       position: "Vue Engineer",
+      skills: [],
     },
     {
       id: 6,
@@ -57,6 +94,7 @@ export const useUsersStore = defineStore("users", () => {
       email: "aliaksei.yuryeu@innowise.com",
       department: "Vue",
       position: "Vue Engineer",
+      skills: [],
     },
     {
       id: 7,
@@ -66,6 +104,7 @@ export const useUsersStore = defineStore("users", () => {
       email: "pavel.zhukouski@innowise.com",
       department: "Vue",
       position: "Vue Engineer",
+      skills: [],
     },
     {
       id: 8,
@@ -75,6 +114,7 @@ export const useUsersStore = defineStore("users", () => {
       email: "aliaksei.yuryeu@innowise.com",
       department: "Vue",
       position: "Vue Engineer",
+      skills: [],
     },
     {
       id: 9,
@@ -84,6 +124,7 @@ export const useUsersStore = defineStore("users", () => {
       email: "pavel.zhukouski@innowise.com",
       department: "Vue",
       position: "Vue Engineer",
+      skills: [],
     },
     {
       id: 10,
@@ -93,6 +134,7 @@ export const useUsersStore = defineStore("users", () => {
       email: "aliaksei.yuryeu@innowise.com",
       department: "Vue",
       position: "Vue Engineer",
+      skills: [],
     },
     {
       id: 11,
@@ -102,6 +144,7 @@ export const useUsersStore = defineStore("users", () => {
       email: "pavel.zhukouski@innowise.com",
       department: "Vue",
       position: "Vue Engineer",
+      skills: [],
     },
     {
       id: 12,
@@ -111,6 +154,7 @@ export const useUsersStore = defineStore("users", () => {
       email: "aliaksei.yuryeu@innowise.com",
       department: "Vue",
       position: "Vue Engineer",
+      skills: [],
     },
   ]);
 
