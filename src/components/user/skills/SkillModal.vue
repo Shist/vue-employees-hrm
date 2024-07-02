@@ -20,11 +20,12 @@
         <v-card-item class="skill-modal__text-fields-container">
           <v-select
             v-model="selectSkill"
-            :items="skills.map((skill) => skill.name)"
+            :items="skillsItems"
             label="Skill"
             variant="outlined"
             class="skill-modal__text-field-wrapper"
             hide-details
+            :disabled="!!skillForModal"
           />
           <v-select
             v-model="selectCategory"
@@ -33,6 +34,7 @@
             variant="outlined"
             class="skill-modal__text-field-wrapper"
             hide-details
+            disabled
           />
           <v-select
             v-model="selectSkillMastery"
@@ -41,6 +43,7 @@
             variant="outlined"
             class="skill-modal__text-field-wrapper"
             hide-details
+            :disabled="!selectSkill"
           />
         </v-card-item>
         <v-card-actions>
@@ -56,6 +59,14 @@
             variant="text"
             @click="handleModalClose"
             class="skill-modal__btn-confirm"
+            :disabled="
+              (!skillForModal && !selectSkill) ||
+              (!!skillForModal &&
+                selectSkillMastery ===
+                  (props.skillForModal?.mastery !== undefined
+                    ? skillMasteries[props.skillForModal?.mastery]
+                    : skillMasteries[0]))
+            "
           >
             Confirm
           </v-btn>
@@ -66,7 +77,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, watchEffect } from "vue";
+import { ref, computed, watch, onUpdated } from "vue";
 import { useSkillsStore } from "@/store/skills";
 import { ISkillForModal } from "@/types/ISkill";
 
@@ -89,20 +100,9 @@ const modalState = computed({
   },
 });
 
-const { skills, skillCategories } = useSkillsStore();
+const { skills, skillCategories, getCategoryBySkill } = useSkillsStore();
 
-const selectSkill = ref<string | null>(null);
-const selectCategory = ref<string | null>(null);
-const selectSkillMastery = ref<string | null>(null);
-
-watchEffect(() => {
-  selectSkill.value = props.skillForModal?.name || null;
-  selectCategory.value = props.skillForModal?.category || null;
-  selectSkillMastery.value =
-    props.skillForModal?.mastery !== undefined
-      ? skillMasteries[props.skillForModal?.mastery]
-      : null;
-});
+const skillsItems = computed(() => skills.map((skill) => skill.name));
 
 const skillMasteries = [
   "Novice",
@@ -111,6 +111,24 @@ const skillMasteries = [
   "Proficient",
   "Expert",
 ];
+
+const selectSkill = ref<string | null>(null);
+const selectCategory = ref<string | null>(null);
+const selectSkillMastery = ref<string | null>(skillMasteries[0]);
+
+onUpdated(() => {
+  selectSkill.value = props.skillForModal?.name || null;
+  selectCategory.value = props.skillForModal?.category || null;
+  selectSkillMastery.value =
+    props.skillForModal?.mastery !== undefined
+      ? skillMasteries[props.skillForModal?.mastery]
+      : skillMasteries[0];
+});
+
+watch(selectSkill, () => {
+  const skillCategory = getCategoryBySkill(`${selectSkill.value}`);
+  selectCategory.value = skillCategory ? skillCategory : null;
+});
 </script>
 
 <style lang="scss" scoped>

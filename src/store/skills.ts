@@ -41,5 +41,9 @@ export const useSkillsStore = defineStore("skills", () => {
     return skills.find((skill) => skill.id === targetId);
   }
 
-  return { skills, skillCategories, getSkillById };
+  function getCategoryBySkill(skillName: string) {
+    return skills.find((skill) => skill.name === skillName)?.category;
+  }
+
+  return { skills, skillCategories, getSkillById, getCategoryBySkill };
 });
