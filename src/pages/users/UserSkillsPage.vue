@@ -4,6 +4,7 @@
       variant="text"
       color="var(--color-btn-gray-text)"
       class="user-skills__add-btn"
+      @click="handleOpenCreateModal"
     >
       <v-icon class="user-skills__add-icon">mdi-plus</v-icon>
       <span>Add skill</span>
@@ -13,16 +14,41 @@
       :key="sCategory"
       :category="sCategory.toString()"
       :skills="aSkills"
+      @openEditModal="handleOpenEditModal"
+    />
+    <SkillModal
+      :isOpen="isModalOpen"
+      :skillForModal="skillToEdit"
+      @closeModal="handleCloseModal"
     />
   </div>
 </template>
 
 <script setup lang="ts">
 import { ref, computed } from "vue";
+import SkillModal from "@/components/user/skills/SkillModal.vue";
 import SkillsCategory from "@/components/user/skills/SkillsCategory.vue";
 import { useUsersStore } from "@/store/users";
 import IUserData from "@/types/IUserData";
 import { ISkillCategoriesMap } from "@/types/ISkillMastery";
+import { ISkillForModal } from "@/types/ISkill";
+
+const skillToEdit = ref<ISkillForModal | null>(null);
+const isModalOpen = ref(false);
+
+function handleOpenCreateModal() {
+  skillToEdit.value = null;
+  isModalOpen.value = true;
+}
+
+function handleOpenEditModal(skillForModal: ISkillForModal) {
+  skillToEdit.value = skillForModal;
+  isModalOpen.value = true;
+}
+
+function handleCloseModal() {
+  isModalOpen.value = false;
+}
 
 const { getUserById } = useUsersStore();
 

@@ -22,9 +22,11 @@ import {
   VCardText,
   VCard,
   VCardItem,
+  VCardActions,
   VNavigationDrawer,
   VLayout,
   VProgressLinear,
+  VDialog,
 } from "vuetify/components";
 
 export default {
@@ -51,7 +53,9 @@ export default {
   VCardText,
   VCard,
   VCardItem,
+  VCardActions,
   VNavigationDrawer,
   VLayout,
   VProgressLinear,
+  VDialog,
 };

@@ -6,7 +6,14 @@
         <v-card
           variant="text"
           class="skills-wrapper__skill-card"
-          @click="editSkill"
+          @click="
+            () =>
+              handleOpenEditModal({
+                name: skill.name,
+                category: props.category,
+                mastery: skill.mastery,
+              })
+          "
         >
           <v-card-item class="skills-wrapper__skill-card-content">
             <v-progress-linear
@@ -24,11 +31,20 @@
 <script setup lang="ts">
 import { reactive } from "vue";
 import { ISkillMastery, Mastery } from "@/types/ISkillMastery";
+import { ISkillForModal } from "@/types/ISkill";
 
 const props = defineProps<{
   category: string;
   skills: Omit<ISkillMastery, "category">[];
 }>();
+
+const emit = defineEmits<{
+  (event: "openEditModal", skillForModal: ISkillForModal): void;
+}>();
+
+function handleOpenEditModal(skillForModal: ISkillForModal) {
+  emit("openEditModal", skillForModal);
+}
 
 const skillsMasteries = reactive(
   props.skills.map((skill) => {
@@ -61,10 +77,6 @@ function getColorByValue(value: number) {
   } else {
     return "white";
   }
-}
-
-function editSkill() {
-  // TODO
 }
 </script>
 
