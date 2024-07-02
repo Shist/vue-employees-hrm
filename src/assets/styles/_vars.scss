@@ -34,6 +34,8 @@ $font-roboto: "Roboto", Helvetica, Arial, sans-serif;
   --color-text-error: #cf6679;
 
   --color-modal-overlay: rgba(0, 0, 0, 0.5);
+
+  --color-active-borders: #000000;
 }
 
 // Class for dark theme colors
@@ -46,6 +48,8 @@ $font-roboto: "Roboto", Helvetica, Arial, sans-serif;
 
   --color-text: #ffffff;
   --color-gray-label-text: #9a9a9a;
+
+  --color-active-borders: #ffffff;
 }
 
 // Default checkpoints for adaptive

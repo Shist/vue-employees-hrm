@@ -15,31 +15,37 @@ export const useUsersStore = defineStore("users", () => {
       position: "Vue Engineer",
       skills: [
         {
+          id: 5,
           name: "MySQL",
           category: "Database management system",
           mastery: Mastery.Novice,
         },
         {
+          id: 6,
           name: "HTML/CSS",
           category: "Programming technologies",
           mastery: Mastery.Proficient,
         },
         {
+          id: 1,
           name: "JavaScript",
           category: "Programming technologies",
           mastery: Mastery.Expert,
         },
         {
+          id: 7,
           name: "React",
           category: "Programming technologies",
           mastery: Mastery.Advanced,
         },
         {
+          id: 3,
           name: "Vue",
           category: "Programming technologies",
           mastery: Mastery.Proficient,
         },
         {
+          id: 8,
           name: "Git",
           category: "Source control systems",
           mastery: Mastery.Completent,

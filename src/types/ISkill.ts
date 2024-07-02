@@ -8,6 +8,7 @@ export interface ISkill {
 }
 
 export interface ISkillForModal {
+  id: number;
   name: string;
   category: string;
   mastery: Mastery;

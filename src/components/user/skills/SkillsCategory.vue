@@ -1,26 +1,46 @@
 <template>
   <div class="skills-wrapper">
-    <h3 class="skills-wrapper__category-headline">{{ props.category }}</h3>
+    <h3 class="skills-wrapper__category-headline">{{ category }}</h3>
     <div class="skills-wrapper__category-wrapper">
-      <div v-for="(skill, skillIndex) in props.skills" :key="skill.name">
+      <div
+        v-for="(categorySkill, categorySkillIndex) in categorySkills"
+        :key="categorySkill.name"
+      >
         <v-card
           variant="text"
           class="skills-wrapper__skill-card"
+          :class="{
+            'skills-wrapper__skill-card_is-deleting': categorySkill.isDeleting,
+          }"
           @click="
             () =>
-              handleOpenEditModal({
-                name: skill.name,
-                category: props.category,
-                mastery: skill.mastery,
-              })
+              handleOpenEditModal(
+                {
+                  id: categorySkill.id,
+                  name: categorySkill.name,
+                  category: category,
+                  mastery: categorySkill.mastery,
+                },
+                categorySkill.id,
+                categorySkill.skillIndex
+              )
+          "
+          @contextmenu.prevent="
+            () =>
+              handleSetCardForDeletion(
+                categorySkill.id,
+                categorySkill.skillIndex
+              )
           "
         >
           <v-card-item class="skills-wrapper__skill-card-content">
             <v-progress-linear
-              v-model="skillsMasteries[skillIndex]"
-              :color="getColorByValue(skillsMasteries[skillIndex])"
+              v-model="skillsMasteries[categorySkillIndex]"
+              :color="getColorByValue(skillsMasteries[categorySkillIndex])"
             />
-            <span class="skills-wrapper__skill-label">{{ skill.name }}</span>
+            <span class="skills-wrapper__skill-label">{{
+              categorySkill.name
+            }}</span>
           </v-card-item>
         </v-card>
       </div>
@@ -30,24 +50,26 @@
 
 <script setup lang="ts">
 import { reactive } from "vue";
-import { ISkillMastery, Mastery } from "@/types/ISkillMastery";
+import { ICategorySkill, Mastery } from "@/types/ISkillMastery";
 import { ISkillForModal } from "@/types/ISkill";
 
 const props = defineProps<{
   category: string;
-  skills: Omit<ISkillMastery, "category">[];
+  categorySkills: ICategorySkill[];
 }>();
 
 const emit = defineEmits<{
-  (event: "openEditModal", skillForModal: ISkillForModal): void;
+  (
+    event: "openEditModal",
+    skillForModal: ISkillForModal,
+    skillID: number,
+    skillIndex: number
+  ): void;
+  (event: "setCardForDeletion", skillID: number, skillIndex: number): void;
 }>();
 
-function handleOpenEditModal(skillForModal: ISkillForModal) {
-  emit("openEditModal", skillForModal);
-}
-
 const skillsMasteries = reactive(
-  props.skills.map((skill) => {
+  props.categorySkills.map((skill) => {
     switch (skill.mastery) {
       case Mastery.Novice:
         return 20;
@@ -62,6 +84,18 @@ const skillsMasteries = reactive(
     }
   })
 );
+
+function handleOpenEditModal(
+  skillForModal: ISkillForModal,
+  skillID: number,
+  skillIndex: number
+) {
+  emit("openEditModal", skillForModal, skillID, skillIndex);
+}
+
+function handleSetCardForDeletion(skillID: number, skillIndex: number) {
+  emit("setCardForDeletion", skillID, skillIndex);
+}
 
 function getColorByValue(value: number) {
   if (value === 100) {
@@ -94,10 +128,14 @@ function getColorByValue(value: number) {
     gap: 5px;
     .skills-wrapper__skill-card {
       border-radius: 0;
+      border: 2px solid var(--color-wrapper-bg);
       .skills-wrapper__skill-label {
         color: var(--color-btn-gray-text);
         font-size: 18px;
         line-height: 24px;
+      }
+      &_is-deleting {
+        border: 2px solid var(--color-active-borders);
       }
     }
   }

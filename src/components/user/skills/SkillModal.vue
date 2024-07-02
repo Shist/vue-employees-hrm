@@ -81,10 +81,6 @@ const props = defineProps<{
 
 const emit = defineEmits<{ (event: "closeModal"): void }>();
 
-function handleModalClose() {
-  emit("closeModal");
-}
-
 const modalState = computed({
   get() {
     return props.isOpen;
@@ -133,6 +129,10 @@ watch(selectSkill, () => {
   const skillCategory = getCategoryBySkill(`${selectSkill.value}`);
   selectCategory.value = skillCategory ? skillCategory : null;
 });
+
+function handleModalClose() {
+  emit("closeModal");
+}
 </script>
 
 <style lang="scss" scoped>
