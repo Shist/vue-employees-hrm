@@ -18,7 +18,7 @@
     />
     <SkillModal
       :isOpen="isModalOpen"
-      :skillForModal="skillToEdit"
+      :oSkillForModal="oSkillForModal"
       @closeModal="handleCloseModal"
     />
   </div>
@@ -33,16 +33,16 @@ import IUserData from "@/types/IUserData";
 import { ISkillCategoriesMap } from "@/types/ISkillMastery";
 import { ISkillForModal } from "@/types/ISkill";
 
-const skillToEdit = ref<ISkillForModal | null>(null);
+const oSkillForModal = ref<ISkillForModal | null>(null);
 const isModalOpen = ref(false);
 
 function handleOpenCreateModal() {
-  skillToEdit.value = null;
+  oSkillForModal.value = null;
   isModalOpen.value = true;
 }
 
-function handleOpenEditModal(skillForModal: ISkillForModal) {
-  skillToEdit.value = skillForModal;
+function handleOpenEditModal(_oSkillForModal: ISkillForModal) {
+  oSkillForModal.value = _oSkillForModal;
   isModalOpen.value = true;
 }
 

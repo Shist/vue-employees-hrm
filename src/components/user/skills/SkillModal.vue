@@ -9,7 +9,7 @@
       opacity="100%"
     >
       <v-card
-        :title="skillForModal ? 'Update skill' : 'Add skill'"
+        :title="!oSkillForModal ? 'Add skill' : 'Update skill'"
         class="skill-modal__card-wrapper"
       >
         <v-btn
@@ -20,12 +20,12 @@
         <v-card-item class="skill-modal__text-fields-container">
           <v-select
             v-model="selectSkill"
-            :items="skillsItems"
+            :items="aSkillsItems"
             label="Skill"
             variant="outlined"
             class="skill-modal__text-field-wrapper"
             hide-details
-            :disabled="!!skillForModal"
+            :disabled="!!oSkillForModal"
           />
           <v-select
             v-model="selectCategory"
@@ -38,7 +38,7 @@
           />
           <v-select
             v-model="selectSkillMastery"
-            :items="skillMasteries"
+            :items="aSkillMasteries"
             label="Skill mastery"
             variant="outlined"
             class="skill-modal__text-field-wrapper"
@@ -59,14 +59,7 @@
             variant="text"
             @click="handleModalClose"
             class="skill-modal__btn-confirm"
-            :disabled="
-              (!skillForModal && !selectSkill) ||
-              (!!skillForModal &&
-                selectSkillMastery ===
-                  (props.skillForModal?.mastery !== undefined
-                    ? skillMasteries[props.skillForModal?.mastery]
-                    : skillMasteries[0]))
-            "
+            :disabled="isConfirmBtnDisabled"
           >
             Confirm
           </v-btn>
@@ -83,10 +76,11 @@ import { ISkillForModal } from "@/types/ISkill";
 
 const props = defineProps<{
   isOpen: boolean;
-  skillForModal: ISkillForModal | null;
+  oSkillForModal: ISkillForModal | null;
 }>();
 
 const emit = defineEmits<{ (event: "closeModal"): void }>();
+
 function handleModalClose() {
   emit("closeModal");
 }
@@ -100,11 +94,18 @@ const modalState = computed({
   },
 });
 
+const isConfirmBtnDisabled = computed(
+  () =>
+    (!props.oSkillForModal && !selectSkill.value) ||
+    (!!props.oSkillForModal &&
+      selectSkillMastery.value === computedSkillMastery.value)
+);
+
 const { skills, skillCategories, getCategoryBySkill } = useSkillsStore();
 
-const skillsItems = computed(() => skills.map((skill) => skill.name));
+const aSkillsItems = computed(() => skills.map((skill) => skill.name));
 
-const skillMasteries = [
+const aSkillMasteries = [
   "Novice",
   "Advanced",
   "Completent",
@@ -112,17 +113,20 @@ const skillMasteries = [
   "Expert",
 ];
 
+const computedSkillMastery = computed(() =>
+  props.oSkillForModal?.mastery !== undefined
+    ? aSkillMasteries[props.oSkillForModal?.mastery]
+    : aSkillMasteries[0]
+);
+
 const selectSkill = ref<string | null>(null);
 const selectCategory = ref<string | null>(null);
-const selectSkillMastery = ref<string | null>(skillMasteries[0]);
+const selectSkillMastery = ref<string | null>(aSkillMasteries[0]);
 
 onUpdated(() => {
-  selectSkill.value = props.skillForModal?.name || null;
-  selectCategory.value = props.skillForModal?.category || null;
-  selectSkillMastery.value =
-    props.skillForModal?.mastery !== undefined
-      ? skillMasteries[props.skillForModal?.mastery]
-      : skillMasteries[0];
+  selectSkill.value = props.oSkillForModal?.name || null;
+  selectCategory.value = props.oSkillForModal?.category || null;
+  selectSkillMastery.value = computedSkillMastery.value;
 });
 
 watch(selectSkill, () => {
