@@ -1,8 +1,5 @@
 <template>
-  <div
-    class="global-container"
-    :class="{ 'dark-theme': theme.global.name.value === 'appDark' }"
-  >
+  <div class="global-container">
     <AppHeader />
     <main class="app-main" :style="{ paddingRight: scrollbarWidth }">
       <BreadCrumbs v-if="$route.meta.hasBreadcrumbs" />
@@ -23,6 +20,10 @@ import { storeToRefs } from "pinia";
 const { scrollbarWidth } = storeToRefs(useScrollbarWidth());
 
 const theme = useTheme();
+
+if (theme.global.name.value === "appDark") {
+  document.body.classList.add("dark-theme");
+}
 </script>
 
 <style lang="scss" scoped>

@@ -10,6 +10,7 @@ $font-roboto: "Roboto", Helvetica, Arial, sans-serif;
 
   --color-btn-text: #ffffff;
   --color-btn-gray-text: #767676;
+  --color-btn-gray-text-rgb: 117, 117, 117;
 
   --color-btn-bg: #c62f31;
   --color-btn-bg-hover: #8a2122;
@@ -31,6 +32,8 @@ $font-roboto: "Roboto", Helvetica, Arial, sans-serif;
   --color-gray-label-text: #7e7e7e;
   --color-text-red: #c62f31;
   --color-text-error: #cf6679;
+
+  --color-modal-overlay: rgba(0, 0, 0, 0.5);
 }
 
 // Class for dark theme colors
