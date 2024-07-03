@@ -26,7 +26,7 @@
 import { reactive, Reactive, watch } from "vue";
 import { useRoute } from "vue-router";
 import { ROUTES } from "@/constants/router";
-import IBreadCrumbsItem from "@/types/IBreadCrumbsItem";
+import { IBreadCrumbsItem } from "@/types/navigation";
 import {
   SECTIONS_NAMES,
   SECTIONS_ICONS,
@@ -88,7 +88,10 @@ function updateBreadCrumbs() {
         getUserById(Number(id))
           .then((userData) => {
             if (!userData) throw new Error("Empty user data!");
-            breadcrumbsItems[2].title = `${userData?.firstName} ${userData?.lastName}`;
+            const userFullName = userData.profile.full_name;
+            breadcrumbsItems[2].title = userFullName
+              ? userFullName
+              : "(name is empty)";
           })
           .catch(() => {
             breadcrumbsItems[2].title = `❌ Loading Error`;
@@ -98,7 +101,7 @@ function updateBreadCrumbs() {
         getCVById(Number(id))
           .then((cvData) => {
             if (!cvData) throw new Error("Empty CV data!");
-            breadcrumbsItems[2].title = `${cvData?.name}`;
+            breadcrumbsItems[2].title = `${cvData.name}`;
           })
           .catch(() => {
             breadcrumbsItems[2].title = `❌ Loading Error`;

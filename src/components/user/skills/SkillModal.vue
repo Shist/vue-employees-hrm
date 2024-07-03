@@ -72,11 +72,11 @@
 <script setup lang="ts">
 import { ref, computed, watch, onUpdated } from "vue";
 import { useSkillsStore } from "@/store/skills";
-import { ISkillForModal } from "@/types/ISkill";
+import { IProfileSkill } from "@/types/backend-interfaces/user/profile/skill";
 
 const props = defineProps<{
   isOpen: boolean;
-  oSkillForModal: ISkillForModal | null;
+  oSkillForModal: IProfileSkill | null;
 }>();
 
 const emit = defineEmits<{ (event: "closeModal"): void }>();

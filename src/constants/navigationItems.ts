@@ -1,5 +1,5 @@
 import { ROUTES } from "@/constants/router";
-import { INavigationItem } from "@/types/INavigationItem";
+import { INavigationItem } from "@/types/navigation";
 
 export const NAVIGATION__ITEMS: INavigationItem[] = [
   {
