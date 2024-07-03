@@ -53,10 +53,16 @@
 import { ref, reactive, computed } from "vue";
 import SkillModal from "@/components/user/skills/SkillModal.vue";
 import SkillsCategory from "@/components/user/skills/SkillsCategory.vue";
+import { useRoute } from "vue-router";
 import { useUsersStore } from "@/store/users";
 import { IUser } from "@/types/backend-interfaces/user";
 import { IProfileSkill } from "@/types/backend-interfaces/user/profile/skill";
 import { ISkillCategoriesMap, ICategorySkill } from "@/types/userSkillsUI";
+
+const route = useRoute();
+
+// eslint-disable-next-line
+const [section, id, tab] = route.fullPath.slice(1).split("/");
 
 const oSkillForModal = ref<IProfileSkill | null>(null);
 const isModalOpen = ref(false);
@@ -140,7 +146,7 @@ function handleSetCardForDeletion(skillName: string, skillIndex: number) {
   }
 }
 
-getUserById(1)
+getUserById(Number(id))
   .then((userData) => {
     aSkillsDeletionState.splice(
       0,
