@@ -7,7 +7,7 @@ export const usePositionsStore = defineStore("positions", () => {
     {
       id: 1,
       created_at: "03.07.2024",
-      name: "AQA Engineer",
+      name: "Vue Engineer",
     },
     {
       id: 2,

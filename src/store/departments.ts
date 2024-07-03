@@ -7,7 +7,7 @@ export const useDepartmentsStore = defineStore("departments", () => {
     {
       id: 1,
       created_at: "03.07.2024",
-      name: ".Net",
+      name: "Vue",
     },
     {
       id: 2,

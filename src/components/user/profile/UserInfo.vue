@@ -1,15 +1,17 @@
 <template>
   <div class="user-info">
     <div class="user-info__info-captions-wrapper">
-      <h3 class="user-info__name-caption">Pavel Zhukouski</h3>
+      <h3 class="user-info__name-caption">
+        {{ `${userFirstName} ${userLastName}` }}
+      </h3>
       <div class="user-info__mail-caption-wrapper">
-        <span class="user-info__mail-caption">pavel.zhouski041@gmail.com</span>
-        <v-icon class="user-info__mail-verified-icon">
+        <span class="user-info__mail-caption">{{ userEmail }}</span>
+        <v-icon v-if="isVerified" class="user-info__mail-verified-icon">
           mdi-check-decagram
         </v-icon>
       </div>
       <span class="user-info__date-caption">
-        A member since Tue April 2 2024
+        {{ `A member since ${userCreationDate}` }}
       </span>
     </div>
     <form class="user-info__info-inputs-form">
@@ -28,7 +30,7 @@
         hide-details
       />
       <v-select
-        v-model="department"
+        v-model="departmentID"
         :items="departmentsItems"
         label="Department"
         variant="outlined"
@@ -36,7 +38,7 @@
         hide-details
       />
       <v-select
-        v-model="position"
+        v-model="positionID"
         :items="positionsItems"
         label="Position"
         variant="outlined"
@@ -46,8 +48,8 @@
       <v-btn
         type="submit"
         class="user-info__form-submit-btn"
-        :disabled="!firstName && !lastName && !department && !position"
         @click.prevent="submitChanges"
+        :disabled="isSubmitBtnDisabled"
       >
         UPDATE
       </v-btn>
@@ -56,27 +58,56 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed } from "vue";
+import { ref, computed, watchEffect } from "vue";
 import { useDepartmentsStore } from "@/store/departments";
 import { usePositionsStore } from "@/store/positions";
 
-const firstName = ref(null);
+const props = defineProps<{
+  userFirstName?: string;
+  userLastName?: string;
+  userEmail?: string;
+  isVerified?: boolean;
+  userCreationDate?: string;
+  departmentID?: number;
+  positionID?: number;
+}>();
 
-const lastName = ref(null);
+const firstName = ref(props.userFirstName);
 
-const department = ref(null);
+const lastName = ref(props.userLastName);
+
+const departmentID = ref(props.departmentID);
 const { departments } = useDepartmentsStore();
 const departmentsItems = computed(() => [
   { title: "No department", value: null },
   ...departments.map((dep) => ({ title: dep.name, value: dep.id })),
 ]);
 
-const position = ref(null);
+const positionID = ref(props.positionID);
 const { positions } = usePositionsStore();
 const positionsItems = computed(() => [
   { title: "No position", value: null },
   ...positions.map((pos) => ({ title: pos.name, value: pos.id })),
 ]);
+
+watchEffect(() => {
+  firstName.value = props.userFirstName;
+  lastName.value = props.userLastName;
+  departmentID.value = props.departmentID;
+  positionID.value = props.departmentID;
+});
+
+const isSubmitBtnDisabled = computed(
+  () =>
+    !firstName.value ||
+    !lastName.value ||
+    !departmentID.value ||
+    !positionID.value ||
+    (firstName.value === props.userFirstName &&
+      lastName.value === props.userLastName &&
+      departmentID.value === props.departmentID &&
+      positionID.value === props.positionID)
+);
 
 function submitChanges() {
   // TODO - send new user data to server
