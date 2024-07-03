@@ -1,20 +1,30 @@
 import { defineStore } from "pinia";
 import { reactive, Reactive } from "vue";
-import { ICVData } from "@/types/cvData";
+import { ICV } from "@/types/backend-interfaces/cv";
 
 export const useCVsStore = defineStore("cvs", () => {
-  const cvs: Reactive<ICVData[]> = reactive([
+  const cvs: Reactive<ICV[]> = reactive([
     {
       id: 1,
+      created_at: "01.07.2024",
       name: "CV #1",
+      education: undefined,
       description: "Some first CV",
-      employee: "Pavel",
+      user: undefined,
+      projects: undefined,
+      skills: [],
+      languages: [],
     },
     {
       id: 2,
+      created_at: "02.07.2024",
       name: "CV #2",
+      education: undefined,
       description: "Some second CV",
-      employee: "Aleksey",
+      user: undefined,
+      projects: undefined,
+      skills: [],
+      languages: [],
     },
   ]);
 

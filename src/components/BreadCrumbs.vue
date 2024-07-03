@@ -98,7 +98,7 @@ function updateBreadCrumbs() {
         getCVById(Number(id))
           .then((cvData) => {
             if (!cvData) throw new Error("Empty CV data!");
-            breadcrumbsItems[2].title = `${cvData?.name}`;
+            breadcrumbsItems[2].title = `${cvData.name}`;
           })
           .catch(() => {
             breadcrumbsItems[2].title = `❌ Loading Error`;
