@@ -25,6 +25,7 @@ export const getAllUsers = async () => {
         lastName: user.profile?.last_name ?? "",
         department: user.department?.name ?? "",
         position: user.position?.name ?? "",
+        skills: [],
       });
     });
   } catch (error: unknown) {

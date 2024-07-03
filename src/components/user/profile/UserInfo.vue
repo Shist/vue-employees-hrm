@@ -18,27 +18,31 @@
         label="First Name"
         variant="outlined"
         class="user-info__text-field-wrapper"
-      ></v-text-field>
+        hide-details
+      />
       <v-text-field
         v-model="lastName"
         label="Last Name"
         variant="outlined"
         class="user-info__text-field-wrapper"
-      ></v-text-field>
+        hide-details
+      />
       <v-select
         v-model="department"
         :items="departmentsItems"
         label="Department"
         variant="outlined"
         class="user-info__text-field-wrapper"
-      ></v-select>
+        hide-details
+      />
       <v-select
         v-model="position"
         :items="positionsItems"
         label="Position"
         variant="outlined"
         class="user-info__text-field-wrapper"
-      ></v-select>
+        hide-details
+      />
       <v-btn
         type="submit"
         class="user-info__form-submit-btn"
@@ -112,7 +116,7 @@ function submitChanges() {
   }
   &__info-inputs-form {
     display: grid;
-    gap: 32px;
+    gap: 52px 32px;
     grid-template-columns: 1fr 1fr;
     grid-template-areas:
       ".    ."

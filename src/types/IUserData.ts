@@ -1,3 +1,5 @@
+import { ISkillMastery } from "@/types/ISkillMastery";
+
 export default interface IUserData {
   id: number;
   email: string;
@@ -6,4 +8,5 @@ export default interface IUserData {
   lastName: string | null;
   department: string | null;
   position: string | null;
+  skills: ISkillMastery[];
 }
