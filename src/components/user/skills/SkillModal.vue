@@ -72,7 +72,7 @@
 <script setup lang="ts">
 import { ref, computed, watch, onUpdated } from "vue";
 import { useSkillsStore } from "@/store/skills";
-import { ISkillForModal } from "@/types/ISkill";
+import { ISkillForModal } from "@/types/userSkillsUI";
 
 const props = defineProps<{
   isOpen: boolean;

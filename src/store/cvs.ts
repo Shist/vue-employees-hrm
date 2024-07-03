@@ -1,6 +1,6 @@
 import { defineStore } from "pinia";
 import { reactive, Reactive } from "vue";
-import ICVData from "@/types/ICVData";
+import { ICVData } from "@/types/cvData";
 
 export const useCVsStore = defineStore("cvs", () => {
   const cvs: Reactive<ICVData[]> = reactive([

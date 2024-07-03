@@ -50,8 +50,8 @@
 
 <script setup lang="ts">
 import { reactive } from "vue";
-import { ICategorySkill, Mastery } from "@/types/ISkillMastery";
-import { ISkillForModal } from "@/types/ISkill";
+import { Mastery, ICategorySkill } from "@/types/userSkillsUI";
+import { ISkillForModal } from "@/types/userSkillsUI";
 
 const props = defineProps<{
   category: string;

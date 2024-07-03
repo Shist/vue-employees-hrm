@@ -1,4 +1,4 @@
-export default interface ICVData {
+export interface ICVData {
   id: number;
   name: string;
   description: string;

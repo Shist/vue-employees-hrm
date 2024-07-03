@@ -26,7 +26,7 @@
 import { reactive, Reactive, watch } from "vue";
 import { useRoute } from "vue-router";
 import { ROUTES } from "@/constants/router";
-import IBreadCrumbsItem from "@/types/IBreadCrumbsItem";
+import { IBreadCrumbsItem } from "@/types/navigation";
 import {
   SECTIONS_NAMES,
   SECTIONS_ICONS,

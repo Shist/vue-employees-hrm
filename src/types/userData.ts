@@ -1,6 +1,6 @@
-import { ISkillMastery } from "@/types/ISkillMastery";
+import { ISkillForModal } from "@/types/userSkillsUI";
 
-export default interface IUserData {
+export interface IUserData {
   id: number;
   avatar: string;
   firstName: string;
@@ -8,5 +8,5 @@ export default interface IUserData {
   email: string;
   department: string;
   position: string;
-  skills: ISkillMastery[];
+  skills: ISkillForModal[];
 }

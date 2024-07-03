@@ -1,6 +1,6 @@
 import { defineStore } from "pinia";
 import { reactive, Reactive } from "vue";
-import IPositionData from "@/types/IPositionData";
+import { IPositionData } from "@/types/positionData";
 
 export const usePositionsStore = defineStore("positions", () => {
   const positions: Reactive<IPositionData[]> = reactive([

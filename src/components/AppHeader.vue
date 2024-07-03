@@ -175,9 +175,9 @@ import { computed, onMounted, ref, watch } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import { ROUTES } from "@/constants/router";
 import { useUsersStore } from "@/store/users";
-import IUserData from "@/types/IUserData";
+import { IUserData } from "@/types/userData";
 import { NAVIGATION__ITEMS } from "@/constants/navigationItems";
-import { INavigationItem } from "@/types/INavigationItem";
+import { INavigationItem } from "@/types/navigation";
 import { useScrollbarWidth } from "@/store/scrollbarWidth";
 import { storeToRefs } from "pinia";
 

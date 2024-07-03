@@ -1,6 +1,6 @@
 import { defineStore } from "pinia";
 import { reactive, Reactive } from "vue";
-import IDepartmentData from "@/types/IDepartmentData";
+import { IDepartmentData } from "@/types/departmentData";
 
 export const useDepartmentsStore = defineStore("departments", () => {
   const departments: Reactive<IDepartmentData[]> = reactive([

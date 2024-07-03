@@ -1,6 +1,6 @@
 import { defineStore } from "pinia";
 import { reactive, Reactive } from "vue";
-import { ISkill } from "@/types/ISkill";
+import { ISkill } from "@/types/userSkillsUI";
 
 export const useSkillsStore = defineStore("skills", () => {
   const skills: Reactive<ISkill[]> = reactive([

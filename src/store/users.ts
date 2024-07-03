@@ -1,7 +1,7 @@
 import { defineStore } from "pinia";
 import { reactive, Reactive } from "vue";
-import IUserData from "@/types/IUserData";
-import { Mastery } from "@/types/ISkillMastery";
+import { IUserData } from "@/types/userData";
+import { Mastery } from "@/types/userSkillsUI";
 
 export const useUsersStore = defineStore("users", () => {
   const users: Reactive<IUserData[]> = reactive([

@@ -54,9 +54,8 @@ import { ref, reactive, computed } from "vue";
 import SkillModal from "@/components/user/skills/SkillModal.vue";
 import SkillsCategory from "@/components/user/skills/SkillsCategory.vue";
 import { useUsersStore } from "@/store/users";
-import IUserData from "@/types/IUserData";
-import { ISkillCategoriesMap } from "@/types/ISkillMastery";
-import { ISkillForModal } from "@/types/ISkill";
+import { IUserData } from "@/types/userData";
+import { ISkillForModal, ISkillCategoriesMap } from "@/types/userSkillsUI";
 
 const oSkillForModal = ref<ISkillForModal | null>(null);
 const isModalOpen = ref(false);
