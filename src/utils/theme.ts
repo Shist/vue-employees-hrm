@@ -1,4 +1,4 @@
-import { ITheme, isTheme } from "@/types/ITheme";
+import { ITheme, isTheme } from "@/types/theme";
 
 const localTheme = localStorage.getItem("theme");
 

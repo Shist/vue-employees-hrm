@@ -53,15 +53,21 @@
 import { ref, reactive, computed } from "vue";
 import SkillModal from "@/components/user/skills/SkillModal.vue";
 import SkillsCategory from "@/components/user/skills/SkillsCategory.vue";
+import { useRoute } from "vue-router";
 import { useUsersStore } from "@/store/users";
-import IUserData from "@/types/IUserData";
-import { ISkillCategoriesMap } from "@/types/ISkillMastery";
-import { ISkillForModal } from "@/types/ISkill";
+import { IUser } from "@/types/backend-interfaces/user";
+import { IProfileSkill } from "@/types/backend-interfaces/user/profile/skill";
+import { ISkillCategoriesMap, ICategorySkill } from "@/types/userSkillsUI";
 
-const oSkillForModal = ref<ISkillForModal | null>(null);
+const route = useRoute();
+
+// eslint-disable-next-line
+const [section, id, tab] = route.fullPath.slice(1).split("/");
+
+const oSkillForModal = ref<IProfileSkill | null>(null);
 const isModalOpen = ref(false);
 
-const skillsForDeletionIDs = reactive(new Set<number>());
+const skillsForDeletionNames = reactive(new Set<string>());
 
 const aSkillsDeletionState = reactive<boolean[]>([]);
 
@@ -74,32 +80,33 @@ const skillsForDeletionAmount = computed<number>(() =>
 
 const { getUserById } = useUsersStore();
 
-const user = ref<IUserData | undefined>();
+const user = ref<IUser | undefined>();
 
 const skillCategories = computed(() => {
   const resultObj: ISkillCategoriesMap = {};
 
-  user.value?.skills.forEach((skill, index) => {
+  user.value?.profile.skills.forEach((skill, index) => {
     const category = skill.category;
 
-    if (resultObj[category]) {
-      resultObj[category].push({
-        id: skill.id,
-        name: skill.name,
-        mastery: skill.mastery,
-        skillIndex: index,
-        isDeleting: aSkillsDeletionState[index],
-      });
+    const oCategorySkill: ICategorySkill = {
+      name: skill.name,
+      mastery: skill.mastery,
+      skillIndex: index,
+      isDeleting: aSkillsDeletionState[index],
+    };
+
+    if (category) {
+      if (resultObj[category]) {
+        resultObj[category].push(oCategorySkill);
+      } else {
+        resultObj[category] = [oCategorySkill];
+      }
     } else {
-      resultObj[category] = [
-        {
-          id: skill.id,
-          name: skill.name,
-          mastery: skill.mastery,
-          skillIndex: index,
-          isDeleting: aSkillsDeletionState[index],
-        },
-      ];
+      if (resultObj["Other skills"]) {
+        resultObj["Other skills"].push(oCategorySkill);
+      } else {
+        resultObj["Other skills"] = [oCategorySkill];
+      }
     }
   });
 
@@ -112,12 +119,12 @@ function handleOpenCreateModal() {
 }
 
 function handleOpenEditModal(
-  _oSkillForModal: ISkillForModal,
-  skillID: number,
+  _oSkillForModal: IProfileSkill,
+  skillName: string,
   skillIndex: number
 ) {
   if (aSkillsDeletionState[skillIndex]) {
-    skillsForDeletionIDs.delete(skillID);
+    skillsForDeletionNames.delete(skillName);
     aSkillsDeletionState[skillIndex] = false;
   } else {
     oSkillForModal.value = _oSkillForModal;
@@ -129,22 +136,22 @@ function handleCloseModal() {
   isModalOpen.value = false;
 }
 
-function handleSetCardForDeletion(skillID: number, skillIndex: number) {
-  if (skillsForDeletionIDs.has(skillID)) {
-    skillsForDeletionIDs.delete(skillID);
+function handleSetCardForDeletion(skillName: string, skillIndex: number) {
+  if (skillsForDeletionNames.has(skillName)) {
+    skillsForDeletionNames.delete(skillName);
     aSkillsDeletionState[skillIndex] = false;
   } else {
-    skillsForDeletionIDs.add(skillID);
+    skillsForDeletionNames.add(skillName);
     aSkillsDeletionState[skillIndex] = true;
   }
 }
 
-getUserById(1)
+getUserById(Number(id))
   .then((userData) => {
     aSkillsDeletionState.splice(
       0,
       0,
-      ...new Array(userData?.skills.length).fill(false)
+      ...new Array(userData?.profile.skills.length).fill(false)
     );
     user.value = userData;
   })
@@ -153,13 +160,13 @@ getUserById(1)
   });
 
 function clearUserDeletionSkills() {
-  skillsForDeletionIDs.clear();
+  skillsForDeletionNames.clear();
 
   aSkillsDeletionState.fill(false);
 }
 
 function deleteUserSkills() {
-  // TODO delete all skills, which IDs are inside skillsForDeletionIDs
+  // TODO delete all skills, which names are inside skillsForDeletionNames
 
   clearUserDeletionSkills();
 }

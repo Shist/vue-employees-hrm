@@ -61,8 +61,8 @@
 import { ref, reactive, onMounted } from "vue";
 import { useRouter } from "vue-router";
 import { ROUTES } from "@/constants/router";
-import IUserData from "@/types/IUserData";
 import { getAllUsers } from "@/services/users";
+import { IUsersTableData } from "@/types/usersTableUI";
 
 const router = useRouter();
 
@@ -74,16 +74,16 @@ const search = ref("");
 
 const headers = reactive([
   { key: "avatar", sortable: false },
-  { key: "firstName", title: "First Name" },
-  { key: "lastName", title: "Last Name" },
+  { key: "first_name", title: "First Name" },
+  { key: "last_name", title: "Last Name" },
   { key: "email", title: "Email" },
-  { key: "department", title: "Department" },
-  { key: "position", title: "Position" },
+  { key: "department_name", title: "Department" },
+  { key: "position_name", title: "Position" },
   { key: "options", sortable: false },
 ]);
 
 const isLoading = ref<boolean>(false);
-const users = reactive<IUserData[]>([]);
+const users = reactive<IUsersTableData[]>([]);
 
 onMounted(async () => {
   isLoading.value = true;

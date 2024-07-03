@@ -16,19 +16,18 @@
             () =>
               handleOpenEditModal(
                 {
-                  id: categorySkill.id,
                   name: categorySkill.name,
                   category: category,
                   mastery: categorySkill.mastery,
                 },
-                categorySkill.id,
+                categorySkill.name,
                 categorySkill.skillIndex
               )
           "
           @contextmenu.prevent="
             () =>
               handleSetCardForDeletion(
-                categorySkill.id,
+                categorySkill.name,
                 categorySkill.skillIndex
               )
           "
@@ -50,8 +49,9 @@
 
 <script setup lang="ts">
 import { reactive } from "vue";
-import { ICategorySkill, Mastery } from "@/types/ISkillMastery";
-import { ISkillForModal } from "@/types/ISkill";
+import { IProfileSkill } from "@/types/backend-interfaces/user/profile/skill";
+import { ICategorySkill } from "@/types/userSkillsUI";
+import { Mastery } from "@/types/backend-interfaces/skill/mastery";
 
 const props = defineProps<{
   category: string;
@@ -61,11 +61,11 @@ const props = defineProps<{
 const emit = defineEmits<{
   (
     event: "openEditModal",
-    skillForModal: ISkillForModal,
-    skillID: number,
+    skillForModal: IProfileSkill,
+    skillName: string,
     skillIndex: number
   ): void;
-  (event: "setCardForDeletion", skillID: number, skillIndex: number): void;
+  (event: "setCardForDeletion", skillName: string, skillIndex: number): void;
 }>();
 
 const skillsMasteries = reactive(
@@ -75,7 +75,7 @@ const skillsMasteries = reactive(
         return 20;
       case Mastery.Advanced:
         return 40;
-      case Mastery.Completent:
+      case Mastery.Competent:
         return 60;
       case Mastery.Proficient:
         return 80;
@@ -86,15 +86,15 @@ const skillsMasteries = reactive(
 );
 
 function handleOpenEditModal(
-  skillForModal: ISkillForModal,
-  skillID: number,
+  skillForModal: IProfileSkill,
+  skillName: string,
   skillIndex: number
 ) {
-  emit("openEditModal", skillForModal, skillID, skillIndex);
+  emit("openEditModal", skillForModal, skillName, skillIndex);
 }
 
-function handleSetCardForDeletion(skillID: number, skillIndex: number) {
-  emit("setCardForDeletion", skillID, skillIndex);
+function handleSetCardForDeletion(skillName: string, skillIndex: number) {
+  emit("setCardForDeletion", skillName, skillIndex);
 }
 
 function getColorByValue(value: number) {

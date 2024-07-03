@@ -2,14 +2,22 @@
   <div class="avatar-upload">
     <div class="avatar-upload__avatar-wrapper">
       <v-img
-        :src="require(`@/assets/images/employee-1.png`)"
+        v-if="userAvatar"
+        :src="require(`@/assets/images/${userAvatar}`)"
         alt="avatar"
         class="avatar-upload__avatar"
+      />
+      <v-skeleton-loader
+        v-else
+        type="avatar"
+        color="var(--color-header-bg)"
+        class="avatar-upload__avatar-skeleton"
       />
       <v-btn
         icon="mdi-close"
         class="avatar-upload__avatar-cross-btn"
         @click.prevent="avatarRemove"
+        :disabled="!userAvatar"
       ></v-btn>
     </div>
     <label
@@ -25,6 +33,7 @@
         accept="image/png, image/jpg, image/jpeg, image/gif"
         id="input-avatar"
         @change.prevent="avatarChange"
+        :disabled="!userAvatar"
       />
       <div class="avatar-upload__upload-avatar-headline-wrapper">
         <v-icon class="avatar-upload__upload-avatar-headline-icon">
@@ -42,6 +51,10 @@
 </template>
 
 <script setup lang="ts">
+defineProps<{
+  userAvatar?: string;
+}>();
+
 function avatarRemove() {
   console.log("User clicked cross button, he wants to remove old avatar");
   // Remove old avatar from server
@@ -87,8 +100,13 @@ function avatarDrop(e: Event) {
   flex-wrap: wrap;
   &__avatar-wrapper {
     position: relative;
+    height: 120px;
+    width: 120px;
     .avatar-upload__avatar {
       border-radius: 50%;
+    }
+    .avatar-upload__avatar-skeleton {
+      padding: 10px;
       height: 120px;
       width: 120px;
     }
@@ -129,5 +147,13 @@ function avatarDrop(e: Event) {
       color: var(--color-gray-label-text);
     }
   }
+}
+
+:deep(.avatar-upload__avatar-skeleton .v-skeleton-loader__avatar) {
+  margin: 0;
+  max-width: 100px;
+  width: 100%;
+  max-height: 100px;
+  height: 100%;
 }
 </style>

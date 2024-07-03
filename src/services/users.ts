@@ -1,11 +1,10 @@
 import apolloClient from "@/plugins/apollo";
 import getAllUsersQuery from "@/graphql/queries/getAllUsers.query.gql";
-import IUserData from "@/types/IUserData";
-import IUserApolloData from "@/types/IUserApolloData";
 import { useAuthStore } from "@/store/authStore";
+import { IUsersTableData, IUsersTableServerData } from "@/types/usersTableUI";
 
 export const getAllUsers = async () => {
-  const result: IUserData[] = [];
+  const result: IUsersTableData[] = [];
 
   try {
     const { users } = (
@@ -16,16 +15,15 @@ export const getAllUsers = async () => {
 
     if (!users) return;
 
-    users.forEach((user: IUserApolloData) => {
+    users.forEach((user: IUsersTableServerData) => {
       result.push({
         id: user.id,
         email: user.email,
         avatar: user.profile.avatar ?? "",
-        firstName: user.profile?.first_name ?? "",
-        lastName: user.profile?.last_name ?? "",
-        department: user.department?.name ?? "",
-        position: user.position?.name ?? "",
-        skills: [],
+        first_name: user.profile?.first_name ?? "",
+        last_name: user.profile?.last_name ?? "",
+        department_name: user.department_name ?? "",
+        position_name: user.position_name ?? "",
       });
     });
   } catch (error: unknown) {

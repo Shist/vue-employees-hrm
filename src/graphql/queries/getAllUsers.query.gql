@@ -7,11 +7,7 @@ query GET_ALL_USERS {
       last_name
       avatar
     }
-    department {
-      name
-    }
-    position {
-      name
-    }
+    department_name
+    position_name
   }
 }

@@ -53,8 +53,7 @@ import {
   PASSWORD_MINLENGTH_FIELD,
   PASSWORD_REQUIRED_FIELD,
 } from "@/constants/errorMessage";
-import { IForm } from "@/types/IForm";
-import { IAuthForm } from "@/types/IAuthForm";
+import { IForm, IAuthForm } from "@/types/form";
 import { useValidationErrors } from "@/composables/useValidationErrors";
 import { useAuthStore } from "@/store/authStore";
 
