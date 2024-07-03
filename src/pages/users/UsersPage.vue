@@ -1,5 +1,5 @@
 <template>
-  <div class="main-page">
+  <div class="main-page" v-if="!isLoading">
     <v-text-field
       v-model="search"
       label="Search"
@@ -11,16 +11,19 @@
     </v-text-field>
     <v-data-table
       :headers="headers"
-      :items="userItems"
+      :items="users"
       :search="search"
       :class="{ 'main-page__data-table': true }"
       hide-details
     >
       <template v-slot:[`item.avatar`]="{ item }">
-        <v-img
-          :src="require(`@/assets/images/${item.avatar}`)"
-          class="main-page__table-img-avatar"
-        />
+        <v-avatar color="var(--color-wrapper-bg)" size="default">
+          <v-img
+            :src="item.avatar ?? undefined"
+            alt="Avatar"
+            class="main-page__table-img-avatar"
+          />
+        </v-avatar>
       </template>
       <template v-slot:[`item.options`]="{ item }">
         <v-menu>
@@ -55,10 +58,11 @@
 </template>
 
 <script setup lang="ts">
-import { ref, reactive, computed } from "vue";
+import { ref, reactive, onMounted } from "vue";
 import { useRouter } from "vue-router";
 import { ROUTES } from "@/constants/router";
-import { useUsersStore } from "@/store/users";
+import { getAllUsers } from "@/services/users";
+import { IUsersTableData } from "@/types/usersTableUI";
 
 const router = useRouter();
 
@@ -70,27 +74,23 @@ const search = ref("");
 
 const headers = reactive([
   { key: "avatar", sortable: false },
-  { key: "firstName", title: "First Name" },
-  { key: "lastName", title: "Last Name" },
+  { key: "first_name", title: "First Name" },
+  { key: "last_name", title: "Last Name" },
   { key: "email", title: "Email" },
-  { key: "department", title: "Department" },
-  { key: "position", title: "Position" },
+  { key: "department_name", title: "Department" },
+  { key: "position_name", title: "Position" },
   { key: "options", sortable: false },
 ]);
 
-const { users } = useUsersStore();
+const isLoading = ref<boolean>(false);
+const users = reactive<IUsersTableData[]>([]);
 
-const userItems = computed(() =>
-  users.map((user) => ({
-    id: user.id,
-    avatar: user.profile.avatar,
-    firstName: user.profile.first_name,
-    lastName: user.profile.last_name,
-    email: user.email,
-    department: user.department_name,
-    position: user.position_name,
-  }))
-);
+onMounted(async () => {
+  isLoading.value = true;
+  const userData = await getAllUsers();
+  users.splice(0, users.length, ...(userData as []));
+  isLoading.value = false;
+});
 </script>
 
 <style lang="scss" scoped>

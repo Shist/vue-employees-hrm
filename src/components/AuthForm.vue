@@ -43,7 +43,7 @@
 
 <script setup lang="ts">
 import { computed, reactive, ref } from "vue";
-import { useRoute } from "vue-router";
+import { useRoute, useRouter } from "vue-router";
 import { ROUTES } from "@/constants/router";
 import useVuelidate from "@vuelidate/core";
 import { required, minLength, email, helpers } from "@vuelidate/validators";
@@ -55,10 +55,14 @@ import {
 } from "@/constants/errorMessage";
 import { IForm, IAuthForm } from "@/types/form";
 import { useValidationErrors } from "@/composables/useValidationErrors";
+import { useAuthStore } from "@/store/authStore";
+
+const authStore = useAuthStore();
 
 const props = defineProps<IAuthForm>();
 
 const route = useRoute();
+const router = useRouter();
 
 const formData = reactive<IForm>({
   email: "",
@@ -116,12 +120,16 @@ const submitForm = async (): Promise<void> => {
     try {
       if (route.fullPath === ROUTES.SIGN_IN.PATH) {
         // await authStore.loginUser(formData.email, formData.password);
+        // const { result } = useQuery(loginQuery);
+        await authStore.loginUser(formData.email, formData.password);
+
         console.log("call login user method");
       } else {
         // await authStore.registerUser(formData.email, formData.password);
         console.log("call register user method");
       }
       // router.push("/");
+      router.push(ROUTES.MAIN.PATH);
       console.log("change route to main");
     } catch (err: unknown) {
       if (err instanceof Error) {

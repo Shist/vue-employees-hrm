@@ -180,10 +180,12 @@ import { NAVIGATION__ITEMS } from "@/constants/navigationItems";
 import { INavigationItem } from "@/types/navigation";
 import { useScrollbarWidth } from "@/store/scrollbarWidth";
 import { storeToRefs } from "pinia";
+import { useAuthStore } from "@/store/authStore";
 
 const router = useRouter();
 const route = useRoute();
 const userStore = useUsersStore();
+const authStore = useAuthStore();
 
 const { scrollbarWidth } = storeToRefs(useScrollbarWidth());
 
@@ -220,8 +222,7 @@ const handleNavigationShow = () => {
 };
 
 const handleLogout = async (): Promise<void> => {
-  // await authStore.logoutUser()
-  // router.push("/signin");
+  authStore.logout();
   console.log("logout");
 };
 
