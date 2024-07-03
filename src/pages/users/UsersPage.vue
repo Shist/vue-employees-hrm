@@ -1,5 +1,5 @@
 <template>
-  <div class="main-page">
+  <div class="main-page" v-if="!isLoading">
     <v-text-field
       v-model="search"
       label="Search"
@@ -17,10 +17,13 @@
       hide-details
     >
       <template v-slot:[`item.avatar`]="{ item }">
-        <v-img
-          :src="require(`@/assets/images/${item.avatar}`)"
-          class="main-page__table-img-avatar"
-        />
+        <v-avatar color="var(--color-wrapper-bg)" size="default">
+          <v-img
+            :src="item.avatar ?? undefined"
+            alt="Avatar"
+            class="main-page__table-img-avatar"
+          />
+        </v-avatar>
       </template>
       <template v-slot:[`item.options`]="{ item }">
         <v-menu>
@@ -55,10 +58,11 @@
 </template>
 
 <script setup lang="ts">
-import { ref, reactive } from "vue";
+import { ref, reactive, onMounted } from "vue";
 import { useRouter } from "vue-router";
 import { ROUTES } from "@/constants/router";
-import { useUsersStore } from "@/store/users";
+import IUserData from "@/types/IUserData";
+import { getAllUsers } from "@/services/users";
 
 const router = useRouter();
 
@@ -77,7 +81,16 @@ const headers = reactive([
   { key: "position", title: "Position" },
   { key: "options", sortable: false },
 ]);
-const { users } = useUsersStore();
+
+const isLoading = ref<boolean>(false);
+const users = reactive<IUserData[]>([]);
+
+onMounted(async () => {
+  isLoading.value = true;
+  const userData = await getAllUsers();
+  users.splice(0, users.length, ...(userData as []));
+  isLoading.value = false;
+});
 </script>
 
 <style lang="scss" scoped>

@@ -1,9 +1,9 @@
 export default interface IUserData {
   id: number;
-  avatar: string;
-  firstName: string;
-  lastName: string;
   email: string;
-  department: string;
-  position: string;
+  avatar: string | null;
+  firstName: string | null;
+  lastName: string | null;
+  department: string | null;
+  position: string | null;
 }
