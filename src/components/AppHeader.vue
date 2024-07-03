@@ -52,7 +52,7 @@
         </div>
 
         <p v-if="user" class="toolbar__email text-white">
-          {{ `${user.firstName} ` + `${user.lastName}` }}
+          {{ user.profile.full_name }}
         </p>
         <v-skeleton-loader
           v-else
@@ -67,7 +67,7 @@
                 <v-img
                   v-if="user"
                   alt="Avatar"
-                  :src="require(`@/assets/images/${user.avatar}`)"
+                  :src="require(`@/assets/images/${user.profile.avatar}`)"
                 />
                 <v-skeleton-loader v-else type="avatar"></v-skeleton-loader>
               </v-avatar>
@@ -175,7 +175,7 @@ import { computed, onMounted, ref, watch } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import { ROUTES } from "@/constants/router";
 import { useUsersStore } from "@/store/users";
-import { IUserData } from "@/types/userData";
+import { IUser } from "@/types/backend-interfaces/user";
 import { NAVIGATION__ITEMS } from "@/constants/navigationItems";
 import { INavigationItem } from "@/types/navigation";
 import { useScrollbarWidth } from "@/store/scrollbarWidth";
@@ -195,7 +195,7 @@ const locations = ref([
 
 const location = ref<string>("English");
 
-const user = ref<IUserData | undefined>(undefined);
+const user = ref<IUser | undefined>(undefined);
 
 const drawer = ref<boolean>(false);
 

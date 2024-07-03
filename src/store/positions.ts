@@ -71,7 +71,9 @@ export const usePositionsStore = defineStore("positions", () => {
     },
   ]);
 
-  async function getPositionById(targetId: number) {
+  async function getPositionById(
+    targetId: number
+  ): Promise<IPosition | undefined> {
     // if (positions === null) { await Подтягиваем позиции с сервера ... }
     return positions.find((pos) => pos.id === targetId);
   }

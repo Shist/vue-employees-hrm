@@ -11,7 +11,7 @@
     </v-text-field>
     <v-data-table
       :headers="headers"
-      :items="users"
+      :items="userItems"
       :search="search"
       :class="{ 'main-page__data-table': true }"
       hide-details
@@ -55,7 +55,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, reactive } from "vue";
+import { ref, reactive, computed } from "vue";
 import { useRouter } from "vue-router";
 import { ROUTES } from "@/constants/router";
 import { useUsersStore } from "@/store/users";
@@ -77,7 +77,20 @@ const headers = reactive([
   { key: "position", title: "Position" },
   { key: "options", sortable: false },
 ]);
+
 const { users } = useUsersStore();
+
+const userItems = computed(() =>
+  users.map((user) => ({
+    id: user.id,
+    avatar: user.profile.avatar,
+    firstName: user.profile.first_name,
+    lastName: user.profile.last_name,
+    email: user.email,
+    department: user.department_name,
+    position: user.position_name,
+  }))
+);
 </script>
 
 <style lang="scss" scoped>

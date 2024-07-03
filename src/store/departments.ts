@@ -51,7 +51,9 @@ export const useDepartmentsStore = defineStore("departments", () => {
     },
   ]);
 
-  async function getDepartmentById(targetId: number) {
+  async function getDepartmentById(
+    targetId: number
+  ): Promise<IDepartment | undefined> {
     // if (departments === null) { await Подтягиваем департменты с сервера ... }
     return departments.find((dep) => dep.id === targetId);
   }

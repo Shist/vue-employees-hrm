@@ -1,5 +1,11 @@
 import { Mastery } from "@/types/backend-interfaces/skill/mastery";
 
+export interface IProfileSkill {
+  name: string;
+  category?: string;
+  mastery: Mastery;
+}
+
 export interface IAddProfileSkillInput {
   userId: number;
   name: string;

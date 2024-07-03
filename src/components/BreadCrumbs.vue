@@ -88,7 +88,10 @@ function updateBreadCrumbs() {
         getUserById(Number(id))
           .then((userData) => {
             if (!userData) throw new Error("Empty user data!");
-            breadcrumbsItems[2].title = `${userData?.firstName} ${userData?.lastName}`;
+            const userFullName = userData.profile.full_name;
+            breadcrumbsItems[2].title = userFullName
+              ? userFullName
+              : "(name is empty)";
           })
           .catch(() => {
             breadcrumbsItems[2].title = `❌ Loading Error`;

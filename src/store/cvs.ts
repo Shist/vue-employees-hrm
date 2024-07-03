@@ -28,7 +28,7 @@ export const useCVsStore = defineStore("cvs", () => {
     },
   ]);
 
-  async function getCVById(targetId: number) {
+  async function getCVById(targetId: number): Promise<ICV | undefined> {
     // if (cvs === null) { await Подтягиваем cv-шки с сервера ... }
     return cvs.find((cv) => cv.id === targetId);
   }
