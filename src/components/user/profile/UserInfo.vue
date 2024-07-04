@@ -2,16 +2,16 @@
   <div class="user-info">
     <div class="user-info__info-captions-wrapper">
       <h3 class="user-info__name-caption">
-        {{ `${userFirstName} ${userLastName}` }}
+        {{ computedFullName }}
       </h3>
       <div class="user-info__mail-caption-wrapper">
-        <span class="user-info__mail-caption">{{ userEmail }}</span>
-        <v-icon v-if="isVerified" class="user-info__mail-verified-icon">
+        <span class="user-info__mail-caption">{{ computedEmail }}</span>
+        <v-icon v-if="computedIsVerified" class="user-info__mail-verified-icon">
           mdi-check-decagram
         </v-icon>
       </div>
       <span class="user-info__date-caption">
-        {{ `A member since ${userCreationDate}` }}
+        {{ computedCreationDate }}
       </span>
     </div>
     <form class="user-info__info-inputs-form">
@@ -20,6 +20,7 @@
         label="First Name"
         variant="outlined"
         class="user-info__text-field-wrapper"
+        :disabled="firstName === 'pending' || firstName === 'error'"
         hide-details
       />
       <v-text-field
@@ -27,6 +28,7 @@
         label="Last Name"
         variant="outlined"
         class="user-info__text-field-wrapper"
+        :disabled="lastName === 'pending' || lastName === 'error'"
         hide-details
       />
       <v-select
@@ -35,6 +37,7 @@
         label="Department"
         variant="outlined"
         class="user-info__text-field-wrapper"
+        :disabled="departmentID === 'pending' || departmentID === 'error'"
         hide-details
       />
       <v-select
@@ -43,6 +46,7 @@
         label="Position"
         variant="outlined"
         class="user-info__text-field-wrapper"
+        :disabled="positionID === 'pending' || positionID === 'error'"
         hide-details
       />
       <v-btn
@@ -63,18 +67,72 @@ import { useDepartmentsStore } from "@/store/departments";
 import { usePositionsStore } from "@/store/positions";
 
 const props = defineProps<{
-  userFirstName?: string;
-  userLastName?: string;
-  userEmail?: string;
-  isVerified?: boolean;
-  userCreationDate?: string;
-  departmentID?: number;
-  positionID?: number;
+  email: string | "pending" | "error";
+  createdAt: number | "pending" | "error";
+  isVerified: boolean | "pending" | "error";
+  firstName: string | null | "pending" | "error";
+  lastName: string | null | "pending" | "error";
+  departmentID: number | "pending" | "error";
+  positionID: number | "pending" | "error";
 }>();
 
-const firstName = ref(props.userFirstName);
+const computedFullName = computed(() => {
+  if (props.firstName === "pending" || props.lastName === "pending") {
+    return "⏳ Loading full name...";
+  } else if (props.firstName === "error" || props.lastName === "error") {
+    return "❌ Name loading error";
+  } else if (!props.firstName && !props.lastName) {
+    return "(Neither first nor last name are specified)";
+  } else {
+    if (props.firstName && props.lastName) {
+      return `${props.firstName} ${props.lastName}`;
+    } else if (props.firstName) {
+      return props.firstName;
+    } else {
+      return props.lastName;
+    }
+  }
+});
 
-const lastName = ref(props.userLastName);
+const computedEmail = computed(() => {
+  if (props.email === "pending") {
+    return "⏳ Loading email...";
+  } else if (props.email === "error") {
+    return "❌ Email loading error";
+  } else {
+    return props.email;
+  }
+});
+
+const computedIsVerified = computed(() => {
+  if (props.isVerified === "pending" || props.isVerified === "error") {
+    return false;
+  } else {
+    return props.isVerified;
+  }
+});
+
+const computedCreationDate = computed(() => {
+  if (props.createdAt === "pending") {
+    return "⏳ Loading creation date...";
+  } else if (props.createdAt === "error") {
+    return "❌ Creation date loading error";
+  } else {
+    const targetDate = new Date(props.createdAt)
+      .toLocaleDateString("en-US", {
+        weekday: "short",
+        month: "short",
+        day: "numeric",
+        year: "numeric",
+      })
+      .replace(/,/g, "");
+    return `A member since ${targetDate}`;
+  }
+});
+
+const firstName = ref(props.firstName);
+
+const lastName = ref(props.lastName);
 
 const departmentID = ref(props.departmentID);
 const { departments } = useDepartmentsStore();
@@ -91,8 +149,8 @@ const positionsItems = computed(() => [
 ]);
 
 watchEffect(() => {
-  firstName.value = props.userFirstName;
-  lastName.value = props.userLastName;
+  firstName.value = props.firstName;
+  lastName.value = props.lastName;
   departmentID.value = props.departmentID;
   positionID.value = props.departmentID;
 });
@@ -103,8 +161,8 @@ const isSubmitBtnDisabled = computed(
     !lastName.value ||
     !departmentID.value ||
     !positionID.value ||
-    (firstName.value === props.userFirstName &&
-      lastName.value === props.userLastName &&
+    (firstName.value === props.firstName &&
+      lastName.value === props.lastName &&
       departmentID.value === props.departmentID &&
       positionID.value === props.positionID)
 );

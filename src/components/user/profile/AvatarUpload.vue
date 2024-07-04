@@ -2,8 +2,8 @@
   <div class="avatar-upload">
     <div class="avatar-upload__avatar-wrapper">
       <v-img
-        v-if="userAvatar"
-        :src="require(`@/assets/images/${userAvatar}`)"
+        v-if="avatar !== null && avatar !== 'pending' && avatar !== 'error'"
+        :src="avatar"
         alt="avatar"
         class="avatar-upload__avatar"
       />
@@ -17,7 +17,7 @@
         icon="mdi-close"
         class="avatar-upload__avatar-cross-btn"
         @click.prevent="avatarRemove"
-        :disabled="!userAvatar"
+        :disabled="!avatar"
       ></v-btn>
     </div>
     <label
@@ -33,7 +33,7 @@
         accept="image/png, image/jpg, image/jpeg, image/gif"
         id="input-avatar"
         @change.prevent="avatarChange"
-        :disabled="!userAvatar"
+        :disabled="!avatar"
       />
       <div class="avatar-upload__upload-avatar-headline-wrapper">
         <v-icon class="avatar-upload__upload-avatar-headline-icon">
@@ -52,7 +52,7 @@
 
 <script setup lang="ts">
 defineProps<{
-  userAvatar?: string;
+  avatar: string | null | "pending" | "error";
 }>();
 
 function avatarRemove() {

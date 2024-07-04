@@ -1,42 +1,65 @@
 <template>
   <div class="user-profile">
-    <AvatarUpload :userAvatar="user?.profile.avatar" />
+    <AvatarUpload :avatar="user.avatar" />
     <UserInfo
-      :userFirstName="user?.profile.first_name"
-      :userLastName="user?.profile.last_name"
-      :userEmail="user?.email"
-      :isVerified="user?.is_verified"
-      :userCreationDate="user?.created_at"
-      :departmentID="user?.department?.id"
-      :positionID="user?.position?.id"
+      :firstName="user.firstName"
+      :lastName="user.lastName"
+      :email="user.email"
+      :isVerified="user.isVerified"
+      :createdAt="user.createdAt"
+      :departmentID="user.departmentID"
+      :positionID="user.positionID"
     />
   </div>
 </template>
 
 <script setup lang="ts">
-import { ref } from "vue";
+import { reactive, onMounted } from "vue";
 import AvatarUpload from "@/components/user/profile/AvatarUpload.vue";
 import UserInfo from "@/components/user/profile/UserInfo.vue";
 import { useRoute } from "vue-router";
-import { useUsersStore } from "@/store/users";
-import { IUser } from "@/types/backend-interfaces/user";
+import { getUserProfileByID } from "@/services/users";
+import { IUsersProfileData } from "@/types/userProfileUI";
 
 const route = useRoute();
 
 // eslint-disable-next-line
 const [section, id, tab] = route.fullPath.slice(1).split("/");
 
-const { getUserById } = useUsersStore();
+const user = reactive<IUsersProfileData>({
+  email: "pending",
+  createdAt: "pending",
+  isVerified: "pending",
+  firstName: "pending",
+  lastName: "pending",
+  avatar: "pending",
+  departmentID: "pending",
+  positionID: "pending",
+});
 
-const user = ref<IUser | undefined>();
-
-getUserById(Number(id))
-  .then((userData) => {
-    user.value = userData;
-  })
-  .catch(() => {
-    // todo: show some error while loading user data
+onMounted(() => {
+  getUserProfileByID(Number(id)).then((userData) => {
+    if (userData !== "error") {
+      user.email = userData.email;
+      user.createdAt = Number(userData.created_at);
+      user.isVerified = userData.is_verified;
+      user.firstName = userData.profile.first_name;
+      user.lastName = userData.profile.last_name;
+      user.avatar = userData.profile.avatar;
+      user.departmentID = Number(userData.department.id);
+      user.positionID = Number(userData.position.id);
+    } else {
+      user.email = "error";
+      user.createdAt = "error";
+      user.isVerified = "error";
+      user.firstName = "error";
+      user.lastName = "error";
+      user.avatar = "error";
+      user.departmentID = "error";
+      user.positionID = "error";
+    }
   });
+});
 </script>
 
 <style lang="scss" scoped>

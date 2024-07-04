@@ -7,25 +7,25 @@ export interface ICV {
   id: number;
   created_at: string;
   name: string;
-  education?: string;
+  education: string | null;
   description: string;
-  user?: IUser;
-  projects?: ICVProject[];
+  user: IUser | null;
+  projects: ICVProject[] | null;
   skills: ISkillMastery[];
   languages: ILanguageProficiency[];
 }
 
 export interface ICreateCVInput {
   name: string;
-  education?: string;
+  education: string | null;
   description: string;
-  userId?: number;
+  userId: number | null;
 }
 
 export interface IUpdateCVInput {
   cvId: number;
   name: string;
-  education?: string;
+  education: string | null;
   description: string;
 }
 

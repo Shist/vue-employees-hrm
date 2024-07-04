@@ -18,11 +18,11 @@ export interface IUser {
   email: string;
   is_verified: boolean;
   profile: IProfile;
-  cvs?: ICV[];
-  department?: IDepartment;
-  department_name?: string;
-  position?: IPosition;
-  position_name?: string;
+  cvs: ICV[] | null;
+  department: IDepartment | null;
+  department_name: string | null;
+  position: IPosition | null;
+  position_name: string | null;
   role: UserRole;
 }
 
@@ -30,15 +30,15 @@ export interface ICreateUserInput {
   auth: IAuthInput;
   profile: ICreateProfileInput;
   cvsIds: string[];
-  departmentId?: number;
-  positionId?: number;
+  departmentId: number | null;
+  positionId: number | null;
   role: UserRole;
 }
 
 export interface IUpdateUserInput {
   userId: number;
-  cvsIds?: string[];
-  departmentId?: number;
-  positionId?: number;
-  role?: UserRole;
+  cvsIds: string[] | null;
+  departmentId: number | null;
+  positionId: number | null;
+  role: UserRole | null;
 }
