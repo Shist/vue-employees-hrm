@@ -1,6 +1,5 @@
 import apolloClient from "@/plugins/apollo";
 import getAllUsersQuery from "@/graphql/queries/getAllUsers.query.gql";
-import { useAuthStore } from "@/store/authStore";
 import { IUsersTableData, IUsersTableServerData } from "@/types/usersTableUI";
 
 export const getAllUsers = async () => {
@@ -29,9 +28,6 @@ export const getAllUsers = async () => {
   } catch (error: unknown) {
     if (error instanceof Error) {
       console.log(error.message);
-      if (error.message === "Unauthorized") {
-        useAuthStore().checkTokenExpiration();
-      }
     }
   }
   return result;

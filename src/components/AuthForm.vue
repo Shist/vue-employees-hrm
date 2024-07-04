@@ -119,16 +119,14 @@ const submitForm = async (): Promise<void> => {
 
     try {
       if (route.fullPath === ROUTES.SIGN_IN.PATH) {
-        // await authStore.loginUser(formData.email, formData.password);
-        // const { result } = useQuery(loginQuery);
         await authStore.loginUser(formData.email, formData.password);
 
         console.log("call login user method");
       } else {
-        // await authStore.registerUser(formData.email, formData.password);
+        await authStore.registerUser(formData.email, formData.password);
+
         console.log("call register user method");
       }
-      // router.push("/");
       router.push(ROUTES.MAIN.PATH);
       console.log("change route to main");
     } catch (err: unknown) {
