@@ -2,6 +2,7 @@
 
 .Toastify__toast-container > .Toastify__toast {
   cursor: default;
+  background-color: var(--color-toast-bg);
 }
 
 [data-testid="toast-content"] {

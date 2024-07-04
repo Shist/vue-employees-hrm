@@ -29,7 +29,10 @@ import UserInfo from "@/components/user/profile/UserInfo.vue";
 import { useRoute } from "vue-router";
 import { getUserProfileByID } from "@/services/users";
 import { IUsersProfileData } from "@/types/userProfileUI";
-import useToast from "@/composables/useToast";
+import {
+  NOT_FOUND_ERROR_NAME,
+  UNEXPECTED_ERROR,
+} from "@/constants/errorMessage";
 
 const route = useRoute();
 
@@ -39,15 +42,11 @@ const [section, id, tab] = route.fullPath.slice(1).split("/");
 const user = ref<IUsersProfileData | null>(null);
 
 const isError = ref(false);
-const errorMessage = ref("Unknown error");
+const errorMessage = ref(UNEXPECTED_ERROR);
 const isNotFoundError = ref(false);
 
-const { setLoadingToast, removeCurrToast, setErrorToast } = useToast();
-
 onMounted(() => {
-  setLoadingToast("Loading user profile data...");
-
-  getUserProfileByID(Number(id))
+  getUserProfileByID(id)
     .then((userData) => {
       user.value = {
         email: userData.email,
@@ -59,8 +58,6 @@ onMounted(() => {
         departmentID: Number(userData.department.id),
         positionID: Number(userData.position.id),
       };
-
-      removeCurrToast();
     })
     .catch((error: unknown) => {
       isError.value = true;
@@ -68,9 +65,7 @@ onMounted(() => {
       if (error instanceof Error) {
         errorMessage.value = error.message;
 
-        setErrorToast(errorMessage.value);
-
-        if (error.name === "NotFoundError") {
+        if (error.name === NOT_FOUND_ERROR_NAME) {
           isNotFoundError.value = true;
         }
       }

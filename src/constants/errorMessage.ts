@@ -7,3 +7,7 @@ export const PASSWORD_MINLENGTH_FIELD =
 export const INVALID_CREDENTIALS = "Email or password is invalid";
 export const NO_NETWORK_CONNECTION = "No network connection";
 export const UNEXPECTED_ERROR = "Unexpected error, please try again";
+export const NOT_FOUND_ERROR_NAME = "NotFoundError";
+export const GRAPHQL_NULL_RETURN_ERROR =
+  "Cannot return null for non-nullable field";
+export const NOT_FOUND_USER = "The user with specified ID does not exist";

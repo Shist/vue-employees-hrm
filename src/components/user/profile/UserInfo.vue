@@ -222,6 +222,7 @@ function submitChanges() {
     }
     .user-info__form-submit-btn {
       grid-area: btn;
+      color: var(--color-btn-text);
       background-color: var(--color-btn-bg);
       border-radius: 0;
       &:hover {

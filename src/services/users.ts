@@ -2,7 +2,13 @@ import apolloClient from "@/plugins/apollo";
 import getAllUsersQuery from "@/graphql/queries/getAllUsers.query.gql";
 import getUserProfileByIDQuery from "@/graphql/queries/getUserProfileByID.query.gql";
 import { IUsersTableData, IUsersTableServerData } from "@/types/usersTableUI";
-import { IUsersProfileServerData } from "@/types/userProfileUI";
+import useToast from "@/composables/useToast";
+import checkID from "@/utils/checkID";
+import {
+  NOT_FOUND_USER,
+  NOT_FOUND_ERROR_NAME,
+  GRAPHQL_NULL_RETURN_ERROR,
+} from "@/constants/errorMessage";
 
 export const getAllUsers = async () => {
   const result: IUsersTableData[] = [];
@@ -37,26 +43,29 @@ export const getAllUsers = async () => {
   return result;
 };
 
-export const getUserProfileByID = async (id: number) => {
+export const getUserProfileByID = async (id: string) => {
   try {
-    const response = (await apolloClient.query({
+    checkID(id);
+
+    const response = await apolloClient.query({
       query: getUserProfileByIDQuery,
-      variables: { userId: id },
-    })) as { data: { user: IUsersProfileServerData } };
+      variables: { userId: Number(id) },
+    });
 
     return response.data.user;
   } catch (error: unknown) {
     if (error instanceof Error) {
-      // set some toast here
+      const { setErrorToast } = useToast();
 
-      if (
-        error.message.startsWith("Cannot return null for non-nullable field")
-      ) {
-        const notFoundError = new Error(
-          "The user with specified ID was not found!"
-        );
-        notFoundError.name = "NotFoundError";
+      if (error.message.startsWith(GRAPHQL_NULL_RETURN_ERROR)) {
+        const notFoundError = new Error(NOT_FOUND_USER);
+        notFoundError.name = NOT_FOUND_ERROR_NAME;
+
+        setErrorToast(notFoundError.message);
+
         throw notFoundError;
+      } else {
+        setErrorToast(error.message);
       }
     }
 
