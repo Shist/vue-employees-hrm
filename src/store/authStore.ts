@@ -1,11 +1,12 @@
 import { defineStore } from "pinia";
 import { computed, ref } from "vue";
-import { login } from "@/services/auth";
+import { login, register } from "@/services/auth";
 import { ROUTES } from "@/constants/router";
 import { useRouter } from "vue-router";
+import { IUserAuthData } from "@/types/userAuthUI";
 
 export const useAuthStore = defineStore("authStore", () => {
-  const user = ref<Record<string, unknown> | null>(
+  const user = ref<IUserAuthData | null>(
     JSON.parse(`${localStorage.getItem("user")}`)
   );
   const token = ref<string | null>(localStorage.getItem("token"));
@@ -19,6 +20,19 @@ export const useAuthStore = defineStore("authStore", () => {
 
   const loginUser = async (email: string, password: string) => {
     const result = await login(email, password);
+    if (result) {
+      user.value = result.user;
+      token.value = result.token;
+    }
+
+    localStorage.setItem("token", `Bearer ${token.value}`);
+    localStorage.setItem("user", JSON.stringify(user.value));
+
+    checkTokenExpiration();
+  };
+
+  const registerUser = async (email: string, password: string) => {
+    const result = await register(email, password);
     if (result) {
       user.value = result.user;
       token.value = result.token;
@@ -73,5 +87,6 @@ export const useAuthStore = defineStore("authStore", () => {
     checkAuthorization,
     checkTokenExpiration,
     isLoggedIn,
+    registerUser,
   };
 });
