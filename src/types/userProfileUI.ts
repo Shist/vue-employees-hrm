@@ -1,12 +1,12 @@
 export interface IUsersProfileData {
-  email: string | "pending" | "error";
-  createdAt: number | "pending" | "error";
-  isVerified: boolean | "pending" | "error";
-  firstName: string | null | "pending" | "error";
-  lastName: string | null | "pending" | "error";
-  avatar: string | null | "pending" | "error";
-  departmentID: number | "pending" | "error";
-  positionID: number | "pending" | "error";
+  email: string;
+  createdAt: number;
+  isVerified: boolean;
+  firstName: string | null;
+  lastName: string | null;
+  avatar: string | null;
+  departmentID: number;
+  positionID: number;
 }
 
 export interface IUsersProfileServerData {

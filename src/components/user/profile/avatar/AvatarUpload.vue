@@ -1,19 +1,21 @@
 <template>
   <div class="avatar-upload">
     <div class="avatar-upload__avatar-wrapper">
-      <v-img
-        v-if="avatar !== null && avatar !== 'pending' && avatar !== 'error'"
-        :src="avatar"
-        alt="avatar"
-        class="avatar-upload__avatar"
-      />
       <v-skeleton-loader
-        v-else
+        v-if="avatar === 'pending'"
         type="avatar"
         color="var(--color-header-bg)"
         class="avatar-upload__avatar-skeleton"
       />
+      <EmptyAvatar v-if="avatar === null" :letter="`L`" />
+      <v-img
+        v-else-if="avatar !== 'pending' && avatar !== 'error'"
+        :src="avatar"
+        alt="avatar"
+        class="avatar-upload__avatar"
+      />
       <v-btn
+        v-if="avatar !== null && avatar !== 'pending' && avatar !== 'error'"
         icon="mdi-close"
         class="avatar-upload__avatar-cross-btn"
         @click.prevent="avatarRemove"
@@ -51,6 +53,8 @@
 </template>
 
 <script setup lang="ts">
+import EmptyAvatar from "@/components/user/profile/avatar/EmptyAvatar.vue";
+
 defineProps<{
   avatar: string | null | "pending" | "error";
 }>();

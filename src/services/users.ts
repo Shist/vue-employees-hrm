@@ -1,7 +1,6 @@
 import apolloClient from "@/plugins/apollo";
 import getAllUsersQuery from "@/graphql/queries/getAllUsers.query.gql";
 import getUserProfileByIDQuery from "@/graphql/queries/getUserProfileByID.query.gql";
-import { useAuthStore } from "@/store/authStore";
 import { IUsersTableData, IUsersTableServerData } from "@/types/usersTableUI";
 import { IUsersProfileServerData } from "@/types/userProfileUI";
 
@@ -30,9 +29,8 @@ export const getAllUsers = async () => {
     });
   } catch (error: unknown) {
     if (error instanceof Error) {
-      if (error.message === "Unauthorized") {
-        useAuthStore().checkTokenExpiration();
-      }
+      // set some toast
+      console.log(error.message);
     }
   }
 
@@ -40,28 +38,28 @@ export const getAllUsers = async () => {
 };
 
 export const getUserProfileByID = async (id: number) => {
-  let result: IUsersProfileServerData | "pending" | "error" = "pending";
-
   try {
-    const { user } = (
-      await apolloClient.query({
-        query: getUserProfileByIDQuery,
-        variables: { userId: id },
-      })
-    ).data as { user: IUsersProfileServerData };
+    const response = (await apolloClient.query({
+      query: getUserProfileByIDQuery,
+      variables: { userId: id },
+    })) as { data: { user: IUsersProfileServerData } };
 
-    result = user;
+    return response.data.user;
   } catch (error: unknown) {
-    result = "error";
-
-    // Show some toast that we didn't load user
-
     if (error instanceof Error) {
-      if (error.message === "Unauthorized") {
-        useAuthStore().checkTokenExpiration();
+      // set some toast here
+
+      if (
+        error.message.startsWith("Cannot return null for non-nullable field")
+      ) {
+        const notFoundError = new Error(
+          "The user with specified ID was not found!"
+        );
+        notFoundError.name = "NotFoundError";
+        throw notFoundError;
       }
     }
-  }
 
-  return result;
+    throw error;
+  }
 };

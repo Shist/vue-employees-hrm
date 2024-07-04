@@ -1,21 +1,30 @@
 <template>
   <div class="user-profile">
-    <AvatarUpload :avatar="user.avatar" />
-    <UserInfo
-      :firstName="user.firstName"
-      :lastName="user.lastName"
-      :email="user.email"
-      :isVerified="user.isVerified"
-      :createdAt="user.createdAt"
-      :departmentID="user.departmentID"
-      :positionID="user.positionID"
-    />
+    <div v-if="isError" class="some-error">
+      <span class="some-error__message">{{ errorMessage }}</span>
+      <a v-if="isNotFoundError" href="#" class="some-error__link-to-main">
+        Link to main
+      </a>
+    </div>
+    <div v-else-if="!user" class="some-spinner">Loading</div>
+    <div v-else>
+      <AvatarUpload :avatar="user.avatar" />
+      <UserInfo
+        :firstName="user.firstName"
+        :lastName="user.lastName"
+        :email="user.email"
+        :isVerified="user.isVerified"
+        :createdAt="user.createdAt"
+        :departmentID="user.departmentID"
+        :positionID="user.positionID"
+      />
+    </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import { reactive, onMounted } from "vue";
-import AvatarUpload from "@/components/user/profile/AvatarUpload.vue";
+import { ref, onMounted } from "vue";
+import AvatarUpload from "@/components/user/profile/avatar/AvatarUpload.vue";
 import UserInfo from "@/components/user/profile/UserInfo.vue";
 import { useRoute } from "vue-router";
 import { getUserProfileByID } from "@/services/users";
@@ -26,39 +35,37 @@ const route = useRoute();
 // eslint-disable-next-line
 const [section, id, tab] = route.fullPath.slice(1).split("/");
 
-const user = reactive<IUsersProfileData>({
-  email: "pending",
-  createdAt: "pending",
-  isVerified: "pending",
-  firstName: "pending",
-  lastName: "pending",
-  avatar: "pending",
-  departmentID: "pending",
-  positionID: "pending",
-});
+const user = ref<IUsersProfileData | null>(null);
+
+const isError = ref(false);
+const errorMessage = ref("Unknown error");
+const isNotFoundError = ref(false);
 
 onMounted(() => {
-  getUserProfileByID(Number(id)).then((userData) => {
-    if (userData !== "error") {
-      user.email = userData.email;
-      user.createdAt = Number(userData.created_at);
-      user.isVerified = userData.is_verified;
-      user.firstName = userData.profile.first_name;
-      user.lastName = userData.profile.last_name;
-      user.avatar = userData.profile.avatar;
-      user.departmentID = Number(userData.department.id);
-      user.positionID = Number(userData.position.id);
-    } else {
-      user.email = "error";
-      user.createdAt = "error";
-      user.isVerified = "error";
-      user.firstName = "error";
-      user.lastName = "error";
-      user.avatar = "error";
-      user.departmentID = "error";
-      user.positionID = "error";
-    }
-  });
+  getUserProfileByID(Number(id))
+    .then((userData) => {
+      user.value = {
+        email: userData.email,
+        createdAt: Number(userData.created_at),
+        isVerified: userData.is_verified,
+        firstName: userData.profile.first_name,
+        lastName: userData.profile.last_name,
+        avatar: userData.profile.avatar,
+        departmentID: Number(userData.department.id),
+        positionID: Number(userData.position.id),
+      };
+    })
+    .catch((error: unknown) => {
+      isError.value = true;
+
+      if (error instanceof Error) {
+        errorMessage.value = error.message;
+
+        if (error.name === "NotFoundError") {
+          isNotFoundError.value = true;
+        }
+      }
+    });
 });
 </script>
 
