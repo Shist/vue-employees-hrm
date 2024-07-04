@@ -1,70 +1,93 @@
 import apolloClient from "@/plugins/apollo";
 import loginQuery from "@/graphql/queries/login.query.gql";
 import signupMutation from "@/graphql/mutations/signUp.mutation.gql";
-import { IUserAuthData } from "@/types/userAuthUI";
+import {
+  INVALID_CREDENTIALS,
+  NO_NETWORK_CONNECTION,
+  UNEXPECTED_ERROR,
+} from "@/constants/errorMessage";
 
 export const login = async (email: string, password: string) => {
-  let token: string | null = null;
-  let user: IUserAuthData | null = null;
-
   try {
-    const databaseResult = await apolloClient.query({
-      query: loginQuery,
-      variables: { auth: { email, password } },
-    });
+    const { login } = (
+      await apolloClient.query({
+        query: loginQuery,
+        variables: { auth: { email, password } },
+      })
+    ).data;
 
-    if (databaseResult.data.login) {
-      await apolloClient.resetStore();
+    if (!login) return;
 
-      token = databaseResult.data.login.access_token;
+    await apolloClient.resetStore();
 
-      user = {
-        id: databaseResult.data.login.user.id,
-        email: databaseResult.data.login.user.email,
-        first_name: databaseResult.data.login.user.profile.first_name,
-        last_name: databaseResult.data.login.user.profile.last_name,
-        full_name: databaseResult.data.login.user.profile.full_name,
-        avatar: databaseResult.data.login.user.profile.avatar,
-      };
-    }
+    const token = login.access_token;
+
+    const user = {
+      id: login.user.id,
+      email: login.user.email,
+      first_name: login.user.profile.first_name,
+      last_name: login.user.profile.last_name,
+      full_name: login.user.profile.full_name,
+      avatar: login.user.profile.avatar,
+    };
+
+    return { user, token };
   } catch (error: unknown) {
     if (error instanceof Error) {
-      console.log(error.message);
+      if (error.message === "Invalid credentials") {
+        throw new Error(INVALID_CREDENTIALS);
+      } else if (error.message === "Failed to fetch") {
+        throw new Error(NO_NETWORK_CONNECTION);
+      } else {
+        throw new Error(UNEXPECTED_ERROR);
+      }
+    } else {
+      throw new Error(UNEXPECTED_ERROR);
     }
   }
-
-  return { user, token };
 };
 
 export const register = async (email: string, password: string) => {
-  let token: string | null = null;
-  let user: IUserAuthData | null = null;
-
   try {
-    const databaseResult = await apolloClient.mutate({
-      mutation: signupMutation,
-      variables: { auth: { email, password } },
-    });
+    const { signup } = (
+      await apolloClient.mutate({
+        mutation: signupMutation,
+        variables: { auth: { email, password } },
+      })
+    ).data;
 
-    if (databaseResult.data.signup) {
-      await apolloClient.resetStore();
+    if (!signup) return;
 
-      token = databaseResult.data.signup.access_token;
+    await apolloClient.resetStore();
 
-      user = {
-        id: databaseResult.data.signup.user.id,
-        email: databaseResult.data.signup.user.email,
-        first_name: databaseResult.data.signup.user.profile.first_name,
-        last_name: databaseResult.data.signup.user.profile.last_name,
-        full_name: databaseResult.data.signup.user.profile.full_name,
-        avatar: databaseResult.data.signup.user.profile.avatar,
-      };
-    }
+    const token = signup.access_token;
+
+    const user = {
+      id: signup.user.id,
+      email: signup.user.email,
+      first_name: signup.user.profile.first_name,
+      last_name: signup.user.profile.last_name,
+      full_name: signup.user.profile.full_name,
+      avatar: signup.user.profile.avatar,
+    };
+
+    return { user, token };
   } catch (error: unknown) {
     if (error instanceof Error) {
-      console.log(error.message);
+      if (error.message === "Invalid credentials") {
+        throw new Error(INVALID_CREDENTIALS);
+      } else if (error.message === "Failed to fetch") {
+        throw new Error(NO_NETWORK_CONNECTION);
+      } else if (
+        error.message ===
+        'duplicate key value violates unique constraint "UQ_e12875dfb3b1d92d7d7c5377e22"'
+      ) {
+        throw new Error(`User with email: ${email} already exists`);
+      } else {
+        throw new Error(UNEXPECTED_ERROR);
+      }
+    } else {
+      throw new Error(UNEXPECTED_ERROR);
     }
   }
-
-  return { user, token };
 };
