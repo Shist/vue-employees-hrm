@@ -1,0 +1,17 @@
+@import "@/assets/styles/vars";
+
+.Toastify__toast-container > .Toastify__toast {
+  cursor: default;
+}
+
+[data-testid="toast-content"] {
+  cursor: text;
+  font-family: $font-roboto;
+  color: var(--color-text);
+  text-align: center;
+  word-break: break-word;
+}
+
+.Toastify__toast > .Toastify__close-button {
+  color: var(--color-text);
+}

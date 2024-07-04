@@ -29,6 +29,7 @@ import UserInfo from "@/components/user/profile/UserInfo.vue";
 import { useRoute } from "vue-router";
 import { getUserProfileByID } from "@/services/users";
 import { IUsersProfileData } from "@/types/userProfileUI";
+import useToast from "@/composables/useToast";
 
 const route = useRoute();
 
@@ -41,7 +42,11 @@ const isError = ref(false);
 const errorMessage = ref("Unknown error");
 const isNotFoundError = ref(false);
 
+const { setLoadingToast, removeCurrToast, setErrorToast } = useToast();
+
 onMounted(() => {
+  setLoadingToast("Loading user profile data...");
+
   getUserProfileByID(Number(id))
     .then((userData) => {
       user.value = {
@@ -54,12 +59,16 @@ onMounted(() => {
         departmentID: Number(userData.department.id),
         positionID: Number(userData.position.id),
       };
+
+      removeCurrToast();
     })
     .catch((error: unknown) => {
       isError.value = true;
 
       if (error instanceof Error) {
         errorMessage.value = error.message;
+
+        setErrorToast(errorMessage.value);
 
         if (error.name === "NotFoundError") {
           isNotFoundError.value = true;
