@@ -3,9 +3,10 @@ import { computed, ref } from "vue";
 import { login, register } from "@/services/auth";
 import { ROUTES } from "@/constants/router";
 import { useRouter } from "vue-router";
+import { IUserAuthData } from "@/types/userAuthUI";
 
 export const useAuthStore = defineStore("authStore", () => {
-  const user = ref<Record<string, unknown> | null>(
+  const user = ref<IUserAuthData | null>(
     JSON.parse(`${localStorage.getItem("user")}`)
   );
   const token = ref<string | null>(localStorage.getItem("token"));

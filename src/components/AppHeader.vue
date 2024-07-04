@@ -44,15 +44,15 @@
         <v-icon style="color: #767676">mdi-web</v-icon>
 
         <div class="toolbar__language text-white">
-          <v-select :items="locations" v-model="location">
+          <v-select :items="languages" v-model="language">
             <template v-slot:item="{ props, item }">
               <v-list-item v-bind="props" :title="item.raw.value"></v-list-item>
             </template>
           </v-select>
         </div>
 
-        <p v-if="user" class="toolbar__email text-white">
-          {{ user.profile.full_name }}
+        <p v-if="user?.email" class="toolbar__email text-white">
+          {{ userHeaderName }}
         </p>
         <v-skeleton-loader
           v-else
@@ -63,12 +63,15 @@
         <v-menu max-width="150px" rounded>
           <template v-slot:activator="{ props }">
             <v-btn icon v-bind="props">
-              <v-avatar color="var(--color-text-red)" size="large">
+              <v-avatar color="var(--color-text-red)" size="default">
                 <v-img
-                  v-if="user"
+                  v-if="user?.avatar"
                   alt="Avatar"
-                  :src="require(`@/assets/images/${user.profile.avatar}`)"
+                  :src="user.avatar || undefined"
                 />
+                <p v-else-if="user?.email" class="toolbar__name">
+                  {{ userInitials }}
+                </p>
                 <v-skeleton-loader v-else type="avatar"></v-skeleton-loader>
               </v-avatar>
             </v-btn>
@@ -158,7 +161,9 @@
               size="x-large"
               variant="flat"
               color="var(--color-wrapper-bg)"
-              :class="[route.fullPath === item.link ? 'text-red-darken-4' : '']"
+              :class="[
+                route.fullPath.startsWith(item.link) ? 'text-red-darken-4' : '',
+              ]"
             >
               <v-icon size="x-large" class="mr-8 ml-4">{{ item.icon }}</v-icon>
               {{ item.title }}
@@ -171,11 +176,9 @@
 </template>
 
 <script setup lang="ts">
-import { computed, onMounted, ref, watch } from "vue";
+import { computed, ref, watch } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import { ROUTES } from "@/constants/router";
-import { useUsersStore } from "@/store/users";
-import { IUser } from "@/types/backend-interfaces/user";
 import { NAVIGATION__ITEMS } from "@/constants/navigationItems";
 import { INavigationItem } from "@/types/navigation";
 import { useScrollbarWidth } from "@/store/scrollbarWidth";
@@ -184,24 +187,34 @@ import { useAuthStore } from "@/store/authStore";
 
 const router = useRouter();
 const route = useRoute();
-const userStore = useUsersStore();
 const authStore = useAuthStore();
+const { user } = storeToRefs(authStore);
 
 const { scrollbarWidth } = storeToRefs(useScrollbarWidth());
 
-const locations = ref([
+const languages = ref([
   { title: "EN", value: "English" },
   { title: "DE", value: "Deutsch" },
   { title: "RU", value: "Русский" },
 ]);
 
-const location = ref<string>("English");
-
-const user = ref<IUser | undefined>(undefined);
+const language = ref<string>("English");
 
 const drawer = ref<boolean>(false);
 
 const navigationItems: INavigationItem[] = NAVIGATION__ITEMS;
+
+const userInitials = computed(() => {
+  if (user.value?.first_name) {
+    return user.value.first_name.charAt(0).toUpperCase();
+  }
+  return user.value?.email.charAt(0).toUpperCase();
+});
+
+const userHeaderName = computed(() => {
+  if (user.value?.full_name) return user.value.full_name;
+  return user.value?.email;
+});
 
 const isActive = computed(() => {
   return route.fullPath === ROUTES.SIGN_IN.PATH
@@ -221,16 +234,9 @@ const handleNavigationShow = () => {
   drawer.value = !drawer.value;
 };
 
-const handleLogout = async (): Promise<void> => {
+const handleLogout = (): void => {
   authStore.logout();
-  console.log("logout");
 };
-
-onMounted(() => {
-  setTimeout(async (): Promise<void> => {
-    user.value = await userStore.getUserById(1);
-  }, 1000);
-});
 
 watch(drawer, (newValue, oldValue) => {
   if (document.body.offsetHeight > window.innerHeight) {
@@ -306,6 +312,10 @@ watch(drawer, (newValue, oldValue) => {
   }
   &__email {
     margin-right: 16px;
+  }
+  &__name {
+    font-size: 20px;
+    color: var(--color-header-bg);
   }
   &__navigation-close {
     height: 64px;
