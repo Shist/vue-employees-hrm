@@ -41,7 +41,9 @@ export const useAuthStore = defineStore("authStore", () => {
 
   const checkAuthorization = () => {
     try {
-      if (!token.value || !user.value) {
+      if (token.value && user.value) {
+        checkTokenExpiration();
+      } else {
         router.push(ROUTES.SIGN_IN.PATH);
       }
     } catch (error) {
