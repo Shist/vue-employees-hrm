@@ -205,8 +205,8 @@ const drawer = ref<boolean>(false);
 const navigationItems: INavigationItem[] = NAVIGATION__ITEMS;
 
 const userInitials = computed(() => {
-  if (user.value?.first_name) {
-    return user.value.first_name.charAt(0).toUpperCase();
+  if (user.value?.full_name) {
+    return user.value.full_name.charAt(0).toUpperCase();
   }
   return user.value?.email.charAt(0).toUpperCase();
 });
