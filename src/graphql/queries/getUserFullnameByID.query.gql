@@ -1,0 +1,8 @@
+query GET_USER_FULLNAME_BY_ID($userId: ID!) {
+  user(userId: $userId) {
+    email
+    profile {
+      full_name
+    }
+  }
+}

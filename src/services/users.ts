@@ -1,8 +1,10 @@
 import apolloClient from "@/plugins/apollo";
 import getAllUsersQuery from "@/graphql/queries/getAllUsers.query.gql";
 import getUserProfileByIDQuery from "@/graphql/queries/getUserProfileByID.query.gql";
+import getUserFullnameByIDQuery from "@/graphql/queries/getUserFullnameByID.query.gql";
 import { IUsersTableData, IUsersTableServerData } from "@/types/usersTableUI";
 import { IUsersProfileServerData } from "@/types/userProfileUI";
+import { IUsersNameServerData } from "@/types/breadcrumbsUI";
 import useToast from "@/composables/useToast";
 import checkID from "@/utils/checkID";
 import {
@@ -41,6 +43,25 @@ export const getAllUsers = async () => {
   }
 
   return result;
+};
+
+export const getUserNameDataByID = async (id: string) => {
+  try {
+    checkID(id);
+
+    const response = (await apolloClient.query({
+      query: getUserFullnameByIDQuery,
+      variables: { userId: Number(id) },
+    })) as { data: { user: IUsersNameServerData } };
+
+    return response.data.user;
+  } catch (error: unknown) {
+    if (error instanceof Error) {
+      console.error(error.message);
+    }
+
+    throw error;
+  }
 };
 
 export const getUserProfileByID = async (id: string) => {
