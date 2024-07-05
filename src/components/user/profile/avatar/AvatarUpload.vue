@@ -56,7 +56,7 @@
 import EmptyAvatar from "@/components/user/profile/avatar/EmptyAvatar.vue";
 
 defineProps<{
-  avatar: string | null | "pending" | "error";
+  avatar: string | null;
 }>();
 
 function avatarRemove() {
@@ -96,7 +96,6 @@ function avatarDrop(e: Event) {
 <style lang="scss" scoped>
 .avatar-upload {
   padding: 20px;
-  width: 100%;
   display: flex;
   justify-content: center;
   align-items: center;

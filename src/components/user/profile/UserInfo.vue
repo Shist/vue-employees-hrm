@@ -5,8 +5,8 @@
         {{ computedFullName }}
       </h3>
       <div class="user-info__mail-caption-wrapper">
-        <span class="user-info__mail-caption">{{ computedEmail }}</span>
-        <v-icon v-if="computedIsVerified" class="user-info__mail-verified-icon">
+        <span class="user-info__mail-caption">{{ email }}</span>
+        <v-icon v-if="isVerified" class="user-info__mail-verified-icon">
           mdi-check-decagram
         </v-icon>
       </div>
@@ -20,7 +20,6 @@
         label="First Name"
         variant="outlined"
         class="user-info__text-field-wrapper"
-        :disabled="firstName === 'pending' || firstName === 'error'"
         hide-details
       />
       <v-text-field
@@ -28,7 +27,6 @@
         label="Last Name"
         variant="outlined"
         class="user-info__text-field-wrapper"
-        :disabled="lastName === 'pending' || lastName === 'error'"
         hide-details
       />
       <v-select
@@ -37,7 +35,6 @@
         label="Department"
         variant="outlined"
         class="user-info__text-field-wrapper"
-        :disabled="departmentID === 'pending' || departmentID === 'error'"
         hide-details
       />
       <v-select
@@ -46,7 +43,6 @@
         label="Position"
         variant="outlined"
         class="user-info__text-field-wrapper"
-        :disabled="positionID === 'pending' || positionID === 'error'"
         hide-details
       />
       <v-btn
@@ -67,21 +63,17 @@ import { useDepartmentsStore } from "@/store/departments";
 import { usePositionsStore } from "@/store/positions";
 
 const props = defineProps<{
-  email: string | "pending" | "error";
-  createdAt: number | "pending" | "error";
-  isVerified: boolean | "pending" | "error";
-  firstName: string | null | "pending" | "error";
-  lastName: string | null | "pending" | "error";
-  departmentID: number | "pending" | "error";
-  positionID: number | "pending" | "error";
+  email: string;
+  createdAt: number;
+  isVerified: boolean;
+  firstName: string | null;
+  lastName: string | null;
+  departmentID: number;
+  positionID: number;
 }>();
 
 const computedFullName = computed(() => {
-  if (props.firstName === "pending" || props.lastName === "pending") {
-    return "⏳ Loading full name...";
-  } else if (props.firstName === "error" || props.lastName === "error") {
-    return "❌ Name loading error";
-  } else if (!props.firstName && !props.lastName) {
+  if (!props.firstName && !props.lastName) {
     return "(Neither first nor last name are specified)";
   } else {
     if (props.firstName && props.lastName) {
@@ -94,40 +86,16 @@ const computedFullName = computed(() => {
   }
 });
 
-const computedEmail = computed(() => {
-  if (props.email === "pending") {
-    return "⏳ Loading email...";
-  } else if (props.email === "error") {
-    return "❌ Email loading error";
-  } else {
-    return props.email;
-  }
-});
-
-const computedIsVerified = computed(() => {
-  if (props.isVerified === "pending" || props.isVerified === "error") {
-    return false;
-  } else {
-    return props.isVerified;
-  }
-});
-
 const computedCreationDate = computed(() => {
-  if (props.createdAt === "pending") {
-    return "⏳ Loading creation date...";
-  } else if (props.createdAt === "error") {
-    return "❌ Creation date loading error";
-  } else {
-    const targetDate = new Date(props.createdAt)
-      .toLocaleDateString("en-US", {
-        weekday: "short",
-        month: "short",
-        day: "numeric",
-        year: "numeric",
-      })
-      .replace(/,/g, "");
-    return `A member since ${targetDate}`;
-  }
+  const targetDate = new Date(props.createdAt)
+    .toLocaleDateString("en-US", {
+      weekday: "short",
+      month: "short",
+      day: "numeric",
+      year: "numeric",
+    })
+    .replace(/,/g, "");
+  return `A member since ${targetDate}`;
 });
 
 const firstName = ref(props.firstName);
@@ -152,13 +120,11 @@ watchEffect(() => {
   firstName.value = props.firstName;
   lastName.value = props.lastName;
   departmentID.value = props.departmentID;
-  positionID.value = props.departmentID;
+  positionID.value = props.positionID;
 });
 
 const isSubmitBtnDisabled = computed(
   () =>
-    !firstName.value ||
-    !lastName.value ||
     !departmentID.value ||
     !positionID.value ||
     (firstName.value === props.firstName &&
@@ -175,7 +141,6 @@ function submitChanges() {
 <style lang="scss" scoped>
 .user-info {
   padding-block: 12px;
-  width: 100%;
   display: flex;
   flex-direction: column;
   row-gap: 60px;

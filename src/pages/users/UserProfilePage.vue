@@ -1,13 +1,21 @@
 <template>
   <div class="user-profile">
-    <div v-if="isError" class="some-error">
-      <span class="some-error__message">{{ errorMessage }}</span>
-      <a v-if="isNotFoundError" href="#" class="some-error__link-to-main">
-        Link to main
-      </a>
+    <div v-if="isError" class="user-profile__error-wrapper">
+      <h4 class="user-profile__error-message">❌ {{ errorMessage }}</h4>
+      <v-btn
+        v-if="isNotFoundError"
+        class="user-profile__back-to-main-btn"
+        router
+        :to="ROUTES.USERS.PATH"
+      >
+        Back to the main page
+      </v-btn>
+      <span v-if="!isNotFoundError" class="user-profile__try-to-reload-label">
+        Please try to reload the page
+      </span>
     </div>
-    <div v-else-if="!user" class="some-spinner">Loading</div>
-    <div v-else>
+    <div v-else-if="!user" class="user-profile__spinner-wrapper">Loading</div>
+    <div v-else class="user-profile__main-content-wrapper">
       <AvatarUpload :avatar="user.avatar" />
       <UserInfo
         :firstName="user.firstName"
@@ -29,10 +37,8 @@ import UserInfo from "@/components/user/profile/UserInfo.vue";
 import { useRoute } from "vue-router";
 import { getUserProfileByID } from "@/services/users";
 import { IUsersProfileData } from "@/types/userProfileUI";
-import {
-  NOT_FOUND_ERROR_NAME,
-  UNEXPECTED_ERROR,
-} from "@/constants/errorMessage";
+import { UNEXPECTED_ERROR } from "@/constants/errorMessage";
+import { ROUTES } from "@/constants/router";
 
 const route = useRoute();
 
@@ -65,7 +71,7 @@ onMounted(() => {
       if (error instanceof Error) {
         errorMessage.value = error.message;
 
-        if (error.name === NOT_FOUND_ERROR_NAME) {
+        if (error.name === "NotFoundError") {
           isNotFoundError.value = true;
         }
       }
@@ -81,5 +87,32 @@ onMounted(() => {
   display: flex;
   flex-direction: column;
   align-items: center;
+  &__error-wrapper {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    row-gap: 20px;
+    .user-profile__error-message {
+      @include default-text(26px, 32px);
+    }
+    .user-profile__back-to-main-btn {
+      color: var(--color-btn-text);
+      background-color: var(--color-btn-bg);
+      border-radius: 0;
+      &:hover {
+        background-color: var(--color-btn-bg-hover);
+      }
+    }
+    .user-profile__try-to-reload-label {
+      @include default-text(20px, 26px);
+    }
+  }
+  &__spinner-wrapper {
+    width: 100%;
+  }
+  &__main-content-wrapper {
+    width: 100%;
+  }
 }
 </style>

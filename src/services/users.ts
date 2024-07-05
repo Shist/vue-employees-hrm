@@ -6,7 +6,6 @@ import useToast from "@/composables/useToast";
 import checkID from "@/utils/checkID";
 import {
   NOT_FOUND_USER,
-  NOT_FOUND_ERROR_NAME,
   GRAPHQL_NULL_RETURN_ERROR,
 } from "@/constants/errorMessage";
 
@@ -59,7 +58,7 @@ export const getUserProfileByID = async (id: string) => {
 
       if (error.message.startsWith(GRAPHQL_NULL_RETURN_ERROR)) {
         const notFoundError = new Error(NOT_FOUND_USER);
-        notFoundError.name = NOT_FOUND_ERROR_NAME;
+        notFoundError.name = "NotFoundError";
 
         setErrorToast(notFoundError.message);
 
