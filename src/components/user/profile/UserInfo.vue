@@ -48,7 +48,7 @@
       <v-btn
         type="submit"
         class="user-info__form-submit-btn"
-        @click.prevent="submitChanges"
+        @click.prevent="onUpdateBtnClicked"
         :disabled="isSubmitBtnDisabled"
       >
         UPDATE
@@ -63,8 +63,11 @@ import {
   IDepartmentNamesData,
   IPositionNamesData,
 } from "@/types/userProfileUI";
+import { IUpdateUserInput } from "@/types/backend-interfaces/user";
+import { IUpdateProfileInput } from "@/types/backend-interfaces/user/profile";
 
 const props = defineProps<{
+  userID: string;
   email: string;
   createdAt: number;
   isVerified: boolean;
@@ -74,6 +77,14 @@ const props = defineProps<{
   positionID: string | null;
   departmentNames: IDepartmentNamesData[] | null;
   positionNames: IPositionNamesData[] | null;
+}>();
+
+const emit = defineEmits<{
+  (
+    event: "onUpdateUserData",
+    userInputObj: Omit<IUpdateUserInput, "cvsIds" | "role">,
+    profileInputObj: IUpdateProfileInput
+  ): void;
 }>();
 
 const computedFullName = computed(() => {
@@ -140,8 +151,19 @@ const isSubmitBtnDisabled = computed(
     positionID.value === props.positionID
 );
 
-function submitChanges() {
-  // TODO - send new user data to server
+function onUpdateBtnClicked() {
+  const userInputObj: Omit<IUpdateUserInput, "cvsIds" | "role"> = {
+    userId: Number(props.userID),
+    departmentId: Number(departmentID.value),
+    positionId: Number(positionID.value),
+  };
+  const profileInputObj: IUpdateProfileInput = {
+    userId: Number(props.userID),
+    first_name: firstName.value,
+    last_name: lastName.value,
+  };
+
+  emit("onUpdateUserData", userInputObj, profileInputObj);
 }
 </script>
 

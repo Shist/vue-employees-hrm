@@ -24,6 +24,7 @@
     <div v-else class="user-profile__main-content-wrapper">
       <AvatarUpload :avatar="user.avatar" :userInitials="userInitials" />
       <UserInfo
+        :userID="id"
         :firstName="user.firstName"
         :lastName="user.lastName"
         :email="user.email"
@@ -33,6 +34,7 @@
         :positionID="user.positionID"
         :departmentNames="departmentNames"
         :positionNames="positionNames"
+        @onUpdateUserData="submitUserData"
       />
     </div>
   </div>
@@ -43,14 +45,16 @@ import { ref, onMounted, computed, watch } from "vue";
 import AvatarUpload from "@/components/user/profile/AvatarUpload.vue";
 import UserInfo from "@/components/user/profile/UserInfo.vue";
 import { useRoute } from "vue-router";
-import { getUserProfileByID } from "@/services/users";
+import { getUserProfileByID, updateUserData } from "@/services/users";
 import { getAllDepartmentNames } from "@/services/departments";
 import { getAllPositionNames } from "@/services/positions";
 import {
-  IUsersProfileData,
+  IUserProfileData,
   IDepartmentNamesData,
   IPositionNamesData,
 } from "@/types/userProfileUI";
+import { IUpdateUserInput } from "@/types/backend-interfaces/user";
+import { IUpdateProfileInput } from "@/types/backend-interfaces/user/profile";
 import { UNEXPECTED_ERROR } from "@/constants/errorMessage";
 import { ROUTES } from "@/constants/router";
 import useToast from "@/composables/useToast";
@@ -63,7 +67,7 @@ const id = computed<string>(() => {
   return id;
 });
 
-const user = ref<IUsersProfileData | null>(null);
+const user = ref<IUserProfileData | null>(null);
 const departmentNames = ref<IDepartmentNamesData[] | null>(null);
 const positionNames = ref<IPositionNamesData[] | null>(null);
 
@@ -130,6 +134,15 @@ function fetchData() {
         setErrorToast(errorMessage.value);
       }
     });
+}
+
+function submitUserData(
+  userInputObj: Omit<IUpdateUserInput, "cvsIds" | "role">,
+  profileInputObj: IUpdateProfileInput
+) {
+  updateUserData(userInputObj, profileInputObj).then((response) =>
+    console.log(response)
+  );
 }
 </script>
 

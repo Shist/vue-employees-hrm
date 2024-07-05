@@ -2,13 +2,18 @@ import apolloClient from "@/plugins/apollo";
 import getAllUsersQuery from "@/graphql/queries/getAllUsers.query.gql";
 import getUserProfileByIDQuery from "@/graphql/queries/getUserProfileByID.query.gql";
 import getUserFullnameByIDQuery from "@/graphql/queries/getUserFullnameByID.query.gql";
+import updateUserQuery from "@/graphql/mutations/updateUser.mutation.gql";
+import updateProfileQuery from "@/graphql/mutations/updateProfile.mutation.gql";
 import { IUsersTableData, IUsersTableServerData } from "@/types/usersTableUI";
-import { IUsersProfileServerData } from "@/types/userProfileUI";
+import { IUserProfileServerData } from "@/types/userProfileUI";
 import { IUsersNameServerData } from "@/types/breadcrumbsUI";
+import { IUpdateUserInput } from "@/types/backend-interfaces/user";
+import { IUpdateProfileInput } from "@/types/backend-interfaces/user/profile";
 import checkID from "@/utils/checkID";
 import {
   NOT_FOUND_USER,
   GRAPHQL_NULL_RETURN_ERROR,
+  NO_NETWORK_CONNECTION,
 } from "@/constants/errorMessage";
 
 export const getAllUsers = async () => {
@@ -70,7 +75,7 @@ export const getUserProfileByID = async (id: string) => {
     const response = (await apolloClient.query({
       query: getUserProfileByIDQuery,
       variables: { userId: Number(id) },
-    })) as { data: { user: IUsersProfileServerData } };
+    })) as { data: { user: IUserProfileServerData } };
 
     return response.data.user;
   } catch (error: unknown) {
@@ -79,6 +84,35 @@ export const getUserProfileByID = async (id: string) => {
         const notFoundError = new Error(NOT_FOUND_USER);
         notFoundError.name = "NotFoundError";
         throw notFoundError;
+      } else if (error.message === "Failed to fetch") {
+        throw new Error(NO_NETWORK_CONNECTION);
+      }
+    }
+
+    throw error;
+  }
+};
+
+export const updateUserData = async (
+  inputUserObj: Omit<IUpdateUserInput, "cvsIds" | "role">,
+  inputProfileObj: IUpdateProfileInput
+) => {
+  try {
+    await apolloClient.mutate({
+      mutation: updateProfileQuery,
+      variables: { profile: inputProfileObj },
+    });
+
+    const response = (await apolloClient.mutate({
+      mutation: updateUserQuery,
+      variables: { user: inputUserObj },
+    })) as { data: { updateUser: IUserProfileServerData } };
+
+    return response.data.updateUser;
+  } catch (error: unknown) {
+    if (error instanceof Error) {
+      if (error.message === "Failed to fetch") {
+        throw new Error(NO_NETWORK_CONNECTION);
       }
     }
 

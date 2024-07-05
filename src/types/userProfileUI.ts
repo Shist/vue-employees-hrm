@@ -1,4 +1,4 @@
-export interface IUsersProfileData {
+export interface IUserProfileData {
   email: string;
   createdAt: number;
   isVerified: boolean;
@@ -9,7 +9,7 @@ export interface IUsersProfileData {
   positionID: string | null;
 }
 
-export interface IUsersProfileServerData {
+export interface IUserProfileServerData {
   email: string;
   created_at: string;
   is_verified: boolean;
