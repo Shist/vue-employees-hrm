@@ -59,8 +59,10 @@
 
 <script setup lang="ts">
 import { ref, computed, watchEffect } from "vue";
-import { useDepartmentsStore } from "@/store/departments";
-import { usePositionsStore } from "@/store/positions";
+import {
+  IDepartmentNamesData,
+  IPositionNamesData,
+} from "@/types/userProfileUI";
 
 const props = defineProps<{
   email: string;
@@ -70,6 +72,8 @@ const props = defineProps<{
   lastName: string | null;
   departmentID: string | null;
   positionID: string | null;
+  departmentNames: IDepartmentNamesData[] | null;
+  positionNames: IPositionNamesData[] | null;
 }>();
 
 const computedFullName = computed(() => {
@@ -102,19 +106,24 @@ const firstName = ref(props.firstName);
 
 const lastName = ref(props.lastName);
 
+const prepareSelectItems = (
+  objects: IDepartmentNamesData[] | IPositionNamesData[] | null,
+  defaultItemText: string
+) => {
+  return computed(() => [
+    { title: defaultItemText, value: null },
+    ...(objects?.map((obj) => ({ title: obj.name, value: obj.id })) || []),
+  ]);
+};
+
 const departmentID = ref(props.departmentID);
-const { departments } = useDepartmentsStore();
-const departmentsItems = computed(() => [
-  { title: "No department", value: null },
-  ...departments.map((dep) => ({ title: dep.name, value: dep.id })),
-]);
+const departmentsItems = prepareSelectItems(
+  props.departmentNames,
+  "No department"
+);
 
 const positionID = ref(props.positionID);
-const { positions } = usePositionsStore();
-const positionsItems = computed(() => [
-  { title: "No position", value: null },
-  ...positions.map((pos) => ({ title: pos.name, value: pos.id })),
-]);
+const positionsItems = prepareSelectItems(props.positionNames, "No position");
 
 watchEffect(() => {
   firstName.value = props.firstName;

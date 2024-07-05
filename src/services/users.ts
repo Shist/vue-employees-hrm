@@ -5,7 +5,6 @@ import getUserFullnameByIDQuery from "@/graphql/queries/getUserFullnameByID.quer
 import { IUsersTableData, IUsersTableServerData } from "@/types/usersTableUI";
 import { IUsersProfileServerData } from "@/types/userProfileUI";
 import { IUsersNameServerData } from "@/types/breadcrumbsUI";
-import useToast from "@/composables/useToast";
 import checkID from "@/utils/checkID";
 import {
   NOT_FOUND_USER,
@@ -76,17 +75,10 @@ export const getUserProfileByID = async (id: string) => {
     return response.data.user;
   } catch (error: unknown) {
     if (error instanceof Error) {
-      const { setErrorToast } = useToast();
-
       if (error.message.startsWith(GRAPHQL_NULL_RETURN_ERROR)) {
         const notFoundError = new Error(NOT_FOUND_USER);
         notFoundError.name = "NotFoundError";
-
-        setErrorToast(notFoundError.message);
-
         throw notFoundError;
-      } else {
-        setErrorToast(error.message);
       }
     }
 

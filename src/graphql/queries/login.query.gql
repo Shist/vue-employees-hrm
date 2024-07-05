@@ -4,6 +4,7 @@ query LOGIN($auth: AuthInput!) {
       id
       email
       profile {
+        id
         first_name
         last_name
         full_name

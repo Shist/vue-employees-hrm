@@ -1,9 +1,11 @@
 query GET_USER_PROFILE_BY_ID($userId: ID!) {
   user(userId: $userId) {
+    id
     email
     created_at
     is_verified
     profile {
+      id
       first_name
       last_name
       avatar

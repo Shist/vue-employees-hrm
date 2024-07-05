@@ -3,6 +3,7 @@ query GET_ALL_USERS {
     id
     email
     profile {
+      id
       first_name
       last_name
       avatar

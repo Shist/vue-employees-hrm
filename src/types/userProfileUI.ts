@@ -25,3 +25,13 @@ export interface IUsersProfileServerData {
     id: string;
   } | null;
 }
+
+export interface IDepartmentNamesData {
+  id: string;
+  name: number;
+}
+
+export interface IPositionNamesData {
+  id: string;
+  name: number;
+}

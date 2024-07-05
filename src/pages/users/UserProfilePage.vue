@@ -31,6 +31,8 @@
         :createdAt="user.createdAt"
         :departmentID="user.departmentID"
         :positionID="user.positionID"
+        :departmentNames="departmentNames"
+        :positionNames="positionNames"
       />
     </div>
   </div>
@@ -42,9 +44,16 @@ import AvatarUpload from "@/components/user/profile/AvatarUpload.vue";
 import UserInfo from "@/components/user/profile/UserInfo.vue";
 import { useRoute } from "vue-router";
 import { getUserProfileByID } from "@/services/users";
-import { IUsersProfileData } from "@/types/userProfileUI";
+import { getAllDepartmentNames } from "@/services/departments";
+import { getAllPositionNames } from "@/services/positions";
+import {
+  IUsersProfileData,
+  IDepartmentNamesData,
+  IPositionNamesData,
+} from "@/types/userProfileUI";
 import { UNEXPECTED_ERROR } from "@/constants/errorMessage";
 import { ROUTES } from "@/constants/router";
+import useToast from "@/composables/useToast";
 
 const route = useRoute();
 
@@ -52,6 +61,8 @@ const route = useRoute();
 const [section, id, tab] = route.fullPath.slice(1).split("/");
 
 const user = ref<IUsersProfileData | null>(null);
+const departmentNames = ref<IDepartmentNamesData[] | null>(null);
+const positionNames = ref<IPositionNamesData[] | null>(null);
 
 const isError = ref(false);
 const errorMessage = ref(UNEXPECTED_ERROR);
@@ -69,9 +80,15 @@ const userInitials = computed(() => {
   }
 });
 
+const { setErrorToast } = useToast();
+
 onMounted(() => {
-  getUserProfileByID(id)
-    .then((userData) => {
+  Promise.all([
+    getUserProfileByID(id),
+    getAllDepartmentNames(),
+    getAllPositionNames(),
+  ])
+    .then(([userData, departmentNamesData, positionNamesData]) => {
       user.value = {
         email: userData.email,
         createdAt: Number(userData.created_at),
@@ -82,6 +99,8 @@ onMounted(() => {
         departmentID: userData.department ? userData.department.id : null,
         positionID: userData.position ? userData.position.id : null,
       };
+      departmentNames.value = departmentNamesData;
+      positionNames.value = positionNamesData;
     })
     .catch((error: unknown) => {
       isError.value = true;
@@ -92,6 +111,8 @@ onMounted(() => {
         if (error.name === "NotFoundError") {
           isNotFoundError.value = true;
         }
+
+        setErrorToast(errorMessage.value);
       }
     });
 });
