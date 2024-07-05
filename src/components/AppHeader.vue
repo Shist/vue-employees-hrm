@@ -72,7 +72,7 @@
                 <p v-else-if="user?.email" class="toolbar__name">
                   {{ userInitials }}
                 </p>
-                <v-skeleton-loader v-else type="avatar"></v-skeleton-loader>
+                <v-skeleton-loader v-else type="avatar" />
               </v-avatar>
             </v-btn>
           </template>

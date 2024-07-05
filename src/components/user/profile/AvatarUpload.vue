@@ -1,25 +1,21 @@
 <template>
   <div class="avatar-upload">
     <div class="avatar-upload__avatar-wrapper">
-      <v-skeleton-loader
-        v-if="avatar === 'pending'"
-        type="avatar"
-        color="var(--color-header-bg)"
-        class="avatar-upload__avatar-skeleton"
-      />
-      <EmptyAvatar v-if="avatar === null" :letter="`L`" />
-      <v-img
-        v-else-if="avatar !== 'pending' && avatar !== 'error'"
-        :src="avatar"
-        alt="avatar"
-        class="avatar-upload__avatar"
-      />
+      <v-avatar
+        color="var(--color-avatar-bg)"
+        size="default"
+        class="avatar-upload__avatar-img-wrapper"
+      >
+        <v-img v-if="avatar" alt="User avatar" :src="avatar || undefined" />
+        <p v-else class="avatar-upload__initials-label">
+          {{ userInitials }}
+        </p>
+      </v-avatar>
       <v-btn
-        v-if="avatar !== null && avatar !== 'pending' && avatar !== 'error'"
+        v-if="avatar"
         icon="mdi-close"
         class="avatar-upload__avatar-cross-btn"
         @click.prevent="avatarRemove"
-        :disabled="!avatar"
       ></v-btn>
     </div>
     <label
@@ -53,10 +49,9 @@
 </template>
 
 <script setup lang="ts">
-import EmptyAvatar from "@/components/user/profile/avatar/EmptyAvatar.vue";
-
 defineProps<{
   avatar: string | null;
+  userInitials: string;
 }>();
 
 function avatarRemove() {
@@ -105,13 +100,15 @@ function avatarDrop(e: Event) {
     position: relative;
     height: 120px;
     width: 120px;
-    .avatar-upload__avatar {
-      border-radius: 50%;
-    }
-    .avatar-upload__avatar-skeleton {
-      padding: 10px;
+    .avatar-upload__avatar-img-wrapper {
       height: 120px;
       width: 120px;
+    }
+    .avatar-upload__initials-label {
+      font-family: $font-roboto;
+      font-size: 40px;
+      line-height: 44px;
+      color: var(--color-avatar-initials);
     }
     .avatar-upload__avatar-cross-btn {
       position: absolute;

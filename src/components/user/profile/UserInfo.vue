@@ -68,8 +68,8 @@ const props = defineProps<{
   isVerified: boolean;
   firstName: string | null;
   lastName: string | null;
-  departmentID: number;
-  positionID: number;
+  departmentID: string | null;
+  positionID: string | null;
 }>();
 
 const computedFullName = computed(() => {
@@ -125,12 +125,10 @@ watchEffect(() => {
 
 const isSubmitBtnDisabled = computed(
   () =>
-    !departmentID.value ||
-    !positionID.value ||
-    (firstName.value === props.firstName &&
-      lastName.value === props.lastName &&
-      departmentID.value === props.departmentID &&
-      positionID.value === props.positionID)
+    firstName.value === props.firstName &&
+    lastName.value === props.lastName &&
+    departmentID.value === props.departmentID &&
+    positionID.value === props.positionID
 );
 
 function submitChanges() {

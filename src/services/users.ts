@@ -2,6 +2,7 @@ import apolloClient from "@/plugins/apollo";
 import getAllUsersQuery from "@/graphql/queries/getAllUsers.query.gql";
 import getUserProfileByIDQuery from "@/graphql/queries/getUserProfileByID.query.gql";
 import { IUsersTableData, IUsersTableServerData } from "@/types/usersTableUI";
+import { IUsersProfileServerData } from "@/types/userProfileUI";
 import useToast from "@/composables/useToast";
 import checkID from "@/utils/checkID";
 import {
@@ -46,10 +47,10 @@ export const getUserProfileByID = async (id: string) => {
   try {
     checkID(id);
 
-    const response = await apolloClient.query({
+    const response = (await apolloClient.query({
       query: getUserProfileByIDQuery,
       variables: { userId: Number(id) },
-    });
+    })) as { data: { user: IUsersProfileServerData } };
 
     return response.data.user;
   } catch (error: unknown) {

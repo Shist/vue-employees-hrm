@@ -22,7 +22,7 @@
       indeterminate
     />
     <div v-else class="user-profile__main-content-wrapper">
-      <AvatarUpload :avatar="user.avatar" />
+      <AvatarUpload :avatar="user.avatar" :userInitials="userInitials" />
       <UserInfo
         :firstName="user.firstName"
         :lastName="user.lastName"
@@ -37,8 +37,8 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted } from "vue";
-import AvatarUpload from "@/components/user/profile/avatar/AvatarUpload.vue";
+import { ref, onMounted, computed } from "vue";
+import AvatarUpload from "@/components/user/profile/AvatarUpload.vue";
 import UserInfo from "@/components/user/profile/UserInfo.vue";
 import { useRoute } from "vue-router";
 import { getUserProfileByID } from "@/services/users";
@@ -57,6 +57,18 @@ const isError = ref(false);
 const errorMessage = ref(UNEXPECTED_ERROR);
 const isNotFoundError = ref(false);
 
+const userInitials = computed(() => {
+  if (user.value?.firstName) {
+    return user.value.firstName.charAt(0).toUpperCase();
+  } else if (user.value?.lastName) {
+    return user.value.lastName.charAt(0).toUpperCase();
+  } else if (user.value?.email) {
+    return user.value.email.charAt(0).toUpperCase();
+  } else {
+    return "";
+  }
+});
+
 onMounted(() => {
   getUserProfileByID(id)
     .then((userData) => {
@@ -67,8 +79,8 @@ onMounted(() => {
         firstName: userData.profile.first_name,
         lastName: userData.profile.last_name,
         avatar: userData.profile.avatar,
-        departmentID: Number(userData.department.id),
-        positionID: Number(userData.position.id),
+        departmentID: userData.department ? userData.department.id : null,
+        positionID: userData.position ? userData.position.id : null,
       };
     })
     .catch((error: unknown) => {
