@@ -69,7 +69,7 @@ function avatarDragOver(e: Event) {
   const labelWrapper = e.target.closest(
     ".avatar-upload__upload-avatar-wrapper"
   );
-  labelWrapper?.classList.add("green-filter-bg");
+  labelWrapper?.classList.add("dark-red-filter-bg");
 }
 
 function avatarDragLeave(e: Event) {
@@ -77,7 +77,7 @@ function avatarDragLeave(e: Event) {
   const labelWrapper = e.target.closest(
     ".avatar-upload__upload-avatar-wrapper"
   );
-  labelWrapper?.classList.remove("green-filter-bg");
+  labelWrapper?.classList.remove("dark-red-filter-bg");
 }
 
 function avatarDrop(e: Event) {
