@@ -14,7 +14,13 @@
         Please try to reload the page
       </span>
     </div>
-    <div v-else-if="!user" class="user-profile__spinner-wrapper">Loading</div>
+    <v-progress-circular
+      v-else-if="!user"
+      :size="100"
+      :width="10"
+      color="var(--color-spinner)"
+      indeterminate
+    />
     <div v-else class="user-profile__main-content-wrapper">
       <AvatarUpload :avatar="user.avatar" />
       <UserInfo

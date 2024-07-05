@@ -26,6 +26,7 @@ import {
   VNavigationDrawer,
   VLayout,
   VProgressLinear,
+  VProgressCircular,
   VDialog,
 } from "vuetify/components";
 
@@ -57,5 +58,6 @@ export default {
   VNavigationDrawer,
   VLayout,
   VProgressLinear,
+  VProgressCircular,
   VDialog,
 };
