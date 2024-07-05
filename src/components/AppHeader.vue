@@ -205,14 +205,14 @@ const drawer = ref<boolean>(false);
 const navigationItems: INavigationItem[] = NAVIGATION__ITEMS;
 
 const userInitials = computed(() => {
-  if (user.value?.full_name) {
-    return user.value.full_name.charAt(0).toUpperCase();
+  if (user.value?.fullName) {
+    return user.value.fullName.charAt(0).toUpperCase();
   }
   return user.value?.email.charAt(0).toUpperCase();
 });
 
 const userHeaderName = computed(() => {
-  if (user.value?.full_name) return user.value.full_name;
+  if (user.value?.fullName) return user.value.fullName;
   return user.value?.email;
 });
 
