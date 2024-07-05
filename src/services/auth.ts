@@ -16,8 +16,6 @@ export const login = async (email: string, password: string) => {
       })
     ).data;
 
-    if (!login) return;
-
     await apolloClient.resetStore();
 
     const token = login.access_token;
@@ -25,9 +23,9 @@ export const login = async (email: string, password: string) => {
     const user = {
       id: login.user.id,
       email: login.user.email,
-      first_name: login.user.profile.first_name,
-      last_name: login.user.profile.last_name,
-      full_name: login.user.profile.full_name,
+      firstName: login.user.profile.first_name,
+      lastName: login.user.profile.last_name,
+      fullName: login.user.profile.full_name,
       avatar: login.user.profile.avatar,
     };
 
@@ -38,12 +36,9 @@ export const login = async (email: string, password: string) => {
         throw new Error(INVALID_CREDENTIALS);
       } else if (error.message === "Failed to fetch") {
         throw new Error(NO_NETWORK_CONNECTION);
-      } else {
-        throw new Error(UNEXPECTED_ERROR);
       }
-    } else {
-      throw new Error(UNEXPECTED_ERROR);
     }
+    throw new Error(UNEXPECTED_ERROR);
   }
 };
 
@@ -56,8 +51,6 @@ export const register = async (email: string, password: string) => {
       })
     ).data;
 
-    if (!signup) return;
-
     await apolloClient.resetStore();
 
     const token = signup.access_token;
@@ -65,9 +58,9 @@ export const register = async (email: string, password: string) => {
     const user = {
       id: signup.user.id,
       email: signup.user.email,
-      first_name: signup.user.profile.first_name,
-      last_name: signup.user.profile.last_name,
-      full_name: signup.user.profile.full_name,
+      firstName: signup.user.profile.first_name,
+      lastName: signup.user.profile.last_name,
+      fullName: signup.user.profile.full_name,
       avatar: signup.user.profile.avatar,
     };
 
@@ -83,11 +76,8 @@ export const register = async (email: string, password: string) => {
         'duplicate key value violates unique constraint "UQ_e12875dfb3b1d92d7d7c5377e22"'
       ) {
         throw new Error(`User with email: ${email} already exists`);
-      } else {
-        throw new Error(UNEXPECTED_ERROR);
       }
-    } else {
-      throw new Error(UNEXPECTED_ERROR);
     }
+    throw new Error(UNEXPECTED_ERROR);
   }
 };
