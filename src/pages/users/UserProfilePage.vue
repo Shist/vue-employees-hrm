@@ -39,7 +39,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted, computed } from "vue";
+import { ref, onMounted, computed, watch } from "vue";
 import AvatarUpload from "@/components/user/profile/AvatarUpload.vue";
 import UserInfo from "@/components/user/profile/UserInfo.vue";
 import { useRoute } from "vue-router";
@@ -57,8 +57,11 @@ import useToast from "@/composables/useToast";
 
 const route = useRoute();
 
-// eslint-disable-next-line
-const [section, id, tab] = route.fullPath.slice(1).split("/");
+const id = computed<string>(() => {
+  // eslint-disable-next-line
+  const [section, id, tab] = route.fullPath.slice(1).split("/");
+  return id;
+});
 
 const user = ref<IUsersProfileData | null>(null);
 const departmentNames = ref<IDepartmentNamesData[] | null>(null);
@@ -83,8 +86,16 @@ const userInitials = computed(() => {
 const { setErrorToast } = useToast();
 
 onMounted(() => {
+  fetchData();
+});
+
+watch(id, () => {
+  fetchData();
+});
+
+function fetchData() {
   Promise.all([
-    getUserProfileByID(id),
+    getUserProfileByID(id.value),
     getAllDepartmentNames(),
     getAllPositionNames(),
   ])
@@ -101,6 +112,10 @@ onMounted(() => {
       };
       departmentNames.value = departmentNamesData;
       positionNames.value = positionNamesData;
+
+      isError.value = false;
+      errorMessage.value = UNEXPECTED_ERROR;
+      isNotFoundError.value = false;
     })
     .catch((error: unknown) => {
       isError.value = true;
@@ -115,7 +130,7 @@ onMounted(() => {
         setErrorToast(errorMessage.value);
       }
     });
-});
+}
 </script>
 
 <style lang="scss" scoped>
