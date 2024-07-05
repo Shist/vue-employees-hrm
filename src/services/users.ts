@@ -1,12 +1,14 @@
 import apolloClient from "@/plugins/apollo";
 import getAllUsersQuery from "@/graphql/queries/getAllUsers.query.gql";
 import getUserProfileByIDQuery from "@/graphql/queries/getUserProfileByID.query.gql";
+import getUserAuthDataByIDQuery from "@/graphql/queries/getUserAuthDataByID.query.gql";
 import getUserFullnameByIDQuery from "@/graphql/queries/getUserFullnameByID.query.gql";
 import updateUserQuery from "@/graphql/mutations/updateUser.mutation.gql";
 import updateProfileQuery from "@/graphql/mutations/updateProfile.mutation.gql";
 import { IUsersTableData, IUsersTableServerData } from "@/types/usersTableUI";
 import { IUserProfileServerData } from "@/types/userProfileUI";
 import { IUsersNameServerData } from "@/types/breadcrumbsUI";
+import { IUserAuthServerData } from "@/types/userAuthUI";
 import { IUpdateUserInput } from "@/types/backend-interfaces/user";
 import { IUpdateProfileInput } from "@/types/backend-interfaces/user/profile";
 import checkID from "@/utils/checkID";
@@ -47,6 +49,25 @@ export const getAllUsers = async () => {
   }
 
   return result;
+};
+
+export const getUserAuthDataByID = async (id: string) => {
+  try {
+    checkID(id);
+
+    const response = (await apolloClient.query({
+      query: getUserAuthDataByIDQuery,
+      variables: { userId: Number(id) },
+    })) as { data: { user: IUserAuthServerData } };
+
+    return response.data.user;
+  } catch (error: unknown) {
+    if (error instanceof Error) {
+      console.error(error.message);
+    }
+
+    throw error;
+  }
 };
 
 export const getUserNameDataByID = async (id: string) => {

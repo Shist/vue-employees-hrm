@@ -117,7 +117,7 @@ function updateUserValue(newUser: IUserProfileServerData) {
     positionID: newUser.position ? newUser.position.id : null,
   };
 
-  if (!authStoreUser.value) return;
+  if (!authStoreUser.value || authStoreUser.value.id !== id.value) return;
 
   authStoreUser.value.firstName = newUser.profile.first_name;
   authStoreUser.value.lastName = newUser.profile.last_name;

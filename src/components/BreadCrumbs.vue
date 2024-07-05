@@ -34,12 +34,18 @@ import {
 } from "@/constants/breadCrumbs";
 import { getUserNameDataByID } from "@/services/users";
 import { useCVsStore } from "@/store/cvs";
+import { storeToRefs } from "pinia";
+import { useAuthStore } from "@/store/authStore";
+
+const authStore = useAuthStore();
+const user = storeToRefs(authStore).user;
 
 const breadcrumbsItems: Reactive<IBreadCrumbsItem[]> = reactive([]);
 
 const route = useRoute();
 
 watch(route, updateBreadCrumbs);
+watch(user, updateBreadCrumbs, { deep: true });
 
 updateBreadCrumbs();
 
@@ -79,21 +85,29 @@ function updateBreadCrumbs() {
       },
       crumbIconName: SECTIONS_ICONS[section],
     });
+
     const { getCVById } = useCVsStore();
 
     switch (section) {
       case ROUTES.USERS.PATH.slice(1):
-        getUserNameDataByID(id)
-          .then((userData) => {
-            if (!userData) throw new Error("Empty user data!");
-            const userFullName = userData.profile.full_name;
-            breadcrumbsItems[2].title = userFullName
-              ? userFullName
-              : userData.email;
-          })
-          .catch(() => {
-            breadcrumbsItems[2].title = `❌ Loading Error`;
-          });
+        if (id === user.value?.id) {
+          const userFullName = user.value.fullName;
+          breadcrumbsItems[2].title = userFullName
+            ? userFullName
+            : user.value.email;
+        } else {
+          getUserNameDataByID(id)
+            .then((userData) => {
+              if (!userData) throw new Error("Empty user data!");
+              const userFullName = userData.profile.full_name;
+              breadcrumbsItems[2].title = userFullName
+                ? userFullName
+                : userData.email;
+            })
+            .catch(() => {
+              breadcrumbsItems[2].title = `❌ Loading Error`;
+            });
+        }
         break;
       case ROUTES.CVS.PATH.slice(1):
         getCVById(Number(id))
