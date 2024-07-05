@@ -12,17 +12,15 @@ export const getAllUsers = async () => {
       })
     ).data;
 
-    if (!users) return;
-
     users.forEach((user: IUsersTableServerData) => {
       result.push({
         id: user.id,
         email: user.email,
         avatar: user.profile.avatar ?? "",
-        first_name: user.profile?.first_name ?? "",
-        last_name: user.profile?.last_name ?? "",
-        department_name: user.department_name ?? "",
-        position_name: user.position_name ?? "",
+        firstName: user.profile?.first_name ?? "",
+        lastName: user.profile?.last_name ?? "",
+        departmentName: user.department_name ?? "",
+        positionName: user.position_name ?? "",
       });
     });
   } catch (error: unknown) {

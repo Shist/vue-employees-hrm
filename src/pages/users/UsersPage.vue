@@ -2,13 +2,13 @@
   <div class="main-page" v-if="!isLoading">
     <v-text-field
       v-model="search"
-      label="Search"
       prepend-inner-icon="mdi-magnify"
       variant="outlined"
       single-line
+      density="compact"
+      placeholder="Search"
       class="main-page__text-field-wrapper"
-    >
-    </v-text-field>
+    />
     <v-data-table
       :headers="headers"
       :items="users"
@@ -74,11 +74,11 @@ const search = ref("");
 
 const headers = reactive([
   { key: "avatar", sortable: false },
-  { key: "first_name", title: "First Name" },
-  { key: "last_name", title: "Last Name" },
+  { key: "firstName", title: "First Name" },
+  { key: "lastName", title: "Last Name" },
   { key: "email", title: "Email" },
-  { key: "department_name", title: "Department" },
-  { key: "position_name", title: "Position" },
+  { key: "departmentName", title: "Department" },
+  { key: "positionName", title: "Position" },
   { key: "options", sortable: false },
 ]);
 

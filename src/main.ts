@@ -27,4 +27,4 @@ const authStore = useAuthStore();
 
 app.mount("#app");
 
-authStore.checkAuthorization();
+authStore.checkAuthorization(); //delete from main, add to router beforeEach

@@ -6,6 +6,8 @@ import { useRouter } from "vue-router";
 import { IUserAuthData } from "@/types/userAuthUI";
 
 export const useAuthStore = defineStore("authStore", () => {
+  const router = useRouter();
+
   const user = ref<IUserAuthData | null>(
     JSON.parse(`${localStorage.getItem("user")}`)
   );
@@ -15,8 +17,6 @@ export const useAuthStore = defineStore("authStore", () => {
   const isLoggedIn = computed(() => {
     return !!token.value && !!user.value;
   });
-
-  const router = useRouter();
 
   const loginUser = async (email: string, password: string) => {
     const result = await login(email, password);
