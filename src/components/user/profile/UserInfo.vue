@@ -1,7 +1,7 @@
 <template>
   <div class="user-info">
     <div class="user-info__info-captions-wrapper">
-      <h3 class="user-info__name-caption">
+      <h3 v-if="computedFullName" class="user-info__name-caption">
         {{ computedFullName }}
       </h3>
       <div class="user-info__mail-caption-wrapper">
@@ -89,7 +89,7 @@ const emit = defineEmits<{
 
 const computedFullName = computed(() => {
   if (!props.firstName && !props.lastName) {
-    return "(Neither first nor last name are specified)";
+    return "";
   } else {
     if (props.firstName && props.lastName) {
       return `${props.firstName} ${props.lastName}`;

@@ -1,6 +1,13 @@
 <template>
   <div class="user-profile">
-    <div v-if="isError" class="user-profile__error-wrapper">
+    <v-progress-circular
+      v-if="isPageLoading"
+      :size="100"
+      :width="10"
+      color="var(--color-spinner)"
+      indeterminate
+    />
+    <div v-else-if="isError" class="user-profile__error-wrapper">
       <h4 class="user-profile__error-message">❌ {{ errorMessage }}</h4>
       <v-btn
         v-if="isNotFoundError"
@@ -14,14 +21,7 @@
         Please try to reload the page
       </span>
     </div>
-    <v-progress-circular
-      v-else-if="!user"
-      :size="100"
-      :width="10"
-      color="var(--color-spinner)"
-      indeterminate
-    />
-    <div v-else class="user-profile__main-content-wrapper">
+    <div v-else-if="user" class="user-profile__main-content-wrapper">
       <AvatarUpload :avatar="user.avatar" :userInitials="userInitials" />
       <UserInfo
         :userID="id"
@@ -50,6 +50,7 @@ import { getAllDepartmentNames } from "@/services/departments";
 import { getAllPositionNames } from "@/services/positions";
 import {
   IUserProfileData,
+  IUserProfileServerData,
   IDepartmentNamesData,
   IPositionNamesData,
 } from "@/types/userProfileUI";
@@ -58,6 +59,8 @@ import { IUpdateProfileInput } from "@/types/backend-interfaces/user/profile";
 import { UNEXPECTED_ERROR } from "@/constants/errorMessage";
 import { ROUTES } from "@/constants/router";
 import useToast from "@/composables/useToast";
+import { storeToRefs } from "pinia";
+import { useAuthStore } from "@/store/authStore";
 
 const route = useRoute();
 
@@ -66,6 +69,11 @@ const id = computed<string>(() => {
   const [section, id, tab] = route.fullPath.slice(1).split("/");
   return id;
 });
+
+const authStore = useAuthStore();
+const authStoreUser = storeToRefs(authStore).user;
+
+const isPageLoading = ref(true);
 
 const user = ref<IUserProfileData | null>(null);
 const departmentNames = ref<IDepartmentNamesData[] | null>(null);
@@ -97,29 +105,54 @@ watch(id, () => {
   fetchData();
 });
 
+function updateUserValue(newUser: IUserProfileServerData) {
+  user.value = {
+    email: newUser.email,
+    createdAt: Number(newUser.created_at),
+    isVerified: newUser.is_verified,
+    firstName: newUser.profile.first_name,
+    lastName: newUser.profile.last_name,
+    avatar: newUser.profile.avatar,
+    departmentID: newUser.department ? newUser.department.id : null,
+    positionID: newUser.position ? newUser.position.id : null,
+  };
+
+  if (!authStoreUser.value) return;
+
+  authStoreUser.value.firstName = newUser.profile.first_name;
+  authStoreUser.value.lastName = newUser.profile.last_name;
+
+  if (newUser.profile.first_name && newUser.profile.last_name) {
+    authStoreUser.value.fullName = `${newUser.profile.first_name} ${newUser.profile.last_name}`;
+  } else if (newUser.profile.first_name) {
+    authStoreUser.value.fullName = newUser.profile.first_name;
+  } else if (newUser.profile.last_name) {
+    authStoreUser.value.fullName = newUser.profile.last_name;
+  } else {
+    authStoreUser.value.fullName = "";
+  }
+}
+
+function setErrorValuesToDefault() {
+  isError.value = false;
+  errorMessage.value = UNEXPECTED_ERROR;
+  isNotFoundError.value = false;
+}
+
 function fetchData() {
+  isPageLoading.value = true;
+
   Promise.all([
     getUserProfileByID(id.value),
     getAllDepartmentNames(),
     getAllPositionNames(),
   ])
     .then(([userData, departmentNamesData, positionNamesData]) => {
-      user.value = {
-        email: userData.email,
-        createdAt: Number(userData.created_at),
-        isVerified: userData.is_verified,
-        firstName: userData.profile.first_name,
-        lastName: userData.profile.last_name,
-        avatar: userData.profile.avatar,
-        departmentID: userData.department ? userData.department.id : null,
-        positionID: userData.position ? userData.position.id : null,
-      };
+      updateUserValue(userData);
       departmentNames.value = departmentNamesData;
       positionNames.value = positionNamesData;
 
-      isError.value = false;
-      errorMessage.value = UNEXPECTED_ERROR;
-      isNotFoundError.value = false;
+      setErrorValuesToDefault();
     })
     .catch((error: unknown) => {
       isError.value = true;
@@ -133,6 +166,9 @@ function fetchData() {
 
         setErrorToast(errorMessage.value);
       }
+    })
+    .finally(() => {
+      isPageLoading.value = false;
     });
 }
 
@@ -140,9 +176,30 @@ function submitUserData(
   userInputObj: Omit<IUpdateUserInput, "cvsIds" | "role">,
   profileInputObj: IUpdateProfileInput
 ) {
-  updateUserData(userInputObj, profileInputObj).then((response) =>
-    console.log(response)
-  );
+  isPageLoading.value = true;
+
+  updateUserData(userInputObj, profileInputObj)
+    .then((response) => {
+      updateUserValue(response);
+
+      setErrorValuesToDefault();
+    })
+    .catch((error: unknown) => {
+      isError.value = true;
+
+      if (error instanceof Error) {
+        errorMessage.value = error.message;
+
+        if (error.name === "NotFoundError") {
+          isNotFoundError.value = true;
+        }
+
+        setErrorToast(errorMessage.value);
+      }
+    })
+    .finally(() => {
+      isPageLoading.value = false;
+    });
 }
 </script>
 
