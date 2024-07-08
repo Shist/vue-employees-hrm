@@ -10,6 +10,7 @@ import uploadAvatarQuery from "@/graphql/mutations/uploadAvatar.mutation.gql";
 import deleteAvatarQuery from "@/graphql/mutations/deleteAvatar.mutation.gql";
 import createUserSkillQuery from "@/graphql/mutations/createUserSkill.mutation.gql";
 import updateUserSkillQuery from "@/graphql/mutations/updateUserSkill.mutation.gql";
+import deleteUserSkillsQuery from "@/graphql/mutations/deleteUserSkills.mutation.gql";
 import { IUsersTableData, IUsersTableServerData } from "@/types/usersTableUI";
 import { IUserProfileServerData } from "@/types/userProfileUI";
 import { IUsersNameServerData } from "@/types/breadcrumbsUI";
@@ -18,8 +19,9 @@ import { IUpdateUserInput } from "@/types/backend-interfaces/user";
 import { IUpdateProfileInput } from "@/types/backend-interfaces/user/profile";
 import { IUploadAvatarInput } from "@/types/backend-interfaces/user/avatar";
 import {
-  IAddOrUpdateProfileSkillInput,
   IProfileSkill,
+  IAddOrUpdateProfileSkillInput,
+  IDeleteProfileSkillInput,
 } from "@/types/backend-interfaces/user/profile/skill";
 import checkID from "@/utils/checkID";
 import {
@@ -243,6 +245,27 @@ export const updateUserSkill = async (
     })) as { data: { updateProfileSkill: { skills: IProfileSkill[] } } };
 
     return response.data.updateProfileSkill.skills;
+  } catch (error: unknown) {
+    if (error instanceof Error) {
+      if (error.message === "Failed to fetch") {
+        throw new Error(NO_NETWORK_CONNECTION);
+      }
+    }
+
+    throw error;
+  }
+};
+
+export const deleteUserSkills = async (
+  inputSkillObj: IDeleteProfileSkillInput
+) => {
+  try {
+    const response = (await apolloClient.mutate({
+      mutation: deleteUserSkillsQuery,
+      variables: { skills: inputSkillObj },
+    })) as { data: { deleteProfileSkill: { skills: IProfileSkill[] } } };
+
+    return response.data.deleteProfileSkill.skills;
   } catch (error: unknown) {
     if (error instanceof Error) {
       if (error.message === "Failed to fetch") {

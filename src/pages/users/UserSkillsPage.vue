@@ -55,7 +55,7 @@
           variant="text"
           color="var(--color-btn-gray-text)"
           class="user-skills__deletion-btn"
-          @click="deleteUserSkills"
+          @click="submitUserSkillsDeletion"
         >
           <span class="user-skills__deletion-btn-label">Delete</span>
           <span class="user-skills__deletion-btn-num">
@@ -86,11 +86,13 @@ import {
   getUserSkillsByID,
   createUserSkill,
   updateUserSkill,
+  deleteUserSkills,
 } from "@/services/users";
 import { getAllSkills, getSkillCategories } from "@/services/skills";
 import {
   IProfileSkill,
   IAddOrUpdateProfileSkillInput,
+  IDeleteProfileSkillInput,
 } from "@/types/backend-interfaces/user/profile/skill";
 import {
   ISkillCategoriesMap,
@@ -135,12 +137,12 @@ const skillsForDeletionNames = reactive(new Set<string>());
 
 const aSkillsDeletionState = reactive<boolean[]>([]);
 
-const skillsForDeletionAmount = computed<number>(() =>
-  aSkillsDeletionState.reduce((acc, isDeleting) => {
+const skillsForDeletionAmount = computed<number>(() => {
+  return aSkillsDeletionState.reduce((acc, isDeleting) => {
     if (isDeleting) acc++;
     return acc;
-  }, 0)
-);
+  }, 0);
+});
 
 const skillCategoriesMap = computed(() => {
   if (!userSkills.value) return null;
@@ -192,9 +194,10 @@ function setErrorValuesToDefault() {
 }
 
 function updateUserSkillsValue(userSkillsData: IProfileSkill[]) {
+  skillsForDeletionNames.clear();
   aSkillsDeletionState.splice(
     0,
-    0,
+    aSkillsDeletionState.length,
     ...new Array(userSkillsData.length).fill(false)
   );
   userSkills.value = userSkillsData;
@@ -328,8 +331,36 @@ function clearUserDeletionSkills() {
   aSkillsDeletionState.fill(false);
 }
 
-function deleteUserSkills() {
-  // TODO delete all skills, which names are inside skillsForDeletionNames
+function submitUserSkillsDeletion() {
+  isPageLoading.value = true;
+
+  const skillsToBeDeleted: IDeleteProfileSkillInput = {
+    userId: Number(id.value),
+    name: [...skillsForDeletionNames],
+  };
+
+  deleteUserSkills(skillsToBeDeleted)
+    .then((freshUserSkills) => {
+      updateUserSkillsValue(freshUserSkills);
+
+      setErrorValuesToDefault();
+    })
+    .catch((error: unknown) => {
+      isError.value = true;
+
+      if (error instanceof Error) {
+        errorMessage.value = error.message;
+
+        if (error.name === "NotFoundError") {
+          isNotFoundError.value = true;
+        }
+
+        setErrorToast(errorMessage.value);
+      }
+    })
+    .finally(() => {
+      isPageLoading.value = false;
+    });
 
   clearUserDeletionSkills();
 }
