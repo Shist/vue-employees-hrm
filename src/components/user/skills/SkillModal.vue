@@ -29,7 +29,7 @@
           />
           <v-select
             v-model="selectCategory"
-            :items="skillCategories"
+            :items="aSkillCategoriesItems"
             label="Category"
             variant="outlined"
             class="skill-modal__text-field-wrapper"
@@ -71,12 +71,14 @@
 
 <script setup lang="ts">
 import { ref, computed, watch, onUpdated } from "vue";
-import { useSkillsStore } from "@/store/skills";
 import { IProfileSkill } from "@/types/backend-interfaces/user/profile/skill";
+import { ISkillsData } from "@/types/userSkillsUI";
 
 const props = defineProps<{
   isOpen: boolean;
   oSkillForModal: IProfileSkill | null;
+  skills: ISkillsData[] | null;
+  skillCategories: string[] | null;
 }>();
 
 const emit = defineEmits<{ (event: "closeModal"): void }>();
@@ -97,9 +99,20 @@ const isConfirmBtnDisabled = computed(
       selectSkillMastery.value === computedSkillMastery.value)
 );
 
-const { skills, skillCategories, getCategoryBySkill } = useSkillsStore();
+function getCategoryBySkill(skillName: string) {
+  if (!props.skills) return null;
+  return props.skills.find((skill) => skill.name === skillName)?.category;
+}
 
-const aSkillsItems = computed(() => skills.map((skill) => skill.name));
+const aSkillsItems = computed(() => {
+  if (!props.skills) return [];
+  return props.skills.map((skill) => skill.name);
+});
+
+const aSkillCategoriesItems = computed(() => {
+  if (!props.skillCategories) return [];
+  return props.skillCategories;
+});
 
 const aSkillMasteries = [
   "Novice",

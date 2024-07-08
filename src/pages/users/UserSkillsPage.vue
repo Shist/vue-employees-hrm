@@ -32,7 +32,7 @@
         <span>Add skill</span>
       </v-btn>
       <SkillsCategory
-        v-for="(aSkills, sCategory) in skillCategories"
+        v-for="(aSkills, sCategory) in skillCategoriesMap"
         :key="sCategory"
         :category="sCategory.toString()"
         :category-skills="aSkills"
@@ -68,6 +68,8 @@
   <SkillModal
     :isOpen="isModalOpen"
     :oSkillForModal="oSkillForModal"
+    :skills="skills"
+    :skill-categories="skillCategories"
     @closeModal="handleCloseModal"
   />
 </template>
@@ -78,8 +80,13 @@ import SkillModal from "@/components/user/skills/SkillModal.vue";
 import SkillsCategory from "@/components/user/skills/SkillsCategory.vue";
 import { useRoute } from "vue-router";
 import { getUserSkillsByID } from "@/services/users";
+import { getAllSkills, getSkillCategories } from "@/services/skills";
 import { IProfileSkill } from "@/types/backend-interfaces/user/profile/skill";
-import { ISkillCategoriesMap, ICategorySkill } from "@/types/userSkillsUI";
+import {
+  ISkillCategoriesMap,
+  ICategorySkill,
+  ISkillsData,
+} from "@/types/userSkillsUI";
 import useToast from "@/composables/useToast";
 import { UNEXPECTED_ERROR } from "@/constants/errorMessage";
 import { ROUTES } from "@/constants/router";
@@ -95,6 +102,8 @@ const id = computed<string>(() => {
 const isPageLoading = ref(true);
 
 const userSkills = ref<IProfileSkill[] | null>(null);
+const skills = ref<ISkillsData[] | null>(null);
+const skillCategories = ref<string[] | null>(null);
 
 const isError = ref(false);
 const errorMessage = ref(UNEXPECTED_ERROR);
@@ -114,7 +123,7 @@ const skillsForDeletionAmount = computed<number>(() =>
   }, 0)
 );
 
-const skillCategories = computed(() => {
+const skillCategoriesMap = computed(() => {
   if (!userSkills.value) return null;
 
   const resultObj: ISkillCategoriesMap = {};
@@ -166,14 +175,22 @@ function setErrorValuesToDefault() {
 function fetchData() {
   isPageLoading.value = true;
 
-  getUserSkillsByID(id.value)
-    .then((userSkillsData) => {
+  Promise.all([
+    getUserSkillsByID(id.value),
+    getAllSkills(),
+    getSkillCategories(),
+  ])
+    .then(([userSkillsData, skillsData, skillCategoriesData]) => {
       aSkillsDeletionState.splice(
         0,
         0,
         ...new Array(userSkillsData.length).fill(false)
       );
       userSkills.value = userSkillsData;
+
+      skills.value = skillsData;
+
+      skillCategories.value = skillCategoriesData;
 
       setErrorValuesToDefault();
     })
