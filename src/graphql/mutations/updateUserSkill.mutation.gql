@@ -1,0 +1,10 @@
+mutation UPDATE_USER_SKILL($skill: UpdateProfileSkillInput!) {
+  updateProfileSkill(skill: $skill) {
+    id
+    skills {
+      name
+      category
+      mastery
+    }
+  }
+}

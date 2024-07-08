@@ -8,6 +8,8 @@ import updateUserQuery from "@/graphql/mutations/updateUser.mutation.gql";
 import updateProfileQuery from "@/graphql/mutations/updateProfile.mutation.gql";
 import uploadAvatarQuery from "@/graphql/mutations/uploadAvatar.mutation.gql";
 import deleteAvatarQuery from "@/graphql/mutations/deleteAvatar.mutation.gql";
+import createUserSkillQuery from "@/graphql/mutations/createUserSkill.mutation.gql";
+import updateUserSkillQuery from "@/graphql/mutations/updateUserSkill.mutation.gql";
 import { IUsersTableData, IUsersTableServerData } from "@/types/usersTableUI";
 import { IUserProfileServerData } from "@/types/userProfileUI";
 import { IUsersNameServerData } from "@/types/breadcrumbsUI";
@@ -15,7 +17,10 @@ import { IUserAuthServerData } from "@/types/userAuthUI";
 import { IUpdateUserInput } from "@/types/backend-interfaces/user";
 import { IUpdateProfileInput } from "@/types/backend-interfaces/user/profile";
 import { IUploadAvatarInput } from "@/types/backend-interfaces/user/avatar";
-import { IProfileSkill } from "@/types/backend-interfaces/user/profile/skill";
+import {
+  IAddOrUpdateProfileSkillInput,
+  IProfileSkill,
+} from "@/types/backend-interfaces/user/profile/skill";
 import checkID from "@/utils/checkID";
 import {
   NOT_FOUND_USER,
@@ -196,6 +201,48 @@ export const deleteUserAvatar = async (id: string) => {
       mutation: deleteAvatarQuery,
       variables: { avatar: { userId: Number(id) } },
     });
+  } catch (error: unknown) {
+    if (error instanceof Error) {
+      if (error.message === "Failed to fetch") {
+        throw new Error(NO_NETWORK_CONNECTION);
+      }
+    }
+
+    throw error;
+  }
+};
+
+export const createUserSkill = async (
+  inputSkillObj: IAddOrUpdateProfileSkillInput
+) => {
+  try {
+    const response = (await apolloClient.mutate({
+      mutation: createUserSkillQuery,
+      variables: { skill: inputSkillObj },
+    })) as { data: { addProfileSkill: { skills: IProfileSkill[] } } };
+
+    return response.data.addProfileSkill.skills;
+  } catch (error: unknown) {
+    if (error instanceof Error) {
+      if (error.message === "Failed to fetch") {
+        throw new Error(NO_NETWORK_CONNECTION);
+      }
+    }
+
+    throw error;
+  }
+};
+
+export const updateUserSkill = async (
+  inputSkillObj: IAddOrUpdateProfileSkillInput
+) => {
+  try {
+    const response = (await apolloClient.mutate({
+      mutation: updateUserSkillQuery,
+      variables: { skill: inputSkillObj },
+    })) as { data: { updateProfileSkill: { skills: IProfileSkill[] } } };
+
+    return response.data.updateProfileSkill.skills;
   } catch (error: unknown) {
     if (error instanceof Error) {
       if (error.message === "Failed to fetch") {

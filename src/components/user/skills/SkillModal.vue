@@ -71,17 +71,32 @@
 
 <script setup lang="ts">
 import { ref, computed, watch, onUpdated } from "vue";
-import { IProfileSkill } from "@/types/backend-interfaces/user/profile/skill";
+import {
+  IProfileSkill,
+  IAddOrUpdateProfileSkillInput,
+} from "@/types/backend-interfaces/user/profile/skill";
+import { Mastery } from "@/types/backend-interfaces/skill/mastery";
 import { ISkillsData } from "@/types/userSkillsUI";
 
 const props = defineProps<{
   isOpen: boolean;
   oSkillForModal: IProfileSkill | null;
+  userID: string;
   skills: ISkillsData[] | null;
   skillCategories: string[] | null;
 }>();
 
-const emit = defineEmits<{ (event: "closeModal"): void }>();
+const emit = defineEmits<{
+  (event: "closeModal"): void;
+  (
+    event: "onCreateUserSkill",
+    skillInputObj: IAddOrUpdateProfileSkillInput
+  ): void;
+  (
+    event: "onUpdateUserSkill",
+    skillInputObj: IAddOrUpdateProfileSkillInput
+  ): void;
+}>();
 
 const modalState = computed({
   get() {
@@ -96,7 +111,7 @@ const isConfirmBtnDisabled = computed(
   () =>
     (!props.oSkillForModal && !selectSkill.value) ||
     (!!props.oSkillForModal &&
-      selectSkillMastery.value === computedSkillMastery.value)
+      selectSkillMastery.value === props.oSkillForModal.mastery)
 );
 
 function getCategoryBySkill(skillName: string) {
@@ -117,25 +132,19 @@ const aSkillCategoriesItems = computed(() => {
 const aSkillMasteries = [
   "Novice",
   "Advanced",
-  "Completent",
+  "Competent",
   "Proficient",
   "Expert",
 ];
 
-const computedSkillMastery = computed(() =>
-  props.oSkillForModal?.mastery !== undefined
-    ? aSkillMasteries[props.oSkillForModal?.mastery]
-    : aSkillMasteries[0]
-);
-
 const selectSkill = ref<string | null>(null);
 const selectCategory = ref<string | null>(null);
-const selectSkillMastery = ref<string | null>(aSkillMasteries[0]);
+const selectSkillMastery = ref<Mastery>(Mastery.Novice);
 
 onUpdated(() => {
   selectSkill.value = props.oSkillForModal?.name || null;
   selectCategory.value = props.oSkillForModal?.category || null;
-  selectSkillMastery.value = computedSkillMastery.value;
+  selectSkillMastery.value = props.oSkillForModal?.mastery || Mastery.Novice;
 });
 
 watch(selectSkill, () => {
@@ -144,6 +153,18 @@ watch(selectSkill, () => {
 });
 
 function handleModalClose() {
+  const skillInputObj: IAddOrUpdateProfileSkillInput = {
+    userId: Number(props.userID),
+    name: `${selectSkill.value}`,
+    category: selectCategory.value,
+    mastery: selectSkillMastery.value,
+  };
+
+  if (props.oSkillForModal) {
+    emit("onUpdateUserSkill", skillInputObj);
+  } else {
+    emit("onCreateUserSkill", skillInputObj);
+  }
   emit("closeModal");
 }
 </script>

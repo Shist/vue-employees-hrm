@@ -68,8 +68,11 @@
   <SkillModal
     :isOpen="isModalOpen"
     :oSkillForModal="oSkillForModal"
+    :userID="id"
     :skills="skills"
     :skill-categories="skillCategories"
+    @onCreateUserSkill="submitUserSkillCreate"
+    @onUpdateUserSkill="submitUserSkillUpdate"
     @closeModal="handleCloseModal"
   />
 </template>
@@ -79,9 +82,16 @@ import { ref, reactive, computed, watch, onMounted } from "vue";
 import SkillModal from "@/components/user/skills/SkillModal.vue";
 import SkillsCategory from "@/components/user/skills/SkillsCategory.vue";
 import { useRoute } from "vue-router";
-import { getUserSkillsByID } from "@/services/users";
+import {
+  getUserSkillsByID,
+  createUserSkill,
+  updateUserSkill,
+} from "@/services/users";
 import { getAllSkills, getSkillCategories } from "@/services/skills";
-import { IProfileSkill } from "@/types/backend-interfaces/user/profile/skill";
+import {
+  IProfileSkill,
+  IAddOrUpdateProfileSkillInput,
+} from "@/types/backend-interfaces/user/profile/skill";
 import {
   ISkillCategoriesMap,
   ICategorySkill,
@@ -172,6 +182,15 @@ function setErrorValuesToDefault() {
   isNotFoundError.value = false;
 }
 
+function updateUserSkillsValue(userSkillsData: IProfileSkill[]) {
+  aSkillsDeletionState.splice(
+    0,
+    0,
+    ...new Array(userSkillsData.length).fill(false)
+  );
+  userSkills.value = userSkillsData;
+}
+
 function fetchData() {
   isPageLoading.value = true;
 
@@ -181,12 +200,7 @@ function fetchData() {
     getSkillCategories(),
   ])
     .then(([userSkillsData, skillsData, skillCategoriesData]) => {
-      aSkillsDeletionState.splice(
-        0,
-        0,
-        ...new Array(userSkillsData.length).fill(false)
-      );
-      userSkills.value = userSkillsData;
+      updateUserSkillsValue(userSkillsData);
 
       skills.value = skillsData;
 
@@ -229,6 +243,62 @@ function handleOpenEditModal(
     oSkillForModal.value = _oSkillForModal;
     isModalOpen.value = true;
   }
+}
+
+function submitUserSkillCreate(skillInputObj: IAddOrUpdateProfileSkillInput) {
+  isPageLoading.value = true;
+
+  console.log(skillInputObj);
+
+  createUserSkill(skillInputObj)
+    .then((freshUserSkills) => {
+      updateUserSkillsValue(freshUserSkills);
+
+      setErrorValuesToDefault();
+    })
+    .catch((error: unknown) => {
+      isError.value = true;
+
+      if (error instanceof Error) {
+        errorMessage.value = error.message;
+
+        if (error.name === "NotFoundError") {
+          isNotFoundError.value = true;
+        }
+
+        setErrorToast(errorMessage.value);
+      }
+    })
+    .finally(() => {
+      isPageLoading.value = false;
+    });
+}
+
+function submitUserSkillUpdate(skillInputObj: IAddOrUpdateProfileSkillInput) {
+  isPageLoading.value = true;
+
+  updateUserSkill(skillInputObj)
+    .then((freshUserSkills) => {
+      updateUserSkillsValue(freshUserSkills);
+
+      setErrorValuesToDefault();
+    })
+    .catch((error: unknown) => {
+      isError.value = true;
+
+      if (error instanceof Error) {
+        errorMessage.value = error.message;
+
+        if (error.name === "NotFoundError") {
+          isNotFoundError.value = true;
+        }
+
+        setErrorToast(errorMessage.value);
+      }
+    })
+    .finally(() => {
+      isPageLoading.value = false;
+    });
 }
 
 function handleCloseModal() {
