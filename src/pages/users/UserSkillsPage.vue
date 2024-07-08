@@ -69,7 +69,7 @@
     :isOpen="isModalOpen"
     :oSkillForModal="oSkillForModal"
     :userID="id"
-    :skills="skills"
+    :skills="leftSkills"
     :skill-categories="skillCategories"
     @onCreateUserSkill="submitUserSkillCreate"
     @onUpdateUserSkill="submitUserSkillUpdate"
@@ -114,6 +114,15 @@ const isPageLoading = ref(true);
 const userSkills = ref<IProfileSkill[] | null>(null);
 const skills = ref<ISkillsData[] | null>(null);
 const skillCategories = ref<string[] | null>(null);
+
+const leftSkills = computed<ISkillsData[]>(() => {
+  if (!userSkills.value || !skills.value) {
+    return [];
+  }
+
+  const userSkillsSet = new Set(userSkills.value.map((skill) => skill.name));
+  return skills.value.filter((skill) => !userSkillsSet.has(skill.name));
+});
 
 const isError = ref(false);
 const errorMessage = ref(UNEXPECTED_ERROR);
@@ -247,8 +256,6 @@ function handleOpenEditModal(
 
 function submitUserSkillCreate(skillInputObj: IAddOrUpdateProfileSkillInput) {
   isPageLoading.value = true;
-
-  console.log(skillInputObj);
 
   createUserSkill(skillInputObj)
     .then((freshUserSkills) => {
