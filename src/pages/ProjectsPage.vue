@@ -10,7 +10,15 @@
         placeholder="Search"
         class="project-page__text-field-wrapper"
       />
-      <v-btn>Create Project</v-btn>
+      <v-btn
+        v-if="admin"
+        rounded
+        prepend-icon="mdi-plus"
+        color="var(--color-wrapper-bg)"
+        elevation="0"
+        class="text-red-darken-4 project-page__button mr-8"
+        >CREATE PROJECT</v-btn
+      >
     </div>
 
     <v-data-table
@@ -63,6 +71,8 @@ const router = useRouter();
 
 const search = ref("");
 
+const admin = ref(false);
+
 const headers = reactive([
   { key: "name", title: "Name" },
   { key: "internalName", title: "Internal Name" },
@@ -100,6 +110,9 @@ onMounted(async () => {
   &__wrapper {
     display: flex;
     justify-content: space-between;
+  }
+  &__button {
+    border: 1px solid var(--color-text-red);
   }
   &__data-table {
     background-color: var(--color-wrapper-bg);

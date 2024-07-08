@@ -1,14 +1,25 @@
 <template>
   <div class="main-page" v-if="!isLoading">
-    <v-text-field
-      v-model="search"
-      prepend-inner-icon="mdi-magnify"
-      variant="outlined"
-      single-line
-      density="compact"
-      placeholder="Search"
-      class="main-page__text-field-wrapper"
-    />
+    <div class="main-page__wrapper">
+      <v-text-field
+        v-model="search"
+        prepend-inner-icon="mdi-magnify"
+        variant="outlined"
+        single-line
+        density="compact"
+        placeholder="Search"
+        class="main-page__text-field-wrapper"
+      />
+      <v-btn
+        v-if="admin"
+        rounded
+        prepend-icon="mdi-plus"
+        color="var(--color-wrapper-bg)"
+        elevation="0"
+        class="text-red-darken-4 main-page__button mr-8"
+        >CREATE PROJECT</v-btn
+      >
+    </div>
     <v-data-table
       :headers="headers"
       :items="users"
@@ -71,6 +82,7 @@ function openUserProfile(userId: number) {
 }
 
 const search = ref("");
+const admin = ref(false);
 
 const headers = reactive([
   { key: "avatar", sortable: false },
@@ -98,6 +110,13 @@ onMounted(async () => {
   &__text-field-wrapper {
     margin-left: 20px;
     max-width: 320px;
+  }
+  &__wrapper {
+    display: flex;
+    justify-content: space-between;
+  }
+  &__button {
+    border: 1px solid var(--color-text-red);
   }
   &__data-table {
     background-color: var(--color-wrapper-bg);
