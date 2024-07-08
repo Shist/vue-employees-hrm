@@ -27,6 +27,7 @@
         :avatar="user.avatar"
         :userInitials="userInitials"
         @onUpdateUserAvatar="submitUserAvatar"
+        @onDeleteUserAvatar="submitUserAvatarDeletion"
       />
       <UserInfo
         :userID="id"
@@ -54,6 +55,7 @@ import {
   getUserProfileByID,
   updateUserData,
   updateUserAvatar,
+  deleteUserAvatar,
 } from "@/services/users";
 import { getAllDepartmentNames } from "@/services/departments";
 import { getAllPositionNames } from "@/services/positions";
@@ -238,6 +240,39 @@ function submitUserAvatar(avatarInputObj: IUploadAvatarInput) {
 
       if (authStoreUser.value && authStoreUser.value.id === id.value) {
         authStoreUser.value.avatar = newAvatarSRC;
+      }
+
+      setErrorValuesToDefault();
+    })
+    .catch((error: unknown) => {
+      isError.value = true;
+
+      if (error instanceof Error) {
+        errorMessage.value = error.message;
+
+        if (error.name === "NotFoundError") {
+          isNotFoundError.value = true;
+        }
+
+        setErrorToast(errorMessage.value);
+      }
+    })
+    .finally(() => {
+      isPageLoading.value = false;
+    });
+}
+
+function submitUserAvatarDeletion(userID: string) {
+  isPageLoading.value = true;
+
+  deleteUserAvatar(userID)
+    .then(() => {
+      if (user.value) {
+        user.value.avatar = null;
+      }
+
+      if (authStoreUser.value && authStoreUser.value.id === id.value) {
+        authStoreUser.value.avatar = null;
       }
 
       setErrorValuesToDefault();

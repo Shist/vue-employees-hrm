@@ -31,7 +31,6 @@
         accept="image/png, image/jpg, image/jpeg, image/gif"
         id="input-avatar"
         @change.prevent="avatarChange"
-        :disabled="!avatar"
       />
       <div class="avatar-upload__upload-avatar-headline-wrapper">
         <v-icon class="avatar-upload__upload-avatar-headline-icon">
@@ -60,11 +59,11 @@ const props = defineProps<{
 
 const emit = defineEmits<{
   (event: "onUpdateUserAvatar", avatarInputObj: IUploadAvatarInput): void;
+  (event: "onDeleteUserAvatar", userID: string): void;
 }>();
 
 function avatarRemove() {
-  console.log("User clicked cross button, he wants to remove old avatar");
-  // Remove old avatar from server
+  emit("onDeleteUserAvatar", props.userID);
 }
 
 async function uploadAvatar(file: File) {

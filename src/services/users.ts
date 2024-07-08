@@ -6,6 +6,7 @@ import getUserFullnameByIDQuery from "@/graphql/queries/getUserFullnameByID.quer
 import updateUserQuery from "@/graphql/mutations/updateUser.mutation.gql";
 import updateProfileQuery from "@/graphql/mutations/updateProfile.mutation.gql";
 import uploadAvatarQuery from "@/graphql/mutations/uploadAvatar.mutation.gql";
+import deleteAvatarQuery from "@/graphql/mutations/deleteAvatar.mutation.gql";
 import { IUsersTableData, IUsersTableServerData } from "@/types/usersTableUI";
 import { IUserProfileServerData } from "@/types/userProfileUI";
 import { IUsersNameServerData } from "@/types/breadcrumbsUI";
@@ -151,6 +152,23 @@ export const updateUserAvatar = async (inputAvatarObj: IUploadAvatarInput) => {
     })) as { data: { uploadAvatar: string } };
 
     return response.data.uploadAvatar;
+  } catch (error: unknown) {
+    if (error instanceof Error) {
+      if (error.message === "Failed to fetch") {
+        throw new Error(NO_NETWORK_CONNECTION);
+      }
+    }
+
+    throw error;
+  }
+};
+
+export const deleteUserAvatar = async (id: string) => {
+  try {
+    await apolloClient.mutate({
+      mutation: deleteAvatarQuery,
+      variables: { avatar: { userId: Number(id) } },
+    });
   } catch (error: unknown) {
     if (error instanceof Error) {
       if (error.message === "Failed to fetch") {
