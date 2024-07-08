@@ -1,45 +1,68 @@
 <template>
   <div class="user-skills">
-    <v-btn
-      variant="text"
-      color="var(--color-btn-gray-text)"
-      class="user-skills__add-btn"
-      @click="handleOpenCreateModal"
-    >
-      <v-icon class="user-skills__add-icon">mdi-plus</v-icon>
-      <span>Add skill</span>
-    </v-btn>
-    <SkillsCategory
-      v-for="(aSkills, sCategory) in skillCategories"
-      :key="sCategory"
-      :category="sCategory.toString()"
-      :category-skills="aSkills"
-      @openEditModal="handleOpenEditModal"
-      @setCardForDeletion="handleSetCardForDeletion"
+    <v-progress-circular
+      v-if="isPageLoading"
+      :size="100"
+      :width="10"
+      color="var(--color-spinner)"
+      indeterminate
     />
-    <div
-      v-show="skillsForDeletionAmount > 0"
-      class="user-skills__delete-btns-wrapper"
-    >
+    <div v-else-if="isError" class="user-skills__error-wrapper">
+      <h4 class="user-skills__error-message">❌ {{ errorMessage }}</h4>
+      <v-btn
+        v-if="isNotFoundError"
+        class="user-skills__back-to-main-btn"
+        router
+        :to="ROUTES.USERS.PATH"
+      >
+        Back to the main page
+      </v-btn>
+      <span v-if="!isNotFoundError" class="user-skills__try-to-reload-label">
+        Please try to reload the page
+      </span>
+    </div>
+    <div v-else-if="userSkills" class="user-skills__main-content-wrapper">
       <v-btn
         variant="text"
         color="var(--color-btn-gray-text)"
-        class="user-skills__cancel-deletion-btn"
-        @click="clearUserDeletionSkills"
+        class="user-skills__add-btn"
+        @click="handleOpenCreateModal"
       >
-        Cancel
+        <v-icon class="user-skills__add-icon">mdi-plus</v-icon>
+        <span>Add skill</span>
       </v-btn>
-      <v-btn
-        variant="text"
-        color="var(--color-btn-gray-text)"
-        class="user-skills__deletion-btn"
-        @click="deleteUserSkills"
+      <SkillsCategory
+        v-for="(aSkills, sCategory) in skillCategories"
+        :key="sCategory"
+        :category="sCategory.toString()"
+        :category-skills="aSkills"
+        @openEditModal="handleOpenEditModal"
+        @setCardForDeletion="handleSetCardForDeletion"
+      />
+      <div
+        v-show="skillsForDeletionAmount > 0"
+        class="user-skills__delete-btns-wrapper"
       >
-        <span class="user-skills__deletion-btn-label">Delete</span>
-        <span class="user-skills__deletion-btn-num">
-          {{ skillsForDeletionAmount }}
-        </span>
-      </v-btn>
+        <v-btn
+          variant="text"
+          color="var(--color-btn-gray-text)"
+          class="user-skills__cancel-deletion-btn"
+          @click="clearUserDeletionSkills"
+        >
+          Cancel
+        </v-btn>
+        <v-btn
+          variant="text"
+          color="var(--color-btn-gray-text)"
+          class="user-skills__deletion-btn"
+          @click="deleteUserSkills"
+        >
+          <span class="user-skills__deletion-btn-label">Delete</span>
+          <span class="user-skills__deletion-btn-num">
+            {{ skillsForDeletionAmount }}
+          </span>
+        </v-btn>
+      </div>
     </div>
   </div>
   <SkillModal
@@ -50,19 +73,32 @@
 </template>
 
 <script setup lang="ts">
-import { ref, reactive, computed } from "vue";
+import { ref, reactive, computed, watch, onMounted } from "vue";
 import SkillModal from "@/components/user/skills/SkillModal.vue";
 import SkillsCategory from "@/components/user/skills/SkillsCategory.vue";
 import { useRoute } from "vue-router";
-import { useUsersStore } from "@/store/users";
-import { IUser } from "@/types/backend-interfaces/user";
+import { getUserSkillsByID } from "@/services/users";
 import { IProfileSkill } from "@/types/backend-interfaces/user/profile/skill";
 import { ISkillCategoriesMap, ICategorySkill } from "@/types/userSkillsUI";
+import useToast from "@/composables/useToast";
+import { UNEXPECTED_ERROR } from "@/constants/errorMessage";
+import { ROUTES } from "@/constants/router";
 
 const route = useRoute();
 
-// eslint-disable-next-line
-const [section, id, tab] = route.fullPath.slice(1).split("/");
+const id = computed<string>(() => {
+  // eslint-disable-next-line
+  const [section, id, tab] = route.fullPath.slice(1).split("/");
+  return id;
+});
+
+const isPageLoading = ref(true);
+
+const userSkills = ref<IProfileSkill[] | null>(null);
+
+const isError = ref(false);
+const errorMessage = ref(UNEXPECTED_ERROR);
+const isNotFoundError = ref(false);
 
 const oSkillForModal = ref<IProfileSkill | null>(null);
 const isModalOpen = ref(false);
@@ -78,14 +114,12 @@ const skillsForDeletionAmount = computed<number>(() =>
   }, 0)
 );
 
-const { getUserById } = useUsersStore();
-
-const user = ref<IUser | undefined>();
-
 const skillCategories = computed(() => {
+  if (!userSkills.value) return null;
+
   const resultObj: ISkillCategoriesMap = {};
 
-  user.value?.profile.skills.forEach((skill, index) => {
+  userSkills.value.forEach((skill, index) => {
     const category = skill.category;
 
     const oCategorySkill: ICategorySkill = {
@@ -112,6 +146,54 @@ const skillCategories = computed(() => {
 
   return resultObj;
 });
+
+const { setErrorToast } = useToast();
+
+onMounted(() => {
+  fetchData();
+});
+
+watch(id, () => {
+  fetchData();
+});
+
+function setErrorValuesToDefault() {
+  isError.value = false;
+  errorMessage.value = UNEXPECTED_ERROR;
+  isNotFoundError.value = false;
+}
+
+function fetchData() {
+  isPageLoading.value = true;
+
+  getUserSkillsByID(id.value)
+    .then((userSkillsData) => {
+      aSkillsDeletionState.splice(
+        0,
+        0,
+        ...new Array(userSkillsData.length).fill(false)
+      );
+      userSkills.value = userSkillsData;
+
+      setErrorValuesToDefault();
+    })
+    .catch((error: unknown) => {
+      isError.value = true;
+
+      if (error instanceof Error) {
+        errorMessage.value = error.message;
+
+        if (error.name === "NotFoundError") {
+          isNotFoundError.value = true;
+        }
+
+        setErrorToast(errorMessage.value);
+      }
+    })
+    .finally(() => {
+      isPageLoading.value = false;
+    });
+}
 
 function handleOpenCreateModal() {
   oSkillForModal.value = null;
@@ -146,19 +228,6 @@ function handleSetCardForDeletion(skillName: string, skillIndex: number) {
   }
 }
 
-getUserById(Number(id))
-  .then((userData) => {
-    aSkillsDeletionState.splice(
-      0,
-      0,
-      ...new Array(userData?.profile.skills.length).fill(false)
-    );
-    user.value = userData;
-  })
-  .catch(() => {
-    // todo: show some error while loading user data
-  });
-
 function clearUserDeletionSkills() {
   skillsForDeletionNames.clear();
 
@@ -179,59 +248,89 @@ function deleteUserSkills() {
   max-width: 850px;
   display: flex;
   flex-direction: column;
-  row-gap: 32px;
-  &__add-btn {
-    font-size: 18px;
-    line-height: 28px;
-    text-transform: none;
-    border-radius: 0;
-    .user-skills__add-icon {
-      font-size: 28px;
-    }
-  }
-  &__delete-btns-wrapper {
+  align-items: center;
+  &__error-wrapper {
+    width: 100%;
     display: flex;
-    justify-content: space-between;
+    flex-direction: column;
     align-items: center;
-    .user-skills__cancel-deletion-btn {
-      padding: 6px;
-      max-width: 100px;
-      width: 100%;
-      color: var(--color-btn-gray-text);
-      background-color: var(--color-wrapper-bg);
-      border-radius: 0;
-      border: 1px solid rgba(var(--color-btn-gray-text-rgb), 0.5);
-      &:hover {
-        background-color: rgba(var(--color-btn-gray-text-rgb), 0.08);
-        border: 1px solid var(--color-btn-gray-text);
-      }
+    row-gap: 20px;
+    .user-skills__error-message {
+      @include default-text(26px, 32px);
     }
-    .user-skills__deletion-btn {
-      padding: 6px;
-      max-width: 120px;
-      width: 100%;
+    .user-skills__back-to-main-btn {
+      color: var(--color-btn-text);
       background-color: var(--color-btn-bg);
       border-radius: 0;
-      box-shadow: rgba(0, 0, 0, 0.2) 0px 3px 1px -2px,
-        rgba(0, 0, 0, 0.14) 0px 2px 2px 0px, rgba(0, 0, 0, 0.12) 0px 1px 5px 0px;
       &:hover {
         background-color: var(--color-btn-bg-hover);
       }
-      &:disabled {
-        filter: grayscale(50%);
+    }
+    .user-skills__try-to-reload-label {
+      @include default-text(20px, 26px);
+    }
+  }
+  &__main-content-wrapper {
+    margin: 0 auto;
+    max-width: 850px;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    row-gap: 32px;
+    .user-skills__add-btn {
+      font-size: 18px;
+      line-height: 28px;
+      text-transform: none;
+      border-radius: 0;
+      .user-skills__add-icon {
+        font-size: 28px;
       }
-      .user-skills__deletion-btn-label {
-        color: var(--color-btn-text);
+    }
+    .user-skills__delete-btns-wrapper {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      .user-skills__cancel-deletion-btn {
+        padding: 6px;
+        max-width: 100px;
+        width: 100%;
+        color: var(--color-btn-gray-text);
+        background-color: var(--color-wrapper-bg);
+        border-radius: 0;
+        border: 1px solid rgba(var(--color-btn-gray-text-rgb), 0.5);
+        &:hover {
+          background-color: rgba(var(--color-btn-gray-text-rgb), 0.08);
+          border: 1px solid var(--color-btn-gray-text);
+        }
       }
-      .user-skills__deletion-btn-num {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        width: 24px;
-        height: 24px;
-        border-radius: 50%;
-        background-color: var(--color-btn-text);
-        color: var(--color-btn-bg);
+      .user-skills__deletion-btn {
+        padding: 6px;
+        max-width: 120px;
+        width: 100%;
+        background-color: var(--color-btn-bg);
+        border-radius: 0;
+        box-shadow: rgba(0, 0, 0, 0.2) 0px 3px 1px -2px,
+          rgba(0, 0, 0, 0.14) 0px 2px 2px 0px,
+          rgba(0, 0, 0, 0.12) 0px 1px 5px 0px;
+        &:hover {
+          background-color: var(--color-btn-bg-hover);
+        }
+        &:disabled {
+          filter: grayscale(50%);
+        }
+        .user-skills__deletion-btn-label {
+          color: var(--color-btn-text);
+        }
+        .user-skills__deletion-btn-num {
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          width: 24px;
+          height: 24px;
+          border-radius: 50%;
+          background-color: var(--color-btn-text);
+          color: var(--color-btn-bg);
+        }
       }
     }
   }

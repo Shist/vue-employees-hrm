@@ -70,7 +70,8 @@ const emit = defineEmits<{
 
 const skillsMasteries = reactive(
   props.categorySkills.map((skill) => {
-    switch (skill.mastery) {
+    const masteryValue = Number(Mastery[skill.mastery]);
+    switch (masteryValue) {
       case Mastery.Novice:
         return 20;
       case Mastery.Advanced:
@@ -81,6 +82,8 @@ const skillsMasteries = reactive(
         return 80;
       case Mastery.Expert:
         return 100;
+      default:
+        return 0;
     }
   })
 );
