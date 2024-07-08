@@ -58,6 +58,7 @@
       </template>
     </v-data-table>
   </div>
+  <ProjectsModal />
 </template>
 
 <script setup lang="ts">
@@ -66,6 +67,7 @@ import { getAllProjects } from "@/services/projects";
 import { IProjectsTableData } from "@/types/projectsTableUI";
 import { onMounted, reactive, ref } from "vue";
 import { useRouter } from "vue-router";
+import ProjectsModal from "../components/ProjectsModal.vue";
 
 const router = useRouter();
 
