@@ -15,7 +15,7 @@
         <v-btn
           icon="mdi-close"
           class="skill-modal__cross-btn"
-          @click.prevent="handleModalClose"
+          @click.prevent="closeModal"
         ></v-btn>
         <v-card-item class="skill-modal__text-fields-container">
           <v-select
@@ -49,7 +49,7 @@
         <v-card-actions>
           <v-btn
             variant="outlined"
-            @click="handleModalClose"
+            @click="closeModal"
             class="skill-modal__btn-cancel"
           >
             Cancel
@@ -57,7 +57,7 @@
           <v-btn
             type="submit"
             variant="text"
-            @click="handleModalClose"
+            @click="makeCreateOrUpdateOperation"
             class="skill-modal__btn-confirm"
             :disabled="isConfirmBtnDisabled"
           >
@@ -152,7 +152,7 @@ watch(selectSkill, () => {
   selectCategory.value = skillCategory ? skillCategory : null;
 });
 
-function handleModalClose() {
+function makeCreateOrUpdateOperation() {
   const skillInputObj: IAddOrUpdateProfileSkillInput = {
     userId: Number(props.userID),
     name: `${selectSkill.value}`,
@@ -165,6 +165,10 @@ function handleModalClose() {
   } else {
     emit("onCreateUserSkill", skillInputObj);
   }
+  emit("closeModal");
+}
+
+function closeModal() {
   emit("closeModal");
 }
 </script>
