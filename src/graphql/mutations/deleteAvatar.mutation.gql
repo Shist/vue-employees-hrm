@@ -1,0 +1,3 @@
+mutation DELETE_AVATAR($avatar: DeleteAvatarInput!) {
+  deleteAvatar(avatar: $avatar)
+}

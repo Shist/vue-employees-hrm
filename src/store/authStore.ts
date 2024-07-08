@@ -1,22 +1,41 @@
 import { defineStore } from "pinia";
 import { computed, ref } from "vue";
 import { login, register } from "@/services/auth";
+import { getUserAuthDataByID } from "@/services/users";
 import { ROUTES } from "@/constants/router";
 import { useRouter } from "vue-router";
 import { IUserAuthData } from "@/types/userAuthUI";
+import { ITokenData } from "@/types/tokenData";
 
 export const useAuthStore = defineStore("authStore", () => {
-  const router = useRouter();
-
-  const user = ref<IUserAuthData | null>(
-    JSON.parse(`${localStorage.getItem("user")}`)
-  );
+  const user = ref<IUserAuthData | null>(null);
   const token = ref<string | null>(localStorage.getItem("token"));
+  const decodedToken = computed<ITokenData | null>(() => {
+    const decodedData = atob(token.value ? token.value.split(".")[1] : "");
+    return decodedData ? JSON.parse(decodedData) : null;
+  });
   const refreshTokenTimer = ref<undefined | number>(undefined);
 
   const isLoggedIn = computed(() => {
-    return !!token.value && !!user.value;
+    return !!token.value;
   });
+
+  const router = useRouter();
+
+  const fetchUserAuthData = async () => {
+    const userData = await getUserAuthDataByID(`${decodedToken.value?.sub}`);
+
+    if (!userData) return;
+
+    user.value = {
+      id: userData.id,
+      email: userData.email,
+      firstName: userData.profile.first_name,
+      lastName: userData.profile.last_name,
+      fullName: userData.profile.full_name,
+      avatar: userData.profile.avatar,
+    };
+  };
 
   const loginUser = async (email: string, password: string) => {
     const result = await login(email, password);
@@ -26,7 +45,6 @@ export const useAuthStore = defineStore("authStore", () => {
     }
 
     localStorage.setItem("token", `Bearer ${token.value}`);
-    localStorage.setItem("user", JSON.stringify(user.value));
 
     checkTokenExpiration();
   };
@@ -39,7 +57,6 @@ export const useAuthStore = defineStore("authStore", () => {
     }
 
     localStorage.setItem("token", `Bearer ${token.value}`);
-    localStorage.setItem("user", JSON.stringify(user.value));
 
     checkTokenExpiration();
   };
@@ -48,14 +65,15 @@ export const useAuthStore = defineStore("authStore", () => {
     user.value = null;
     token.value = null;
     localStorage.removeItem("token");
-    localStorage.removeItem("user");
     clearTimeout(refreshTokenTimer.value);
     router.push(ROUTES.SIGN_IN.PATH);
   };
 
   const checkAuthorization = () => {
     try {
-      if (!token.value || !user.value) {
+      if (token.value) {
+        checkTokenExpiration();
+      } else {
         router.push(ROUTES.SIGN_IN.PATH);
       }
     } catch (error) {
@@ -64,9 +82,8 @@ export const useAuthStore = defineStore("authStore", () => {
   };
 
   const checkTokenExpiration = () => {
-    if (token.value) {
-      const decodedToken = JSON.parse(atob(token.value.split(".")[1]));
-      const expirationTime = decodedToken.exp * 1000;
+    if (token.value && decodedToken.value) {
+      const expirationTime = decodedToken.value.exp * 1000;
       const currentTime = Date.now();
 
       if (currentTime >= expirationTime) {
@@ -80,6 +97,7 @@ export const useAuthStore = defineStore("authStore", () => {
 
   return {
     user,
+    fetchUserAuthData,
     loginUser,
     logout,
     checkAuthorization,

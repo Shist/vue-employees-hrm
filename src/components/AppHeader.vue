@@ -72,7 +72,7 @@
                 <p v-else-if="user?.email" class="toolbar__name">
                   {{ userInitials }}
                 </p>
-                <v-skeleton-loader v-else type="avatar"></v-skeleton-loader>
+                <v-skeleton-loader v-else type="avatar" />
               </v-avatar>
             </v-btn>
           </template>
@@ -188,7 +188,7 @@ import { useAuthStore } from "@/store/authStore";
 const router = useRouter();
 const route = useRoute();
 const authStore = useAuthStore();
-const { user } = storeToRefs(authStore);
+const user = storeToRefs(authStore).user;
 
 const { scrollbarWidth } = storeToRefs(useScrollbarWidth());
 

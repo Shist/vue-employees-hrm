@@ -1,0 +1,6 @@
+query GET_ALL_POSITION_NAMES {
+  positions {
+    id
+    name
+  }
+}

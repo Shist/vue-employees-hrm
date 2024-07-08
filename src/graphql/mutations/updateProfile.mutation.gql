@@ -1,0 +1,5 @@
+mutation UPDATE_PROFILE($profile: UpdateProfileInput!) {
+  updateProfile(profile: $profile) {
+    id
+  }
+}

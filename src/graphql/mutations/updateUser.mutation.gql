@@ -1,0 +1,20 @@
+mutation UPDATE_USER($user: UpdateUserInput!) {
+  updateUser(user: $user) {
+    id
+    email
+    created_at
+    is_verified
+    profile {
+      id
+      first_name
+      last_name
+      avatar
+    }
+    department {
+      id
+    }
+    position {
+      id
+    }
+  }
+}

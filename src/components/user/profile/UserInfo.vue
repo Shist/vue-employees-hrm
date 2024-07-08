@@ -1,17 +1,17 @@
 <template>
   <div class="user-info">
     <div class="user-info__info-captions-wrapper">
-      <h3 class="user-info__name-caption">
-        {{ `${userFirstName} ${userLastName}` }}
+      <h3 v-if="computedFullName" class="user-info__name-caption">
+        {{ computedFullName }}
       </h3>
       <div class="user-info__mail-caption-wrapper">
-        <span class="user-info__mail-caption">{{ userEmail }}</span>
+        <span class="user-info__mail-caption">{{ email }}</span>
         <v-icon v-if="isVerified" class="user-info__mail-verified-icon">
           mdi-check-decagram
         </v-icon>
       </div>
       <span class="user-info__date-caption">
-        {{ `A member since ${userCreationDate}` }}
+        {{ computedCreationDate }}
       </span>
     </div>
     <form class="user-info__info-inputs-form">
@@ -48,7 +48,7 @@
       <v-btn
         type="submit"
         class="user-info__form-submit-btn"
-        @click.prevent="submitChanges"
+        @click.prevent="onUpdateBtnClicked"
         :disabled="isSubmitBtnDisabled"
       >
         UPDATE
@@ -59,65 +59,117 @@
 
 <script setup lang="ts">
 import { ref, computed, watchEffect } from "vue";
-import { useDepartmentsStore } from "@/store/departments";
-import { usePositionsStore } from "@/store/positions";
+import {
+  IDepartmentNamesData,
+  IPositionNamesData,
+} from "@/types/userProfileUI";
+import { IUpdateUserInput } from "@/types/backend-interfaces/user";
+import { IUpdateProfileInput } from "@/types/backend-interfaces/user/profile";
 
 const props = defineProps<{
-  userFirstName?: string;
-  userLastName?: string;
-  userEmail?: string;
-  isVerified?: boolean;
-  userCreationDate?: string;
-  departmentID?: number;
-  positionID?: number;
+  userID: string;
+  email: string;
+  createdAt: number;
+  isVerified: boolean;
+  firstName: string | null;
+  lastName: string | null;
+  departmentID: string | null;
+  positionID: string | null;
+  departmentNames: IDepartmentNamesData[] | null;
+  positionNames: IPositionNamesData[] | null;
 }>();
 
-const firstName = ref(props.userFirstName);
+const emit = defineEmits<{
+  (
+    event: "onUpdateUserData",
+    userInputObj: Omit<IUpdateUserInput, "cvsIds" | "role">,
+    profileInputObj: IUpdateProfileInput
+  ): void;
+}>();
 
-const lastName = ref(props.userLastName);
+const computedFullName = computed(() => {
+  if (!props.firstName && !props.lastName) {
+    return "";
+  } else {
+    if (props.firstName && props.lastName) {
+      return `${props.firstName} ${props.lastName}`;
+    } else if (props.firstName) {
+      return props.firstName;
+    } else {
+      return props.lastName;
+    }
+  }
+});
+
+const computedCreationDate = computed(() => {
+  const targetDate = new Date(props.createdAt)
+    .toLocaleDateString("en-US", {
+      weekday: "short",
+      month: "short",
+      day: "numeric",
+      year: "numeric",
+    })
+    .replace(/,/g, "");
+  return `A member since ${targetDate}`;
+});
+
+const firstName = ref(props.firstName);
+
+const lastName = ref(props.lastName);
+
+const prepareSelectItems = (
+  objects: IDepartmentNamesData[] | IPositionNamesData[] | null,
+  defaultItemText: string
+) => {
+  return computed(() => [
+    { title: defaultItemText, value: null },
+    ...(objects?.map((obj) => ({ title: obj.name, value: obj.id })) || []),
+  ]);
+};
 
 const departmentID = ref(props.departmentID);
-const { departments } = useDepartmentsStore();
-const departmentsItems = computed(() => [
-  { title: "No department", value: null },
-  ...departments.map((dep) => ({ title: dep.name, value: dep.id })),
-]);
+const departmentsItems = prepareSelectItems(
+  props.departmentNames,
+  "No department"
+);
 
 const positionID = ref(props.positionID);
-const { positions } = usePositionsStore();
-const positionsItems = computed(() => [
-  { title: "No position", value: null },
-  ...positions.map((pos) => ({ title: pos.name, value: pos.id })),
-]);
+const positionsItems = prepareSelectItems(props.positionNames, "No position");
 
 watchEffect(() => {
-  firstName.value = props.userFirstName;
-  lastName.value = props.userLastName;
+  firstName.value = props.firstName;
+  lastName.value = props.lastName;
   departmentID.value = props.departmentID;
-  positionID.value = props.departmentID;
+  positionID.value = props.positionID;
 });
 
 const isSubmitBtnDisabled = computed(
   () =>
-    !firstName.value ||
-    !lastName.value ||
-    !departmentID.value ||
-    !positionID.value ||
-    (firstName.value === props.userFirstName &&
-      lastName.value === props.userLastName &&
-      departmentID.value === props.departmentID &&
-      positionID.value === props.positionID)
+    firstName.value === props.firstName &&
+    lastName.value === props.lastName &&
+    departmentID.value === props.departmentID &&
+    positionID.value === props.positionID
 );
 
-function submitChanges() {
-  // TODO - send new user data to server
+function onUpdateBtnClicked() {
+  const userInputObj: Omit<IUpdateUserInput, "cvsIds" | "role"> = {
+    userId: Number(props.userID),
+    departmentId: Number(departmentID.value),
+    positionId: Number(positionID.value),
+  };
+  const profileInputObj: IUpdateProfileInput = {
+    userId: Number(props.userID),
+    first_name: firstName.value,
+    last_name: lastName.value,
+  };
+
+  emit("onUpdateUserData", userInputObj, profileInputObj);
 }
 </script>
 
 <style lang="scss" scoped>
 .user-info {
   padding-block: 12px;
-  width: 100%;
   display: flex;
   flex-direction: column;
   row-gap: 60px;
@@ -164,6 +216,7 @@ function submitChanges() {
     }
     .user-info__form-submit-btn {
       grid-area: btn;
+      color: var(--color-btn-text);
       background-color: var(--color-btn-bg);
       border-radius: 0;
       &:hover {

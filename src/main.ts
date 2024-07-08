@@ -23,8 +23,10 @@ app
   .use(vuetifyConfig)
   .use(Vue3Toasity, toastifyConfig);
 
-const authStore = useAuthStore();
-
 app.mount("#app");
 
-authStore.checkAuthorization(); //delete from main, add to router beforeEach
+const authStore = useAuthStore();
+
+authStore.checkAuthorization();
+
+authStore.fetchUserAuthData();

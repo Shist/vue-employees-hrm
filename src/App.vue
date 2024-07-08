@@ -26,19 +26,7 @@ if (theme.global.name.value === "appDark") {
 }
 </script>
 
-<style lang="scss" scoped>
-@import "vue3-toastify/dist/index.css";
-
-.Toastify__toast {
-  cursor: default;
-}
-.Toastify__toast-body > div {
-  cursor: text;
-  font-family: $font-roboto;
-  text-align: center;
-  word-break: break-word;
-}
-
+<style lang="scss">
 .global-container {
   position: relative;
   min-height: 100vh;

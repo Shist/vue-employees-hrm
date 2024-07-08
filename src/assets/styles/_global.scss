@@ -1,6 +1,7 @@
 @import "@/assets/styles/vars";
 @import "@/assets/styles/templates";
 @import "@/assets/styles/mixins";
+@import "@/assets/styles/toastify-overrides";
 
 // Class which is needed to disable links while loading anything
 .disabled-link {
@@ -9,6 +10,6 @@
 }
 
 // Class which is needed to set half-transparent green filter to some wrappers
-.green-filter-bg {
-  background-color: rgba(var(--color-wrapper-bg-green-filter), 0.1);
+.dark-red-filter-bg {
+  background-color: rgba(var(--color-wrapper-bg-dark-red-filter), 0.2);
 }

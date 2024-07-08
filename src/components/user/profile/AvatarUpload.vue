@@ -1,23 +1,21 @@
 <template>
   <div class="avatar-upload">
     <div class="avatar-upload__avatar-wrapper">
-      <v-img
-        v-if="userAvatar"
-        :src="require(`@/assets/images/${userAvatar}`)"
-        alt="avatar"
-        class="avatar-upload__avatar"
-      />
-      <v-skeleton-loader
-        v-else
-        type="avatar"
-        color="var(--color-header-bg)"
-        class="avatar-upload__avatar-skeleton"
-      />
+      <v-avatar
+        color="var(--color-avatar-bg)"
+        size="default"
+        class="avatar-upload__avatar-img-wrapper"
+      >
+        <v-img v-if="avatar" alt="User avatar" :src="avatar || undefined" />
+        <p v-else class="avatar-upload__initials-label">
+          {{ userInitials }}
+        </p>
+      </v-avatar>
       <v-btn
+        v-if="avatar"
         icon="mdi-close"
         class="avatar-upload__avatar-cross-btn"
         @click.prevent="avatarRemove"
-        :disabled="!userAvatar"
       ></v-btn>
     </div>
     <label
@@ -33,7 +31,6 @@
         accept="image/png, image/jpg, image/jpeg, image/gif"
         id="input-avatar"
         @change.prevent="avatarChange"
-        :disabled="!userAvatar"
       />
       <div class="avatar-upload__upload-avatar-headline-wrapper">
         <v-icon class="avatar-upload__upload-avatar-headline-icon">
@@ -51,48 +48,83 @@
 </template>
 
 <script setup lang="ts">
-defineProps<{
-  userAvatar?: string;
+import { IUploadAvatarInput } from "@/types/backend-interfaces/user/avatar";
+import fileToBase64 from "@/utils/fileToBase64";
+
+const props = defineProps<{
+  userID: string;
+  avatar: string | null;
+  userInitials: string;
+}>();
+
+const emit = defineEmits<{
+  (event: "onUpdateUserAvatar", avatarInputObj: IUploadAvatarInput): void;
+  (event: "onDeleteUserAvatar", userID: string): void;
 }>();
 
 function avatarRemove() {
-  console.log("User clicked cross button, he wants to remove old avatar");
-  // Remove old avatar from server
+  emit("onDeleteUserAvatar", props.userID);
 }
 
-function avatarChange() {
-  console.log("User clicked to input-label and choosed new avatar from window");
-  // Load new avatar to server (choosed from window)
+async function uploadAvatar(file: File) {
+  const fileBase64 = await fileToBase64(file);
+  emit("onUpdateUserAvatar", {
+    userId: Number(props.userID),
+    base64: fileBase64,
+    size: file.size,
+    type: file.type,
+  });
 }
 
-function avatarDragOver(e: Event) {
+function avatarChange(e: Event) {
+  if (
+    !e.target ||
+    !(e.target instanceof HTMLInputElement) ||
+    !e.target.files ||
+    !e.target.files.length
+  ) {
+    return;
+  }
+
+  const file = e.target.files[0];
+  uploadAvatar(file);
+}
+
+function avatarDragOver(e: DragEvent) {
   if (!e.target || !(e.target instanceof HTMLElement)) return;
   const labelWrapper = e.target.closest(
     ".avatar-upload__upload-avatar-wrapper"
   );
-  labelWrapper?.classList.add("green-filter-bg");
+  labelWrapper?.classList.add("dark-red-filter-bg");
 }
 
-function avatarDragLeave(e: Event) {
+function avatarDragLeave(e: DragEvent) {
   if (!e.target || !(e.target instanceof HTMLElement)) return;
   const labelWrapper = e.target.closest(
     ".avatar-upload__upload-avatar-wrapper"
   );
-  labelWrapper?.classList.remove("green-filter-bg");
+  labelWrapper?.classList.remove("dark-red-filter-bg");
 }
 
-function avatarDrop(e: Event) {
+function avatarDrop(e: DragEvent) {
   avatarDragLeave(e);
 
-  console.log("User dropped new avatar to the input-label");
-  // Load new avatar to server (drag-and-dropped to the field)
+  if (
+    !e.dataTransfer ||
+    !e.dataTransfer.files ||
+    !e.dataTransfer.files.length
+  ) {
+    return;
+  }
+
+  const file = e.dataTransfer.files[0];
+  uploadAvatar(file);
 }
 </script>
 
 <style lang="scss" scoped>
 .avatar-upload {
   padding: 20px;
-  width: 100%;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -102,13 +134,15 @@ function avatarDrop(e: Event) {
     position: relative;
     height: 120px;
     width: 120px;
-    .avatar-upload__avatar {
-      border-radius: 50%;
-    }
-    .avatar-upload__avatar-skeleton {
-      padding: 10px;
+    .avatar-upload__avatar-img-wrapper {
       height: 120px;
       width: 120px;
+    }
+    .avatar-upload__initials-label {
+      font-family: $font-roboto;
+      font-size: 40px;
+      line-height: 44px;
+      color: var(--color-avatar-initials);
     }
     .avatar-upload__avatar-cross-btn {
       position: absolute;
