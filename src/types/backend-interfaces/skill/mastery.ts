@@ -8,6 +8,6 @@ export enum Mastery {
 
 export interface ISkillMastery {
   name: string;
-  category?: string;
+  category: string | null;
   mastery: Mastery;
 }

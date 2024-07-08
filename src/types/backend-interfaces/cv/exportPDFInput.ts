@@ -1,6 +1,6 @@
 export interface IExportPDFInput {
   html: string;
-  margin?: IMarginInput;
+  margin: IMarginInput | null;
 }
 
 export interface IMarginInput {

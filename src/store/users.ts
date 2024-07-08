@@ -50,18 +50,18 @@ export const useUsersStore = defineStore("users", () => {
           },
           {
             name: "Playing computer games",
-            category: undefined,
+            category: null,
             mastery: Mastery.Expert,
           },
           {
             name: "Drawing",
-            category: undefined,
+            category: null,
             mastery: Mastery.Advanced,
           },
         ],
         languages: [],
       },
-      cvs: undefined,
+      cvs: null,
       department: {
         id: 1,
         created_at: "03.07.2024",
@@ -91,7 +91,7 @@ export const useUsersStore = defineStore("users", () => {
         skills: [],
         languages: [],
       },
-      cvs: undefined,
+      cvs: null,
       department: {
         id: 1,
         created_at: "03.07.2024",

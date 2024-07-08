@@ -2,7 +2,6 @@ import { createRouter, createWebHistory, RouteRecordRaw } from "vue-router";
 import { ROUTES } from "@/constants/router";
 import { TAB_NAMES } from "@/constants/tabs";
 import pages from "@/pages";
-import { useAuthStore } from "@/store/authStore";
 
 const routes: Array<RouteRecordRaw> = [
   {
@@ -181,14 +180,14 @@ const router = createRouter({
 });
 
 router.beforeEach((to, from, next) => {
-  const { user } = useAuthStore();
+  const token = localStorage.getItem("token");
 
   if (to.name === ROUTES.NOT_FOUND.NAME) {
     next();
   } else if (to.meta.requiresAuth) {
-    !user ? next(ROUTES.SIGN_IN.PATH) : next();
+    !token ? next(ROUTES.SIGN_IN.PATH) : next();
   } else {
-    user ? next(ROUTES.USERS.PATH) : next();
+    token ? next(ROUTES.USERS.PATH) : next();
   }
 });
 

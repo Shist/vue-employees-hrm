@@ -7,8 +7,7 @@
       variant="outlined"
       single-line
       class="main-page__text-field-wrapper"
-    >
-    </v-text-field>
+    />
     <v-data-table
       :headers="headers"
       :items="users"

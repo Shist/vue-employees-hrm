@@ -4,21 +4,21 @@ import { ILanguageProficiency } from "@/types/backend-interfaces/language/profic
 export interface IProfile {
   id: number;
   created_at: string;
-  first_name?: string;
-  last_name?: string;
-  full_name?: string;
-  avatar?: string;
+  first_name: string | null;
+  last_name: string | null;
+  full_name: string | null;
+  avatar: string | null;
   skills: ISkillMastery[];
   languages: ILanguageProficiency[];
 }
 
 export interface ICreateProfileInput {
-  first_name?: string;
-  last_name?: string;
+  first_name: string | null;
+  last_name: string | null;
 }
 
 export interface IUpdateProfileInput {
   userId: number;
-  first_name?: string;
-  last_name?: string;
+  first_name: string | null;
+  last_name: string | null;
 }

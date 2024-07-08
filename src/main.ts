@@ -23,8 +23,10 @@ app
   .use(vuetifyConfig)
   .use(Vue3Toasity, toastifyConfig);
 
-const authStore = useAuthStore();
-
 app.mount("#app");
 
+const authStore = useAuthStore();
+
 authStore.checkAuthorization();
+
+authStore.fetchUserAuthData();
