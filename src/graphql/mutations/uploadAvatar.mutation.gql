@@ -1,0 +1,3 @@
+mutation UPLOAD_AVATAR($avatar: UploadAvatarInput!) {
+  uploadAvatar(avatar: $avatar)
+}

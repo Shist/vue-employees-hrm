@@ -5,12 +5,14 @@ import getUserAuthDataByIDQuery from "@/graphql/queries/getUserAuthDataByID.quer
 import getUserFullnameByIDQuery from "@/graphql/queries/getUserFullnameByID.query.gql";
 import updateUserQuery from "@/graphql/mutations/updateUser.mutation.gql";
 import updateProfileQuery from "@/graphql/mutations/updateProfile.mutation.gql";
+import uploadAvatarQuery from "@/graphql/mutations/uploadAvatar.mutation.gql";
 import { IUsersTableData, IUsersTableServerData } from "@/types/usersTableUI";
 import { IUserProfileServerData } from "@/types/userProfileUI";
 import { IUsersNameServerData } from "@/types/breadcrumbsUI";
 import { IUserAuthServerData } from "@/types/userAuthUI";
 import { IUpdateUserInput } from "@/types/backend-interfaces/user";
 import { IUpdateProfileInput } from "@/types/backend-interfaces/user/profile";
+import { IUploadAvatarInput } from "@/types/backend-interfaces/user/avatar";
 import checkID from "@/utils/checkID";
 import {
   NOT_FOUND_USER,
@@ -130,6 +132,25 @@ export const updateUserData = async (
     })) as { data: { updateUser: IUserProfileServerData } };
 
     return response.data.updateUser;
+  } catch (error: unknown) {
+    if (error instanceof Error) {
+      if (error.message === "Failed to fetch") {
+        throw new Error(NO_NETWORK_CONNECTION);
+      }
+    }
+
+    throw error;
+  }
+};
+
+export const updateUserAvatar = async (inputAvatarObj: IUploadAvatarInput) => {
+  try {
+    const response = (await apolloClient.mutate({
+      mutation: uploadAvatarQuery,
+      variables: { avatar: inputAvatarObj },
+    })) as { data: { uploadAvatar: string } };
+
+    return response.data.uploadAvatar;
   } catch (error: unknown) {
     if (error instanceof Error) {
       if (error.message === "Failed to fetch") {

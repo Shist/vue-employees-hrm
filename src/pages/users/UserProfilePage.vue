@@ -22,7 +22,12 @@
       </span>
     </div>
     <div v-else-if="user" class="user-profile__main-content-wrapper">
-      <AvatarUpload :avatar="user.avatar" :userInitials="userInitials" />
+      <AvatarUpload
+        :userID="id"
+        :avatar="user.avatar"
+        :userInitials="userInitials"
+        @onUpdateUserAvatar="submitUserAvatar"
+      />
       <UserInfo
         :userID="id"
         :firstName="user.firstName"
@@ -45,7 +50,11 @@ import { ref, onMounted, computed, watch } from "vue";
 import AvatarUpload from "@/components/user/profile/AvatarUpload.vue";
 import UserInfo from "@/components/user/profile/UserInfo.vue";
 import { useRoute } from "vue-router";
-import { getUserProfileByID, updateUserData } from "@/services/users";
+import {
+  getUserProfileByID,
+  updateUserData,
+  updateUserAvatar,
+} from "@/services/users";
 import { getAllDepartmentNames } from "@/services/departments";
 import { getAllPositionNames } from "@/services/positions";
 import {
@@ -56,11 +65,13 @@ import {
 } from "@/types/userProfileUI";
 import { IUpdateUserInput } from "@/types/backend-interfaces/user";
 import { IUpdateProfileInput } from "@/types/backend-interfaces/user/profile";
+import { IUploadAvatarInput } from "@/types/backend-interfaces/user/avatar";
 import { UNEXPECTED_ERROR } from "@/constants/errorMessage";
 import { ROUTES } from "@/constants/router";
 import useToast from "@/composables/useToast";
 import { storeToRefs } from "pinia";
 import { useAuthStore } from "@/store/authStore";
+import { TOO_LARGE_FILE, INVALID_FILE_TYPE } from "@/constants/errorMessage";
 
 const route = useRoute();
 
@@ -181,6 +192,53 @@ function submitUserData(
   updateUserData(userInputObj, profileInputObj)
     .then((response) => {
       updateUserValue(response);
+
+      setErrorValuesToDefault();
+    })
+    .catch((error: unknown) => {
+      isError.value = true;
+
+      if (error instanceof Error) {
+        errorMessage.value = error.message;
+
+        if (error.name === "NotFoundError") {
+          isNotFoundError.value = true;
+        }
+
+        setErrorToast(errorMessage.value);
+      }
+    })
+    .finally(() => {
+      isPageLoading.value = false;
+    });
+}
+
+function submitUserAvatar(avatarInputObj: IUploadAvatarInput) {
+  if (
+    avatarInputObj.type !== "image/png" &&
+    avatarInputObj.type !== "image/jpeg" &&
+    avatarInputObj.type !== "image/gif"
+  ) {
+    setErrorToast(INVALID_FILE_TYPE);
+    return;
+  }
+
+  if (avatarInputObj.size > 524288) {
+    setErrorToast(TOO_LARGE_FILE);
+    return;
+  }
+
+  isPageLoading.value = true;
+
+  updateUserAvatar(avatarInputObj)
+    .then((newAvatarSRC) => {
+      if (user.value) {
+        user.value.avatar = newAvatarSRC;
+      }
+
+      if (authStoreUser.value && authStoreUser.value.id === id.value) {
+        authStoreUser.value.avatar = newAvatarSRC;
+      }
 
       setErrorValuesToDefault();
     })

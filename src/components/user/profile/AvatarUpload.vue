@@ -49,9 +49,17 @@
 </template>
 
 <script setup lang="ts">
-defineProps<{
+import { IUploadAvatarInput } from "@/types/backend-interfaces/user/avatar";
+import fileToBase64 from "@/utils/fileToBase64";
+
+const props = defineProps<{
+  userID: string;
   avatar: string | null;
   userInitials: string;
+}>();
+
+const emit = defineEmits<{
+  (event: "onUpdateUserAvatar", avatarInputObj: IUploadAvatarInput): void;
 }>();
 
 function avatarRemove() {
@@ -59,12 +67,31 @@ function avatarRemove() {
   // Remove old avatar from server
 }
 
-function avatarChange() {
-  console.log("User clicked to input-label and choosed new avatar from window");
-  // Load new avatar to server (choosed from window)
+async function uploadAvatar(file: File) {
+  const fileBase64 = await fileToBase64(file);
+  emit("onUpdateUserAvatar", {
+    userId: Number(props.userID),
+    base64: fileBase64,
+    size: file.size,
+    type: file.type,
+  });
 }
 
-function avatarDragOver(e: Event) {
+function avatarChange(e: Event) {
+  if (
+    !e.target ||
+    !(e.target instanceof HTMLInputElement) ||
+    !e.target.files ||
+    !e.target.files.length
+  ) {
+    return;
+  }
+
+  const file = e.target.files[0];
+  uploadAvatar(file);
+}
+
+function avatarDragOver(e: DragEvent) {
   if (!e.target || !(e.target instanceof HTMLElement)) return;
   const labelWrapper = e.target.closest(
     ".avatar-upload__upload-avatar-wrapper"
@@ -72,7 +99,7 @@ function avatarDragOver(e: Event) {
   labelWrapper?.classList.add("dark-red-filter-bg");
 }
 
-function avatarDragLeave(e: Event) {
+function avatarDragLeave(e: DragEvent) {
   if (!e.target || !(e.target instanceof HTMLElement)) return;
   const labelWrapper = e.target.closest(
     ".avatar-upload__upload-avatar-wrapper"
@@ -80,11 +107,19 @@ function avatarDragLeave(e: Event) {
   labelWrapper?.classList.remove("dark-red-filter-bg");
 }
 
-function avatarDrop(e: Event) {
+function avatarDrop(e: DragEvent) {
   avatarDragLeave(e);
 
-  console.log("User dropped new avatar to the input-label");
-  // Load new avatar to server (drag-and-dropped to the field)
+  if (
+    !e.dataTransfer ||
+    !e.dataTransfer.files ||
+    !e.dataTransfer.files.length
+  ) {
+    return;
+  }
+
+  const file = e.dataTransfer.files[0];
+  uploadAvatar(file);
 }
 </script>
 

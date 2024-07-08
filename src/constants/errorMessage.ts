@@ -10,3 +10,7 @@ export const UNEXPECTED_ERROR = "Unexpected error, please try again";
 export const GRAPHQL_NULL_RETURN_ERROR =
   "Cannot return null for non-nullable field";
 export const NOT_FOUND_USER = "The user with specified ID does not exist";
+export const TOO_LARGE_FILE =
+  "The file you've attached has too large size (> 0.5 MB)";
+export const INVALID_FILE_TYPE =
+  "The file you've attached has unacceptable type";
