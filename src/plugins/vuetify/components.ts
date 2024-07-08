@@ -28,6 +28,7 @@ import {
   VProgressLinear,
   VProgressCircular,
   VDialog,
+  VTextarea,
 } from "vuetify/components";
 
 export default {
@@ -60,4 +61,5 @@ export default {
   VProgressLinear,
   VProgressCircular,
   VDialog,
+  VTextarea,
 };

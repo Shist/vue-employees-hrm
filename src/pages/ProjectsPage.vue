@@ -17,6 +17,7 @@
         color="var(--color-wrapper-bg)"
         elevation="0"
         class="text-red-darken-4 project-page__button mr-8"
+        @click="openCreateProjectModal"
         >CREATE PROJECT</v-btn
       >
     </div>
@@ -43,7 +44,7 @@
                 Project
               </v-list-item-title>
             </v-list-item>
-            <v-list-item @click="console.log('Update project')" disabled>
+            <v-list-item @click="openUpdateProjectModal">
               <v-list-item-title class="project-page__popup-menu-label">
                 Update project
               </v-list-item-title>
@@ -58,7 +59,11 @@
       </template>
     </v-data-table>
   </div>
-  <ProjectsModal />
+  <ProjectsModal
+    :isOpen="isModalOpen"
+    @closeModal="handleCloseModal"
+    :isUpdateOrCreateModal="modalStatus"
+  />
 </template>
 
 <script setup lang="ts">
@@ -73,7 +78,9 @@ const router = useRouter();
 
 const search = ref("");
 
-const admin = ref(false);
+const admin = ref(true);
+const isModalOpen = ref(false);
+const modalStatus = ref<string>("");
 
 const headers = reactive([
   { key: "name", title: "Name" },
@@ -91,6 +98,20 @@ const isLoading = ref<boolean>(false);
 
 function openProjectDetails(projectId: number) {
   router.push(`${ROUTES.PROJECTS.PATH}/${projectId}`);
+}
+
+function openCreateProjectModal() {
+  isModalOpen.value = true;
+  modalStatus.value = "create";
+}
+
+function openUpdateProjectModal() {
+  isModalOpen.value = true;
+  modalStatus.value = "update";
+}
+
+function handleCloseModal() {
+  isModalOpen.value = false;
 }
 
 onMounted(async () => {
