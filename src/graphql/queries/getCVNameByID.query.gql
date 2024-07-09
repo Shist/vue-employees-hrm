@@ -1,0 +1,6 @@
+query GET_CV_NAME_BY_ID($cvId: ID!) {
+  cv(cvId: $cvId) {
+    id
+    name
+  }
+}
