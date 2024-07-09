@@ -39,9 +39,9 @@
           color="var(--color-wrapper-bg)"
           elevation="0"
           class="project-page__button text-red-darken-4"
-          @click="console.log('create CV')"
+          @click="handleOpenModal"
         >
-          CREATE CV
+          Create CV
         </v-btn>
       </div>
       <v-data-table
@@ -77,14 +77,22 @@
       </v-data-table>
     </div>
   </div>
+  <CreateCVModal
+    :isOpen="isModalOpen"
+    :userID="id"
+    @onCreateUserCV="submitUserCVCreate"
+    @closeModal="handleCloseModal"
+  />
 </template>
 
 <script setup lang="ts">
 import { ref, reactive, computed, onMounted } from "vue";
+import CreateCVModal from "@/components/user/cvs/CreateCVModal.vue";
 import { useRouter, useRoute } from "vue-router";
 import { ROUTES } from "@/constants/router";
 import { getUserCVsNamesByID } from "@/services/users";
 import { IUserCVNameData } from "@/types/userCVsUI";
+import { ICreateCVInput } from "@/types/backend-interfaces/cv";
 import useToast from "@/composables/useToast";
 import { UNEXPECTED_ERROR } from "@/constants/errorMessage";
 
@@ -115,6 +123,8 @@ const userCVs = reactive<IUserCVNameData[]>([]);
 const isError = ref(false);
 const errorMessage = ref(UNEXPECTED_ERROR);
 const isNotFoundError = ref(false);
+
+const isModalOpen = ref(false);
 
 const { setErrorToast } = useToast();
 
@@ -150,6 +160,37 @@ onMounted(async () => {
       isPageLoading.value = false;
     });
 });
+
+function submitUserCVCreate(cvInputObj: ICreateCVInput) {
+  console.log("emit Create CV!!!");
+  // isPageLoading.value = true;
+  // createUserLanguage(languageInputObj)
+  //   .then((freshUserLanguages) => {
+  //     updateUserLanguagesValue(freshUserLanguages);
+  //     setErrorValuesToDefault();
+  //   })
+  //   .catch((error: unknown) => {
+  //     isError.value = true;
+  //     if (error instanceof Error) {
+  //       errorMessage.value = error.message;
+  //       if (error.name === "NotFoundError") {
+  //         isNotFoundError.value = true;
+  //       }
+  //       setErrorToast(errorMessage.value);
+  //     }
+  //   })
+  //   .finally(() => {
+  //     isPageLoading.value = false;
+  //   });
+}
+
+function handleOpenModal() {
+  isModalOpen.value = true;
+}
+
+function handleCloseModal() {
+  isModalOpen.value = false;
+}
 </script>
 
 <style lang="scss" scoped>
