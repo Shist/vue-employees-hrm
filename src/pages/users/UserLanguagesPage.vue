@@ -438,9 +438,19 @@ function getClassByProficiency(value: Proficiency) {
       }
     }
     .user-languages__delete-btns-wrapper {
+      padding-block: 32px;
+      margin: 0 auto;
+      position: fixed;
+      bottom: 0;
+      max-width: 800px;
+      width: 100%;
       display: flex;
       justify-content: space-between;
       align-items: center;
+      background: linear-gradient(
+        rgba(255, 255, 255, 0) 0%,
+        rgb(var(--color-wrapper-bg-rgb)) 40%
+      );
       .user-languages__cancel-deletion-btn {
         padding: 6px;
         max-width: 100px;
