@@ -1,0 +1,6 @@
+query GET_ALL_LANGUAGES_NAMES {
+  languages {
+    id
+    name
+  }
+}

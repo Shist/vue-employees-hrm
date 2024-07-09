@@ -4,6 +4,7 @@ import getUserProfileByIDQuery from "@/graphql/queries/getUserProfileByID.query.
 import getUserAuthDataByIDQuery from "@/graphql/queries/getUserAuthDataByID.query.gql";
 import getUserFullnameByIDQuery from "@/graphql/queries/getUserFullnameByID.query.gql";
 import getUserSkillsByIDQuery from "@/graphql/queries/getUserSkillsByID.query.gql";
+import getUserLanguagesByIDQuery from "@/graphql/queries/getUserLanguagesByID.query.gql";
 import updateUserQuery from "@/graphql/mutations/updateUser.mutation.gql";
 import updateProfileQuery from "@/graphql/mutations/updateProfile.mutation.gql";
 import uploadAvatarQuery from "@/graphql/mutations/uploadAvatar.mutation.gql";
@@ -23,6 +24,7 @@ import {
   IAddOrUpdateProfileSkillInput,
   IDeleteProfileSkillInput,
 } from "@/types/backend-interfaces/user/profile/skill";
+import { ILanguageProficiency } from "@/types/backend-interfaces/language/proficiency";
 import checkID from "@/utils/checkID";
 import {
   NOT_FOUND_USER,
@@ -136,6 +138,33 @@ export const getUserSkillsByID = async (id: string) => {
     })) as { data: { user: { profile: { skills: IProfileSkill[] } } } };
 
     return response.data.user.profile.skills;
+  } catch (error: unknown) {
+    if (error instanceof Error) {
+      if (error.message.startsWith(GRAPHQL_NULL_RETURN_ERROR)) {
+        const notFoundError = new Error(NOT_FOUND_USER);
+        notFoundError.name = "NotFoundError";
+        throw notFoundError;
+      } else if (error.message === "Failed to fetch") {
+        throw new Error(NO_NETWORK_CONNECTION);
+      }
+    }
+
+    throw error;
+  }
+};
+
+export const getUserLanguagesByID = async (id: string) => {
+  try {
+    checkID(id);
+
+    const response = (await apolloClient.query({
+      query: getUserLanguagesByIDQuery,
+      variables: { userId: Number(id) },
+    })) as {
+      data: { user: { profile: { languages: ILanguageProficiency[] } } };
+    };
+
+    return response.data.user.profile.languages;
   } catch (error: unknown) {
     if (error instanceof Error) {
       if (error.message.startsWith(GRAPHQL_NULL_RETURN_ERROR)) {
