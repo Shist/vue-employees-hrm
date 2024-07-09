@@ -27,6 +27,7 @@
               label="Name"
               variant="outlined"
               class="projects-modal__input"
+              :error-messages="formErrors.name"
             />
             <v-text-field
               v-model="formData.internal_name"
@@ -39,6 +40,7 @@
               label="Domain"
               variant="outlined"
               class="projects-modal__input"
+              :error-messages="formErrors.domain"
             />
             <v-text-field
               type="number"
@@ -46,6 +48,7 @@
               label="Team Size"
               variant="outlined"
               class="projects-modal__input"
+              :error-messages="formErrors.team_size"
             />
             <v-text-field
               type="date"
@@ -53,6 +56,7 @@
               v-model="formData.start_date"
               variant="outlined"
               class="projects-modal__input projects-modal__input-date"
+              :error-messages="formErrors.start_date"
             />
             <v-text-field
               type="date"
@@ -67,7 +71,7 @@
               variant="outlined"
               density="compact"
               class="projects-modal__textarea"
-              hide-details
+              :error-messages="formErrors.description"
             />
           </form>
         </v-card-item>
@@ -84,7 +88,7 @@
             variant="text"
             @click="createOrUpdateProject"
             class="projects-modal__btn-confirm"
-            :disabled="isConfirmBtnDisabled"
+            :disabled="v$.$errors.length > 0"
           >
             Confirm
           </v-btn>
@@ -95,12 +99,17 @@
 </template>
 
 <script setup lang="ts">
+import { computed, onUpdated, reactive } from "vue";
+import useVuelidate from "@vuelidate/core";
+import { required, helpers } from "@vuelidate/validators";
+import { useValidationErrors } from "@/composables/useValidationErrors";
 import {
   ICreateProjectInput,
   IUpdateProjectInput,
 } from "@/types/backend-interfaces/project";
 import { IAddOrUpdateProjectModal } from "@/types/projectsTableUI";
-import { computed, onUpdated, reactive } from "vue";
+import { REQUIRED_FIELD } from "@/constants/errorMessage";
+import { IProjectForm } from "@/types/form";
 
 const props = defineProps<{
   isOpen: boolean;
@@ -118,6 +127,32 @@ const formData = reactive<ICreateProjectInput>({
   team_size: 1,
 });
 
+const rules = computed(() => {
+  return {
+    name: {
+      required: helpers.withMessage(REQUIRED_FIELD, required),
+    },
+    description: {
+      required: helpers.withMessage(REQUIRED_FIELD, required),
+    },
+    domain: {
+      required: helpers.withMessage(REQUIRED_FIELD, required),
+    },
+    start_date: {
+      required: helpers.withMessage(REQUIRED_FIELD, required),
+    },
+    team_size: {
+      required: helpers.withMessage(REQUIRED_FIELD, required),
+    },
+  };
+});
+
+const formErrors = computed(() =>
+  useValidationErrors<IProjectForm>(v$.value.$errors)
+);
+
+const v$ = useVuelidate(rules, formData);
+
 const emit = defineEmits<{
   (event: "closeModal"): void;
   (event: "createProject", createProjectObj: ICreateProjectInput): void;
@@ -133,7 +168,9 @@ const modalState = computed({
   },
 });
 
-function createOrUpdateProject() {
+async function createOrUpdateProject() {
+  const isFormCorrect = await v$.value.$validate();
+  if (!isFormCorrect) return;
   if (props.isUpdateOrCreateModal === "create") {
     const projectInputObj: ICreateProjectInput = {
       name: formData.name,
@@ -176,37 +213,12 @@ function handleModalClose() {
   emit("closeModal");
 }
 
-const isConfirmBtnDisabled = computed(() => {
-  if (
-    !props.oProjectForModal &&
-    (formData.name === "" ||
-      formData.description === "" ||
-      formData.domain === "" ||
-      formData.start_date === "" ||
-      !formData.team_size)
-  )
-    return true;
-  else if (
-    (formData.name === props.oProjectForModal?.name &&
-      formData.internal_name === props.oProjectForModal?.internalName &&
-      formData.description === props.oProjectForModal?.description &&
-      formData.domain === props.oProjectForModal?.domain &&
-      formData.start_date === props.oProjectForModal?.startDate &&
-      (formData.end_date === props.oProjectForModal?.endDate ||
-        formData.end_date === "") &&
-      Number(formData.team_size) === props.oProjectForModal?.teamSize) ||
-    formData.name === "" ||
-    formData.description === "" ||
-    formData.domain === "" ||
-    formData.start_date === "" ||
-    !formData.team_size
-  ) {
-    return true;
-  }
-  return false;
-});
+const clearForm = async () => {
+  v$.value.$reset();
+};
 
 onUpdated(() => {
+  clearForm();
   if (!props.oProjectForModal) {
     formData.name = "";
     formData.internal_name = "";

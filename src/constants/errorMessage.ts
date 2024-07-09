@@ -14,3 +14,4 @@ export const TOO_LARGE_FILE =
   "The file you've attached has too large size (> 0.5 MB)";
 export const INVALID_FILE_TYPE =
   "The file you've attached has unacceptable type";
+export const REQUIRED_FIELD = "Field is required";
