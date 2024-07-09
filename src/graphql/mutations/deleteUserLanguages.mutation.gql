@@ -1,0 +1,9 @@
+mutation DELETE_USER_LANGUAGES($languages: DeleteProfileLanguageInput!) {
+  deleteProfileLanguage(language: $languages) {
+    id
+    languages {
+      name
+      proficiency
+    }
+  }
+}

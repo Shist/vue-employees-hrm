@@ -27,11 +27,11 @@ export interface IUserProfileServerData {
 }
 
 export interface IDepartmentNamesData {
-  id: string;
-  name: number;
+  id: number;
+  name: string;
 }
 
 export interface IPositionNamesData {
-  id: string;
-  name: number;
+  id: number;
+  name: string;
 }

@@ -1,55 +1,46 @@
 <template>
-  <div class="skill-modal">
+  <div class="language-modal">
     <v-dialog
       v-model="modalState"
       max-width="600"
-      class="skill-modal__dialog-wrapper"
+      class="language-modal__dialog-wrapper"
       scrim="var(--color-modal-overlay)"
       opacity="100%"
     >
       <v-card
-        :title="!oSkillForModal ? 'Add skill' : 'Update skill'"
-        class="skill-modal__card-wrapper"
+        :title="!oLanguageForModal ? 'Add language' : 'Update language'"
+        class="language-modal__card-wrapper"
       >
         <v-btn
           icon="mdi-close"
-          class="skill-modal__cross-btn"
+          class="language-modal__cross-btn"
           @click.prevent="closeModal"
         ></v-btn>
-        <v-card-item class="skill-modal__text-fields-container">
+        <v-card-item class="language-modal__text-fields-container">
           <v-select
-            v-model="selectSkill"
-            :items="aSkillsItems"
-            label="Skill"
+            v-model="selectLanguage"
+            :items="aLanguagesItems"
+            label="Language"
             variant="outlined"
-            class="skill-modal__text-field-wrapper"
+            class="language-modal__text-field-wrapper"
             hide-details
-            :disabled="!!oSkillForModal"
+            :disabled="!!oLanguageForModal"
           />
           <v-select
-            v-model="selectCategory"
-            :items="aSkillCategoriesItems"
-            label="Category"
+            v-model="selectLanguageProficiency"
+            :items="aLanguageProficiencies"
+            label="Language proficiency"
             variant="outlined"
-            class="skill-modal__text-field-wrapper"
+            class="language-modal__text-field-wrapper"
             hide-details
-            disabled
-          />
-          <v-select
-            v-model="selectSkillMastery"
-            :items="aSkillMasteries"
-            label="Skill mastery"
-            variant="outlined"
-            class="skill-modal__text-field-wrapper"
-            hide-details
-            :disabled="!selectSkill"
+            :disabled="!selectLanguage"
           />
         </v-card-item>
         <v-card-actions>
           <v-btn
             variant="outlined"
             @click="closeModal"
-            class="skill-modal__btn-cancel"
+            class="language-modal__btn-cancel"
           >
             Cancel
           </v-btn>
@@ -57,7 +48,7 @@
             type="submit"
             variant="text"
             @click="makeCreateOrUpdateOperation"
-            class="skill-modal__btn-confirm"
+            class="language-modal__btn-confirm"
             :disabled="isConfirmBtnDisabled"
           >
             Confirm
@@ -69,31 +60,30 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, watch, onUpdated } from "vue";
+import { ref, computed, onUpdated } from "vue";
+import { Proficiency } from "@/types/backend-interfaces/language/proficiency";
 import {
-  IProfileSkill,
-  IAddOrUpdateProfileSkillInput,
-} from "@/types/backend-interfaces/user/profile/skill";
-import { Mastery } from "@/types/backend-interfaces/skill/mastery";
-import { ISkillsData } from "@/types/userSkillsUI";
+  IProfileLanguage,
+  IAddOrUpdateProfileLanguageInput,
+} from "@/types/backend-interfaces/user/profile/language";
+import { ILanguagesNamesData } from "@/types/userLanguagesUI";
 
 const props = defineProps<{
   isOpen: boolean;
-  oSkillForModal: IProfileSkill | null;
+  oLanguageForModal: IProfileLanguage | null;
   userID: string;
-  skills: ISkillsData[] | null;
-  skillCategories: string[] | null;
+  languages: ILanguagesNamesData[] | null;
 }>();
 
 const emit = defineEmits<{
   (event: "closeModal"): void;
   (
-    event: "onCreateUserSkill",
-    skillInputObj: IAddOrUpdateProfileSkillInput
+    event: "onCreateUserLanguage",
+    languageInputObj: IAddOrUpdateProfileLanguageInput
   ): void;
   (
-    event: "onUpdateUserSkill",
-    skillInputObj: IAddOrUpdateProfileSkillInput
+    event: "onUpdateUserLanguage",
+    languageInputObj: IAddOrUpdateProfileLanguageInput
   ): void;
 }>();
 
@@ -108,61 +98,38 @@ const modalState = computed({
 
 const isConfirmBtnDisabled = computed(
   () =>
-    (!props.oSkillForModal && !selectSkill.value) ||
-    (!!props.oSkillForModal &&
-      selectSkillMastery.value === props.oSkillForModal.mastery)
+    (!props.oLanguageForModal && !selectLanguage.value) ||
+    (!!props.oLanguageForModal &&
+      selectLanguageProficiency.value === props.oLanguageForModal.proficiency)
 );
 
-function getCategoryBySkill(skillName: string) {
-  if (!props.skills) return null;
-  return props.skills.find((skill) => skill.name === skillName)?.category;
-}
-
-const aSkillsItems = computed(() => {
-  if (!props.skills) return [];
-  return props.skills.map((skill) => skill.name);
+const aLanguagesItems = computed(() => {
+  if (!props.languages) return [];
+  return props.languages.map((languages) => languages.name);
 });
 
-const aSkillCategoriesItems = computed(() => {
-  if (!props.skillCategories) return [];
-  return props.skillCategories;
-});
+const aLanguageProficiencies = ["A1", "A2", "B1", "B2", "C1", "C2", "Native"];
 
-const aSkillMasteries = [
-  "Novice",
-  "Advanced",
-  "Competent",
-  "Proficient",
-  "Expert",
-];
-
-const selectSkill = ref<string | null>(null);
-const selectCategory = ref<string | null>(null);
-const selectSkillMastery = ref<Mastery>(Mastery.Novice);
+const selectLanguage = ref<string | null>(null);
+const selectLanguageProficiency = ref<Proficiency>(Proficiency.A1);
 
 onUpdated(() => {
-  selectSkill.value = props.oSkillForModal?.name || null;
-  selectCategory.value = props.oSkillForModal?.category || null;
-  selectSkillMastery.value = props.oSkillForModal?.mastery || Mastery.Novice;
-});
-
-watch(selectSkill, () => {
-  const skillCategory = getCategoryBySkill(`${selectSkill.value}`);
-  selectCategory.value = skillCategory ? skillCategory : null;
+  selectLanguage.value = props.oLanguageForModal?.name || null;
+  selectLanguageProficiency.value =
+    props.oLanguageForModal?.proficiency || Proficiency.A1;
 });
 
 function makeCreateOrUpdateOperation() {
-  const skillInputObj: IAddOrUpdateProfileSkillInput = {
+  const languageInputObj: IAddOrUpdateProfileLanguageInput = {
     userId: Number(props.userID),
-    name: `${selectSkill.value}`,
-    category: selectCategory.value,
-    mastery: selectSkillMastery.value,
+    name: `${selectLanguage.value}`,
+    proficiency: selectLanguageProficiency.value,
   };
 
-  if (props.oSkillForModal) {
-    emit("onUpdateUserSkill", skillInputObj);
+  if (props.oLanguageForModal) {
+    emit("onUpdateUserLanguage", languageInputObj);
   } else {
-    emit("onCreateUserSkill", skillInputObj);
+    emit("onCreateUserLanguage", languageInputObj);
   }
   emit("closeModal");
 }
@@ -173,10 +140,10 @@ function closeModal() {
 </script>
 
 <style lang="scss" scoped>
-.skill-modal {
+.language-modal {
   &__card-wrapper {
     background-color: var(--color-wrapper-bg);
-    .skill-modal__cross-btn {
+    .language-modal__cross-btn {
       font-family: $font-roboto;
       position: absolute;
       width: 40px;
@@ -186,7 +153,7 @@ function closeModal() {
       background-color: var(--color-wrapper-bg);
       box-shadow: none;
     }
-    .skill-modal__btn-cancel {
+    .language-modal__btn-cancel {
       padding: 6px;
       max-width: 100px;
       width: 100%;
@@ -199,7 +166,7 @@ function closeModal() {
         border: 1px solid var(--color-btn-gray-text);
       }
     }
-    .skill-modal__btn-confirm {
+    .language-modal__btn-confirm {
       padding: 6px;
       max-width: 100px;
       width: 100%;
@@ -218,11 +185,11 @@ function closeModal() {
   }
 }
 
-:deep(.skill-modal__text-field-wrapper .v-field__outline__start) {
+:deep(.language-modal__text-field-wrapper .v-field__outline__start) {
   border-radius: 0;
   transition: 0.3s;
 }
-:deep(.skill-modal__text-field-wrapper .v-field__outline__end) {
+:deep(.language-modal__text-field-wrapper .v-field__outline__end) {
   border-radius: 0;
   transition: 0.3s;
 }
@@ -234,25 +201,25 @@ function closeModal() {
   border-block: 1px solid var(--color-input-borders);
   border-right: 1px solid var(--color-input-borders);
 }
-:deep(.skill-modal__text-field-wrapper .v-field__outline__notch::before) {
+:deep(.language-modal__text-field-wrapper .v-field__outline__notch::before) {
   transition: 0.3s;
 }
 :deep(.v-field--focused .v-field__outline__notch::before) {
   border-top: 1px solid var(--color-input-borders);
 }
-:deep(.skill-modal__text-field-wrapper .v-field__outline__notch::after) {
+:deep(.language-modal__text-field-wrapper .v-field__outline__notch::after) {
   transition: 0.3s;
 }
 :deep(.v-field--focused .v-field__outline__notch::after) {
   border-bottom: 1px solid var(--color-input-borders);
 }
-:deep(.skill-modal__text-field-wrapper .v-field-label) {
+:deep(.language-modal__text-field-wrapper .v-field-label) {
   transition: background-color 0.3s;
 }
 :deep(.v-field--focused .v-field-label) {
   color: var(--color-active-text);
 }
-:deep(.skill-modal__text-fields-container .v-card-item__content) {
+:deep(.language-modal__text-fields-container .v-card-item__content) {
   padding-block: 10px;
   display: flex;
   flex-direction: column;

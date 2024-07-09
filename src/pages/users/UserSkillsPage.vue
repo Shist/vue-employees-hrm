@@ -396,6 +396,7 @@ function submitUserSkillsDeletion() {
     }
   }
   &__main-content-wrapper {
+    position: relative;
     margin: 0 auto;
     max-width: 850px;
     width: 100%;
@@ -412,9 +413,19 @@ function submitUserSkillsDeletion() {
       }
     }
     .user-skills__delete-btns-wrapper {
+      padding-block: 32px;
+      margin: 0 auto;
+      position: fixed;
+      bottom: 0;
+      max-width: 800px;
+      width: 100%;
       display: flex;
       justify-content: space-between;
       align-items: center;
+      background: linear-gradient(
+        rgba(255, 255, 255, 0) 0%,
+        rgb(var(--color-wrapper-bg-rgb)) 40%
+      );
       .user-skills__cancel-deletion-btn {
         padding: 6px;
         max-width: 100px;

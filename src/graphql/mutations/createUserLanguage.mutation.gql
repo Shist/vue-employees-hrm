@@ -1,0 +1,9 @@
+mutation CREATE_USER_LANGUAGE($language: AddProfileLanguageInput!) {
+  addProfileLanguage(language: $language) {
+    id
+    languages {
+      name
+      proficiency
+    }
+  }
+}
