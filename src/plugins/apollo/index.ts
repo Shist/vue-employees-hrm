@@ -28,6 +28,12 @@ const cache = new InMemoryCache({
             return incoming;
           },
         },
+        languages: {
+          keyArgs: false,
+          merge(existing, incoming) {
+            return incoming;
+          },
+        },
       },
     },
   },

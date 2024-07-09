@@ -116,6 +116,7 @@ import {
   getUserLanguagesByID,
   createUserLanguage,
   updateUserLanguage,
+  deleteUserLanguages,
 } from "@/services/users";
 import { getAllLanguagesNames } from "@/services/languages";
 import { Proficiency } from "@/types/backend-interfaces/language/proficiency";
@@ -319,30 +320,37 @@ function clearUserDeletionLanguages() {
 }
 
 function submitUserLanguagesDeletion() {
-  // isPageLoading.value = true;
-  // const languagesToBeDeleted: IDeleteProfileSkillInput = {
-  //   userId: Number(id.value),
-  //   name: [...languagesForDeletionNames],
-  // };
-  // deleteUserLanguages(languagesToBeDeleted)
-  //   .then((freshUserLanguages) => {
-  //     updateUserLanguagesValue(freshUserLanguages);
-  //     setErrorValuesToDefault();
-  //   })
-  //   .catch((error: unknown) => {
-  //     isError.value = true;
-  //     if (error instanceof Error) {
-  //       errorMessage.value = error.message;
-  //       if (error.name === "NotFoundError") {
-  //         isNotFoundError.value = true;
-  //       }
-  //       setErrorToast(errorMessage.value);
-  //     }
-  //   })
-  //   .finally(() => {
-  //     isPageLoading.value = false;
-  //   });
-  // clearUserDeletionLanguages();
+  isPageLoading.value = true;
+
+  const languagesToBeDeleted: IDeleteProfileLanguageInput = {
+    userId: Number(id.value),
+    name: [...languagesForDeletionNames],
+  };
+
+  deleteUserLanguages(languagesToBeDeleted)
+    .then((freshUserLanguages) => {
+      updateUserLanguagesValue(freshUserLanguages);
+
+      setErrorValuesToDefault();
+    })
+    .catch((error: unknown) => {
+      isError.value = true;
+
+      if (error instanceof Error) {
+        errorMessage.value = error.message;
+
+        if (error.name === "NotFoundError") {
+          isNotFoundError.value = true;
+        }
+
+        setErrorToast(errorMessage.value);
+      }
+    })
+    .finally(() => {
+      isPageLoading.value = false;
+    });
+
+  clearUserDeletionLanguages();
 }
 
 function getClassByProficiency(value: Proficiency) {
