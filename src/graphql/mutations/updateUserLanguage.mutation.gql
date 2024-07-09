@@ -1,0 +1,9 @@
+mutation UPDATE_USER_LANGUAGE($language: UpdateProfileLanguageInput!) {
+  updateProfileLanguage(language: $language) {
+    id
+    languages {
+      name
+      proficiency
+    }
+  }
+}

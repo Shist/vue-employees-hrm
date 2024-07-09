@@ -1,0 +1,12 @@
+query GET_USER_LANGUAGES_BY_ID($userId: ID!) {
+  user(userId: $userId) {
+    id
+    profile {
+      id
+      languages {
+        name
+        proficiency
+      }
+    }
+  }
+}
