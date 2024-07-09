@@ -6,6 +6,7 @@
       :width="10"
       color="var(--color-spinner)"
       indeterminate
+      class="main-page__spinner"
     />
     <div v-else-if="isError" class="main-page__error-wrapper">
       <h4 class="main-page__error-message">❌ {{ errorMessage }}</h4>
@@ -90,8 +91,8 @@ import { UNEXPECTED_ERROR } from "@/constants/errorMessage";
 
 const router = useRouter();
 
-function openUserProfile(userId: number) {
-  router.push(`${ROUTES.USERS.PATH}/${userId}`);
+function openUserProfile(userID: number) {
+  router.push(`${ROUTES.USERS.PATH}/${userID}`);
 }
 
 const search = ref("");
@@ -126,7 +127,7 @@ onMounted(async () => {
 
   getAllUsers()
     .then((usersData) => {
-      users.splice(0, users.length, ...(usersData as []));
+      users.splice(0, users.length, ...usersData);
 
       setErrorValuesToDefault();
     })
@@ -154,7 +155,11 @@ onMounted(async () => {
   display: flex;
   flex-direction: column;
   align-items: center;
+  &__spinner {
+    margin-top: 64px;
+  }
   &__error-wrapper {
+    padding-top: 64px;
     width: 100%;
     display: flex;
     flex-direction: column;
