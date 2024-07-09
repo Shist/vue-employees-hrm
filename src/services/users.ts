@@ -12,6 +12,7 @@ import deleteAvatarQuery from "@/graphql/mutations/deleteAvatar.mutation.gql";
 import createUserSkillQuery from "@/graphql/mutations/createUserSkill.mutation.gql";
 import updateUserSkillQuery from "@/graphql/mutations/updateUserSkill.mutation.gql";
 import deleteUserSkillsQuery from "@/graphql/mutations/deleteUserSkills.mutation.gql";
+import createUserLanguageQuery from "@/graphql/mutations/createUserLanguage.mutation.gql";
 import { IUsersTableData, IUsersTableServerData } from "@/types/usersTableUI";
 import { IUserProfileServerData } from "@/types/userProfileUI";
 import { IUsersNameServerData } from "@/types/breadcrumbsUI";
@@ -299,6 +300,27 @@ export const deleteUserSkills = async (
     })) as { data: { deleteProfileSkill: { skills: IProfileSkill[] } } };
 
     return response.data.deleteProfileSkill.skills;
+  } catch (error: unknown) {
+    if (error instanceof Error) {
+      if (error.message === "Failed to fetch") {
+        throw new Error(NO_NETWORK_CONNECTION);
+      }
+    }
+
+    throw error;
+  }
+};
+
+export const createUserLanguage = async (
+  inputLanguageObj: IAddOrUpdateProfileLanguageInput
+) => {
+  try {
+    const response = (await apolloClient.mutate({
+      mutation: createUserLanguageQuery,
+      variables: { language: inputLanguageObj },
+    })) as { data: { addProfileLanguage: { languages: IProfileLanguage[] } } };
+
+    return response.data.addProfileLanguage.languages;
   } catch (error: unknown) {
     if (error instanceof Error) {
       if (error.message === "Failed to fetch") {

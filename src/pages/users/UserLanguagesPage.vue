@@ -112,7 +112,7 @@
 import { ref, reactive, computed, watch, onMounted } from "vue";
 import LanguageModal from "@/components/user/languages/LanguageModal.vue";
 import { useRoute } from "vue-router";
-import { getUserLanguagesByID } from "@/services/users";
+import { getUserLanguagesByID, createUserLanguage } from "@/services/users";
 import { getAllLanguagesNames } from "@/services/languages";
 import { Proficiency } from "@/types/backend-interfaces/language/proficiency";
 import {
@@ -239,25 +239,30 @@ function handleOpenEditModal(
 function submitUserLanguageCreate(
   languageInputObj: IAddOrUpdateProfileLanguageInput
 ) {
-  // isPageLoading.value = true;
-  // createUserLanguage(languageInputObj)
-  //   .then((freshUserLanguages) => {
-  //     updateUserLanguagesValue(freshUserLanguages);
-  //     setErrorValuesToDefault();
-  //   })
-  //   .catch((error: unknown) => {
-  //     isError.value = true;
-  //     if (error instanceof Error) {
-  //       errorMessage.value = error.message;
-  //       if (error.name === "NotFoundError") {
-  //         isNotFoundError.value = true;
-  //       }
-  //       setErrorToast(errorMessage.value);
-  //     }
-  //   })
-  //   .finally(() => {
-  //     isPageLoading.value = false;
-  //   });
+  isPageLoading.value = true;
+
+  createUserLanguage(languageInputObj)
+    .then((freshUserLanguages) => {
+      updateUserLanguagesValue(freshUserLanguages);
+
+      setErrorValuesToDefault();
+    })
+    .catch((error: unknown) => {
+      isError.value = true;
+
+      if (error instanceof Error) {
+        errorMessage.value = error.message;
+
+        if (error.name === "NotFoundError") {
+          isNotFoundError.value = true;
+        }
+
+        setErrorToast(errorMessage.value);
+      }
+    })
+    .finally(() => {
+      isPageLoading.value = false;
+    });
 }
 
 function submitUserLanguageUpdate(
