@@ -97,16 +97,15 @@
       </div>
     </div>
   </div>
-  <!-- <LanguageModal
+  <LanguageModal
     :isOpen="isModalOpen"
-    :oSkillForModal="oSkillForModal"
+    :oLanguageForModal="oLanguageForModal"
     :userID="id"
-    :skills="leftSkills"
-    :skill-categories="skillCategories"
-    @onCreateUserSkill="submitUserSkillCreate"
-    @onUpdateUserSkill="submitUserSkillUpdate"
+    :languages="leftLanguages"
+    @onCreateUserLanguage="submitUserLanguageCreate"
+    @onUpdateUserLanguage="submitUserLanguageUpdate"
     @closeModal="handleCloseModal"
-  /> -->
+  />
 </template>
 
 <script setup lang="ts">
@@ -115,10 +114,12 @@ import LanguageModal from "@/components/user/languages/LanguageModal.vue";
 import { useRoute } from "vue-router";
 import { getUserLanguagesByID } from "@/services/users";
 import { getAllLanguagesNames } from "@/services/languages";
+import { Proficiency } from "@/types/backend-interfaces/language/proficiency";
 import {
-  ILanguageProficiency,
-  Proficiency,
-} from "@/types/backend-interfaces/language/proficiency";
+  IProfileLanguage,
+  IAddOrUpdateProfileLanguageInput,
+  IDeleteProfileLanguageInput,
+} from "@/types/backend-interfaces/user/profile/language";
 import { ILanguagesNamesData } from "@/types/userLanguagesUI";
 import useToast from "@/composables/useToast";
 import { UNEXPECTED_ERROR } from "@/constants/errorMessage";
@@ -134,7 +135,7 @@ const id = computed<string>(() => {
 
 const isPageLoading = ref(true);
 
-const userLanguages = ref<ILanguageProficiency[] | null>(null);
+const userLanguages = ref<IProfileLanguage[] | null>(null);
 const languages = ref<ILanguagesNamesData[] | null>(null);
 
 const leftLanguages = computed<ILanguagesNamesData[]>(() => {
@@ -154,7 +155,7 @@ const isError = ref(false);
 const errorMessage = ref(UNEXPECTED_ERROR);
 const isNotFoundError = ref(false);
 
-const oLanguageForModal = ref<ILanguageProficiency | null>(null);
+const oLanguageForModal = ref<IProfileLanguage | null>(null);
 const isModalOpen = ref(false);
 
 const languagesForDeletionNames = reactive(new Set<string>());
@@ -184,7 +185,7 @@ function setErrorValuesToDefault() {
   isNotFoundError.value = false;
 }
 
-function updateUserLanguagesValue(userLanguagesData: ILanguageProficiency[]) {
+function updateUserLanguagesValue(userLanguagesData: IProfileLanguage[]) {
   languagesForDeletionNames.clear();
   aLanguagesDeletionState.splice(
     0,
@@ -218,12 +219,12 @@ function fetchData() {
 }
 
 function handleOpenCreateModal() {
-  //oLanguageForModal.value = null;
+  oLanguageForModal.value = null;
   isModalOpen.value = true;
 }
 
 function handleOpenEditModal(
-  _oLanguageForModal: ILanguageProficiency,
+  _oLanguageForModal: IProfileLanguage,
   languageIndex: number
 ) {
   if (aLanguagesDeletionState[languageIndex]) {
@@ -235,59 +236,53 @@ function handleOpenEditModal(
   }
 }
 
-// function submitUserLanguageCreate(languageInputObj: IAddOrUpdateProfileSkillInput) {
-//   isPageLoading.value = true;
+function submitUserLanguageCreate(
+  languageInputObj: IAddOrUpdateProfileLanguageInput
+) {
+  // isPageLoading.value = true;
+  // createUserLanguage(languageInputObj)
+  //   .then((freshUserLanguages) => {
+  //     updateUserLanguagesValue(freshUserLanguages);
+  //     setErrorValuesToDefault();
+  //   })
+  //   .catch((error: unknown) => {
+  //     isError.value = true;
+  //     if (error instanceof Error) {
+  //       errorMessage.value = error.message;
+  //       if (error.name === "NotFoundError") {
+  //         isNotFoundError.value = true;
+  //       }
+  //       setErrorToast(errorMessage.value);
+  //     }
+  //   })
+  //   .finally(() => {
+  //     isPageLoading.value = false;
+  //   });
+}
 
-//   createUserLanguage(languageInputObj)
-//     .then((freshUserLanguages) => {
-//       updateUserLanguagesValue(freshUserLanguages);
-
-//       setErrorValuesToDefault();
-//     })
-//     .catch((error: unknown) => {
-//       isError.value = true;
-
-//       if (error instanceof Error) {
-//         errorMessage.value = error.message;
-
-//         if (error.name === "NotFoundError") {
-//           isNotFoundError.value = true;
-//         }
-
-//         setErrorToast(errorMessage.value);
-//       }
-//     })
-//     .finally(() => {
-//       isPageLoading.value = false;
-//     });
-// }
-
-// function submitUserLanguageUpdate(languageInputObj: IAddOrUpdateProfileSkillInput) {
-//   isPageLoading.value = true;
-
-//   updateUserLanguage(languageInputObj)
-//     .then((freshUserLanguages) => {
-//       updateUserLanguagesValue(freshUserLanguages);
-
-//       setErrorValuesToDefault();
-//     })
-//     .catch((error: unknown) => {
-//       isError.value = true;
-
-//       if (error instanceof Error) {
-//         errorMessage.value = error.message;
-
-//         if (error.name === "NotFoundError") {
-//           isNotFoundError.value = true;
-//         }
-
-//         setErrorToast(errorMessage.value);
-//       }
-//     })
-//     .finally(() => {
-//       isPageLoading.value = false;
-//     });
-// }
+function submitUserLanguageUpdate(
+  languageInputObj: IAddOrUpdateProfileLanguageInput
+) {
+  //   isPageLoading.value = true;
+  //   updateUserLanguage(languageInputObj)
+  //     .then((freshUserLanguages) => {
+  //       updateUserLanguagesValue(freshUserLanguages);
+  //       setErrorValuesToDefault();
+  //     })
+  //     .catch((error: unknown) => {
+  //       isError.value = true;
+  //       if (error instanceof Error) {
+  //         errorMessage.value = error.message;
+  //         if (error.name === "NotFoundError") {
+  //           isNotFoundError.value = true;
+  //         }
+  //         setErrorToast(errorMessage.value);
+  //       }
+  //     })
+  //     .finally(() => {
+  //       isPageLoading.value = false;
+  //     });
+}
 
 function handleCloseModal() {
   isModalOpen.value = false;

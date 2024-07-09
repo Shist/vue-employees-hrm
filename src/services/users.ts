@@ -24,7 +24,11 @@ import {
   IAddOrUpdateProfileSkillInput,
   IDeleteProfileSkillInput,
 } from "@/types/backend-interfaces/user/profile/skill";
-import { ILanguageProficiency } from "@/types/backend-interfaces/language/proficiency";
+import {
+  IProfileLanguage,
+  IAddOrUpdateProfileLanguageInput,
+  IDeleteProfileLanguageInput,
+} from "@/types/backend-interfaces/user/profile/language";
 import checkID from "@/utils/checkID";
 import {
   NOT_FOUND_USER,
@@ -161,7 +165,7 @@ export const getUserLanguagesByID = async (id: string) => {
       query: getUserLanguagesByIDQuery,
       variables: { userId: Number(id) },
     })) as {
-      data: { user: { profile: { languages: ILanguageProficiency[] } } };
+      data: { user: { profile: { languages: IProfileLanguage[] } } };
     };
 
     return response.data.user.profile.languages;
