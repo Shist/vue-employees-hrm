@@ -30,6 +30,7 @@
         variant="outlined"
         single-line
         class="main-page__text-field-wrapper"
+        hide-details
       />
       <v-data-table
         :headers="headers"
@@ -184,6 +185,7 @@ onMounted(async () => {
     align-self: stretch;
     .main-page__text-field-wrapper {
       margin-left: 20px;
+      margin-bottom: 22px;
       max-width: 320px;
     }
     .main-page__data-table {

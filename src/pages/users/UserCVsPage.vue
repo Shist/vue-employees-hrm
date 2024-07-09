@@ -23,14 +23,27 @@
       </span>
     </div>
     <div v-else-if="userCVs.length" class="user-cvs__main-content-wrapper">
-      <v-text-field
-        v-model="search"
-        label="Search"
-        prepend-inner-icon="mdi-magnify"
-        variant="outlined"
-        single-line
-        class="user-cvs__text-field-wrapper"
-      />
+      <div class="users-cvs__search-create-controls-wrapper">
+        <v-text-field
+          v-model="search"
+          label="Search"
+          prepend-inner-icon="mdi-magnify"
+          variant="outlined"
+          single-line
+          class="user-cvs__text-field-wrapper"
+          hide-details
+        />
+        <v-btn
+          rounded
+          prepend-icon="mdi-plus"
+          color="var(--color-wrapper-bg)"
+          elevation="0"
+          class="project-page__button text-red-darken-4"
+          @click="console.log('create CV')"
+        >
+          CREATE CV
+        </v-btn>
+      </div>
       <v-data-table
         :headers="headers"
         :items="userCVs"
@@ -172,9 +185,18 @@ onMounted(async () => {
   &__main-content-wrapper {
     padding: 32px 24px;
     align-self: stretch;
-    .user-cvs__text-field-wrapper {
-      margin-left: 20px;
-      max-width: 320px;
+    .users-cvs__search-create-controls-wrapper {
+      margin-bottom: 22px;
+      padding-inline: 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      .user-cvs__text-field-wrapper {
+        max-width: 320px;
+      }
+      .project-page__button {
+        border: 1px solid var(--color-text-red);
+      }
     }
     .user-cvs__data-table {
       background-color: var(--color-wrapper-bg);
