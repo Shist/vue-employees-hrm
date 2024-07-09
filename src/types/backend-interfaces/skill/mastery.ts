@@ -1,9 +1,9 @@
 export enum Mastery {
-  Novice,
-  Advanced,
-  Competent,
-  Proficient,
-  Expert,
+  Novice = "Novice",
+  Advanced = "Advanced",
+  Competent = "Competent",
+  Proficient = "Proficient",
+  Expert = "Expert",
 }
 
 export interface ISkillMastery {

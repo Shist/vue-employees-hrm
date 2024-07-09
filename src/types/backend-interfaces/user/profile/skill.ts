@@ -6,14 +6,7 @@ export interface IProfileSkill {
   mastery: Mastery;
 }
 
-export interface IAddProfileSkillInput {
-  userId: number;
-  name: string;
-  category: string | null;
-  mastery: Mastery;
-}
-
-export interface IUpdateProfileSkillInput {
+export interface IAddOrUpdateProfileSkillInput {
   userId: number;
   name: string;
   category: string | null;

@@ -15,7 +15,7 @@
         <v-btn
           icon="mdi-close"
           class="skill-modal__cross-btn"
-          @click.prevent="handleModalClose"
+          @click.prevent="closeModal"
         ></v-btn>
         <v-card-item class="skill-modal__text-fields-container">
           <v-select
@@ -29,7 +29,7 @@
           />
           <v-select
             v-model="selectCategory"
-            :items="skillCategories"
+            :items="aSkillCategoriesItems"
             label="Category"
             variant="outlined"
             class="skill-modal__text-field-wrapper"
@@ -49,7 +49,7 @@
         <v-card-actions>
           <v-btn
             variant="outlined"
-            @click="handleModalClose"
+            @click="closeModal"
             class="skill-modal__btn-cancel"
           >
             Cancel
@@ -57,7 +57,7 @@
           <v-btn
             type="submit"
             variant="text"
-            @click="handleModalClose"
+            @click="makeCreateOrUpdateOperation"
             class="skill-modal__btn-confirm"
             :disabled="isConfirmBtnDisabled"
           >
@@ -71,15 +71,32 @@
 
 <script setup lang="ts">
 import { ref, computed, watch, onUpdated } from "vue";
-import { useSkillsStore } from "@/store/skills";
-import { IProfileSkill } from "@/types/backend-interfaces/user/profile/skill";
+import {
+  IProfileSkill,
+  IAddOrUpdateProfileSkillInput,
+} from "@/types/backend-interfaces/user/profile/skill";
+import { Mastery } from "@/types/backend-interfaces/skill/mastery";
+import { ISkillsData } from "@/types/userSkillsUI";
 
 const props = defineProps<{
   isOpen: boolean;
   oSkillForModal: IProfileSkill | null;
+  userID: string;
+  skills: ISkillsData[] | null;
+  skillCategories: string[] | null;
 }>();
 
-const emit = defineEmits<{ (event: "closeModal"): void }>();
+const emit = defineEmits<{
+  (event: "closeModal"): void;
+  (
+    event: "onCreateUserSkill",
+    skillInputObj: IAddOrUpdateProfileSkillInput
+  ): void;
+  (
+    event: "onUpdateUserSkill",
+    skillInputObj: IAddOrUpdateProfileSkillInput
+  ): void;
+}>();
 
 const modalState = computed({
   get() {
@@ -94,35 +111,40 @@ const isConfirmBtnDisabled = computed(
   () =>
     (!props.oSkillForModal && !selectSkill.value) ||
     (!!props.oSkillForModal &&
-      selectSkillMastery.value === computedSkillMastery.value)
+      selectSkillMastery.value === props.oSkillForModal.mastery)
 );
 
-const { skills, skillCategories, getCategoryBySkill } = useSkillsStore();
+function getCategoryBySkill(skillName: string) {
+  if (!props.skills) return null;
+  return props.skills.find((skill) => skill.name === skillName)?.category;
+}
 
-const aSkillsItems = computed(() => skills.map((skill) => skill.name));
+const aSkillsItems = computed(() => {
+  if (!props.skills) return [];
+  return props.skills.map((skill) => skill.name);
+});
+
+const aSkillCategoriesItems = computed(() => {
+  if (!props.skillCategories) return [];
+  return props.skillCategories;
+});
 
 const aSkillMasteries = [
   "Novice",
   "Advanced",
-  "Completent",
+  "Competent",
   "Proficient",
   "Expert",
 ];
 
-const computedSkillMastery = computed(() =>
-  props.oSkillForModal?.mastery !== undefined
-    ? aSkillMasteries[props.oSkillForModal?.mastery]
-    : aSkillMasteries[0]
-);
-
 const selectSkill = ref<string | null>(null);
 const selectCategory = ref<string | null>(null);
-const selectSkillMastery = ref<string | null>(aSkillMasteries[0]);
+const selectSkillMastery = ref<Mastery>(Mastery.Novice);
 
 onUpdated(() => {
   selectSkill.value = props.oSkillForModal?.name || null;
   selectCategory.value = props.oSkillForModal?.category || null;
-  selectSkillMastery.value = computedSkillMastery.value;
+  selectSkillMastery.value = props.oSkillForModal?.mastery || Mastery.Novice;
 });
 
 watch(selectSkill, () => {
@@ -130,7 +152,23 @@ watch(selectSkill, () => {
   selectCategory.value = skillCategory ? skillCategory : null;
 });
 
-function handleModalClose() {
+function makeCreateOrUpdateOperation() {
+  const skillInputObj: IAddOrUpdateProfileSkillInput = {
+    userId: Number(props.userID),
+    name: `${selectSkill.value}`,
+    category: selectCategory.value,
+    mastery: selectSkillMastery.value,
+  };
+
+  if (props.oSkillForModal) {
+    emit("onUpdateUserSkill", skillInputObj);
+  } else {
+    emit("onCreateUserSkill", skillInputObj);
+  }
+  emit("closeModal");
+}
+
+function closeModal() {
   emit("closeModal");
 }
 </script>

@@ -1,0 +1,10 @@
+mutation CREATE_USER_SKILL($skill: AddProfileSkillInput!) {
+  addProfileSkill(skill: $skill) {
+    id
+    skills {
+      name
+      category
+      mastery
+    }
+  }
+}

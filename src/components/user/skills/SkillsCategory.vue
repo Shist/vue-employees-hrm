@@ -81,6 +81,8 @@ const skillsMasteries = reactive(
         return 80;
       case Mastery.Expert:
         return 100;
+      default:
+        return 0;
     }
   })
 );
