@@ -10,3 +10,9 @@ export interface ICategorySkill {
 export type ISkillCategoriesMap = {
   [key: string]: ICategorySkill[];
 };
+
+export interface ISkillsData {
+  id: number;
+  name: string;
+  category: string;
+}

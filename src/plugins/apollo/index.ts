@@ -30,7 +30,21 @@ const defaultOptions: DefaultOptions = {
   },
 };
 
-const cache = new InMemoryCache();
+const cache = new InMemoryCache({
+  typePolicies: {
+    Profile: {
+      fields: {
+        skills: {
+          keyArgs: false,
+          merge(existing, incoming) {
+            return incoming;
+          },
+        },
+      },
+    },
+  },
+});
+
 const apolloClient = new ApolloClient({
   link: authLink.concat(httpLink),
   cache,

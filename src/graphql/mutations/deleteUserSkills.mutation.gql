@@ -1,0 +1,10 @@
+mutation DELETE_USER_SKILLS($skills: DeleteProfileSkillInput!) {
+  deleteProfileSkill(skill: $skills) {
+    id
+    skills {
+      name
+      category
+      mastery
+    }
+  }
+}

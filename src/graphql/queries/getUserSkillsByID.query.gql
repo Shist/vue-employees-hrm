@@ -1,0 +1,13 @@
+query GET_USER_SKILLS_BY_ID($userId: ID!) {
+  user(userId: $userId) {
+    id
+    profile {
+      id
+      skills {
+        name
+        category
+        mastery
+      }
+    }
+  }
+}
