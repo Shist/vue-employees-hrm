@@ -3,7 +3,6 @@
     <v-dialog
       v-model="modalState"
       max-width="600"
-      theme="dark"
       class="language-modal__dialog-wrapper"
       scrim="var(--color-modal-overlay)"
       opacity="100%"
@@ -171,6 +170,7 @@ function closeModal() {
       padding: 6px;
       max-width: 100px;
       width: 100%;
+      color: var(--color-btn-text);
       background-color: var(--color-btn-bg);
       border-radius: 0;
       box-shadow: rgba(0, 0, 0, 0.2) 0px 3px 1px -2px,
