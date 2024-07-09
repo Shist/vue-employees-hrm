@@ -91,6 +91,7 @@ import CreateCVModal from "@/components/user/cvs/CreateCVModal.vue";
 import { useRouter, useRoute } from "vue-router";
 import { ROUTES } from "@/constants/router";
 import { getUserCVsNamesByID } from "@/services/users";
+import { createCV } from "@/services/cvs";
 import { IUserCVNameData } from "@/types/userCVsUI";
 import { ICreateCVInput } from "@/types/backend-interfaces/cv";
 import useToast from "@/composables/useToast";
@@ -162,26 +163,27 @@ onMounted(async () => {
 });
 
 function submitUserCVCreate(cvInputObj: ICreateCVInput) {
-  console.log("emit Create CV!!!");
-  // isPageLoading.value = true;
-  // createUserLanguage(languageInputObj)
-  //   .then((freshUserLanguages) => {
-  //     updateUserLanguagesValue(freshUserLanguages);
-  //     setErrorValuesToDefault();
-  //   })
-  //   .catch((error: unknown) => {
-  //     isError.value = true;
-  //     if (error instanceof Error) {
-  //       errorMessage.value = error.message;
-  //       if (error.name === "NotFoundError") {
-  //         isNotFoundError.value = true;
-  //       }
-  //       setErrorToast(errorMessage.value);
-  //     }
-  //   })
-  //   .finally(() => {
-  //     isPageLoading.value = false;
-  //   });
+  isPageLoading.value = true;
+
+  createCV(cvInputObj)
+    .then((createdUserCV: IUserCVNameData) => {
+      userCVs.push(createdUserCV);
+
+      setErrorValuesToDefault();
+    })
+    .catch((error: unknown) => {
+      isError.value = true;
+      if (error instanceof Error) {
+        errorMessage.value = error.message;
+        if (error.name === "NotFoundError") {
+          isNotFoundError.value = true;
+        }
+        setErrorToast(errorMessage.value);
+      }
+    })
+    .finally(() => {
+      isPageLoading.value = false;
+    });
 }
 
 function handleOpenModal() {

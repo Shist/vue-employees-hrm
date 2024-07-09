@@ -1,0 +1,7 @@
+mutation CREATE_CV($cv: CreateCvInput!) {
+  createCv(cv: $cv) {
+    id
+    name
+    description
+  }
+}
