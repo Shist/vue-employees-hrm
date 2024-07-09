@@ -63,6 +63,7 @@
             />
             <v-textarea
               label="Description"
+              v-model="formData.description"
               variant="outlined"
               density="compact"
               class="projects-modal__textarea"
@@ -81,8 +82,9 @@
           <v-btn
             type="submit"
             variant="text"
-            @click="handleModalClose"
+            @click="createOrUpdateProject"
             class="projects-modal__btn-confirm"
+            :disabled="isConfirmBtnDisabled"
           >
             Confirm
           </v-btn>
@@ -93,12 +95,17 @@
 </template>
 
 <script setup lang="ts">
-import { ICreateProjectInput } from "@/types/backend-interfaces/project";
-import { computed, reactive } from "vue";
+import {
+  ICreateProjectInput,
+  IUpdateProjectInput,
+} from "@/types/backend-interfaces/project";
+import { IAddOrUpdateProjectModal } from "@/types/projectsTableUI";
+import { computed, onUpdated, reactive } from "vue";
 
 const props = defineProps<{
   isOpen: boolean;
   isUpdateOrCreateModal: string;
+  oProjectForModal: IAddOrUpdateProjectModal | null;
 }>();
 
 const formData = reactive<ICreateProjectInput>({
@@ -111,7 +118,11 @@ const formData = reactive<ICreateProjectInput>({
   team_size: 1,
 });
 
-const emit = defineEmits<{ (event: "closeModal"): void }>();
+const emit = defineEmits<{
+  (event: "closeModal"): void;
+  (event: "createProject", createProjectObj: ICreateProjectInput): void;
+  (event: "updateProject", updateProjectObj: IUpdateProjectInput): void;
+}>();
 
 const modalState = computed({
   get() {
@@ -122,9 +133,101 @@ const modalState = computed({
   },
 });
 
+function createOrUpdateProject() {
+  if (props.isUpdateOrCreateModal === "create") {
+    const projectInputObj: ICreateProjectInput = {
+      name: formData.name,
+      internal_name: formData.internal_name || "",
+      description: formData.description,
+      domain: formData.domain,
+      start_date: formData.start_date,
+      end_date: formData.end_date || "",
+      team_size: Number(formData.team_size),
+    };
+    console.log("create project");
+    emit("createProject", projectInputObj);
+  } else {
+    if (!props.oProjectForModal) return;
+    const projectInputObj: IUpdateProjectInput = {
+      projectId: Number(props.oProjectForModal?.id),
+      name: formData.name,
+      internal_name: formData.internal_name || "",
+      description: formData.description,
+      domain: formData.domain,
+      start_date: formData.start_date,
+      end_date: formData.end_date || "",
+      team_size: Number(formData.team_size),
+    };
+    console.log("update project", projectInputObj);
+    emit("updateProject", projectInputObj);
+  }
+
+  handleModalClose();
+}
+
 function handleModalClose() {
+  formData.name = "";
+  formData.internal_name = "";
+  formData.description = "";
+  formData.domain = "";
+  formData.start_date = "";
+  formData.end_date = "";
+  formData.team_size = 1;
   emit("closeModal");
 }
+
+const isConfirmBtnDisabled = computed(() => {
+  if (
+    !props.oProjectForModal &&
+    (formData.name === "" ||
+      formData.description === "" ||
+      formData.domain === "" ||
+      formData.start_date === "" ||
+      !formData.team_size)
+  )
+    return true;
+  else if (
+    (formData.name === props.oProjectForModal?.name &&
+      formData.internal_name === props.oProjectForModal?.internalName &&
+      formData.description === props.oProjectForModal?.description &&
+      formData.domain === props.oProjectForModal?.domain &&
+      formData.start_date === props.oProjectForModal?.startDate &&
+      (formData.end_date === props.oProjectForModal?.endDate ||
+        formData.end_date === "") &&
+      Number(formData.team_size) === props.oProjectForModal?.teamSize) ||
+    formData.name === "" ||
+    formData.description === "" ||
+    formData.domain === "" ||
+    formData.start_date === "" ||
+    !formData.team_size
+  ) {
+    return true;
+  }
+  return false;
+});
+
+onUpdated(() => {
+  if (!props.oProjectForModal) {
+    formData.name = "";
+    formData.internal_name = "";
+    formData.description = "";
+    formData.domain = "";
+    formData.start_date = "";
+    formData.end_date = "";
+    formData.team_size = 1;
+  } else {
+    formData.name = props.oProjectForModal?.name;
+    formData.internal_name = props.oProjectForModal?.internalName;
+    formData.description = props.oProjectForModal?.description;
+    formData.domain = props.oProjectForModal?.domain;
+    formData.start_date = props.oProjectForModal?.startDate;
+    formData.end_date =
+      props.oProjectForModal?.endDate === "Till now"
+        ? ""
+        : props.oProjectForModal.endDate;
+    formData.team_size = props.oProjectForModal?.teamSize;
+  }
+});
 </script>
 
 <style lang="scss" scoped>

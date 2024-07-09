@@ -1,0 +1,5 @@
+mutation UPDATE_PROJECT($project: UpdateProjectInput!) {
+  updateProject(project: $project) {
+    id
+  }
+}

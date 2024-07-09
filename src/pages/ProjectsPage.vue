@@ -17,7 +17,7 @@
         color="var(--color-wrapper-bg)"
         elevation="0"
         class="text-red-darken-4 project-page__button mr-8"
-        @click="openCreateProjectModal"
+        @click="openCreateProjectModal()"
         >CREATE PROJECT</v-btn
       >
     </div>
@@ -39,17 +39,17 @@
             ></v-btn>
           </template>
           <v-list>
-            <v-list-item @click="() => openProjectDetails(item.id)">
+            <v-list-item @click="() => openProjectDetails(item.id)" disabled>
               <v-list-item-title class="project-page__popup-menu-label">
                 Project
               </v-list-item-title>
             </v-list-item>
-            <v-list-item @click="openUpdateProjectModal">
+            <v-list-item @click="() => openUpdateProjectModal(item)">
               <v-list-item-title class="project-page__popup-menu-label">
                 Update project
               </v-list-item-title>
             </v-list-item>
-            <v-list-item @click="console.log('Delete project')" disabled>
+            <v-list-item @click="() => onDeleteProject(item.id)">
               <v-list-item-title class="project-page__popup-menu-label">
                 Delete project
               </v-list-item-title>
@@ -62,17 +62,32 @@
   <ProjectsModal
     :isOpen="isModalOpen"
     @closeModal="handleCloseModal"
+    @createProject="onCreateProject"
+    @updateProject="onUpdateProject"
     :isUpdateOrCreateModal="modalStatus"
+    :oProjectForModal="oProjectForModal"
   />
 </template>
 
 <script setup lang="ts">
 import { ROUTES } from "@/constants/router";
-import { getAllProjects } from "@/services/projects";
-import { IProjectsTableData } from "@/types/projectsTableUI";
+import {
+  createProject,
+  deleteProject,
+  getAllProjects,
+  updateProject,
+} from "@/services/projects";
+import {
+  IProjectsTableData,
+  IAddOrUpdateProjectModal,
+} from "@/types/projectsTableUI";
 import { onMounted, reactive, ref } from "vue";
 import { useRouter } from "vue-router";
 import ProjectsModal from "../components/ProjectsModal.vue";
+import {
+  ICreateProjectInput,
+  IUpdateProjectInput,
+} from "@/types/backend-interfaces/project";
 
 const router = useRouter();
 
@@ -96,18 +111,46 @@ const projects = reactive<IProjectsTableData[]>([]);
 
 const isLoading = ref<boolean>(false);
 
+const oProjectForModal = ref<IAddOrUpdateProjectModal | null>(null);
+
 function openProjectDetails(projectId: number) {
   router.push(`${ROUTES.PROJECTS.PATH}/${projectId}`);
 }
 
 function openCreateProjectModal() {
-  isModalOpen.value = true;
+  oProjectForModal.value = null;
   modalStatus.value = "create";
+  isModalOpen.value = true;
 }
 
-function openUpdateProjectModal() {
-  isModalOpen.value = true;
+function openUpdateProjectModal(item: IAddOrUpdateProjectModal) {
+  oProjectForModal.value = item;
   modalStatus.value = "update";
+  isModalOpen.value = true;
+}
+
+async function onCreateProject(projectInputObj: ICreateProjectInput) {
+  isLoading.value = true;
+  await createProject(projectInputObj);
+  const projectData = await getAllProjects();
+  projects.splice(0, projects.length, ...(projectData as []));
+  isLoading.value = false;
+}
+
+async function onUpdateProject(projectInputObj: IUpdateProjectInput) {
+  isLoading.value = true;
+  await updateProject(projectInputObj);
+  const projectData = await getAllProjects();
+  projects.splice(0, projects.length, ...(projectData as []));
+  isLoading.value = false;
+}
+
+async function onDeleteProject(id: number) {
+  isLoading.value = true;
+  await deleteProject(id);
+  const projectData = await getAllProjects();
+  projects.splice(0, projects.length, ...(projectData as []));
+  isLoading.value = false;
 }
 
 function handleCloseModal() {
@@ -117,10 +160,8 @@ function handleCloseModal() {
 onMounted(async () => {
   isLoading.value = true;
   const projectData = await getAllProjects();
-  console.log(projectData);
   projects.splice(0, projects.length, ...(projectData as []));
   isLoading.value = false;
-  console.log(projects);
 });
 </script>
 

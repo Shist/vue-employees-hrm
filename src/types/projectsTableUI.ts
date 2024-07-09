@@ -6,6 +6,7 @@ export interface IProjectsTableData {
   startDate: string;
   endDate: string;
   teamSize: number;
+  description: string;
 }
 
 export interface IProjectsTableServerData {
@@ -16,4 +17,16 @@ export interface IProjectsTableServerData {
   start_date: string;
   end_date: string;
   team_size: number;
+  description: string;
+}
+
+export interface IAddOrUpdateProjectModal {
+  id: number;
+  name: string;
+  internalName: string;
+  description: string;
+  domain: string;
+  startDate: string;
+  endDate: string;
+  teamSize: number;
 }
