@@ -3,7 +3,6 @@
     <v-dialog
       v-model="modalState"
       max-width="800"
-      theme="dark"
       class="projects-modal__dialog-wrapper"
       scrim="var(--color-modal-overlay)"
       opacity="100%"
@@ -50,17 +49,17 @@
             />
             <v-text-field
               type="date"
-              v-model="formData.start_date"
               label="Start Date"
+              v-model="formData.start_date"
               variant="outlined"
-              class="projects-modal__input"
+              class="projects-modal__input projects-modal__input-date"
             />
             <v-text-field
               type="date"
-              v-model="formData.end_date"
               label="End Date"
+              v-model="formData.end_date"
               variant="outlined"
-              class="projects-modal__input"
+              class="projects-modal__input projects-modal__input-date"
             />
             <v-textarea
               label="Description"
@@ -177,6 +176,7 @@ function handleModalClose() {
       padding: 6px;
       max-width: 100px;
       width: 100%;
+      color: var(--color-btn-text);
       background-color: var(--color-btn-bg);
       border-radius: 0;
       box-shadow: rgba(0, 0, 0, 0.2) 0px 3px 1px -2px,
@@ -241,19 +241,15 @@ function handleModalClose() {
 :deep(.v-field--focused .v-field-label) {
   color: var(--color-active-text);
 }
-.projects-modal__input::-webkit-calendar-picker-indicator {
+:deep(
+    .projects-modal__input-date
+      .v-field__input::-webkit-calendar-picker-indicator
+  ) {
   position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  width: auto;
-  height: auto;
-  color: transparent;
-  background: transparent;
-}
-.projects-modal__input::-webkit-inner-spin-button,
-.projects-modal__input::-webkit-clear-button {
-  z-index: 1;
+  top: 17px;
+  right: 13px;
+  width: 20px;
+  height: 20px;
+  color: white;
 }
 </style>
