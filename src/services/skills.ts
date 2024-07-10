@@ -1,6 +1,6 @@
-import apolloClient from "@/plugins/apollo";
-import getAllSkillsQuery from "@/graphql/queries/getAllSkills.query.gql";
-import getSkillCategoriesQuery from "@/graphql/queries/getSkillCategories.query.gql";
+import apolloClient from "@/plugins/apolloConfig";
+import getAllSkillsQuery from "@/graphql/skills/getAllSkills.query.gql";
+import getSkillCategoriesQuery from "@/graphql/skills/getSkillCategories.query.gql";
 import { ISkillsData } from "@/types/userSkillsUI";
 
 export const getAllSkills = async () => {

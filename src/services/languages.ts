@@ -1,5 +1,5 @@
-import apolloClient from "@/plugins/apollo";
-import getAllLanguagesNamesQuery from "@/graphql/queries/getAllLanguagesNames.query.gql";
+import apolloClient from "@/plugins/apolloConfig";
+import getAllLanguagesNamesQuery from "@/graphql/languages/getAllLanguagesNames.query.gql";
 import { ILanguagesNamesData } from "@/types/userLanguagesUI";
 
 export const getAllLanguagesNames = async () => {

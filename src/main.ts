@@ -6,8 +6,8 @@ import vuetifyConfig from "@/plugins/vuetify";
 import Vue3Toasity from "vue3-toastify";
 import toastifyConfig from "@/plugins/toastifyConfig";
 import { DefaultApolloClient } from "@vue/apollo-composable";
-import apolloClient from "./plugins/apollo";
-import { useAuthStore } from "./store/authStore";
+import apolloClient from "@/plugins/apolloConfig";
+import { useAuthStore } from "@/store/authStore";
 
 const app = createApp({
   setup() {

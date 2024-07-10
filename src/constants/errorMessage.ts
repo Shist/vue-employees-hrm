@@ -15,3 +15,4 @@ export const TOO_LARGE_FILE =
 export const INVALID_FILE_TYPE =
   "The file you've attached has unacceptable type";
 export const REQUIRED_FIELD = "Field is required";
+export const EMAIL_DUPLICATE_ERROR = "User with this email already exists";

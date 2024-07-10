@@ -77,25 +77,24 @@
             </v-btn>
           </template>
           <v-card>
-            <v-card-text class="d-flex flex-lg-column flex-sm-wrap align-start">
+            <v-card-text
+              v-if="user"
+              class="d-flex flex-lg-column flex-sm-wrap align-start"
+            >
               <v-btn
-                v-if="user"
-                prepend-icon="mdi-account-circle"
+                v-for="item in profileMenu"
+                :key="item.title"
+                :prepend-icon="item.icon"
                 variant="text"
                 class="mb-1 pl-2"
                 router
-                :to="`${ROUTES.USERS.PATH}/${user.id}`"
+                :to="
+                  item.title === 'Profile'
+                    ? `${item.link}/${user.id}`
+                    : item.link
+                "
               >
-                Profile
-              </v-btn>
-              <v-btn
-                prepend-icon="mdi-cog"
-                variant="text"
-                class="pl-2"
-                router
-                :to="`${ROUTES.SETTINGS.PATH}`"
-              >
-                Settings
+                {{ item.title }}
               </v-btn>
               <v-divider class="my-3"></v-divider>
               <v-btn
@@ -198,6 +197,11 @@ const languages = ref([
   { title: "DE", value: "Deutsch" },
   { title: "RU", value: "Русский" },
 ]);
+
+const profileMenu = [
+  { title: "Profile", link: ROUTES.USERS.PATH, icon: "mdi-account-circle" },
+  { title: "Settings", link: ROUTES.SETTINGS.PATH, icon: "mdi-cog" },
+];
 
 const language = ref<string>("English");
 

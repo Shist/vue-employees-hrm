@@ -1,7 +1,7 @@
 import { createRouter, createWebHistory, RouteRecordRaw } from "vue-router";
 import { ROUTES } from "@/constants/router";
 import { TAB_NAMES } from "@/constants/tabs";
-import pages from "@/pages";
+import pages from "@/router/pages";
 
 const routes: Array<RouteRecordRaw> = [
   {

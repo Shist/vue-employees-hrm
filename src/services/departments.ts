@@ -1,5 +1,5 @@
-import apolloClient from "@/plugins/apollo";
-import getAllDepartmentNamesQuery from "@/graphql/queries/getAllDepartmentNames.query.gql";
+import apolloClient from "@/plugins/apolloConfig";
+import getAllDepartmentNamesQuery from "@/graphql/departments/getAllDepartmentNames.query.gql";
 import { IDepartmentNamesData } from "@/types/userProfileUI";
 
 export const getAllDepartmentNames = async () => {

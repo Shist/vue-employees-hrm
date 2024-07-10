@@ -1,11 +1,12 @@
-import apolloClient from "@/plugins/apollo";
-import loginQuery from "@/graphql/queries/login.query.gql";
-import signupMutation from "@/graphql/mutations/signUp.mutation.gql";
+import apolloClient from "@/plugins/apolloConfig";
+import loginQuery from "@/graphql/auth/login.query.gql";
+import signupMutation from "@/graphql/auth/signUp.mutation.gql";
 import {
   INVALID_CREDENTIALS,
   NO_NETWORK_CONNECTION,
   UNEXPECTED_ERROR,
 } from "@/constants/errorMessage";
+import handleErrors from "@/utils/handleErrors";
 
 export const login = async (email: string, password: string) => {
   try {
@@ -31,14 +32,8 @@ export const login = async (email: string, password: string) => {
 
     return { user, token };
   } catch (error: unknown) {
-    if (error instanceof Error) {
-      if (error.message === "Invalid credentials") {
-        throw new Error(INVALID_CREDENTIALS);
-      } else if (error.message === "Failed to fetch") {
-        throw new Error(NO_NETWORK_CONNECTION);
-      }
-    }
-    throw new Error(UNEXPECTED_ERROR);
+    console.log(error);
+    handleErrors(error);
   }
 };
 
@@ -66,18 +61,6 @@ export const register = async (email: string, password: string) => {
 
     return { user, token };
   } catch (error: unknown) {
-    if (error instanceof Error) {
-      if (error.message === "Invalid credentials") {
-        throw new Error(INVALID_CREDENTIALS);
-      } else if (error.message === "Failed to fetch") {
-        throw new Error(NO_NETWORK_CONNECTION);
-      } else if (
-        error.message ===
-        'duplicate key value violates unique constraint "UQ_e12875dfb3b1d92d7d7c5377e22"'
-      ) {
-        throw new Error(`User with email: ${email} already exists`);
-      }
-    }
-    throw new Error(UNEXPECTED_ERROR);
+    handleErrors(error);
   }
 };

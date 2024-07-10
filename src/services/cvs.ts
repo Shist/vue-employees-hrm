@@ -1,8 +1,8 @@
-import apolloClient from "@/plugins/apollo";
+import apolloClient from "@/plugins/apolloConfig";
 import checkID from "@/utils/checkID";
-import getCVNameByIDQuery from "@/graphql/queries/getCVNameByID.query.gql";
-import createCVQuery from "@/graphql/mutations/createCV.mutation.gql";
-import deleteCVQuery from "@/graphql/mutations/deleteCV.mutation.gql";
+import getCVNameByIDQuery from "@/graphql/cvs/getCVNameByID.query.gql";
+import createCVQuery from "@/graphql/cvs/createCV.mutation.gql";
+import deleteCVQuery from "@/graphql/cvs/deleteCV.mutation.gql";
 import { ICVNameData } from "@/types/breadcrumbsUI";
 import { IUserCVNameData } from "@/types/userCVsUI";
 import { ICreateCVInput, IDeleteCVInput } from "@/types/backend-interfaces/cv";

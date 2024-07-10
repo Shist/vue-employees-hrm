@@ -105,7 +105,7 @@ onMounted(async () => {
   isLoading.value = true;
   try {
     const projectData = await getAllProjects();
-    projects.splice(0, projects.length, ...(projectData as []));
+    projects.splice(0, projects.length, ...projectData);
     setErrorValuesToDefault();
   } catch (error) {
     isError.value = true;

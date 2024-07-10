@@ -1,6 +1,6 @@
 import type { ErrorObject } from "@vuelidate/core";
 
-export const useValidationErrors = <T extends Record<keyof T, string>>(
+export const handleValidationErrors = <T extends Record<keyof T, string>>(
   errors: ErrorObject[]
 ): Record<keyof T, string> => {
   return errors.reduce((acc, value) => {

@@ -59,19 +59,14 @@
               ></v-btn>
             </template>
             <v-list>
-              <v-list-item @click="() => openUserProfile(item.id)">
+              <v-list-item
+                v-for="menuItem in projectMenuItems"
+                :key="menuItem.title"
+                v-on:click="menuItem.click ? menuItem.click(item.id) : null"
+                :disabled="menuItem.disabled"
+              >
                 <v-list-item-title class="main-page__popup-menu-label">
-                  Profile
-                </v-list-item-title>
-              </v-list-item>
-              <v-list-item disabled>
-                <v-list-item-title class="main-page__popup-menu-label">
-                  Update user
-                </v-list-item-title>
-              </v-list-item>
-              <v-list-item disabled>
-                <v-list-item-title class="main-page__popup-menu-label">
-                  Delete user
+                  {{ menuItem.title }}
                 </v-list-item-title>
               </v-list-item>
             </v-list>
@@ -106,6 +101,12 @@ const headers = [
   { key: "departmentName", title: "Department" },
   { key: "positionName", title: "Position" },
   { key: "options", sortable: false },
+];
+
+const projectMenuItems = [
+  { title: "Profile", click: openUserProfile, disabled: false },
+  { title: "Update user", disabled: true },
+  { title: "Delete user", disabled: true },
 ];
 
 const isPageLoading = ref(true);
