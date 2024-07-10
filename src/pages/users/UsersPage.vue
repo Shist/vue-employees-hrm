@@ -64,12 +64,12 @@
                   Profile
                 </v-list-item-title>
               </v-list-item>
-              <v-list-item @click="console.log('Update user')" disabled>
+              <v-list-item disabled>
                 <v-list-item-title class="main-page__popup-menu-label">
                   Update user
                 </v-list-item-title>
               </v-list-item>
-              <v-list-item @click="console.log('Delete user')" disabled>
+              <v-list-item disabled>
                 <v-list-item-title class="main-page__popup-menu-label">
                   Delete user
                 </v-list-item-title>
