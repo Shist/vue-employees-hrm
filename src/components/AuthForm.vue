@@ -10,7 +10,7 @@
         label="Email"
         variant="outlined"
         :error-messages="formErrors.email"
-      ></v-text-field>
+      />
       <br />
       <v-text-field
         v-model="formData.password"
@@ -21,7 +21,7 @@
         :append-inner-icon="showPassword ? 'mdi-eye' : 'mdi-eye-off'"
         @click:append-inner="handleShowPassword"
         :error-messages="formErrors.password"
-      ></v-text-field>
+      />
       <div class="auth__form-error">
         <p v-if="serverError" class="auth__form-error-text">
           {{ serverError }}

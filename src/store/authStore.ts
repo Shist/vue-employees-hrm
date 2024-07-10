@@ -10,9 +10,10 @@ import { ITokenData } from "@/types/tokenData";
 export const useAuthStore = defineStore("authStore", () => {
   const user = ref<IUserAuthData | null>(null);
   const token = ref<string | null>(localStorage.getItem("token"));
-  const decodedToken = computed<ITokenData>(() =>
-    JSON.parse(atob(token.value ? token.value.split(".")[1] : ""))
-  );
+  const decodedToken = computed<ITokenData | null>(() => {
+    const decodedData = atob(token.value ? token.value.split(".")[1] : "");
+    return decodedData ? JSON.parse(decodedData) : null;
+  });
   const refreshTokenTimer = ref<undefined | number>(undefined);
 
   const isLoggedIn = computed(() => {
@@ -22,9 +23,9 @@ export const useAuthStore = defineStore("authStore", () => {
   const router = useRouter();
 
   const fetchUserAuthData = async () => {
-    const userData = await getUserAuthDataByID(`${decodedToken.value.sub}`);
+    const userData = await getUserAuthDataByID(`${decodedToken.value?.sub}`);
 
-    if (!userData) throw new Error("Empty user data!");
+    if (!userData) return;
 
     user.value = {
       id: userData.id,
@@ -81,7 +82,7 @@ export const useAuthStore = defineStore("authStore", () => {
   };
 
   const checkTokenExpiration = () => {
-    if (token.value) {
+    if (token.value && decodedToken.value) {
       const expirationTime = decodedToken.value.exp * 1000;
       const currentTime = Date.now();
 
