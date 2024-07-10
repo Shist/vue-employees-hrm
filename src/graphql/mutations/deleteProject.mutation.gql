@@ -1,5 +1,0 @@
-mutation DELETE_PROJECT($project: DeleteProjectInput!) {
-  deleteProject(project: $project) {
-    affected
-  }
-}
