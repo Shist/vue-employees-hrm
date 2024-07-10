@@ -135,11 +135,11 @@ function openUserCV(cvID: string) {
 
 const search = ref("");
 
-const headers = reactive([
+const headers = [
   { key: "name", title: "Name" },
   { key: "description", title: "Description", sortable: false },
   { key: "options", sortable: false },
-]);
+];
 
 const isPageLoading = ref(true);
 const userCVs = reactive<IUserCVNameData[]>([]);
