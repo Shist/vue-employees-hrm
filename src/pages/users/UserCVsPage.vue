@@ -39,7 +39,7 @@
           color="var(--color-wrapper-bg)"
           elevation="0"
           class="project-page__button text-red-darken-4"
-          @click="handleOpenModal"
+          @click="handleOpenCreateModal"
         >
           Create CV
         </v-btn>
@@ -66,7 +66,9 @@
                   Details
                 </v-list-item-title>
               </v-list-item>
-              <v-list-item @click="console.log('Delete user')" disabled>
+              <v-list-item
+                @click="() => handleOpenDeleteModal(item.id, item.name)"
+              >
                 <v-list-item-title class="user-cvs__popup-menu-label">
                   Delete CV
                 </v-list-item-title>
@@ -78,22 +80,30 @@
     </div>
   </div>
   <CreateCVModal
-    :isOpen="isModalOpen"
+    :isOpen="isCreateModalOpen"
     :userID="id"
     @onCreateUserCV="submitUserCVCreate"
-    @closeModal="handleCloseModal"
+    @closeModal="handleCloseCreateModal"
+  />
+  <DeleteCVModal
+    :isOpen="isDeleteModalOpen"
+    :cvID="openedCVID"
+    :cvName="openedCVName"
+    @onDeleteUserCV="submitUserCVDeletion"
+    @closeModal="handleCloseDeleteModal"
   />
 </template>
 
 <script setup lang="ts">
 import { ref, reactive, computed, watch, onMounted } from "vue";
 import CreateCVModal from "@/components/user/cvs/CreateCVModal.vue";
+import DeleteCVModal from "@/components/user/cvs/DeleteCVModal.vue";
 import { useRouter, useRoute } from "vue-router";
 import { ROUTES } from "@/constants/router";
 import { getUserCVsNamesByID } from "@/services/users";
-import { createCV } from "@/services/cvs";
+import { createCV, deleteCV } from "@/services/cvs";
 import { IUserCVNameData } from "@/types/userCVsUI";
-import { ICreateCVInput } from "@/types/backend-interfaces/cv";
+import { ICreateCVInput, IDeleteCVInput } from "@/types/backend-interfaces/cv";
 import useToast from "@/composables/useToast";
 import { UNEXPECTED_ERROR } from "@/constants/errorMessage";
 import handleScrollPadding from "@/utils/handleScrollPadding";
@@ -107,7 +117,10 @@ const id = computed<string>(() => {
   return id;
 });
 
-function openUserCV(cvID: number) {
+const openedCVID = ref<string | null>(null);
+const openedCVName = ref<string | null>(null);
+
+function openUserCV(cvID: string) {
   router.push(`${ROUTES.CVS.PATH}/${cvID}`);
 }
 
@@ -126,7 +139,8 @@ const isError = ref(false);
 const errorMessage = ref(UNEXPECTED_ERROR);
 const isNotFoundError = ref(false);
 
-const isModalOpen = ref(false);
+const isCreateModalOpen = ref(false);
+const isDeleteModalOpen = ref(false);
 
 const { setErrorToast } = useToast();
 
@@ -144,7 +158,11 @@ watch(id, () => {
   fetchData();
 });
 
-watch(isModalOpen, (newValue) => {
+watch(isCreateModalOpen, (newValue) => {
+  handleScrollPadding(newValue);
+});
+
+watch(isDeleteModalOpen, (newValue) => {
   handleScrollPadding(newValue);
 });
 
@@ -199,12 +217,52 @@ function submitUserCVCreate(cvInputObj: ICreateCVInput) {
     });
 }
 
-function handleOpenModal() {
-  isModalOpen.value = true;
+function submitUserCVDeletion(cvInputObj: IDeleteCVInput) {
+  isPageLoading.value = true;
+
+  deleteCV(cvInputObj)
+    .then(() => {
+      const indexOfCVToRemove = userCVs.findIndex(
+        (cv) => Number(cv.id) === cvInputObj.cvId
+      );
+
+      if (indexOfCVToRemove !== -1) {
+        userCVs.splice(indexOfCVToRemove, 1);
+      }
+
+      setErrorValuesToDefault();
+    })
+    .catch((error: unknown) => {
+      isError.value = true;
+      if (error instanceof Error) {
+        errorMessage.value = error.message;
+        if (error.name === "NotFoundError") {
+          isNotFoundError.value = true;
+        }
+        setErrorToast(errorMessage.value);
+      }
+    })
+    .finally(() => {
+      isPageLoading.value = false;
+    });
 }
 
-function handleCloseModal() {
-  isModalOpen.value = false;
+function handleOpenCreateModal() {
+  isCreateModalOpen.value = true;
+}
+
+function handleCloseCreateModal() {
+  isCreateModalOpen.value = false;
+}
+
+function handleOpenDeleteModal(cvID: string, cvName: string) {
+  openedCVID.value = cvID;
+  openedCVName.value = cvName;
+  isDeleteModalOpen.value = true;
+}
+
+function handleCloseDeleteModal() {
+  isDeleteModalOpen.value = false;
 }
 </script>
 

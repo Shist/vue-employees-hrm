@@ -1,5 +1,5 @@
 export interface IUserCVNameData {
-  id: number;
+  id: string;
   name: string;
   description: string;
 }
