@@ -23,13 +23,8 @@
 import { ref, watch } from "vue";
 import { storeToRefs } from "pinia";
 import { useThemeStore } from "@/store/theme";
-import { getThemeValue } from "@/utils/theme";
-import { useTheme } from "vuetify";
-import { updateGlobalOptions } from "vue3-toastify";
 
 const { currTheme } = storeToRefs(useThemeStore());
-
-const vuetifyTheme = useTheme();
 
 const selectTheme = ref(currTheme.value);
 const themeItems = ["Light", "Dark", "Device settings"];
@@ -39,17 +34,6 @@ const languageItems = ["English", "Deutsch", "Русский"];
 
 watch(selectTheme, (newValue) => {
   currTheme.value = newValue;
-
-  localStorage.setItem("theme", newValue);
-
-  const themeValue = getThemeValue(currTheme.value);
-
-  vuetifyTheme.global.name.value = themeValue;
-
-  updateGlobalOptions({
-    clearOnUrlChange: false,
-    theme: themeValue,
-  });
 });
 </script>
 

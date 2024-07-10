@@ -10,7 +10,7 @@
 </template>
 
 <script setup lang="ts">
-import { watch } from "vue";
+import { watch, onMounted, onUnmounted } from "vue";
 import AppHeader from "@/components/AppHeader.vue";
 import BreadCrumbs from "@/components/BreadCrumbs.vue";
 import AppTabs from "@/components/AppTabs.vue";
@@ -18,22 +18,53 @@ import { storeToRefs } from "pinia";
 import { useScrollbarWidth } from "@/store/scrollbarWidth";
 import { useThemeStore } from "@/store/theme";
 import { getThemeValue } from "@/utils/theme";
+import { useTheme } from "vuetify";
+import { updateGlobalOptions } from "vue3-toastify";
 
 const { scrollbarWidth } = storeToRefs(useScrollbarWidth());
 
 const { currTheme } = storeToRefs(useThemeStore());
 
-function updateCurrTheme() {
-  if (getThemeValue(currTheme.value) === "dark") {
+const vuetifyTheme = useTheme();
+
+function setCurrTheme() {
+  localStorage.setItem("theme", currTheme.value);
+
+  const themeValue = getThemeValue(currTheme.value);
+
+  if (themeValue === "dark") {
     document.body.classList.add("dark-theme");
   } else {
     document.body.classList.remove("dark-theme");
   }
+
+  vuetifyTheme.global.name.value = themeValue;
+
+  updateGlobalOptions({
+    clearOnUrlChange: false,
+    theme: themeValue,
+  });
 }
 
-updateCurrTheme();
+setCurrTheme();
 
-watch(currTheme, updateCurrTheme);
+watch(currTheme, setCurrTheme);
+
+function onDeviceSettingsUpdate() {
+  if (currTheme.value === "Device settings") {
+    setCurrTheme();
+  }
+}
+
+onMounted(() => {
+  const mediaQuery = window.matchMedia("(prefers-color-scheme: dark)");
+  mediaQuery.addEventListener("change", onDeviceSettingsUpdate);
+});
+
+onUnmounted(() => {
+  const mediaQuery = window.matchMedia("(prefers-color-scheme: dark)");
+  mediaQuery.removeEventListener("change", onDeviceSettingsUpdate);
+});
 </script>
 
 <style lang="scss">
