@@ -101,6 +101,7 @@ import {
   ISkillsData,
 } from "@/types/userSkillsUI";
 import useToast from "@/composables/useToast";
+import { storeToRefs } from "pinia";
 import { useAuthStore } from "@/store/authStore";
 import { UNEXPECTED_ERROR } from "@/constants/errorMessage";
 import { ROUTES } from "@/constants/router";
@@ -115,8 +116,8 @@ const id = computed<string>(() => {
 });
 
 const authStore = useAuthStore();
-const authStoreUser = authStore.user;
-const isOwner = computed(() => authStoreUser?.id === id.value);
+const authStoreUser = storeToRefs(authStore).user;
+const isOwner = computed(() => authStoreUser.value?.id === id.value);
 
 const isPageLoading = ref(true);
 

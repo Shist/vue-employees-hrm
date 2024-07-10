@@ -34,6 +34,7 @@
           hide-details
         />
         <v-btn
+          v-if="isOwner"
           rounded
           prepend-icon="mdi-plus"
           color="var(--color-wrapper-bg)"
@@ -68,6 +69,7 @@
               </v-list-item>
               <v-list-item
                 @click="() => handleOpenDeleteModal(item.id, item.name)"
+                :disabled="!isOwner"
               >
                 <v-list-item-title class="user-cvs__popup-menu-label">
                   Delete CV
@@ -105,6 +107,8 @@ import { createCV, deleteCV } from "@/services/cvs";
 import { IUserCVNameData } from "@/types/userCVsUI";
 import { ICreateCVInput, IDeleteCVInput } from "@/types/backend-interfaces/cv";
 import useToast from "@/composables/useToast";
+import { storeToRefs } from "pinia";
+import { useAuthStore } from "@/store/authStore";
 import { UNEXPECTED_ERROR } from "@/constants/errorMessage";
 import handleScrollPadding from "@/utils/handleScrollPadding";
 
@@ -116,6 +120,10 @@ const id = computed<string>(() => {
   const [section, id, tab] = route.fullPath.slice(1).split("/");
   return id;
 });
+
+const authStore = useAuthStore();
+const authStoreUser = storeToRefs(authStore).user;
+const isOwner = computed(() => authStoreUser.value?.id === id.value);
 
 const openedCVID = ref<string | null>(null);
 const openedCVName = ref<string | null>(null);
@@ -192,6 +200,8 @@ async function fetchData() {
 }
 
 function submitUserCVCreate(cvInputObj: ICreateCVInput) {
+  if (!isOwner.value) return;
+
   isPageLoading.value = true;
 
   createCV(cvInputObj)
@@ -216,6 +226,8 @@ function submitUserCVCreate(cvInputObj: ICreateCVInput) {
 }
 
 async function submitUserCVDeletion(cvInputObj: IDeleteCVInput) {
+  if (!isOwner.value) return;
+
   isPageLoading.value = true;
 
   try {
@@ -242,6 +254,8 @@ async function submitUserCVDeletion(cvInputObj: IDeleteCVInput) {
 }
 
 function handleOpenCreateModal() {
+  if (!isOwner.value) return;
+
   isCreateModalOpen.value = true;
 }
 
@@ -250,6 +264,8 @@ function handleCloseCreateModal() {
 }
 
 function handleOpenDeleteModal(cvID: string, cvName: string) {
+  if (!isOwner.value) return;
+
   openedCVID.value = cvID;
   openedCVName.value = cvName;
   isDeleteModalOpen.value = true;
