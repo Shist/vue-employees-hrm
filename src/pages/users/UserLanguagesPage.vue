@@ -23,6 +23,7 @@
     </div>
     <div v-else-if="userLanguages" class="user-languages__main-content-wrapper">
       <v-btn
+        v-if="isOwner"
         variant="text"
         color="var(--color-btn-gray-text)"
         class="user-languages__add-btn"
@@ -127,8 +128,11 @@ import {
 } from "@/types/backend-interfaces/user/profile/language";
 import { ILanguagesNamesData } from "@/types/userLanguagesUI";
 import useToast from "@/composables/useToast";
+import { storeToRefs } from "pinia";
+import { useAuthStore } from "@/store/authStore";
 import { UNEXPECTED_ERROR } from "@/constants/errorMessage";
 import { ROUTES } from "@/constants/router";
+import handleScrollPadding from "@/utils/handleScrollPadding";
 
 const route = useRoute();
 
@@ -137,6 +141,10 @@ const id = computed<string>(() => {
   const [section, id, tab] = route.fullPath.slice(1).split("/");
   return id;
 });
+
+const authStore = useAuthStore();
+const authStoreUser = storeToRefs(authStore).user;
+const isOwner = computed(() => authStoreUser.value?.id === id.value);
 
 const isPageLoading = ref(true);
 
@@ -184,6 +192,10 @@ watch(id, () => {
   fetchData();
 });
 
+watch(isModalOpen, (newValue) => {
+  handleScrollPadding(newValue);
+});
+
 function setErrorValuesToDefault() {
   isError.value = false;
   errorMessage.value = UNEXPECTED_ERROR;
@@ -224,6 +236,8 @@ function fetchData() {
 }
 
 function handleOpenCreateModal() {
+  if (!isOwner.value) return;
+
   oLanguageForModal.value = null;
   isModalOpen.value = true;
 }
@@ -232,6 +246,8 @@ function handleOpenEditModal(
   _oLanguageForModal: IProfileLanguage,
   languageIndex: number
 ) {
+  if (!isOwner.value) return;
+
   if (aLanguagesDeletionState[languageIndex]) {
     languagesForDeletionNames.delete(_oLanguageForModal.name);
     aLanguagesDeletionState[languageIndex] = false;
@@ -244,6 +260,8 @@ function handleOpenEditModal(
 function submitUserLanguageCreate(
   languageInputObj: IAddOrUpdateProfileLanguageInput
 ) {
+  if (!isOwner.value) return;
+
   isPageLoading.value = true;
 
   createUserLanguage(languageInputObj)
@@ -273,6 +291,8 @@ function submitUserLanguageCreate(
 function submitUserLanguageUpdate(
   languageInputObj: IAddOrUpdateProfileLanguageInput
 ) {
+  if (!isOwner.value) return;
+
   isPageLoading.value = true;
 
   updateUserLanguage(languageInputObj)
@@ -304,6 +324,8 @@ function handleCloseModal() {
 }
 
 function handleSetCardForDeletion(languageName: string, languageIndex: number) {
+  if (!isOwner.value) return;
+
   if (languagesForDeletionNames.has(languageName)) {
     languagesForDeletionNames.delete(languageName);
     aLanguagesDeletionState[languageIndex] = false;
@@ -320,6 +342,8 @@ function clearUserDeletionLanguages() {
 }
 
 function submitUserLanguagesDeletion() {
+  if (!isOwner.value) return;
+
   isPageLoading.value = true;
 
   const languagesToBeDeleted: IDeleteProfileLanguageInput = {

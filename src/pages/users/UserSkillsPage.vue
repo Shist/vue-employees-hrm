@@ -23,6 +23,7 @@
     </div>
     <div v-else-if="userSkills" class="user-skills__main-content-wrapper">
       <v-btn
+        v-if="isOwner"
         variant="text"
         color="var(--color-btn-gray-text)"
         class="user-skills__add-btn"
@@ -100,8 +101,11 @@ import {
   ISkillsData,
 } from "@/types/userSkillsUI";
 import useToast from "@/composables/useToast";
+import { storeToRefs } from "pinia";
+import { useAuthStore } from "@/store/authStore";
 import { UNEXPECTED_ERROR } from "@/constants/errorMessage";
 import { ROUTES } from "@/constants/router";
+import handleScrollPadding from "@/utils/handleScrollPadding";
 
 const route = useRoute();
 
@@ -110,6 +114,10 @@ const id = computed<string>(() => {
   const [section, id, tab] = route.fullPath.slice(1).split("/");
   return id;
 });
+
+const authStore = useAuthStore();
+const authStoreUser = storeToRefs(authStore).user;
+const isOwner = computed(() => authStoreUser.value?.id === id.value);
 
 const isPageLoading = ref(true);
 
@@ -187,6 +195,10 @@ watch(id, () => {
   fetchData();
 });
 
+watch(isModalOpen, (newValue) => {
+  handleScrollPadding(newValue);
+});
+
 function setErrorValuesToDefault() {
   isError.value = false;
   errorMessage.value = UNEXPECTED_ERROR;
@@ -239,6 +251,8 @@ function fetchData() {
 }
 
 function handleOpenCreateModal() {
+  if (!isOwner.value) return;
+
   oSkillForModal.value = null;
   isModalOpen.value = true;
 }
@@ -248,6 +262,8 @@ function handleOpenEditModal(
   skillName: string,
   skillIndex: number
 ) {
+  if (!isOwner.value) return;
+
   if (aSkillsDeletionState[skillIndex]) {
     skillsForDeletionNames.delete(skillName);
     aSkillsDeletionState[skillIndex] = false;
@@ -258,6 +274,8 @@ function handleOpenEditModal(
 }
 
 function submitUserSkillCreate(skillInputObj: IAddOrUpdateProfileSkillInput) {
+  if (!isOwner.value) return;
+
   isPageLoading.value = true;
 
   createUserSkill(skillInputObj)
@@ -285,6 +303,8 @@ function submitUserSkillCreate(skillInputObj: IAddOrUpdateProfileSkillInput) {
 }
 
 function submitUserSkillUpdate(skillInputObj: IAddOrUpdateProfileSkillInput) {
+  if (!isOwner.value) return;
+
   isPageLoading.value = true;
 
   updateUserSkill(skillInputObj)
@@ -316,6 +336,8 @@ function handleCloseModal() {
 }
 
 function handleSetCardForDeletion(skillName: string, skillIndex: number) {
+  if (!isOwner.value) return;
+
   if (skillsForDeletionNames.has(skillName)) {
     skillsForDeletionNames.delete(skillName);
     aSkillsDeletionState[skillIndex] = false;
@@ -332,6 +354,8 @@ function clearUserDeletionSkills() {
 }
 
 function submitUserSkillsDeletion() {
+  if (!isOwner.value) return;
+
   isPageLoading.value = true;
 
   const skillsToBeDeleted: IDeleteProfileSkillInput = {

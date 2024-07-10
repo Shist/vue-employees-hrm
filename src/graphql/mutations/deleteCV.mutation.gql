@@ -1,0 +1,5 @@
+mutation DELETE_CV($cv: DeleteCvInput!) {
+  deleteCv(cv: $cv) {
+    affected
+  }
+}

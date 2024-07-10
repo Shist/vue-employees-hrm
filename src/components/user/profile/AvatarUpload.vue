@@ -1,5 +1,5 @@
 <template>
-  <div class="avatar-upload">
+  <div class="avatar-upload" :class="{ 'avatar-upload_avatar-only': !isOwner }">
     <div class="avatar-upload__avatar-wrapper">
       <v-avatar
         color="var(--color-avatar-bg)"
@@ -12,13 +12,14 @@
         </p>
       </v-avatar>
       <v-btn
-        v-if="avatar"
+        v-if="avatar && isOwner"
         icon="mdi-close"
         class="avatar-upload__avatar-cross-btn"
         @click.prevent="avatarRemove"
       ></v-btn>
     </div>
     <label
+      v-if="isOwner"
       for="input-avatar"
       class="avatar-upload__upload-avatar-wrapper"
       @dragover.stop.prevent="avatarDragOver"
@@ -52,6 +53,7 @@ import { IUploadAvatarInput } from "@/types/backend-interfaces/user/avatar";
 import fileToBase64 from "@/utils/fileToBase64";
 
 const props = defineProps<{
+  isOwner: boolean;
   userID: string;
   avatar: string | null;
   userInitials: string;
@@ -130,6 +132,9 @@ function avatarDrop(e: DragEvent) {
   align-items: center;
   gap: 30px;
   flex-wrap: wrap;
+  &_avatar-only {
+    justify-content: flex-start;
+  }
   &__avatar-wrapper {
     position: relative;
     height: 120px;

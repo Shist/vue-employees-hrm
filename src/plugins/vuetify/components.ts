@@ -3,6 +3,7 @@ import {
   VImg,
   VIcon,
   VTextField,
+  VTextarea,
   VSelect,
   VDataTable,
   VBreadcrumbs,
@@ -28,7 +29,6 @@ import {
   VProgressLinear,
   VProgressCircular,
   VDialog,
-  VTextarea,
 } from "vuetify/components";
 
 export default {
@@ -36,6 +36,7 @@ export default {
   VImg,
   VIcon,
   VTextField,
+  VTextarea,
   VSelect,
   VDataTable,
   VBreadcrumbs,
@@ -61,5 +62,4 @@ export default {
   VProgressLinear,
   VProgressCircular,
   VDialog,
-  VTextarea,
 };

@@ -33,7 +33,7 @@ import {
   TABS_NAMES,
 } from "@/constants/breadCrumbs";
 import { getUserNameDataByID } from "@/services/users";
-import { useCVsStore } from "@/store/cvs";
+import { getCVNameDataByID } from "@/services/cvs";
 import { storeToRefs } from "pinia";
 import { useAuthStore } from "@/store/authStore";
 
@@ -86,8 +86,6 @@ function updateBreadCrumbs() {
       crumbIconName: SECTIONS_ICONS[section],
     });
 
-    const { getCVById } = useCVsStore();
-
     switch (section) {
       case ROUTES.USERS.PATH.slice(1):
         if (id === user.value?.id) {
@@ -110,10 +108,10 @@ function updateBreadCrumbs() {
         }
         break;
       case ROUTES.CVS.PATH.slice(1):
-        getCVById(Number(id))
+        getCVNameDataByID(id)
           .then((cvData) => {
             if (!cvData) throw new Error("Empty CV data!");
-            breadcrumbsItems[2].title = `${cvData.name}`;
+            breadcrumbsItems[2].title = cvData.name;
           })
           .catch(() => {
             breadcrumbsItems[2].title = `❌ Loading Error`;

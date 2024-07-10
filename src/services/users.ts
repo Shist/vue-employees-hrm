@@ -5,6 +5,7 @@ import getUserAuthDataByIDQuery from "@/graphql/queries/getUserAuthDataByID.quer
 import getUserFullnameByIDQuery from "@/graphql/queries/getUserFullnameByID.query.gql";
 import getUserSkillsByIDQuery from "@/graphql/queries/getUserSkillsByID.query.gql";
 import getUserLanguagesByIDQuery from "@/graphql/queries/getUserLanguagesByID.query.gql";
+import getUserCVsNamesByIDQuery from "@/graphql/queries/getUserCVsNamesByID.query.gql";
 import updateUserQuery from "@/graphql/mutations/updateUser.mutation.gql";
 import updateProfileQuery from "@/graphql/mutations/updateProfile.mutation.gql";
 import uploadAvatarQuery from "@/graphql/mutations/uploadAvatar.mutation.gql";
@@ -19,6 +20,7 @@ import { IUsersTableData, IUsersTableServerData } from "@/types/usersTableUI";
 import { IUserProfileServerData } from "@/types/userProfileUI";
 import { IUsersNameServerData } from "@/types/breadcrumbsUI";
 import { IUserAuthServerData } from "@/types/userAuthUI";
+import { IUserCVNameData } from "@/types/userCVsUI";
 import { IUpdateUserInput } from "@/types/backend-interfaces/user";
 import { IUpdateProfileInput } from "@/types/backend-interfaces/user/profile";
 import { IUploadAvatarInput } from "@/types/backend-interfaces/user/avatar";
@@ -43,28 +45,27 @@ export const getAllUsers = async () => {
   const result: IUsersTableData[] = [];
 
   try {
-    const { users } = (
-      await apolloClient.query({
-        query: getAllUsersQuery,
-      })
-    ).data;
+    const response = (await apolloClient.query({
+      query: getAllUsersQuery,
+    })) as { data: { users: IUsersTableServerData[] } };
 
-    users.forEach((user: IUsersTableServerData) => {
+    response.data.users.forEach((user: IUsersTableServerData) => {
       result.push({
         id: user.id,
         email: user.email,
-        avatar: user.profile.avatar ?? "",
-        firstName: user.profile?.first_name ?? "",
-        lastName: user.profile?.last_name ?? "",
-        departmentName: user.department_name ?? "",
-        positionName: user.position_name ?? "",
+        avatar: user.profile.avatar,
+        firstName: user.profile.first_name,
+        lastName: user.profile.last_name,
+        departmentName: user.department_name,
+        positionName: user.position_name,
       });
     });
   } catch (error: unknown) {
     if (error instanceof Error) {
-      // set some toast
-      console.log(error.message);
+      console.error(error.message);
     }
+
+    throw error;
   }
 
   return result;
@@ -168,6 +169,33 @@ export const getUserLanguagesByID = async (id: string) => {
     };
 
     return response.data.user.profile.languages;
+  } catch (error: unknown) {
+    if (error instanceof Error) {
+      if (error.message.startsWith(GRAPHQL_NULL_RETURN_ERROR)) {
+        const notFoundError = new Error(NOT_FOUND_USER);
+        notFoundError.name = "NotFoundError";
+        throw notFoundError;
+      } else if (error.message === "Failed to fetch") {
+        throw new Error(NO_NETWORK_CONNECTION);
+      }
+    }
+
+    throw error;
+  }
+};
+
+export const getUserCVsNamesByID = async (id: string) => {
+  try {
+    checkID(id);
+
+    const response = (await apolloClient.query({
+      query: getUserCVsNamesByIDQuery,
+      variables: { userId: Number(id) },
+    })) as {
+      data: { user: { cvs: IUserCVNameData[] } };
+    };
+
+    return response.data.user.cvs;
   } catch (error: unknown) {
     if (error instanceof Error) {
       if (error.message.startsWith(GRAPHQL_NULL_RETURN_ERROR)) {

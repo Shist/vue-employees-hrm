@@ -20,6 +20,7 @@
         label="First Name"
         variant="outlined"
         class="user-info__text-field-wrapper"
+        :readonly="!isOwner"
         hide-details
       />
       <v-text-field
@@ -27,6 +28,7 @@
         label="Last Name"
         variant="outlined"
         class="user-info__text-field-wrapper"
+        :readonly="!isOwner"
         hide-details
       />
       <v-select
@@ -35,6 +37,7 @@
         label="Department"
         variant="outlined"
         class="user-info__text-field-wrapper"
+        :readonly="!isOwner"
         hide-details
       />
       <v-select
@@ -43,9 +46,11 @@
         label="Position"
         variant="outlined"
         class="user-info__text-field-wrapper"
+        :readonly="!isOwner"
         hide-details
       />
       <v-btn
+        v-if="isOwner"
         type="submit"
         class="user-info__form-submit-btn"
         @click.prevent="onUpdateBtnClicked"
@@ -67,6 +72,7 @@ import { IUpdateUserInput } from "@/types/backend-interfaces/user";
 import { IUpdateProfileInput } from "@/types/backend-interfaces/user/profile";
 
 const props = defineProps<{
+  isOwner: boolean;
   userID: string;
   email: string;
   createdAt: number;

@@ -13,3 +13,7 @@ export interface IUsersNameServerData {
     last_name: string | null;
   };
 }
+
+export interface ICVNameData {
+  name: string;
+}
