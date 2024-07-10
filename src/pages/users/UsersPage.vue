@@ -98,7 +98,7 @@ function openUserProfile(userID: number) {
 
 const search = ref("");
 
-const headers = reactive([
+const headers = [
   { key: "avatar", sortable: false },
   { key: "first_name", title: "First Name" },
   { key: "last_name", title: "Last Name" },
@@ -106,7 +106,7 @@ const headers = reactive([
   { key: "department_name", title: "Department" },
   { key: "position_name", title: "Position" },
   { key: "options", sortable: false },
-]);
+];
 
 const isPageLoading = ref(true);
 const users = reactive<IUsersTableData[]>([]);
