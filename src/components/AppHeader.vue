@@ -184,6 +184,7 @@ import { INavigationItem } from "@/types/navigation";
 import { useScrollbarWidth } from "@/store/scrollbarWidth";
 import { storeToRefs } from "pinia";
 import { useAuthStore } from "@/store/authStore";
+import handleScrollPadding from "@/utils/handleScrollPadding";
 
 const router = useRouter();
 const route = useRoute();
@@ -238,18 +239,8 @@ const handleLogout = (): void => {
   authStore.logout();
 };
 
-watch(drawer, (newValue, oldValue) => {
-  if (document.body.offsetHeight > window.innerHeight) {
-    scrollbarWidth.value = `${
-      20 + window.innerWidth - document.body.offsetWidth
-    }px`;
-  }
-  if (newValue) {
-    document.documentElement.style.overflowY = "hidden";
-  } else if (oldValue) {
-    document.documentElement.style.overflowY = "auto";
-    scrollbarWidth.value = undefined;
-  }
+watch(drawer, (newValue) => {
+  handleScrollPadding(newValue);
 });
 </script>
 

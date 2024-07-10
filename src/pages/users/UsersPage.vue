@@ -22,7 +22,7 @@
         Please try to reload the page
       </span>
     </div>
-    <div v-else-if="users.length" class="main-page__main-content-wrapper">
+    <div v-else class="main-page__main-content-wrapper">
       <v-text-field
         v-model="search"
         label="Search"

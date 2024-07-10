@@ -22,7 +22,7 @@
         Please try to reload the page
       </span>
     </div>
-    <div v-else-if="userCVs.length" class="user-cvs__main-content-wrapper">
+    <div v-else class="user-cvs__main-content-wrapper">
       <div class="users-cvs__search-create-controls-wrapper">
         <v-text-field
           v-model="search"
@@ -86,7 +86,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, reactive, computed, onMounted } from "vue";
+import { ref, reactive, computed, watch, onMounted } from "vue";
 import CreateCVModal from "@/components/user/cvs/CreateCVModal.vue";
 import { useRouter, useRoute } from "vue-router";
 import { ROUTES } from "@/constants/router";
@@ -96,6 +96,7 @@ import { IUserCVNameData } from "@/types/userCVsUI";
 import { ICreateCVInput } from "@/types/backend-interfaces/cv";
 import useToast from "@/composables/useToast";
 import { UNEXPECTED_ERROR } from "@/constants/errorMessage";
+import handleScrollPadding from "@/utils/handleScrollPadding";
 
 const router = useRouter();
 const route = useRoute();
@@ -135,7 +136,19 @@ function setErrorValuesToDefault() {
   isNotFoundError.value = false;
 }
 
-onMounted(async () => {
+onMounted(() => {
+  fetchData();
+});
+
+watch(id, () => {
+  fetchData();
+});
+
+watch(isModalOpen, (newValue) => {
+  handleScrollPadding(newValue);
+});
+
+function fetchData() {
   isPageLoading.value = true;
 
   getUserCVsNamesByID(id.value)
@@ -160,7 +173,7 @@ onMounted(async () => {
     .finally(() => {
       isPageLoading.value = false;
     });
-});
+}
 
 function submitUserCVCreate(cvInputObj: ICreateCVInput) {
   isPageLoading.value = true;

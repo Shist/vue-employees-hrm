@@ -129,6 +129,7 @@ import { ILanguagesNamesData } from "@/types/userLanguagesUI";
 import useToast from "@/composables/useToast";
 import { UNEXPECTED_ERROR } from "@/constants/errorMessage";
 import { ROUTES } from "@/constants/router";
+import handleScrollPadding from "@/utils/handleScrollPadding";
 
 const route = useRoute();
 
@@ -182,6 +183,10 @@ onMounted(() => {
 
 watch(id, () => {
   fetchData();
+});
+
+watch(isModalOpen, (newValue) => {
+  handleScrollPadding(newValue);
 });
 
 function setErrorValuesToDefault() {
