@@ -28,6 +28,7 @@
         label="Search"
         prepend-inner-icon="mdi-magnify"
         variant="outlined"
+        density="compact"
         single-line
         class="main-page__text-field-wrapper"
         hide-details
@@ -87,7 +88,6 @@ import { useRouter } from "vue-router";
 import { ROUTES } from "@/constants/router";
 import { getAllUsers } from "@/services/users";
 import { IUsersTableData } from "@/types/usersTableUI";
-import useToast from "@/composables/useToast";
 import { UNEXPECTED_ERROR } from "@/constants/errorMessage";
 
 const router = useRouter();
@@ -100,11 +100,11 @@ const search = ref("");
 
 const headers = [
   { key: "avatar", sortable: false },
-  { key: "first_name", title: "First Name" },
-  { key: "last_name", title: "Last Name" },
+  { key: "firstName", title: "First Name" },
+  { key: "lastName", title: "Last Name" },
   { key: "email", title: "Email" },
-  { key: "department_name", title: "Department" },
-  { key: "position_name", title: "Position" },
+  { key: "departmentName", title: "Department" },
+  { key: "positionName", title: "Position" },
   { key: "options", sortable: false },
 ];
 
@@ -114,8 +114,6 @@ const users = reactive<IUsersTableData[]>([]);
 const isError = ref(false);
 const errorMessage = ref(UNEXPECTED_ERROR);
 const isNotFoundError = ref(false);
-
-const { setErrorToast } = useToast();
 
 function setErrorValuesToDefault() {
   isError.value = false;
@@ -141,8 +139,6 @@ onMounted(async () => {
         if (error.name === "NotFoundError") {
           isNotFoundError.value = true;
         }
-
-        setErrorToast(errorMessage.value);
       }
     })
     .finally(() => {

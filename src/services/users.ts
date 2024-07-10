@@ -54,10 +54,10 @@ export const getAllUsers = async () => {
         id: user.id,
         email: user.email,
         avatar: user.profile.avatar,
-        first_name: user.profile.first_name,
-        last_name: user.profile.last_name,
-        department_name: user.department_name,
-        position_name: user.position_name,
+        firstName: user.profile.first_name,
+        lastName: user.profile.last_name,
+        departmentName: user.department_name,
+        positionName: user.position_name,
       });
     });
   } catch (error: unknown) {
@@ -85,8 +85,6 @@ export const getUserAuthDataByID = async (id: string) => {
     if (error instanceof Error) {
       console.error(error.message);
     }
-
-    throw error;
   }
 };
 

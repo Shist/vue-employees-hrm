@@ -29,6 +29,7 @@
           label="Search"
           prepend-inner-icon="mdi-magnify"
           variant="outlined"
+          density="compact"
           single-line
           class="user-cvs__text-field-wrapper"
           hide-details
