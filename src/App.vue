@@ -10,20 +10,30 @@
 </template>
 
 <script setup lang="ts">
-import { useTheme } from "vuetify";
+import { watch } from "vue";
 import AppHeader from "@/components/AppHeader.vue";
 import BreadCrumbs from "@/components/BreadCrumbs.vue";
 import AppTabs from "@/components/AppTabs.vue";
-import { useScrollbarWidth } from "@/store/scrollbarWidth";
 import { storeToRefs } from "pinia";
+import { useScrollbarWidth } from "@/store/scrollbarWidth";
+import { useThemeStore } from "@/store/theme";
+import { getThemeValue } from "@/utils/theme";
 
 const { scrollbarWidth } = storeToRefs(useScrollbarWidth());
 
-const theme = useTheme();
+const { currTheme } = storeToRefs(useThemeStore());
 
-if (theme.global.name.value === "appDark") {
-  document.body.classList.add("dark-theme");
+function updateCurrTheme() {
+  if (getThemeValue(currTheme.value) === "dark") {
+    document.body.classList.add("dark-theme");
+  } else {
+    document.body.classList.remove("dark-theme");
+  }
 }
+
+updateCurrTheme();
+
+watch(currTheme, updateCurrTheme);
 </script>
 
 <style lang="scss">
