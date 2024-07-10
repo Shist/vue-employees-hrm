@@ -23,6 +23,7 @@
     </div>
     <div v-else-if="user" class="user-profile__main-content-wrapper">
       <AvatarUpload
+        :isOwner="isOwner"
         :userID="id"
         :avatar="user.avatar"
         :userInitials="userInitials"
@@ -30,6 +31,7 @@
         @onDeleteUserAvatar="submitUserAvatarDeletion"
       />
       <UserInfo
+        :isOwner="isOwner"
         :userID="id"
         :firstName="user.firstName"
         :lastName="user.lastName"
@@ -85,6 +87,7 @@ const id = computed<string>(() => {
 
 const authStore = useAuthStore();
 const authStoreUser = storeToRefs(authStore).user;
+const isOwner = computed(() => authStoreUser.value?.id === id.value);
 
 const isPageLoading = ref(true);
 
@@ -189,6 +192,8 @@ function submitUserData(
   userInputObj: Omit<IUpdateUserInput, "cvsIds" | "role">,
   profileInputObj: IUpdateProfileInput
 ) {
+  if (!isOwner.value) return;
+
   isPageLoading.value = true;
 
   updateUserData(userInputObj, profileInputObj)
@@ -216,6 +221,8 @@ function submitUserData(
 }
 
 function submitUserAvatar(avatarInputObj: IUploadAvatarInput) {
+  if (!isOwner.value) return;
+
   if (
     avatarInputObj.type !== "image/png" &&
     avatarInputObj.type !== "image/jpeg" &&
@@ -263,6 +270,8 @@ function submitUserAvatar(avatarInputObj: IUploadAvatarInput) {
 }
 
 function submitUserAvatarDeletion(userID: string) {
+  if (!isOwner.value) return;
+
   isPageLoading.value = true;
 
   deleteUserAvatar(userID)
