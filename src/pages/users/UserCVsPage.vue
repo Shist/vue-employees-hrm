@@ -150,12 +150,15 @@ function setErrorValuesToDefault() {
   isNotFoundError.value = false;
 }
 
-onMounted(() => {
-  fetchData();
+onMounted(async () => {
+  await fetchData();
+  isPageLoading.value = false;
 });
 
-watch(id, () => {
-  fetchData();
+watch(id, async () => {
+  isPageLoading.value = true;
+  await fetchData();
+  isPageLoading.value = false;
 });
 
 watch(isCreateModalOpen, (newValue) => {
@@ -166,31 +169,26 @@ watch(isDeleteModalOpen, (newValue) => {
   handleScrollPadding(newValue);
 });
 
-function fetchData() {
-  isPageLoading.value = true;
+async function fetchData() {
+  try {
+    const cvsData = await getUserCVsNamesByID(id.value);
 
-  getUserCVsNamesByID(id.value)
-    .then((cvsData) => {
-      userCVs.splice(0, userCVs.length, ...cvsData);
+    userCVs.splice(0, userCVs.length, ...cvsData);
 
-      setErrorValuesToDefault();
-    })
-    .catch((error: unknown) => {
-      isError.value = true;
+    setErrorValuesToDefault();
+  } catch (error: unknown) {
+    isError.value = true;
 
-      if (error instanceof Error) {
-        errorMessage.value = error.message;
+    if (error instanceof Error) {
+      errorMessage.value = error.message;
 
-        if (error.name === "NotFoundError") {
-          isNotFoundError.value = true;
-        }
-
-        setErrorToast(errorMessage.value);
+      if (error.name === "NotFoundError") {
+        isNotFoundError.value = true;
       }
-    })
-    .finally(() => {
-      isPageLoading.value = false;
-    });
+
+      setErrorToast(errorMessage.value);
+    }
+  }
 }
 
 function submitUserCVCreate(cvInputObj: ICreateCVInput) {
@@ -217,34 +215,30 @@ function submitUserCVCreate(cvInputObj: ICreateCVInput) {
     });
 }
 
-function submitUserCVDeletion(cvInputObj: IDeleteCVInput) {
+async function submitUserCVDeletion(cvInputObj: IDeleteCVInput) {
   isPageLoading.value = true;
 
-  deleteCV(cvInputObj)
-    .then(() => {
-      const indexOfCVToRemove = userCVs.findIndex(
-        (cv) => Number(cv.id) === cvInputObj.cvId
-      );
+  try {
+    await deleteCV(cvInputObj);
 
-      if (indexOfCVToRemove !== -1) {
-        userCVs.splice(indexOfCVToRemove, 1);
+    await fetchData();
+
+    setErrorValuesToDefault();
+  } catch (error: unknown) {
+    isError.value = true;
+
+    if (error instanceof Error) {
+      errorMessage.value = error.message;
+
+      if (error.name === "NotFoundError") {
+        isNotFoundError.value = true;
       }
 
-      setErrorValuesToDefault();
-    })
-    .catch((error: unknown) => {
-      isError.value = true;
-      if (error instanceof Error) {
-        errorMessage.value = error.message;
-        if (error.name === "NotFoundError") {
-          isNotFoundError.value = true;
-        }
-        setErrorToast(errorMessage.value);
-      }
-    })
-    .finally(() => {
-      isPageLoading.value = false;
-    });
+      setErrorToast(errorMessage.value);
+    }
+  } finally {
+    isPageLoading.value = false;
+  }
 }
 
 function handleOpenCreateModal() {
