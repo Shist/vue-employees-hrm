@@ -30,6 +30,7 @@ export const getAllProjects = async () => {
     if (error instanceof Error) {
       console.log(error.message);
     }
+    throw error;
   }
   return result;
 };
