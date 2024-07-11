@@ -1,27 +1,12 @@
 <template>
   <div class="user-cvs">
-    <v-progress-circular
-      v-if="isPageLoading"
-      :size="100"
-      :width="10"
-      color="var(--color-spinner)"
-      indeterminate
-      class="user-cvs__spinner"
+    <AppSpinner v-if="isLoading" class="user-cvs__spinner" />
+    <AppErrorSection
+      v-else-if="isError"
+      :errorMessage="errorMessage"
+      :isNotFoundError="isNotFoundError"
+      class="user-cvs__error-wrapper"
     />
-    <div v-else-if="isError" class="user-cvs__error-wrapper">
-      <h4 class="user-cvs__error-message">❌ {{ errorMessage }}</h4>
-      <v-btn
-        v-if="isNotFoundError"
-        class="user-cvs__back-to-main-btn"
-        router
-        :to="ROUTES.USERS.PATH"
-      >
-        Back to the main page
-      </v-btn>
-      <span v-if="!isNotFoundError" class="user-cvs__try-to-reload-label">
-        Please try to reload the page
-      </span>
-    </div>
     <div v-else class="user-cvs__main-content-wrapper">
       <div class="users-cvs__search-create-controls-wrapper">
         <v-text-field
@@ -103,15 +88,14 @@ import CreateCVModal from "@/components/user/cvs/CreateCVModal.vue";
 import DeleteCVModal from "@/components/user/cvs/DeleteCVModal.vue";
 import { useRouter, useRoute } from "vue-router";
 import { ROUTES } from "@/constants/router";
-import { getUserCVsNamesByID } from "@/services/users";
 import { createCV, deleteCV } from "@/services/cvs";
 import { IUserCVNameData } from "@/types/userCVsUI";
 import { ICreateCVInput, IDeleteCVInput } from "@/types/backend-interfaces/cv";
-import useToast from "@/composables/useToast";
 import { storeToRefs } from "pinia";
 import { useAuthStore } from "@/store/authStore";
-import { UNEXPECTED_ERROR } from "@/constants/errorMessage";
 import handleScrollPadding from "@/utils/handleScrollPadding";
+import { getUserCVsNamesByID } from "@/services/users/cvs";
+import useErrorState from "@/composables/useErrorState";
 
 const router = useRouter();
 const route = useRoute();
@@ -141,33 +125,29 @@ const headers = [
   { key: "options", sortable: false },
 ];
 
-const isPageLoading = ref(true);
-const userCVs = reactive<IUserCVNameData[]>([]);
+const {
+  isLoading,
+  isError,
+  errorMessage,
+  isNotFoundError,
+  setErrorValuesToDefault,
+  setErrorValues,
+} = useErrorState();
 
-const isError = ref(false);
-const errorMessage = ref(UNEXPECTED_ERROR);
-const isNotFoundError = ref(false);
+const userCVs = reactive<IUserCVNameData[]>([]);
 
 const isCreateModalOpen = ref(false);
 const isDeleteModalOpen = ref(false);
 
-const { setErrorToast } = useToast();
-
-function setErrorValuesToDefault() {
-  isError.value = false;
-  errorMessage.value = UNEXPECTED_ERROR;
-  isNotFoundError.value = false;
-}
-
 onMounted(async () => {
   await fetchData();
-  isPageLoading.value = false;
+  isLoading.value = false;
 });
 
 watch(id, async () => {
-  isPageLoading.value = true;
+  isLoading.value = true;
   await fetchData();
-  isPageLoading.value = false;
+  isLoading.value = false;
 });
 
 watch(isCreateModalOpen, (newValue) => {
@@ -182,54 +162,40 @@ async function fetchData() {
   try {
     const cvsData = await getUserCVsNamesByID(id.value);
 
+    if (!cvsData) return;
+
     userCVs.splice(0, userCVs.length, ...cvsData);
 
     setErrorValuesToDefault();
   } catch (error: unknown) {
-    isError.value = true;
-
-    if (error instanceof Error) {
-      errorMessage.value = error.message;
-
-      if (error.name === "NotFoundError") {
-        isNotFoundError.value = true;
-      }
-
-      setErrorToast(errorMessage.value);
-    }
+    setErrorValues(error);
   }
 }
 
 function submitUserCVCreate(cvInputObj: ICreateCVInput) {
   if (!isOwner.value) return;
 
-  isPageLoading.value = true;
+  isLoading.value = true;
 
   createCV(cvInputObj)
-    .then((createdUserCV: IUserCVNameData) => {
+    .then((createdUserCV) => {
+      if (!createdUserCV) return;
       userCVs.push(createdUserCV);
 
       setErrorValuesToDefault();
     })
     .catch((error: unknown) => {
-      isError.value = true;
-      if (error instanceof Error) {
-        errorMessage.value = error.message;
-        if (error.name === "NotFoundError") {
-          isNotFoundError.value = true;
-        }
-        setErrorToast(errorMessage.value);
-      }
+      setErrorValues(error);
     })
     .finally(() => {
-      isPageLoading.value = false;
+      isLoading.value = false;
     });
 }
 
 async function submitUserCVDeletion(cvInputObj: IDeleteCVInput) {
   if (!isOwner.value) return;
 
-  isPageLoading.value = true;
+  isLoading.value = true;
 
   try {
     await deleteCV(cvInputObj);
@@ -238,19 +204,9 @@ async function submitUserCVDeletion(cvInputObj: IDeleteCVInput) {
 
     setErrorValuesToDefault();
   } catch (error: unknown) {
-    isError.value = true;
-
-    if (error instanceof Error) {
-      errorMessage.value = error.message;
-
-      if (error.name === "NotFoundError") {
-        isNotFoundError.value = true;
-      }
-
-      setErrorToast(errorMessage.value);
-    }
+    setErrorValues(error);
   } finally {
-    isPageLoading.value = false;
+    isLoading.value = false;
   }
 }
 
@@ -287,25 +243,6 @@ function handleCloseDeleteModal() {
   }
   &__error-wrapper {
     padding-top: 64px;
-    width: 100%;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    row-gap: 20px;
-    .user-cvs__error-message {
-      @include default-text(26px, 32px);
-    }
-    .user-cvs__back-to-main-btn {
-      color: var(--color-btn-text);
-      background-color: var(--color-btn-bg);
-      border-radius: 0;
-      &:hover {
-        background-color: var(--color-btn-bg-hover);
-      }
-    }
-    .user-cvs__try-to-reload-label {
-      @include default-text(20px, 26px);
-    }
   }
   &__main-content-wrapper {
     padding: 32px 24px;

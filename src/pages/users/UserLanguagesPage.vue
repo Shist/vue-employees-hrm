@@ -1,26 +1,11 @@
 <template>
   <div class="user-languages">
-    <v-progress-circular
-      v-if="isPageLoading"
-      :size="100"
-      :width="10"
-      color="var(--color-spinner)"
-      indeterminate
+    <AppSpinner v-if="isLoading" />
+    <AppErrorSection
+      v-else-if="isError"
+      :errorMessage="errorMessage"
+      :isNotFoundError="isNotFoundError"
     />
-    <div v-else-if="isError" class="user-languages__error-wrapper">
-      <h4 class="user-languages__error-message">❌ {{ errorMessage }}</h4>
-      <v-btn
-        v-if="isNotFoundError"
-        class="user-languages__back-to-main-btn"
-        router
-        :to="ROUTES.USERS.PATH"
-      >
-        Back to the main page
-      </v-btn>
-      <span v-if="!isNotFoundError" class="user-languages__try-to-reload-label">
-        Please try to reload the page
-      </span>
-    </div>
     <div v-else-if="userLanguages" class="user-languages__main-content-wrapper">
       <v-btn
         v-if="isOwner"
@@ -113,12 +98,6 @@
 import { ref, reactive, computed, watch, onMounted } from "vue";
 import LanguageModal from "@/components/user/languages/LanguageModal.vue";
 import { useRoute } from "vue-router";
-import {
-  getUserLanguagesByID,
-  createUserLanguage,
-  updateUserLanguage,
-  deleteUserLanguages,
-} from "@/services/users";
 import { getAllLanguagesNames } from "@/services/languages";
 import { Proficiency } from "@/types/backend-interfaces/language/proficiency";
 import {
@@ -127,12 +106,16 @@ import {
   IDeleteProfileLanguageInput,
 } from "@/types/backend-interfaces/user/profile/language";
 import { ILanguagesNamesData } from "@/types/userLanguagesUI";
-import useToast from "@/composables/useToast";
 import { storeToRefs } from "pinia";
 import { useAuthStore } from "@/store/authStore";
-import { UNEXPECTED_ERROR } from "@/constants/errorMessage";
-import { ROUTES } from "@/constants/router";
 import handleScrollPadding from "@/utils/handleScrollPadding";
+import {
+  createUserLanguage,
+  deleteUserLanguages,
+  getUserLanguagesByID,
+  updateUserLanguage,
+} from "@/services/users/languages";
+import useErrorState from "@/composables/useErrorState";
 
 const route = useRoute();
 
@@ -146,7 +129,14 @@ const authStore = useAuthStore();
 const authStoreUser = storeToRefs(authStore).user;
 const isOwner = computed(() => authStoreUser.value?.id === id.value);
 
-const isPageLoading = ref(true);
+const {
+  isLoading,
+  isError,
+  errorMessage,
+  isNotFoundError,
+  setErrorValuesToDefault,
+  setErrorValues,
+} = useErrorState();
 
 const userLanguages = ref<IProfileLanguage[] | null>(null);
 const languages = ref<ILanguagesNamesData[] | null>(null);
@@ -164,10 +154,6 @@ const leftLanguages = computed<ILanguagesNamesData[]>(() => {
   );
 });
 
-const isError = ref(false);
-const errorMessage = ref(UNEXPECTED_ERROR);
-const isNotFoundError = ref(false);
-
 const oLanguageForModal = ref<IProfileLanguage | null>(null);
 const isModalOpen = ref(false);
 
@@ -182,8 +168,6 @@ const languagesForDeletionAmount = computed<number>(() => {
   }, 0);
 });
 
-const { setErrorToast } = useToast();
-
 onMounted(() => {
   fetchData();
 });
@@ -196,12 +180,6 @@ watch(isModalOpen, (newValue) => {
   handleScrollPadding(newValue);
 });
 
-function setErrorValuesToDefault() {
-  isError.value = false;
-  errorMessage.value = UNEXPECTED_ERROR;
-  isNotFoundError.value = false;
-}
-
 function updateUserLanguagesValue(userLanguagesData: IProfileLanguage[]) {
   languagesForDeletionNames.clear();
   aLanguagesDeletionState.splice(
@@ -213,25 +191,21 @@ function updateUserLanguagesValue(userLanguagesData: IProfileLanguage[]) {
 }
 
 function fetchData() {
-  isPageLoading.value = true;
+  isLoading.value = true;
   Promise.all([getUserLanguagesByID(id.value), getAllLanguagesNames()])
     .then(([userLanguagesData, languagesData]) => {
+      if (!userLanguagesData || !languagesData) return;
+
       updateUserLanguagesValue(userLanguagesData);
+
       languages.value = languagesData;
       setErrorValuesToDefault();
     })
     .catch((error: unknown) => {
-      isError.value = true;
-      if (error instanceof Error) {
-        errorMessage.value = error.message;
-        if (error.name === "NotFoundError") {
-          isNotFoundError.value = true;
-        }
-        setErrorToast(errorMessage.value);
-      }
+      setErrorValues(error);
     })
     .finally(() => {
-      isPageLoading.value = false;
+      isLoading.value = false;
     });
 }
 
@@ -262,29 +236,20 @@ function submitUserLanguageCreate(
 ) {
   if (!isOwner.value) return;
 
-  isPageLoading.value = true;
+  isLoading.value = true;
 
   createUserLanguage(languageInputObj)
     .then((freshUserLanguages) => {
+      if (!freshUserLanguages) return;
       updateUserLanguagesValue(freshUserLanguages);
 
       setErrorValuesToDefault();
     })
     .catch((error: unknown) => {
-      isError.value = true;
-
-      if (error instanceof Error) {
-        errorMessage.value = error.message;
-
-        if (error.name === "NotFoundError") {
-          isNotFoundError.value = true;
-        }
-
-        setErrorToast(errorMessage.value);
-      }
+      setErrorValues(error);
     })
     .finally(() => {
-      isPageLoading.value = false;
+      isLoading.value = false;
     });
 }
 
@@ -293,29 +258,20 @@ function submitUserLanguageUpdate(
 ) {
   if (!isOwner.value) return;
 
-  isPageLoading.value = true;
+  isLoading.value = true;
 
   updateUserLanguage(languageInputObj)
     .then((freshUserLanguages) => {
+      if (!freshUserLanguages) return;
       updateUserLanguagesValue(freshUserLanguages);
 
       setErrorValuesToDefault();
     })
     .catch((error: unknown) => {
-      isError.value = true;
-
-      if (error instanceof Error) {
-        errorMessage.value = error.message;
-
-        if (error.name === "NotFoundError") {
-          isNotFoundError.value = true;
-        }
-
-        setErrorToast(errorMessage.value);
-      }
+      setErrorValues(error);
     })
     .finally(() => {
-      isPageLoading.value = false;
+      isLoading.value = false;
     });
 }
 
@@ -344,7 +300,7 @@ function clearUserDeletionLanguages() {
 function submitUserLanguagesDeletion() {
   if (!isOwner.value) return;
 
-  isPageLoading.value = true;
+  isLoading.value = true;
 
   const languagesToBeDeleted: IDeleteProfileLanguageInput = {
     userId: Number(id.value),
@@ -353,25 +309,16 @@ function submitUserLanguagesDeletion() {
 
   deleteUserLanguages(languagesToBeDeleted)
     .then((freshUserLanguages) => {
+      if (!freshUserLanguages) return;
       updateUserLanguagesValue(freshUserLanguages);
 
       setErrorValuesToDefault();
     })
     .catch((error: unknown) => {
-      isError.value = true;
-
-      if (error instanceof Error) {
-        errorMessage.value = error.message;
-
-        if (error.name === "NotFoundError") {
-          isNotFoundError.value = true;
-        }
-
-        setErrorToast(errorMessage.value);
-      }
+      setErrorValues(error);
     })
     .finally(() => {
-      isPageLoading.value = false;
+      isLoading.value = false;
     });
 
   clearUserDeletionLanguages();
@@ -407,27 +354,6 @@ function getClassByProficiency(value: Proficiency) {
   display: flex;
   flex-direction: column;
   align-items: center;
-  &__error-wrapper {
-    width: 100%;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    row-gap: 20px;
-    .user-languages__error-message {
-      @include default-text(26px, 32px);
-    }
-    .user-languages__back-to-main-btn {
-      color: var(--color-btn-text);
-      background-color: var(--color-btn-bg);
-      border-radius: 0;
-      &:hover {
-        background-color: var(--color-btn-bg-hover);
-      }
-    }
-    .user-languages__try-to-reload-label {
-      @include default-text(20px, 26px);
-    }
-  }
   &__main-content-wrapper {
     margin: 0 auto;
     max-width: 850px;

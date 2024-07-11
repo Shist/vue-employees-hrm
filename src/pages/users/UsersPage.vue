@@ -1,27 +1,12 @@
 <template>
   <div class="main-page">
-    <v-progress-circular
-      v-if="isPageLoading"
-      :size="100"
-      :width="10"
-      color="var(--color-spinner)"
-      indeterminate
-      class="main-page__spinner"
+    <AppSpinner v-if="isLoading" class="main-page__spinner" />
+    <AppErrorSection
+      v-else-if="isError"
+      :errorMessage="errorMessage"
+      :isNotFoundError="isNotFoundError"
+      class="main-page__error-wrapper"
     />
-    <div v-else-if="isError" class="main-page__error-wrapper">
-      <h4 class="main-page__error-message">❌ {{ errorMessage }}</h4>
-      <v-btn
-        v-if="isNotFoundError"
-        class="main-page__back-to-main-btn"
-        router
-        :to="ROUTES.USERS.PATH"
-      >
-        Back to the main page
-      </v-btn>
-      <span v-if="!isNotFoundError" class="main-page__try-to-reload-label">
-        Please try to reload the page
-      </span>
-    </div>
     <div v-else class="main-page__main-content-wrapper">
       <v-text-field
         v-model="search"
@@ -59,19 +44,14 @@
               ></v-btn>
             </template>
             <v-list>
-              <v-list-item @click="() => openUserProfile(item.id)">
+              <v-list-item
+                v-for="menuItem in projectMenuItems"
+                :key="menuItem.title"
+                v-on:click="menuItem.click ? menuItem.click(item.id) : null"
+                :disabled="menuItem.disabled"
+              >
                 <v-list-item-title class="main-page__popup-menu-label">
-                  Profile
-                </v-list-item-title>
-              </v-list-item>
-              <v-list-item disabled>
-                <v-list-item-title class="main-page__popup-menu-label">
-                  Update user
-                </v-list-item-title>
-              </v-list-item>
-              <v-list-item disabled>
-                <v-list-item-title class="main-page__popup-menu-label">
-                  Delete user
+                  {{ menuItem.title }}
                 </v-list-item-title>
               </v-list-item>
             </v-list>
@@ -86,9 +66,9 @@
 import { ref, reactive, onMounted } from "vue";
 import { useRouter } from "vue-router";
 import { ROUTES } from "@/constants/router";
-import { getAllUsers } from "@/services/users";
+import { getAllUsers } from "@/services/users/users";
 import { IUsersTableData } from "@/types/usersTableUI";
-import { UNEXPECTED_ERROR } from "@/constants/errorMessage";
+import useErrorState from "@/composables/useErrorState";
 
 const router = useRouter();
 
@@ -108,21 +88,25 @@ const headers = [
   { key: "options", sortable: false },
 ];
 
-const isPageLoading = ref(true);
+const projectMenuItems = [
+  { title: "Profile", click: openUserProfile, disabled: false },
+  { title: "Update user", disabled: true },
+  { title: "Delete user", disabled: true },
+];
+
+const {
+  isLoading,
+  isError,
+  errorMessage,
+  isNotFoundError,
+  setErrorValuesToDefault,
+  setErrorValues,
+} = useErrorState();
+
 const users = reactive<IUsersTableData[]>([]);
 
-const isError = ref(false);
-const errorMessage = ref(UNEXPECTED_ERROR);
-const isNotFoundError = ref(false);
-
-function setErrorValuesToDefault() {
-  isError.value = false;
-  errorMessage.value = UNEXPECTED_ERROR;
-  isNotFoundError.value = false;
-}
-
 onMounted(async () => {
-  isPageLoading.value = true;
+  isLoading.value = true;
 
   getAllUsers()
     .then((usersData) => {
@@ -131,18 +115,10 @@ onMounted(async () => {
       setErrorValuesToDefault();
     })
     .catch((error: unknown) => {
-      isError.value = true;
-
-      if (error instanceof Error) {
-        errorMessage.value = error.message;
-
-        if (error.name === "NotFoundError") {
-          isNotFoundError.value = true;
-        }
-      }
+      setErrorValues(error);
     })
     .finally(() => {
-      isPageLoading.value = false;
+      isLoading.value = false;
     });
 });
 </script>
@@ -157,25 +133,6 @@ onMounted(async () => {
   }
   &__error-wrapper {
     padding-top: 64px;
-    width: 100%;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    row-gap: 20px;
-    .main-page__error-message {
-      @include default-text(26px, 32px);
-    }
-    .main-page__back-to-main-btn {
-      color: var(--color-btn-text);
-      background-color: var(--color-btn-bg);
-      border-radius: 0;
-      &:hover {
-        background-color: var(--color-btn-bg-hover);
-      }
-    }
-    .main-page__try-to-reload-label {
-      @include default-text(20px, 26px);
-    }
   }
   &__main-content-wrapper {
     align-self: stretch;

@@ -54,7 +54,7 @@ import {
   PASSWORD_REQUIRED_FIELD,
 } from "@/constants/errorMessage";
 import { IForm, IAuthForm } from "@/types/form";
-import { useValidationErrors } from "@/composables/useValidationErrors";
+import { handleValidationErrors } from "@/utils/handleValidationErrors";
 import { useAuthStore } from "@/store/authStore";
 
 const authStore = useAuthStore();
@@ -103,7 +103,9 @@ const rules = computed(() => {
       };
 });
 
-const formErrors = computed(() => useValidationErrors<IForm>(v$.value.$errors));
+const formErrors = computed(() =>
+  handleValidationErrors<IForm>(v$.value.$errors)
+);
 
 const handleShowPassword = () => {
   return (showPassword.value = !showPassword.value);
@@ -120,15 +122,10 @@ const submitForm = async (): Promise<void> => {
     try {
       if (route.fullPath === ROUTES.SIGN_IN.PATH) {
         await authStore.loginUser(formData.email, formData.password);
-
-        console.log("call login user method");
       } else {
         await authStore.registerUser(formData.email, formData.password);
-
-        console.log("call register user method");
       }
       router.push(ROUTES.MAIN.PATH);
-      console.log("change route to main");
     } catch (err: unknown) {
       if (err instanceof Error) {
         serverError.value = err.message;
@@ -170,6 +167,7 @@ const submitForm = async (): Promise<void> => {
       font-size: 14px;
       line-height: 1.235;
       width: 100%;
+      color: var(--color-btn-text);
       background-color: var(--color-btn-bg);
       border-radius: 0;
       &:hover {

@@ -1,26 +1,11 @@
 <template>
   <div class="user-profile">
-    <v-progress-circular
-      v-if="isPageLoading"
-      :size="100"
-      :width="10"
-      color="var(--color-spinner)"
-      indeterminate
+    <AppSpinner v-if="isLoading" />
+    <AppErrorSection
+      v-else-if="isError"
+      :errorMessage="errorMessage"
+      :isNotFoundError="isNotFoundError"
     />
-    <div v-else-if="isError" class="user-profile__error-wrapper">
-      <h4 class="user-profile__error-message">❌ {{ errorMessage }}</h4>
-      <v-btn
-        v-if="isNotFoundError"
-        class="user-profile__back-to-main-btn"
-        router
-        :to="ROUTES.USERS.PATH"
-      >
-        Back to the main page
-      </v-btn>
-      <span v-if="!isNotFoundError" class="user-profile__try-to-reload-label">
-        Please try to reload the page
-      </span>
-    </div>
     <div v-else-if="user" class="user-profile__main-content-wrapper">
       <AvatarUpload
         :isOwner="isOwner"
@@ -53,12 +38,6 @@ import { ref, onMounted, computed, watch } from "vue";
 import AvatarUpload from "@/components/user/profile/AvatarUpload.vue";
 import UserInfo from "@/components/user/profile/UserInfo.vue";
 import { useRoute } from "vue-router";
-import {
-  getUserProfileByID,
-  updateUserData,
-  updateUserAvatar,
-  deleteUserAvatar,
-} from "@/services/users";
 import { getAllDepartmentNames } from "@/services/departments";
 import { getAllPositionNames } from "@/services/positions";
 import {
@@ -70,12 +49,17 @@ import {
 import { IUpdateUserInput } from "@/types/backend-interfaces/user";
 import { IUpdateProfileInput } from "@/types/backend-interfaces/user/profile";
 import { IUploadAvatarInput } from "@/types/backend-interfaces/user/avatar";
-import { UNEXPECTED_ERROR } from "@/constants/errorMessage";
-import { ROUTES } from "@/constants/router";
 import useToast from "@/composables/useToast";
 import { storeToRefs } from "pinia";
 import { useAuthStore } from "@/store/authStore";
 import { TOO_LARGE_FILE, INVALID_FILE_TYPE } from "@/constants/errorMessage";
+import {
+  deleteUserAvatar,
+  getUserProfileByID,
+  updateUserAvatar,
+  updateUserData,
+} from "@/services/users/profile";
+import useErrorState from "@/composables/useErrorState";
 
 const route = useRoute();
 
@@ -89,15 +73,20 @@ const authStore = useAuthStore();
 const authStoreUser = storeToRefs(authStore).user;
 const isOwner = computed(() => authStoreUser.value?.id === id.value);
 
-const isPageLoading = ref(true);
+const {
+  isLoading,
+  isError,
+  errorMessage,
+  isNotFoundError,
+  setErrorValuesToDefault,
+  setErrorValues,
+} = useErrorState();
 
 const user = ref<IUserProfileData | null>(null);
 const departmentNames = ref<IDepartmentNamesData[] | null>(null);
 const positionNames = ref<IPositionNamesData[] | null>(null);
 
-const isError = ref(false);
-const errorMessage = ref(UNEXPECTED_ERROR);
-const isNotFoundError = ref(false);
+const { setErrorToast } = useToast();
 
 const userInitials = computed(() => {
   if (user.value?.firstName) {
@@ -110,8 +99,6 @@ const userInitials = computed(() => {
     return "";
   }
 });
-
-const { setErrorToast } = useToast();
 
 onMounted(() => {
   fetchData();
@@ -149,14 +136,8 @@ function updateUserValue(newUser: IUserProfileServerData) {
   }
 }
 
-function setErrorValuesToDefault() {
-  isError.value = false;
-  errorMessage.value = UNEXPECTED_ERROR;
-  isNotFoundError.value = false;
-}
-
 function fetchData() {
-  isPageLoading.value = true;
+  isLoading.value = true;
 
   Promise.all([
     getUserProfileByID(id.value),
@@ -164,6 +145,7 @@ function fetchData() {
     getAllPositionNames(),
   ])
     .then(([userData, departmentNamesData, positionNamesData]) => {
+      if (!userData || !departmentNamesData || !positionNamesData) return;
       updateUserValue(userData);
       departmentNames.value = departmentNamesData;
       positionNames.value = positionNamesData;
@@ -171,20 +153,10 @@ function fetchData() {
       setErrorValuesToDefault();
     })
     .catch((error: unknown) => {
-      isError.value = true;
-
-      if (error instanceof Error) {
-        errorMessage.value = error.message;
-
-        if (error.name === "NotFoundError") {
-          isNotFoundError.value = true;
-        }
-
-        setErrorToast(errorMessage.value);
-      }
+      setErrorValues(error);
     })
     .finally(() => {
-      isPageLoading.value = false;
+      isLoading.value = false;
     });
 }
 
@@ -194,29 +166,20 @@ function submitUserData(
 ) {
   if (!isOwner.value) return;
 
-  isPageLoading.value = true;
+  isLoading.value = true;
 
   updateUserData(userInputObj, profileInputObj)
     .then((response) => {
+      if (!response) return;
       updateUserValue(response);
 
       setErrorValuesToDefault();
     })
     .catch((error: unknown) => {
-      isError.value = true;
-
-      if (error instanceof Error) {
-        errorMessage.value = error.message;
-
-        if (error.name === "NotFoundError") {
-          isNotFoundError.value = true;
-        }
-
-        setErrorToast(errorMessage.value);
-      }
+      setErrorValues(error);
     })
     .finally(() => {
-      isPageLoading.value = false;
+      isLoading.value = false;
     });
 }
 
@@ -237,10 +200,11 @@ function submitUserAvatar(avatarInputObj: IUploadAvatarInput) {
     return;
   }
 
-  isPageLoading.value = true;
+  isLoading.value = true;
 
   updateUserAvatar(avatarInputObj)
     .then((newAvatarSRC) => {
+      if (!newAvatarSRC) return;
       if (user.value) {
         user.value.avatar = newAvatarSRC;
       }
@@ -252,27 +216,17 @@ function submitUserAvatar(avatarInputObj: IUploadAvatarInput) {
       setErrorValuesToDefault();
     })
     .catch((error: unknown) => {
-      isError.value = true;
-
-      if (error instanceof Error) {
-        errorMessage.value = error.message;
-
-        if (error.name === "NotFoundError") {
-          isNotFoundError.value = true;
-        }
-
-        setErrorToast(errorMessage.value);
-      }
+      setErrorValues(error);
     })
     .finally(() => {
-      isPageLoading.value = false;
+      isLoading.value = false;
     });
 }
 
 function submitUserAvatarDeletion(userID: string) {
   if (!isOwner.value) return;
 
-  isPageLoading.value = true;
+  isLoading.value = true;
 
   deleteUserAvatar(userID)
     .then(() => {
@@ -287,20 +241,10 @@ function submitUserAvatarDeletion(userID: string) {
       setErrorValuesToDefault();
     })
     .catch((error: unknown) => {
-      isError.value = true;
-
-      if (error instanceof Error) {
-        errorMessage.value = error.message;
-
-        if (error.name === "NotFoundError") {
-          isNotFoundError.value = true;
-        }
-
-        setErrorToast(errorMessage.value);
-      }
+      setErrorValues(error);
     })
     .finally(() => {
-      isPageLoading.value = false;
+      isLoading.value = false;
     });
 }
 </script>
@@ -313,27 +257,6 @@ function submitUserAvatarDeletion(userID: string) {
   display: flex;
   flex-direction: column;
   align-items: center;
-  &__error-wrapper {
-    width: 100%;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    row-gap: 20px;
-    .user-profile__error-message {
-      @include default-text(26px, 32px);
-    }
-    .user-profile__back-to-main-btn {
-      color: var(--color-btn-text);
-      background-color: var(--color-btn-bg);
-      border-radius: 0;
-      &:hover {
-        background-color: var(--color-btn-bg-hover);
-      }
-    }
-    .user-profile__try-to-reload-label {
-      @include default-text(20px, 26px);
-    }
-  }
   &__spinner-wrapper {
     width: 100%;
   }

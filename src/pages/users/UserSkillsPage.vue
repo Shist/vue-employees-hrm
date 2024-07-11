@@ -1,26 +1,11 @@
 <template>
   <div class="user-skills">
-    <v-progress-circular
-      v-if="isPageLoading"
-      :size="100"
-      :width="10"
-      color="var(--color-spinner)"
-      indeterminate
+    <AppSpinner v-if="isLoading" />
+    <AppErrorSection
+      v-else-if="isError"
+      :errorMessage="errorMessage"
+      :isNotFoundError="isNotFoundError"
     />
-    <div v-else-if="isError" class="user-skills__error-wrapper">
-      <h4 class="user-skills__error-message">❌ {{ errorMessage }}</h4>
-      <v-btn
-        v-if="isNotFoundError"
-        class="user-skills__back-to-main-btn"
-        router
-        :to="ROUTES.USERS.PATH"
-      >
-        Back to the main page
-      </v-btn>
-      <span v-if="!isNotFoundError" class="user-skills__try-to-reload-label">
-        Please try to reload the page
-      </span>
-    </div>
     <div v-else-if="userSkills" class="user-skills__main-content-wrapper">
       <v-btn
         v-if="isOwner"
@@ -83,12 +68,6 @@ import { ref, reactive, computed, watch, onMounted } from "vue";
 import SkillModal from "@/components/user/skills/SkillModal.vue";
 import SkillsCategory from "@/components/user/skills/SkillsCategory.vue";
 import { useRoute } from "vue-router";
-import {
-  getUserSkillsByID,
-  createUserSkill,
-  updateUserSkill,
-  deleteUserSkills,
-} from "@/services/users";
 import { getAllSkills, getSkillCategories } from "@/services/skills";
 import {
   IProfileSkill,
@@ -100,12 +79,16 @@ import {
   ICategorySkill,
   ISkillsData,
 } from "@/types/userSkillsUI";
-import useToast from "@/composables/useToast";
 import { storeToRefs } from "pinia";
 import { useAuthStore } from "@/store/authStore";
-import { UNEXPECTED_ERROR } from "@/constants/errorMessage";
-import { ROUTES } from "@/constants/router";
 import handleScrollPadding from "@/utils/handleScrollPadding";
+import {
+  createUserSkill,
+  deleteUserSkills,
+  getUserSkillsByID,
+  updateUserSkill,
+} from "@/services/users/skills";
+import useErrorState from "@/composables/useErrorState";
 
 const route = useRoute();
 
@@ -119,7 +102,14 @@ const authStore = useAuthStore();
 const authStoreUser = storeToRefs(authStore).user;
 const isOwner = computed(() => authStoreUser.value?.id === id.value);
 
-const isPageLoading = ref(true);
+const {
+  isLoading,
+  isError,
+  errorMessage,
+  isNotFoundError,
+  setErrorValuesToDefault,
+  setErrorValues,
+} = useErrorState();
 
 const userSkills = ref<IProfileSkill[] | null>(null);
 const skills = ref<ISkillsData[] | null>(null);
@@ -133,10 +123,6 @@ const leftSkills = computed<ISkillsData[]>(() => {
   const userSkillsSet = new Set(userSkills.value.map((skill) => skill.name));
   return skills.value.filter((skill) => !userSkillsSet.has(skill.name));
 });
-
-const isError = ref(false);
-const errorMessage = ref(UNEXPECTED_ERROR);
-const isNotFoundError = ref(false);
 
 const oSkillForModal = ref<IProfileSkill | null>(null);
 const isModalOpen = ref(false);
@@ -185,8 +171,6 @@ const skillCategoriesMap = computed(() => {
   return resultObj;
 });
 
-const { setErrorToast } = useToast();
-
 onMounted(() => {
   fetchData();
 });
@@ -199,12 +183,6 @@ watch(isModalOpen, (newValue) => {
   handleScrollPadding(newValue);
 });
 
-function setErrorValuesToDefault() {
-  isError.value = false;
-  errorMessage.value = UNEXPECTED_ERROR;
-  isNotFoundError.value = false;
-}
-
 function updateUserSkillsValue(userSkillsData: IProfileSkill[]) {
   skillsForDeletionNames.clear();
   aSkillsDeletionState.splice(
@@ -216,7 +194,7 @@ function updateUserSkillsValue(userSkillsData: IProfileSkill[]) {
 }
 
 function fetchData() {
-  isPageLoading.value = true;
+  isLoading.value = true;
 
   Promise.all([
     getUserSkillsByID(id.value),
@@ -224,6 +202,7 @@ function fetchData() {
     getSkillCategories(),
   ])
     .then(([userSkillsData, skillsData, skillCategoriesData]) => {
+      if (!userSkillsData || !skillsData || !skillCategoriesData) return;
       updateUserSkillsValue(userSkillsData);
 
       skills.value = skillsData;
@@ -233,20 +212,10 @@ function fetchData() {
       setErrorValuesToDefault();
     })
     .catch((error: unknown) => {
-      isError.value = true;
-
-      if (error instanceof Error) {
-        errorMessage.value = error.message;
-
-        if (error.name === "NotFoundError") {
-          isNotFoundError.value = true;
-        }
-
-        setErrorToast(errorMessage.value);
-      }
+      setErrorValues(error);
     })
     .finally(() => {
-      isPageLoading.value = false;
+      isLoading.value = false;
     });
 }
 
@@ -276,58 +245,40 @@ function handleOpenEditModal(
 function submitUserSkillCreate(skillInputObj: IAddOrUpdateProfileSkillInput) {
   if (!isOwner.value) return;
 
-  isPageLoading.value = true;
+  isLoading.value = true;
 
   createUserSkill(skillInputObj)
     .then((freshUserSkills) => {
+      if (!freshUserSkills) return;
       updateUserSkillsValue(freshUserSkills);
 
       setErrorValuesToDefault();
     })
     .catch((error: unknown) => {
-      isError.value = true;
-
-      if (error instanceof Error) {
-        errorMessage.value = error.message;
-
-        if (error.name === "NotFoundError") {
-          isNotFoundError.value = true;
-        }
-
-        setErrorToast(errorMessage.value);
-      }
+      setErrorValues(error);
     })
     .finally(() => {
-      isPageLoading.value = false;
+      isLoading.value = false;
     });
 }
 
 function submitUserSkillUpdate(skillInputObj: IAddOrUpdateProfileSkillInput) {
   if (!isOwner.value) return;
 
-  isPageLoading.value = true;
+  isLoading.value = true;
 
   updateUserSkill(skillInputObj)
     .then((freshUserSkills) => {
+      if (!freshUserSkills) return;
       updateUserSkillsValue(freshUserSkills);
 
       setErrorValuesToDefault();
     })
     .catch((error: unknown) => {
-      isError.value = true;
-
-      if (error instanceof Error) {
-        errorMessage.value = error.message;
-
-        if (error.name === "NotFoundError") {
-          isNotFoundError.value = true;
-        }
-
-        setErrorToast(errorMessage.value);
-      }
+      setErrorValues(error);
     })
     .finally(() => {
-      isPageLoading.value = false;
+      isLoading.value = false;
     });
 }
 
@@ -356,7 +307,7 @@ function clearUserDeletionSkills() {
 function submitUserSkillsDeletion() {
   if (!isOwner.value) return;
 
-  isPageLoading.value = true;
+  isLoading.value = true;
 
   const skillsToBeDeleted: IDeleteProfileSkillInput = {
     userId: Number(id.value),
@@ -365,25 +316,16 @@ function submitUserSkillsDeletion() {
 
   deleteUserSkills(skillsToBeDeleted)
     .then((freshUserSkills) => {
+      if (!freshUserSkills) return;
       updateUserSkillsValue(freshUserSkills);
 
       setErrorValuesToDefault();
     })
     .catch((error: unknown) => {
-      isError.value = true;
-
-      if (error instanceof Error) {
-        errorMessage.value = error.message;
-
-        if (error.name === "NotFoundError") {
-          isNotFoundError.value = true;
-        }
-
-        setErrorToast(errorMessage.value);
-      }
+      setErrorValues(error);
     })
     .finally(() => {
-      isPageLoading.value = false;
+      isLoading.value = false;
     });
 
   clearUserDeletionSkills();
@@ -398,27 +340,6 @@ function submitUserSkillsDeletion() {
   display: flex;
   flex-direction: column;
   align-items: center;
-  &__error-wrapper {
-    width: 100%;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    row-gap: 20px;
-    .user-skills__error-message {
-      @include default-text(26px, 32px);
-    }
-    .user-skills__back-to-main-btn {
-      color: var(--color-btn-text);
-      background-color: var(--color-btn-bg);
-      border-radius: 0;
-      &:hover {
-        background-color: var(--color-btn-bg-hover);
-      }
-    }
-    .user-skills__try-to-reload-label {
-      @include default-text(20px, 26px);
-    }
-  }
   &__main-content-wrapper {
     position: relative;
     margin: 0 auto;

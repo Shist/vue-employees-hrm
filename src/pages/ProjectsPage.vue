@@ -1,27 +1,12 @@
 <template>
   <div class="projects-page">
-    <v-progress-circular
-      v-if="isLoading"
-      :size="100"
-      :width="10"
-      color="var(--color-spinner)"
-      indeterminate
-      class="projects-page__spinner"
+    <AppSpinner v-if="isLoading" class="projects-page__spinner" />
+    <AppErrorSection
+      v-else-if="isError"
+      :errorMessage="errorMessage"
+      :isNotFoundError="isNotFoundError"
+      class="projects-page__error-wrapper"
     />
-    <div v-else-if="isError" class="projects-page__error-wrapper">
-      <h4 class="projects-page__error-message">❌ {{ errorMessage }}</h4>
-      <v-btn
-        v-if="isNotFoundError"
-        class="projects-page__back-to-main-btn"
-        router
-        :to="ROUTES.USERS.PATH"
-      >
-        Back to the main page
-      </v-btn>
-      <span v-if="!isNotFoundError" class="projects-page__try-to-reload-label">
-        Please try to reload the page
-      </span>
-    </div>
     <div class="projects-page__main-content-wrapper" v-else>
       <v-text-field
         v-model="search"
@@ -67,11 +52,10 @@
 </template>
 
 <script setup lang="ts">
-import { UNEXPECTED_ERROR } from "@/constants/errorMessage";
 import { getAllProjects } from "@/services/projects";
 import { IProjectsTableData } from "@/types/projectsTableUI";
 import { onMounted, reactive, ref } from "vue";
-import { ROUTES } from "@/constants/router";
+import useErrorState from "@/composables/useErrorState";
 
 const search = ref("");
 
@@ -85,38 +69,27 @@ const headers = [
   { key: "options", sortable: false },
 ];
 
-const isLoading = ref<boolean>(false);
-
-const isError = ref(false);
-const errorMessage = ref(UNEXPECTED_ERROR);
-const isNotFoundError = ref(false);
+const {
+  isLoading,
+  isError,
+  errorMessage,
+  isNotFoundError,
+  setErrorValuesToDefault,
+  setErrorValues,
+} = useErrorState();
 
 const projectMenuItems = ["Project", "Update project", "Delete project"];
 
 const projects = reactive<IProjectsTableData[]>([]);
 
-function setErrorValuesToDefault() {
-  isError.value = false;
-  errorMessage.value = UNEXPECTED_ERROR;
-  isNotFoundError.value = false;
-}
-
 onMounted(async () => {
   isLoading.value = true;
   try {
     const projectData = await getAllProjects();
-    projects.splice(0, projects.length, ...(projectData as []));
+    projects.splice(0, projects.length, ...projectData);
     setErrorValuesToDefault();
-  } catch (error) {
-    isError.value = true;
-
-    if (error instanceof Error) {
-      errorMessage.value = error.message;
-
-      if (error.name === "NotFoundError") {
-        isNotFoundError.value = true;
-      }
-    }
+  } catch (error: unknown) {
+    setErrorValues(error);
   } finally {
     isLoading.value = false;
   }
@@ -133,25 +106,6 @@ onMounted(async () => {
   }
   &__error-wrapper {
     padding-top: 64px;
-    width: 100%;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    row-gap: 20px;
-    .projects-page__error-message {
-      @include default-text(26px, 32px);
-    }
-    .projects-page__back-to-main-btn {
-      color: var(--color-btn-text);
-      background-color: var(--color-btn-bg);
-      border-radius: 0;
-      &:hover {
-        background-color: var(--color-btn-bg-hover);
-      }
-    }
-    .projects-page__try-to-reload-label {
-      @include default-text(20px, 26px);
-    }
   }
   &__main-content-wrapper {
     align-self: stretch;
