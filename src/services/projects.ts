@@ -4,6 +4,7 @@ import {
   IProjectsTableServerData,
 } from "@/types/projectsTableUI";
 import getAllProjectsQuery from "@/graphql/projects/getAllProjects.query.gql";
+import { getDetailedError } from "@/utils/handleErrors";
 
 export const getAllProjects = async () => {
   const result: IProjectsTableData[] = [];
@@ -27,10 +28,7 @@ export const getAllProjects = async () => {
       });
     });
   } catch (error: unknown) {
-    if (error instanceof Error) {
-      console.log(error.message);
-    }
-    throw error;
+    throw getDetailedError(error);
   }
   return result;
 };

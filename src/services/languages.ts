@@ -1,6 +1,7 @@
 import apolloClient from "@/plugins/apolloConfig";
 import getAllLanguagesNamesQuery from "@/graphql/languages/getAllLanguagesNames.query.gql";
 import { ILanguagesNamesData } from "@/types/userLanguagesUI";
+import { getDetailedError } from "@/utils/handleErrors";
 
 export const getAllLanguagesNames = async () => {
   try {
@@ -10,10 +11,6 @@ export const getAllLanguagesNames = async () => {
 
     return response.data.languages;
   } catch (error: unknown) {
-    if (error instanceof Error) {
-      console.error(error.message);
-    }
-
-    throw error;
+    throw getDetailedError(error);
   }
 };

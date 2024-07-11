@@ -20,10 +20,13 @@ import { useThemeStore } from "@/store/theme";
 import { getThemeValue } from "@/utils/theme";
 import { useTheme } from "vuetify";
 import { updateGlobalOptions } from "vue3-toastify";
+import { useAuthStore } from "./store/authStore";
 
 const { scrollbarWidth } = storeToRefs(useScrollbarWidth());
 
 const { currTheme } = storeToRefs(useThemeStore());
+
+const authStore = useAuthStore();
 
 const vuetifyTheme = useTheme();
 
@@ -59,6 +62,8 @@ function onDeviceSettingsUpdate() {
 onMounted(() => {
   const mediaQuery = window.matchMedia("(prefers-color-scheme: dark)");
   mediaQuery.addEventListener("change", onDeviceSettingsUpdate);
+
+  authStore.fetchUserAuthData();
 });
 
 onUnmounted(() => {

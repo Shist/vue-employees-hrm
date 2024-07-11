@@ -7,7 +7,6 @@ import Vue3Toasity from "vue3-toastify";
 import toastifyConfig from "@/plugins/toastifyConfig";
 import { DefaultApolloClient } from "@vue/apollo-composable";
 import apolloClient from "@/plugins/apolloConfig";
-import { useAuthStore } from "@/store/authStore";
 
 const app = createApp({
   setup() {
@@ -24,9 +23,3 @@ app
   .use(Vue3Toasity, toastifyConfig);
 
 app.mount("#app");
-
-const authStore = useAuthStore();
-
-authStore.checkAuthorization();
-
-authStore.fetchUserAuthData();

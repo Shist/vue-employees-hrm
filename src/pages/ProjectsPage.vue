@@ -67,11 +67,16 @@
 </template>
 
 <script setup lang="ts">
-import { UNEXPECTED_ERROR } from "@/constants/errorMessage";
+import {
+  NOT_FOUND_USER,
+  UNAUTHORIZED_ERROR,
+  UNEXPECTED_ERROR,
+} from "@/constants/errorMessage";
 import { getAllProjects } from "@/services/projects";
 import { IProjectsTableData } from "@/types/projectsTableUI";
 import { onMounted, reactive, ref } from "vue";
 import { ROUTES } from "@/constants/router";
+import { handleLogout } from "@/utils/handleErrors";
 
 const search = ref("");
 
@@ -107,13 +112,18 @@ onMounted(async () => {
     const projectData = await getAllProjects();
     projects.splice(0, projects.length, ...projectData);
     setErrorValuesToDefault();
-  } catch (error) {
+  } catch (error: unknown) {
     isError.value = true;
 
     if (error instanceof Error) {
+      if (error.cause === UNAUTHORIZED_ERROR) {
+        handleLogout();
+        return;
+      }
+
       errorMessage.value = error.message;
 
-      if (error.name === "NotFoundError") {
+      if (error.message === NOT_FOUND_USER) {
         isNotFoundError.value = true;
       }
     }

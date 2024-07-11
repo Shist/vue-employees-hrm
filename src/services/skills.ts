@@ -2,6 +2,7 @@ import apolloClient from "@/plugins/apolloConfig";
 import getAllSkillsQuery from "@/graphql/skills/getAllSkills.query.gql";
 import getSkillCategoriesQuery from "@/graphql/skills/getSkillCategories.query.gql";
 import { ISkillsData } from "@/types/userSkillsUI";
+import { getDetailedError } from "@/utils/handleErrors";
 
 export const getAllSkills = async () => {
   try {
@@ -11,11 +12,7 @@ export const getAllSkills = async () => {
 
     return response.data.skills;
   } catch (error: unknown) {
-    if (error instanceof Error) {
-      console.error(error.message);
-    }
-
-    throw error;
+    throw getDetailedError(error);
   }
 };
 
@@ -27,10 +24,6 @@ export const getSkillCategories = async () => {
 
     return response.data.skillCategories;
   } catch (error: unknown) {
-    if (error instanceof Error) {
-      console.error(error.message);
-    }
-
-    throw error;
+    throw getDetailedError(error);
   }
 };

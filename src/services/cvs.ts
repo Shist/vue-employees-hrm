@@ -1,15 +1,15 @@
 import apolloClient from "@/plugins/apolloConfig";
-import checkID from "@/utils/checkID";
 import getCVNameByIDQuery from "@/graphql/cvs/getCVNameByID.query.gql";
 import createCVQuery from "@/graphql/cvs/createCV.mutation.gql";
 import deleteCVQuery from "@/graphql/cvs/deleteCV.mutation.gql";
 import { ICVNameData } from "@/types/breadcrumbsUI";
 import { IUserCVNameData } from "@/types/userCVsUI";
 import { ICreateCVInput, IDeleteCVInput } from "@/types/backend-interfaces/cv";
+import { checkCvID, getDetailedError } from "@/utils/handleErrors";
 
 export const getCVNameDataByID = async (id: string) => {
   try {
-    checkID(id);
+    checkCvID(id);
 
     const response = (await apolloClient.query({
       query: getCVNameByIDQuery,
@@ -18,11 +18,7 @@ export const getCVNameDataByID = async (id: string) => {
 
     return response.data.cv;
   } catch (error: unknown) {
-    if (error instanceof Error) {
-      console.error(error.message);
-    }
-
-    throw error;
+    throw getDetailedError(error);
   }
 };
 
@@ -35,11 +31,7 @@ export const createCV = async (inputCVObj: ICreateCVInput) => {
 
     return response.data.createCv;
   } catch (error: unknown) {
-    if (error instanceof Error) {
-      console.error(error.message);
-    }
-
-    throw error;
+    throw getDetailedError(error);
   }
 };
 
@@ -50,10 +42,6 @@ export const deleteCV = async (inputCVObj: IDeleteCVInput) => {
       variables: { cv: inputCVObj },
     });
   } catch (error: unknown) {
-    if (error instanceof Error) {
-      console.error(error.message);
-    }
-
-    throw error;
+    throw getDetailedError(error);
   }
 };

@@ -81,9 +81,10 @@
 import { ref, reactive, onMounted } from "vue";
 import { useRouter } from "vue-router";
 import { ROUTES } from "@/constants/router";
-import { getAllUsers } from "@/services/users";
+import { getAllUsers } from "@/services/users/users";
 import { IUsersTableData } from "@/types/usersTableUI";
-import { UNEXPECTED_ERROR } from "@/constants/errorMessage";
+import { UNAUTHORIZED_ERROR, UNEXPECTED_ERROR } from "@/constants/errorMessage";
+import { handleLogout } from "@/utils/handleErrors";
 
 const router = useRouter();
 
@@ -135,6 +136,11 @@ onMounted(async () => {
       isError.value = true;
 
       if (error instanceof Error) {
+        if (error.cause === UNAUTHORIZED_ERROR) {
+          handleLogout();
+          return;
+        }
+
         errorMessage.value = error.message;
 
         if (error.name === "NotFoundError") {

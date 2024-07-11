@@ -53,12 +53,6 @@ import { ref, onMounted, computed, watch } from "vue";
 import AvatarUpload from "@/components/user/profile/AvatarUpload.vue";
 import UserInfo from "@/components/user/profile/UserInfo.vue";
 import { useRoute } from "vue-router";
-import {
-  getUserProfileByID,
-  updateUserData,
-  updateUserAvatar,
-  deleteUserAvatar,
-} from "@/services/users";
 import { getAllDepartmentNames } from "@/services/departments";
 import { getAllPositionNames } from "@/services/positions";
 import {
@@ -70,12 +64,19 @@ import {
 import { IUpdateUserInput } from "@/types/backend-interfaces/user";
 import { IUpdateProfileInput } from "@/types/backend-interfaces/user/profile";
 import { IUploadAvatarInput } from "@/types/backend-interfaces/user/avatar";
-import { UNEXPECTED_ERROR } from "@/constants/errorMessage";
+import { UNAUTHORIZED_ERROR, UNEXPECTED_ERROR } from "@/constants/errorMessage";
 import { ROUTES } from "@/constants/router";
 import useToast from "@/composables/useToast";
 import { storeToRefs } from "pinia";
 import { useAuthStore } from "@/store/authStore";
 import { TOO_LARGE_FILE, INVALID_FILE_TYPE } from "@/constants/errorMessage";
+import {
+  deleteUserAvatar,
+  getUserProfileByID,
+  updateUserAvatar,
+  updateUserData,
+} from "@/services/users/profile";
+import { handleLogout } from "@/utils/handleErrors";
 
 const route = useRoute();
 
@@ -99,6 +100,8 @@ const isError = ref(false);
 const errorMessage = ref(UNEXPECTED_ERROR);
 const isNotFoundError = ref(false);
 
+const { setErrorToast } = useToast();
+
 const userInitials = computed(() => {
   if (user.value?.firstName) {
     return user.value.firstName.charAt(0).toUpperCase();
@@ -110,8 +113,6 @@ const userInitials = computed(() => {
     return "";
   }
 });
-
-const { setErrorToast } = useToast();
 
 onMounted(() => {
   fetchData();
@@ -164,6 +165,7 @@ function fetchData() {
     getAllPositionNames(),
   ])
     .then(([userData, departmentNamesData, positionNamesData]) => {
+      if (!userData || !departmentNamesData || !positionNamesData) return;
       updateUserValue(userData);
       departmentNames.value = departmentNamesData;
       positionNames.value = positionNamesData;
@@ -174,13 +176,16 @@ function fetchData() {
       isError.value = true;
 
       if (error instanceof Error) {
+        if (error.cause === UNAUTHORIZED_ERROR) {
+          handleLogout();
+          return;
+        }
+
         errorMessage.value = error.message;
 
         if (error.name === "NotFoundError") {
           isNotFoundError.value = true;
         }
-
-        setErrorToast(errorMessage.value);
       }
     })
     .finally(() => {
@@ -198,6 +203,7 @@ function submitUserData(
 
   updateUserData(userInputObj, profileInputObj)
     .then((response) => {
+      if (!response) return;
       updateUserValue(response);
 
       setErrorValuesToDefault();
@@ -206,13 +212,16 @@ function submitUserData(
       isError.value = true;
 
       if (error instanceof Error) {
+        if (error.cause === UNAUTHORIZED_ERROR) {
+          handleLogout();
+          return;
+        }
+
         errorMessage.value = error.message;
 
         if (error.name === "NotFoundError") {
           isNotFoundError.value = true;
         }
-
-        setErrorToast(errorMessage.value);
       }
     })
     .finally(() => {
@@ -241,6 +250,7 @@ function submitUserAvatar(avatarInputObj: IUploadAvatarInput) {
 
   updateUserAvatar(avatarInputObj)
     .then((newAvatarSRC) => {
+      if (!newAvatarSRC) return;
       if (user.value) {
         user.value.avatar = newAvatarSRC;
       }
@@ -255,13 +265,16 @@ function submitUserAvatar(avatarInputObj: IUploadAvatarInput) {
       isError.value = true;
 
       if (error instanceof Error) {
+        if (error.cause === UNAUTHORIZED_ERROR) {
+          handleLogout();
+          return;
+        }
+
         errorMessage.value = error.message;
 
         if (error.name === "NotFoundError") {
           isNotFoundError.value = true;
         }
-
-        setErrorToast(errorMessage.value);
       }
     })
     .finally(() => {
@@ -290,13 +303,16 @@ function submitUserAvatarDeletion(userID: string) {
       isError.value = true;
 
       if (error instanceof Error) {
+        if (error.cause === UNAUTHORIZED_ERROR) {
+          handleLogout();
+          return;
+        }
+
         errorMessage.value = error.message;
 
         if (error.name === "NotFoundError") {
           isNotFoundError.value = true;
         }
-
-        setErrorToast(errorMessage.value);
       }
     })
     .finally(() => {

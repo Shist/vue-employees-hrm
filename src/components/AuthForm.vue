@@ -167,6 +167,7 @@ const submitForm = async (): Promise<void> => {
       font-size: 14px;
       line-height: 1.235;
       width: 100%;
+      color: var(--color-btn-text);
       background-color: var(--color-btn-bg);
       border-radius: 0;
       &:hover {

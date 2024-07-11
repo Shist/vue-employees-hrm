@@ -32,7 +32,7 @@ import {
   SECTIONS_ICONS,
   TABS_NAMES,
 } from "@/constants/breadCrumbs";
-import { getUserNameDataByID } from "@/services/users";
+import { getUserNameDataByID } from "@/services/users/users";
 import { getCVNameDataByID } from "@/services/cvs";
 import { storeToRefs } from "pinia";
 import { useAuthStore } from "@/store/authStore";

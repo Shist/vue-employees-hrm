@@ -83,12 +83,6 @@ import { ref, reactive, computed, watch, onMounted } from "vue";
 import SkillModal from "@/components/user/skills/SkillModal.vue";
 import SkillsCategory from "@/components/user/skills/SkillsCategory.vue";
 import { useRoute } from "vue-router";
-import {
-  getUserSkillsByID,
-  createUserSkill,
-  updateUserSkill,
-  deleteUserSkills,
-} from "@/services/users";
 import { getAllSkills, getSkillCategories } from "@/services/skills";
 import {
   IProfileSkill,
@@ -100,12 +94,18 @@ import {
   ICategorySkill,
   ISkillsData,
 } from "@/types/userSkillsUI";
-import useToast from "@/composables/useToast";
 import { storeToRefs } from "pinia";
 import { useAuthStore } from "@/store/authStore";
-import { UNEXPECTED_ERROR } from "@/constants/errorMessage";
+import { UNAUTHORIZED_ERROR, UNEXPECTED_ERROR } from "@/constants/errorMessage";
 import { ROUTES } from "@/constants/router";
 import handleScrollPadding from "@/utils/handleScrollPadding";
+import {
+  createUserSkill,
+  deleteUserSkills,
+  getUserSkillsByID,
+  updateUserSkill,
+} from "@/services/users/skills";
+import { handleLogout } from "@/utils/handleErrors";
 
 const route = useRoute();
 
@@ -185,8 +185,6 @@ const skillCategoriesMap = computed(() => {
   return resultObj;
 });
 
-const { setErrorToast } = useToast();
-
 onMounted(() => {
   fetchData();
 });
@@ -224,6 +222,7 @@ function fetchData() {
     getSkillCategories(),
   ])
     .then(([userSkillsData, skillsData, skillCategoriesData]) => {
+      if (!userSkillsData || !skillsData || !skillCategoriesData) return;
       updateUserSkillsValue(userSkillsData);
 
       skills.value = skillsData;
@@ -236,13 +235,16 @@ function fetchData() {
       isError.value = true;
 
       if (error instanceof Error) {
+        if (error.cause === UNAUTHORIZED_ERROR) {
+          handleLogout();
+          return;
+        }
+
         errorMessage.value = error.message;
 
         if (error.name === "NotFoundError") {
           isNotFoundError.value = true;
         }
-
-        setErrorToast(errorMessage.value);
       }
     })
     .finally(() => {
@@ -280,6 +282,7 @@ function submitUserSkillCreate(skillInputObj: IAddOrUpdateProfileSkillInput) {
 
   createUserSkill(skillInputObj)
     .then((freshUserSkills) => {
+      if (!freshUserSkills) return;
       updateUserSkillsValue(freshUserSkills);
 
       setErrorValuesToDefault();
@@ -288,13 +291,16 @@ function submitUserSkillCreate(skillInputObj: IAddOrUpdateProfileSkillInput) {
       isError.value = true;
 
       if (error instanceof Error) {
+        if (error.cause === UNAUTHORIZED_ERROR) {
+          handleLogout();
+          return;
+        }
+
         errorMessage.value = error.message;
 
         if (error.name === "NotFoundError") {
           isNotFoundError.value = true;
         }
-
-        setErrorToast(errorMessage.value);
       }
     })
     .finally(() => {
@@ -309,6 +315,7 @@ function submitUserSkillUpdate(skillInputObj: IAddOrUpdateProfileSkillInput) {
 
   updateUserSkill(skillInputObj)
     .then((freshUserSkills) => {
+      if (!freshUserSkills) return;
       updateUserSkillsValue(freshUserSkills);
 
       setErrorValuesToDefault();
@@ -317,13 +324,16 @@ function submitUserSkillUpdate(skillInputObj: IAddOrUpdateProfileSkillInput) {
       isError.value = true;
 
       if (error instanceof Error) {
+        if (error.cause === UNAUTHORIZED_ERROR) {
+          handleLogout();
+          return;
+        }
+
         errorMessage.value = error.message;
 
         if (error.name === "NotFoundError") {
           isNotFoundError.value = true;
         }
-
-        setErrorToast(errorMessage.value);
       }
     })
     .finally(() => {
@@ -365,6 +375,7 @@ function submitUserSkillsDeletion() {
 
   deleteUserSkills(skillsToBeDeleted)
     .then((freshUserSkills) => {
+      if (!freshUserSkills) return;
       updateUserSkillsValue(freshUserSkills);
 
       setErrorValuesToDefault();
@@ -373,13 +384,16 @@ function submitUserSkillsDeletion() {
       isError.value = true;
 
       if (error instanceof Error) {
+        if (error.cause === UNAUTHORIZED_ERROR) {
+          handleLogout();
+          return;
+        }
+
         errorMessage.value = error.message;
 
         if (error.name === "NotFoundError") {
           isNotFoundError.value = true;
         }
-
-        setErrorToast(errorMessage.value);
       }
     })
     .finally(() => {

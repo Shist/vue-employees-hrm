@@ -103,15 +103,15 @@ import CreateCVModal from "@/components/user/cvs/CreateCVModal.vue";
 import DeleteCVModal from "@/components/user/cvs/DeleteCVModal.vue";
 import { useRouter, useRoute } from "vue-router";
 import { ROUTES } from "@/constants/router";
-import { getUserCVsNamesByID } from "@/services/users";
 import { createCV, deleteCV } from "@/services/cvs";
 import { IUserCVNameData } from "@/types/userCVsUI";
 import { ICreateCVInput, IDeleteCVInput } from "@/types/backend-interfaces/cv";
-import useToast from "@/composables/useToast";
 import { storeToRefs } from "pinia";
 import { useAuthStore } from "@/store/authStore";
-import { UNEXPECTED_ERROR } from "@/constants/errorMessage";
+import { UNAUTHORIZED_ERROR, UNEXPECTED_ERROR } from "@/constants/errorMessage";
 import handleScrollPadding from "@/utils/handleScrollPadding";
+import { getUserCVsNamesByID } from "@/services/users/cvs";
+import { handleLogout } from "@/utils/handleErrors";
 
 const router = useRouter();
 const route = useRoute();
@@ -151,8 +151,6 @@ const isNotFoundError = ref(false);
 const isCreateModalOpen = ref(false);
 const isDeleteModalOpen = ref(false);
 
-const { setErrorToast } = useToast();
-
 function setErrorValuesToDefault() {
   isError.value = false;
   errorMessage.value = UNEXPECTED_ERROR;
@@ -182,6 +180,8 @@ async function fetchData() {
   try {
     const cvsData = await getUserCVsNamesByID(id.value);
 
+    if (!cvsData) return;
+
     userCVs.splice(0, userCVs.length, ...cvsData);
 
     setErrorValuesToDefault();
@@ -189,13 +189,16 @@ async function fetchData() {
     isError.value = true;
 
     if (error instanceof Error) {
+      if (error.cause === UNAUTHORIZED_ERROR) {
+        handleLogout();
+        return;
+      }
+
       errorMessage.value = error.message;
 
       if (error.name === "NotFoundError") {
         isNotFoundError.value = true;
       }
-
-      setErrorToast(errorMessage.value);
     }
   }
 }
@@ -206,19 +209,26 @@ function submitUserCVCreate(cvInputObj: ICreateCVInput) {
   isPageLoading.value = true;
 
   createCV(cvInputObj)
-    .then((createdUserCV: IUserCVNameData) => {
+    .then((createdUserCV) => {
+      if (!createdUserCV) return;
       userCVs.push(createdUserCV);
 
       setErrorValuesToDefault();
     })
     .catch((error: unknown) => {
       isError.value = true;
+
       if (error instanceof Error) {
+        if (error.cause === UNAUTHORIZED_ERROR) {
+          handleLogout();
+          return;
+        }
+
         errorMessage.value = error.message;
+
         if (error.name === "NotFoundError") {
           isNotFoundError.value = true;
         }
-        setErrorToast(errorMessage.value);
       }
     })
     .finally(() => {
@@ -241,13 +251,16 @@ async function submitUserCVDeletion(cvInputObj: IDeleteCVInput) {
     isError.value = true;
 
     if (error instanceof Error) {
+      if (error.cause === UNAUTHORIZED_ERROR) {
+        handleLogout();
+        return;
+      }
+
       errorMessage.value = error.message;
 
       if (error.name === "NotFoundError") {
         isNotFoundError.value = true;
       }
-
-      setErrorToast(errorMessage.value);
     }
   } finally {
     isPageLoading.value = false;

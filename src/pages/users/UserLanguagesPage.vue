@@ -113,12 +113,6 @@
 import { ref, reactive, computed, watch, onMounted } from "vue";
 import LanguageModal from "@/components/user/languages/LanguageModal.vue";
 import { useRoute } from "vue-router";
-import {
-  getUserLanguagesByID,
-  createUserLanguage,
-  updateUserLanguage,
-  deleteUserLanguages,
-} from "@/services/users";
 import { getAllLanguagesNames } from "@/services/languages";
 import { Proficiency } from "@/types/backend-interfaces/language/proficiency";
 import {
@@ -127,12 +121,18 @@ import {
   IDeleteProfileLanguageInput,
 } from "@/types/backend-interfaces/user/profile/language";
 import { ILanguagesNamesData } from "@/types/userLanguagesUI";
-import useToast from "@/composables/useToast";
 import { storeToRefs } from "pinia";
 import { useAuthStore } from "@/store/authStore";
-import { UNEXPECTED_ERROR } from "@/constants/errorMessage";
+import { UNAUTHORIZED_ERROR, UNEXPECTED_ERROR } from "@/constants/errorMessage";
 import { ROUTES } from "@/constants/router";
 import handleScrollPadding from "@/utils/handleScrollPadding";
+import {
+  createUserLanguage,
+  deleteUserLanguages,
+  getUserLanguagesByID,
+  updateUserLanguage,
+} from "@/services/users/languages";
+import { handleLogout } from "@/utils/handleErrors";
 
 const route = useRoute();
 
@@ -182,8 +182,6 @@ const languagesForDeletionAmount = computed<number>(() => {
   }, 0);
 });
 
-const { setErrorToast } = useToast();
-
 onMounted(() => {
   fetchData();
 });
@@ -216,18 +214,27 @@ function fetchData() {
   isPageLoading.value = true;
   Promise.all([getUserLanguagesByID(id.value), getAllLanguagesNames()])
     .then(([userLanguagesData, languagesData]) => {
+      if (!userLanguagesData || !languagesData) return;
+
       updateUserLanguagesValue(userLanguagesData);
+
       languages.value = languagesData;
       setErrorValuesToDefault();
     })
     .catch((error: unknown) => {
       isError.value = true;
+
       if (error instanceof Error) {
+        if (error.cause === UNAUTHORIZED_ERROR) {
+          handleLogout();
+          return;
+        }
+
         errorMessage.value = error.message;
+
         if (error.name === "NotFoundError") {
           isNotFoundError.value = true;
         }
-        setErrorToast(errorMessage.value);
       }
     })
     .finally(() => {
@@ -266,6 +273,7 @@ function submitUserLanguageCreate(
 
   createUserLanguage(languageInputObj)
     .then((freshUserLanguages) => {
+      if (!freshUserLanguages) return;
       updateUserLanguagesValue(freshUserLanguages);
 
       setErrorValuesToDefault();
@@ -274,13 +282,16 @@ function submitUserLanguageCreate(
       isError.value = true;
 
       if (error instanceof Error) {
+        if (error.cause === UNAUTHORIZED_ERROR) {
+          handleLogout();
+          return;
+        }
+
         errorMessage.value = error.message;
 
         if (error.name === "NotFoundError") {
           isNotFoundError.value = true;
         }
-
-        setErrorToast(errorMessage.value);
       }
     })
     .finally(() => {
@@ -297,6 +308,7 @@ function submitUserLanguageUpdate(
 
   updateUserLanguage(languageInputObj)
     .then((freshUserLanguages) => {
+      if (!freshUserLanguages) return;
       updateUserLanguagesValue(freshUserLanguages);
 
       setErrorValuesToDefault();
@@ -305,13 +317,16 @@ function submitUserLanguageUpdate(
       isError.value = true;
 
       if (error instanceof Error) {
+        if (error.cause === UNAUTHORIZED_ERROR) {
+          handleLogout();
+          return;
+        }
+
         errorMessage.value = error.message;
 
         if (error.name === "NotFoundError") {
           isNotFoundError.value = true;
         }
-
-        setErrorToast(errorMessage.value);
       }
     })
     .finally(() => {
@@ -353,6 +368,7 @@ function submitUserLanguagesDeletion() {
 
   deleteUserLanguages(languagesToBeDeleted)
     .then((freshUserLanguages) => {
+      if (!freshUserLanguages) return;
       updateUserLanguagesValue(freshUserLanguages);
 
       setErrorValuesToDefault();
@@ -361,13 +377,16 @@ function submitUserLanguagesDeletion() {
       isError.value = true;
 
       if (error instanceof Error) {
+        if (error.cause === UNAUTHORIZED_ERROR) {
+          handleLogout();
+          return;
+        }
+
         errorMessage.value = error.message;
 
         if (error.name === "NotFoundError") {
           isNotFoundError.value = true;
         }
-
-        setErrorToast(errorMessage.value);
       }
     })
     .finally(() => {

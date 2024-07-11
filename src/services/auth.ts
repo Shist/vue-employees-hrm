@@ -1,12 +1,7 @@
 import apolloClient from "@/plugins/apolloConfig";
 import loginQuery from "@/graphql/auth/login.query.gql";
 import signupMutation from "@/graphql/auth/signUp.mutation.gql";
-import {
-  INVALID_CREDENTIALS,
-  NO_NETWORK_CONNECTION,
-  UNEXPECTED_ERROR,
-} from "@/constants/errorMessage";
-import handleErrors from "@/utils/handleErrors";
+import { getDetailedError } from "@/utils/handleErrors";
 
 export const login = async (email: string, password: string) => {
   try {
@@ -32,8 +27,7 @@ export const login = async (email: string, password: string) => {
 
     return { user, token };
   } catch (error: unknown) {
-    console.log(error);
-    handleErrors(error);
+    throw getDetailedError(error);
   }
 };
 
@@ -61,6 +55,6 @@ export const register = async (email: string, password: string) => {
 
     return { user, token };
   } catch (error: unknown) {
-    handleErrors(error);
+    throw getDetailedError(error);
   }
 };
