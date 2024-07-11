@@ -1,13 +1,6 @@
 <template>
   <div class="main-page">
-    <v-progress-circular
-      v-if="isLoading"
-      :size="100"
-      :width="10"
-      color="var(--color-spinner)"
-      indeterminate
-      class="main-page__spinner"
-    />
+    <AppSpinner v-if="isLoading" class="main-page__spinner" />
     <div v-else-if="isError" class="main-page__error-wrapper">
       <h4 class="main-page__error-message">❌ {{ errorMessage }}</h4>
       <v-btn

@@ -1,5 +1,6 @@
 import { createApp, provide, h } from "vue";
 import App from "@/App.vue";
+import appComponents from "@/components/UI";
 import router from "@/router";
 import { createPinia } from "pinia";
 import vuetifyConfig from "@/plugins/vuetify";
@@ -14,6 +15,12 @@ const app = createApp({
   },
 
   render: () => h(App),
+});
+
+appComponents.forEach((component) => {
+  if (component.__name) {
+    app.component(component.__name, component);
+  }
 });
 
 app

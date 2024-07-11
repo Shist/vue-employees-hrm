@@ -1,13 +1,6 @@
 <template>
   <div class="user-cvs">
-    <v-progress-circular
-      v-if="isLoading"
-      :size="100"
-      :width="10"
-      color="var(--color-spinner)"
-      indeterminate
-      class="user-cvs__spinner"
-    />
+    <AppSpinner v-if="isLoading" class="user-cvs__spinner" />
     <div v-else-if="isError" class="user-cvs__error-wrapper">
       <h4 class="user-cvs__error-message">❌ {{ errorMessage }}</h4>
       <v-btn
