@@ -1,7 +1,7 @@
 <template>
   <div class="user-profile">
     <v-progress-circular
-      v-if="isPageLoading"
+      v-if="isLoading"
       :size="100"
       :width="10"
       color="var(--color-spinner)"
@@ -64,7 +64,6 @@ import {
 import { IUpdateUserInput } from "@/types/backend-interfaces/user";
 import { IUpdateProfileInput } from "@/types/backend-interfaces/user/profile";
 import { IUploadAvatarInput } from "@/types/backend-interfaces/user/avatar";
-import { UNAUTHORIZED_ERROR, UNEXPECTED_ERROR } from "@/constants/errorMessage";
 import { ROUTES } from "@/constants/router";
 import useToast from "@/composables/useToast";
 import { storeToRefs } from "pinia";
@@ -76,7 +75,7 @@ import {
   updateUserAvatar,
   updateUserData,
 } from "@/services/users/profile";
-import { handleLogout } from "@/utils/handleErrors";
+import useErrorState from "@/composables/useErrorState";
 
 const route = useRoute();
 
@@ -90,15 +89,18 @@ const authStore = useAuthStore();
 const authStoreUser = storeToRefs(authStore).user;
 const isOwner = computed(() => authStoreUser.value?.id === id.value);
 
-const isPageLoading = ref(true);
+const {
+  isLoading,
+  isError,
+  errorMessage,
+  isNotFoundError,
+  setErrorValuesToDefault,
+  setErrorValues,
+} = useErrorState();
 
 const user = ref<IUserProfileData | null>(null);
 const departmentNames = ref<IDepartmentNamesData[] | null>(null);
 const positionNames = ref<IPositionNamesData[] | null>(null);
-
-const isError = ref(false);
-const errorMessage = ref(UNEXPECTED_ERROR);
-const isNotFoundError = ref(false);
 
 const { setErrorToast } = useToast();
 
@@ -150,14 +152,8 @@ function updateUserValue(newUser: IUserProfileServerData) {
   }
 }
 
-function setErrorValuesToDefault() {
-  isError.value = false;
-  errorMessage.value = UNEXPECTED_ERROR;
-  isNotFoundError.value = false;
-}
-
 function fetchData() {
-  isPageLoading.value = true;
+  isLoading.value = true;
 
   Promise.all([
     getUserProfileByID(id.value),
@@ -173,23 +169,10 @@ function fetchData() {
       setErrorValuesToDefault();
     })
     .catch((error: unknown) => {
-      isError.value = true;
-
-      if (error instanceof Error) {
-        if (error.cause === UNAUTHORIZED_ERROR) {
-          handleLogout();
-          return;
-        }
-
-        errorMessage.value = error.message;
-
-        if (error.name === "NotFoundError") {
-          isNotFoundError.value = true;
-        }
-      }
+      setErrorValues(error);
     })
     .finally(() => {
-      isPageLoading.value = false;
+      isLoading.value = false;
     });
 }
 
@@ -199,7 +182,7 @@ function submitUserData(
 ) {
   if (!isOwner.value) return;
 
-  isPageLoading.value = true;
+  isLoading.value = true;
 
   updateUserData(userInputObj, profileInputObj)
     .then((response) => {
@@ -209,23 +192,10 @@ function submitUserData(
       setErrorValuesToDefault();
     })
     .catch((error: unknown) => {
-      isError.value = true;
-
-      if (error instanceof Error) {
-        if (error.cause === UNAUTHORIZED_ERROR) {
-          handleLogout();
-          return;
-        }
-
-        errorMessage.value = error.message;
-
-        if (error.name === "NotFoundError") {
-          isNotFoundError.value = true;
-        }
-      }
+      setErrorValues(error);
     })
     .finally(() => {
-      isPageLoading.value = false;
+      isLoading.value = false;
     });
 }
 
@@ -246,7 +216,7 @@ function submitUserAvatar(avatarInputObj: IUploadAvatarInput) {
     return;
   }
 
-  isPageLoading.value = true;
+  isLoading.value = true;
 
   updateUserAvatar(avatarInputObj)
     .then((newAvatarSRC) => {
@@ -262,30 +232,17 @@ function submitUserAvatar(avatarInputObj: IUploadAvatarInput) {
       setErrorValuesToDefault();
     })
     .catch((error: unknown) => {
-      isError.value = true;
-
-      if (error instanceof Error) {
-        if (error.cause === UNAUTHORIZED_ERROR) {
-          handleLogout();
-          return;
-        }
-
-        errorMessage.value = error.message;
-
-        if (error.name === "NotFoundError") {
-          isNotFoundError.value = true;
-        }
-      }
+      setErrorValues(error);
     })
     .finally(() => {
-      isPageLoading.value = false;
+      isLoading.value = false;
     });
 }
 
 function submitUserAvatarDeletion(userID: string) {
   if (!isOwner.value) return;
 
-  isPageLoading.value = true;
+  isLoading.value = true;
 
   deleteUserAvatar(userID)
     .then(() => {
@@ -300,23 +257,10 @@ function submitUserAvatarDeletion(userID: string) {
       setErrorValuesToDefault();
     })
     .catch((error: unknown) => {
-      isError.value = true;
-
-      if (error instanceof Error) {
-        if (error.cause === UNAUTHORIZED_ERROR) {
-          handleLogout();
-          return;
-        }
-
-        errorMessage.value = error.message;
-
-        if (error.name === "NotFoundError") {
-          isNotFoundError.value = true;
-        }
-      }
+      setErrorValues(error);
     })
     .finally(() => {
-      isPageLoading.value = false;
+      isLoading.value = false;
     });
 }
 </script>

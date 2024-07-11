@@ -67,16 +67,11 @@
 </template>
 
 <script setup lang="ts">
-import {
-  NOT_FOUND_USER,
-  UNAUTHORIZED_ERROR,
-  UNEXPECTED_ERROR,
-} from "@/constants/errorMessage";
 import { getAllProjects } from "@/services/projects";
 import { IProjectsTableData } from "@/types/projectsTableUI";
 import { onMounted, reactive, ref } from "vue";
 import { ROUTES } from "@/constants/router";
-import { handleLogout } from "@/utils/handleErrors";
+import useErrorState from "@/composables/useErrorState";
 
 const search = ref("");
 
@@ -90,21 +85,18 @@ const headers = [
   { key: "options", sortable: false },
 ];
 
-const isLoading = ref<boolean>(false);
-
-const isError = ref(false);
-const errorMessage = ref(UNEXPECTED_ERROR);
-const isNotFoundError = ref(false);
+const {
+  isLoading,
+  isError,
+  errorMessage,
+  isNotFoundError,
+  setErrorValuesToDefault,
+  setErrorValues,
+} = useErrorState();
 
 const projectMenuItems = ["Project", "Update project", "Delete project"];
 
 const projects = reactive<IProjectsTableData[]>([]);
-
-function setErrorValuesToDefault() {
-  isError.value = false;
-  errorMessage.value = UNEXPECTED_ERROR;
-  isNotFoundError.value = false;
-}
 
 onMounted(async () => {
   isLoading.value = true;
@@ -113,20 +105,7 @@ onMounted(async () => {
     projects.splice(0, projects.length, ...projectData);
     setErrorValuesToDefault();
   } catch (error: unknown) {
-    isError.value = true;
-
-    if (error instanceof Error) {
-      if (error.cause === UNAUTHORIZED_ERROR) {
-        handleLogout();
-        return;
-      }
-
-      errorMessage.value = error.message;
-
-      if (error.message === NOT_FOUND_USER) {
-        isNotFoundError.value = true;
-      }
-    }
+    setErrorValues(error);
   } finally {
     isLoading.value = false;
   }

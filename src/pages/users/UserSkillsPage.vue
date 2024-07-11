@@ -1,7 +1,7 @@
 <template>
   <div class="user-skills">
     <v-progress-circular
-      v-if="isPageLoading"
+      v-if="isLoading"
       :size="100"
       :width="10"
       color="var(--color-spinner)"
@@ -96,7 +96,6 @@ import {
 } from "@/types/userSkillsUI";
 import { storeToRefs } from "pinia";
 import { useAuthStore } from "@/store/authStore";
-import { UNAUTHORIZED_ERROR, UNEXPECTED_ERROR } from "@/constants/errorMessage";
 import { ROUTES } from "@/constants/router";
 import handleScrollPadding from "@/utils/handleScrollPadding";
 import {
@@ -105,7 +104,7 @@ import {
   getUserSkillsByID,
   updateUserSkill,
 } from "@/services/users/skills";
-import { handleLogout } from "@/utils/handleErrors";
+import useErrorState from "@/composables/useErrorState";
 
 const route = useRoute();
 
@@ -119,7 +118,14 @@ const authStore = useAuthStore();
 const authStoreUser = storeToRefs(authStore).user;
 const isOwner = computed(() => authStoreUser.value?.id === id.value);
 
-const isPageLoading = ref(true);
+const {
+  isLoading,
+  isError,
+  errorMessage,
+  isNotFoundError,
+  setErrorValuesToDefault,
+  setErrorValues,
+} = useErrorState();
 
 const userSkills = ref<IProfileSkill[] | null>(null);
 const skills = ref<ISkillsData[] | null>(null);
@@ -133,10 +139,6 @@ const leftSkills = computed<ISkillsData[]>(() => {
   const userSkillsSet = new Set(userSkills.value.map((skill) => skill.name));
   return skills.value.filter((skill) => !userSkillsSet.has(skill.name));
 });
-
-const isError = ref(false);
-const errorMessage = ref(UNEXPECTED_ERROR);
-const isNotFoundError = ref(false);
 
 const oSkillForModal = ref<IProfileSkill | null>(null);
 const isModalOpen = ref(false);
@@ -197,12 +199,6 @@ watch(isModalOpen, (newValue) => {
   handleScrollPadding(newValue);
 });
 
-function setErrorValuesToDefault() {
-  isError.value = false;
-  errorMessage.value = UNEXPECTED_ERROR;
-  isNotFoundError.value = false;
-}
-
 function updateUserSkillsValue(userSkillsData: IProfileSkill[]) {
   skillsForDeletionNames.clear();
   aSkillsDeletionState.splice(
@@ -214,7 +210,7 @@ function updateUserSkillsValue(userSkillsData: IProfileSkill[]) {
 }
 
 function fetchData() {
-  isPageLoading.value = true;
+  isLoading.value = true;
 
   Promise.all([
     getUserSkillsByID(id.value),
@@ -232,23 +228,10 @@ function fetchData() {
       setErrorValuesToDefault();
     })
     .catch((error: unknown) => {
-      isError.value = true;
-
-      if (error instanceof Error) {
-        if (error.cause === UNAUTHORIZED_ERROR) {
-          handleLogout();
-          return;
-        }
-
-        errorMessage.value = error.message;
-
-        if (error.name === "NotFoundError") {
-          isNotFoundError.value = true;
-        }
-      }
+      setErrorValues(error);
     })
     .finally(() => {
-      isPageLoading.value = false;
+      isLoading.value = false;
     });
 }
 
@@ -278,7 +261,7 @@ function handleOpenEditModal(
 function submitUserSkillCreate(skillInputObj: IAddOrUpdateProfileSkillInput) {
   if (!isOwner.value) return;
 
-  isPageLoading.value = true;
+  isLoading.value = true;
 
   createUserSkill(skillInputObj)
     .then((freshUserSkills) => {
@@ -288,30 +271,17 @@ function submitUserSkillCreate(skillInputObj: IAddOrUpdateProfileSkillInput) {
       setErrorValuesToDefault();
     })
     .catch((error: unknown) => {
-      isError.value = true;
-
-      if (error instanceof Error) {
-        if (error.cause === UNAUTHORIZED_ERROR) {
-          handleLogout();
-          return;
-        }
-
-        errorMessage.value = error.message;
-
-        if (error.name === "NotFoundError") {
-          isNotFoundError.value = true;
-        }
-      }
+      setErrorValues(error);
     })
     .finally(() => {
-      isPageLoading.value = false;
+      isLoading.value = false;
     });
 }
 
 function submitUserSkillUpdate(skillInputObj: IAddOrUpdateProfileSkillInput) {
   if (!isOwner.value) return;
 
-  isPageLoading.value = true;
+  isLoading.value = true;
 
   updateUserSkill(skillInputObj)
     .then((freshUserSkills) => {
@@ -321,23 +291,10 @@ function submitUserSkillUpdate(skillInputObj: IAddOrUpdateProfileSkillInput) {
       setErrorValuesToDefault();
     })
     .catch((error: unknown) => {
-      isError.value = true;
-
-      if (error instanceof Error) {
-        if (error.cause === UNAUTHORIZED_ERROR) {
-          handleLogout();
-          return;
-        }
-
-        errorMessage.value = error.message;
-
-        if (error.name === "NotFoundError") {
-          isNotFoundError.value = true;
-        }
-      }
+      setErrorValues(error);
     })
     .finally(() => {
-      isPageLoading.value = false;
+      isLoading.value = false;
     });
 }
 
@@ -366,7 +323,7 @@ function clearUserDeletionSkills() {
 function submitUserSkillsDeletion() {
   if (!isOwner.value) return;
 
-  isPageLoading.value = true;
+  isLoading.value = true;
 
   const skillsToBeDeleted: IDeleteProfileSkillInput = {
     userId: Number(id.value),
@@ -381,23 +338,10 @@ function submitUserSkillsDeletion() {
       setErrorValuesToDefault();
     })
     .catch((error: unknown) => {
-      isError.value = true;
-
-      if (error instanceof Error) {
-        if (error.cause === UNAUTHORIZED_ERROR) {
-          handleLogout();
-          return;
-        }
-
-        errorMessage.value = error.message;
-
-        if (error.name === "NotFoundError") {
-          isNotFoundError.value = true;
-        }
-      }
+      setErrorValues(error);
     })
     .finally(() => {
-      isPageLoading.value = false;
+      isLoading.value = false;
     });
 
   clearUserDeletionSkills();

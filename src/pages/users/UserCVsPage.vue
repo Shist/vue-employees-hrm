@@ -1,7 +1,7 @@
 <template>
   <div class="user-cvs">
     <v-progress-circular
-      v-if="isPageLoading"
+      v-if="isLoading"
       :size="100"
       :width="10"
       color="var(--color-spinner)"
@@ -108,10 +108,9 @@ import { IUserCVNameData } from "@/types/userCVsUI";
 import { ICreateCVInput, IDeleteCVInput } from "@/types/backend-interfaces/cv";
 import { storeToRefs } from "pinia";
 import { useAuthStore } from "@/store/authStore";
-import { UNAUTHORIZED_ERROR, UNEXPECTED_ERROR } from "@/constants/errorMessage";
 import handleScrollPadding from "@/utils/handleScrollPadding";
 import { getUserCVsNamesByID } from "@/services/users/cvs";
-import { handleLogout } from "@/utils/handleErrors";
+import useErrorState from "@/composables/useErrorState";
 
 const router = useRouter();
 const route = useRoute();
@@ -141,31 +140,29 @@ const headers = [
   { key: "options", sortable: false },
 ];
 
-const isPageLoading = ref(true);
-const userCVs = reactive<IUserCVNameData[]>([]);
+const {
+  isLoading,
+  isError,
+  errorMessage,
+  isNotFoundError,
+  setErrorValuesToDefault,
+  setErrorValues,
+} = useErrorState();
 
-const isError = ref(false);
-const errorMessage = ref(UNEXPECTED_ERROR);
-const isNotFoundError = ref(false);
+const userCVs = reactive<IUserCVNameData[]>([]);
 
 const isCreateModalOpen = ref(false);
 const isDeleteModalOpen = ref(false);
 
-function setErrorValuesToDefault() {
-  isError.value = false;
-  errorMessage.value = UNEXPECTED_ERROR;
-  isNotFoundError.value = false;
-}
-
 onMounted(async () => {
   await fetchData();
-  isPageLoading.value = false;
+  isLoading.value = false;
 });
 
 watch(id, async () => {
-  isPageLoading.value = true;
+  isLoading.value = true;
   await fetchData();
-  isPageLoading.value = false;
+  isLoading.value = false;
 });
 
 watch(isCreateModalOpen, (newValue) => {
@@ -186,27 +183,14 @@ async function fetchData() {
 
     setErrorValuesToDefault();
   } catch (error: unknown) {
-    isError.value = true;
-
-    if (error instanceof Error) {
-      if (error.cause === UNAUTHORIZED_ERROR) {
-        handleLogout();
-        return;
-      }
-
-      errorMessage.value = error.message;
-
-      if (error.name === "NotFoundError") {
-        isNotFoundError.value = true;
-      }
-    }
+    setErrorValues(error);
   }
 }
 
 function submitUserCVCreate(cvInputObj: ICreateCVInput) {
   if (!isOwner.value) return;
 
-  isPageLoading.value = true;
+  isLoading.value = true;
 
   createCV(cvInputObj)
     .then((createdUserCV) => {
@@ -216,30 +200,17 @@ function submitUserCVCreate(cvInputObj: ICreateCVInput) {
       setErrorValuesToDefault();
     })
     .catch((error: unknown) => {
-      isError.value = true;
-
-      if (error instanceof Error) {
-        if (error.cause === UNAUTHORIZED_ERROR) {
-          handleLogout();
-          return;
-        }
-
-        errorMessage.value = error.message;
-
-        if (error.name === "NotFoundError") {
-          isNotFoundError.value = true;
-        }
-      }
+      setErrorValues(error);
     })
     .finally(() => {
-      isPageLoading.value = false;
+      isLoading.value = false;
     });
 }
 
 async function submitUserCVDeletion(cvInputObj: IDeleteCVInput) {
   if (!isOwner.value) return;
 
-  isPageLoading.value = true;
+  isLoading.value = true;
 
   try {
     await deleteCV(cvInputObj);
@@ -248,22 +219,9 @@ async function submitUserCVDeletion(cvInputObj: IDeleteCVInput) {
 
     setErrorValuesToDefault();
   } catch (error: unknown) {
-    isError.value = true;
-
-    if (error instanceof Error) {
-      if (error.cause === UNAUTHORIZED_ERROR) {
-        handleLogout();
-        return;
-      }
-
-      errorMessage.value = error.message;
-
-      if (error.name === "NotFoundError") {
-        isNotFoundError.value = true;
-      }
-    }
+    setErrorValues(error);
   } finally {
-    isPageLoading.value = false;
+    isLoading.value = false;
   }
 }
 

@@ -1,7 +1,7 @@
 <template>
   <div class="main-page">
     <v-progress-circular
-      v-if="isPageLoading"
+      v-if="isLoading"
       :size="100"
       :width="10"
       color="var(--color-spinner)"
@@ -83,8 +83,7 @@ import { useRouter } from "vue-router";
 import { ROUTES } from "@/constants/router";
 import { getAllUsers } from "@/services/users/users";
 import { IUsersTableData } from "@/types/usersTableUI";
-import { UNAUTHORIZED_ERROR, UNEXPECTED_ERROR } from "@/constants/errorMessage";
-import { handleLogout } from "@/utils/handleErrors";
+import useErrorState from "@/composables/useErrorState";
 
 const router = useRouter();
 
@@ -110,21 +109,19 @@ const projectMenuItems = [
   { title: "Delete user", disabled: true },
 ];
 
-const isPageLoading = ref(true);
+const {
+  isLoading,
+  isError,
+  errorMessage,
+  isNotFoundError,
+  setErrorValuesToDefault,
+  setErrorValues,
+} = useErrorState();
+
 const users = reactive<IUsersTableData[]>([]);
 
-const isError = ref(false);
-const errorMessage = ref(UNEXPECTED_ERROR);
-const isNotFoundError = ref(false);
-
-function setErrorValuesToDefault() {
-  isError.value = false;
-  errorMessage.value = UNEXPECTED_ERROR;
-  isNotFoundError.value = false;
-}
-
 onMounted(async () => {
-  isPageLoading.value = true;
+  isLoading.value = true;
 
   getAllUsers()
     .then((usersData) => {
@@ -133,23 +130,10 @@ onMounted(async () => {
       setErrorValuesToDefault();
     })
     .catch((error: unknown) => {
-      isError.value = true;
-
-      if (error instanceof Error) {
-        if (error.cause === UNAUTHORIZED_ERROR) {
-          handleLogout();
-          return;
-        }
-
-        errorMessage.value = error.message;
-
-        if (error.name === "NotFoundError") {
-          isNotFoundError.value = true;
-        }
-      }
+      setErrorValues(error);
     })
     .finally(() => {
-      isPageLoading.value = false;
+      isLoading.value = false;
     });
 });
 </script>

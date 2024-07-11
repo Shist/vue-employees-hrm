@@ -1,7 +1,7 @@
 <template>
   <div class="user-languages">
     <v-progress-circular
-      v-if="isPageLoading"
+      v-if="isLoading"
       :size="100"
       :width="10"
       color="var(--color-spinner)"
@@ -123,7 +123,6 @@ import {
 import { ILanguagesNamesData } from "@/types/userLanguagesUI";
 import { storeToRefs } from "pinia";
 import { useAuthStore } from "@/store/authStore";
-import { UNAUTHORIZED_ERROR, UNEXPECTED_ERROR } from "@/constants/errorMessage";
 import { ROUTES } from "@/constants/router";
 import handleScrollPadding from "@/utils/handleScrollPadding";
 import {
@@ -132,7 +131,7 @@ import {
   getUserLanguagesByID,
   updateUserLanguage,
 } from "@/services/users/languages";
-import { handleLogout } from "@/utils/handleErrors";
+import useErrorState from "@/composables/useErrorState";
 
 const route = useRoute();
 
@@ -146,7 +145,14 @@ const authStore = useAuthStore();
 const authStoreUser = storeToRefs(authStore).user;
 const isOwner = computed(() => authStoreUser.value?.id === id.value);
 
-const isPageLoading = ref(true);
+const {
+  isLoading,
+  isError,
+  errorMessage,
+  isNotFoundError,
+  setErrorValuesToDefault,
+  setErrorValues,
+} = useErrorState();
 
 const userLanguages = ref<IProfileLanguage[] | null>(null);
 const languages = ref<ILanguagesNamesData[] | null>(null);
@@ -163,10 +169,6 @@ const leftLanguages = computed<ILanguagesNamesData[]>(() => {
     (language) => !userLanguagesSet.has(language.name)
   );
 });
-
-const isError = ref(false);
-const errorMessage = ref(UNEXPECTED_ERROR);
-const isNotFoundError = ref(false);
 
 const oLanguageForModal = ref<IProfileLanguage | null>(null);
 const isModalOpen = ref(false);
@@ -194,12 +196,6 @@ watch(isModalOpen, (newValue) => {
   handleScrollPadding(newValue);
 });
 
-function setErrorValuesToDefault() {
-  isError.value = false;
-  errorMessage.value = UNEXPECTED_ERROR;
-  isNotFoundError.value = false;
-}
-
 function updateUserLanguagesValue(userLanguagesData: IProfileLanguage[]) {
   languagesForDeletionNames.clear();
   aLanguagesDeletionState.splice(
@@ -211,7 +207,7 @@ function updateUserLanguagesValue(userLanguagesData: IProfileLanguage[]) {
 }
 
 function fetchData() {
-  isPageLoading.value = true;
+  isLoading.value = true;
   Promise.all([getUserLanguagesByID(id.value), getAllLanguagesNames()])
     .then(([userLanguagesData, languagesData]) => {
       if (!userLanguagesData || !languagesData) return;
@@ -222,23 +218,10 @@ function fetchData() {
       setErrorValuesToDefault();
     })
     .catch((error: unknown) => {
-      isError.value = true;
-
-      if (error instanceof Error) {
-        if (error.cause === UNAUTHORIZED_ERROR) {
-          handleLogout();
-          return;
-        }
-
-        errorMessage.value = error.message;
-
-        if (error.name === "NotFoundError") {
-          isNotFoundError.value = true;
-        }
-      }
+      setErrorValues(error);
     })
     .finally(() => {
-      isPageLoading.value = false;
+      isLoading.value = false;
     });
 }
 
@@ -269,7 +252,7 @@ function submitUserLanguageCreate(
 ) {
   if (!isOwner.value) return;
 
-  isPageLoading.value = true;
+  isLoading.value = true;
 
   createUserLanguage(languageInputObj)
     .then((freshUserLanguages) => {
@@ -279,23 +262,10 @@ function submitUserLanguageCreate(
       setErrorValuesToDefault();
     })
     .catch((error: unknown) => {
-      isError.value = true;
-
-      if (error instanceof Error) {
-        if (error.cause === UNAUTHORIZED_ERROR) {
-          handleLogout();
-          return;
-        }
-
-        errorMessage.value = error.message;
-
-        if (error.name === "NotFoundError") {
-          isNotFoundError.value = true;
-        }
-      }
+      setErrorValues(error);
     })
     .finally(() => {
-      isPageLoading.value = false;
+      isLoading.value = false;
     });
 }
 
@@ -304,7 +274,7 @@ function submitUserLanguageUpdate(
 ) {
   if (!isOwner.value) return;
 
-  isPageLoading.value = true;
+  isLoading.value = true;
 
   updateUserLanguage(languageInputObj)
     .then((freshUserLanguages) => {
@@ -314,23 +284,10 @@ function submitUserLanguageUpdate(
       setErrorValuesToDefault();
     })
     .catch((error: unknown) => {
-      isError.value = true;
-
-      if (error instanceof Error) {
-        if (error.cause === UNAUTHORIZED_ERROR) {
-          handleLogout();
-          return;
-        }
-
-        errorMessage.value = error.message;
-
-        if (error.name === "NotFoundError") {
-          isNotFoundError.value = true;
-        }
-      }
+      setErrorValues(error);
     })
     .finally(() => {
-      isPageLoading.value = false;
+      isLoading.value = false;
     });
 }
 
@@ -359,7 +316,7 @@ function clearUserDeletionLanguages() {
 function submitUserLanguagesDeletion() {
   if (!isOwner.value) return;
 
-  isPageLoading.value = true;
+  isLoading.value = true;
 
   const languagesToBeDeleted: IDeleteProfileLanguageInput = {
     userId: Number(id.value),
@@ -374,23 +331,10 @@ function submitUserLanguagesDeletion() {
       setErrorValuesToDefault();
     })
     .catch((error: unknown) => {
-      isError.value = true;
-
-      if (error instanceof Error) {
-        if (error.cause === UNAUTHORIZED_ERROR) {
-          handleLogout();
-          return;
-        }
-
-        errorMessage.value = error.message;
-
-        if (error.name === "NotFoundError") {
-          isNotFoundError.value = true;
-        }
-      }
+      setErrorValues(error);
     })
     .finally(() => {
-      isPageLoading.value = false;
+      isLoading.value = false;
     });
 
   clearUserDeletionLanguages();
