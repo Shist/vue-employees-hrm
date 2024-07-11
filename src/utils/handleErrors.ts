@@ -9,6 +9,7 @@ import {
   UNEXPECTED_ERROR,
 } from "@/constants/errorMessage";
 import { useAuthStore } from "@/store/authStore";
+import { storeToRefs } from "pinia";
 
 export function checkUserID(id: string) {
   if (!Number.isInteger(Number(id)) || BigInt(id) > 2147483647n) {
@@ -48,8 +49,14 @@ export function getDetailedError(error: unknown) {
 
 export function handleLogout() {
   const authStore = useAuthStore();
-  const { setErrorToast } = useToast();
+  const { wasAuthErrorToastShown } = storeToRefs(authStore);
 
+  if (authStore.wasAuthErrorToastShown) return;
+
+  const { setErrorToast } = useToast();
   setErrorToast(UNAUTHORIZED_ERROR);
+
   authStore.logout();
+
+  wasAuthErrorToastShown.value = true;
 }

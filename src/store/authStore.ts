@@ -18,6 +18,8 @@ export const useAuthStore = defineStore("authStore", () => {
     return decodedData ? JSON.parse(decodedData) : null;
   });
 
+  const wasAuthErrorToastShown = ref(false);
+
   const router = useRouter();
   const { setErrorToast } = useToast();
 
@@ -57,6 +59,8 @@ export const useAuthStore = defineStore("authStore", () => {
     }
 
     localStorage.setItem("token", `Bearer ${token.value}`);
+
+    wasAuthErrorToastShown.value = false;
   };
 
   const registerUser = async (email: string, password: string) => {
@@ -67,6 +71,8 @@ export const useAuthStore = defineStore("authStore", () => {
     }
 
     localStorage.setItem("token", `Bearer ${token.value}`);
+
+    wasAuthErrorToastShown.value = false;
   };
 
   const logout = () => {
@@ -84,5 +90,6 @@ export const useAuthStore = defineStore("authStore", () => {
     registerUser,
     token,
     decodedToken,
+    wasAuthErrorToastShown,
   };
 });

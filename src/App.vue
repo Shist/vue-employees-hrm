@@ -1,7 +1,8 @@
 <template>
   <div class="global-container">
     <AppHeader />
-    <main class="app-main" :style="{ paddingRight: scrollbarWidth }">
+    <AppSpinner v-if="isLogging" class="global-container__spinner" />
+    <main v-else class="app-main" :style="{ paddingRight: scrollbarWidth }">
       <BreadCrumbs v-if="$route.meta.hasBreadcrumbs" />
       <AppTabs v-if="$route.meta.hasTabs" />
       <router-view />
@@ -10,7 +11,7 @@
 </template>
 
 <script setup lang="ts">
-import { watch, onMounted, onUnmounted } from "vue";
+import { watch, onMounted, onUnmounted, ref } from "vue";
 import AppHeader from "@/components/AppHeader.vue";
 import BreadCrumbs from "@/components/BreadCrumbs.vue";
 import AppTabs from "@/components/AppTabs.vue";
@@ -29,6 +30,8 @@ const { currTheme } = storeToRefs(useThemeStore());
 const authStore = useAuthStore();
 
 const vuetifyTheme = useTheme();
+
+const isLogging = ref(true);
 
 function setCurrTheme() {
   localStorage.setItem("theme", currTheme.value);
@@ -63,7 +66,9 @@ onMounted(() => {
   const mediaQuery = window.matchMedia("(prefers-color-scheme: dark)");
   mediaQuery.addEventListener("change", onDeviceSettingsUpdate);
 
-  authStore.fetchUserAuthData();
+  authStore.fetchUserAuthData().finally(() => {
+    isLogging.value = false;
+  });
 });
 
 onUnmounted(() => {
@@ -83,6 +88,10 @@ onUnmounted(() => {
   flex-direction: column;
   background-color: var(--color-wrapper-bg);
   font-family: $font-roboto;
+  &__spinner {
+    margin-top: 132px;
+    align-self: center;
+  }
 }
 
 .app-main {
