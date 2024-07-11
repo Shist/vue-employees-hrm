@@ -1,20 +1,12 @@
 <template>
   <div class="user-cvs">
     <AppSpinner v-if="isLoading" class="user-cvs__spinner" />
-    <div v-else-if="isError" class="user-cvs__error-wrapper">
-      <h4 class="user-cvs__error-message">❌ {{ errorMessage }}</h4>
-      <v-btn
-        v-if="isNotFoundError"
-        class="user-cvs__back-to-main-btn"
-        router
-        :to="ROUTES.USERS.PATH"
-      >
-        Back to the main page
-      </v-btn>
-      <span v-if="!isNotFoundError" class="user-cvs__try-to-reload-label">
-        Please try to reload the page
-      </span>
-    </div>
+    <AppErrorSection
+      v-else-if="isError"
+      :errorMessage="errorMessage"
+      :isNotFoundError="isNotFoundError"
+      class="user-cvs__error-wrapper"
+    />
     <div v-else class="user-cvs__main-content-wrapper">
       <div class="users-cvs__search-create-controls-wrapper">
         <v-text-field
@@ -251,25 +243,6 @@ function handleCloseDeleteModal() {
   }
   &__error-wrapper {
     padding-top: 64px;
-    width: 100%;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    row-gap: 20px;
-    .user-cvs__error-message {
-      @include default-text(26px, 32px);
-    }
-    .user-cvs__back-to-main-btn {
-      color: var(--color-btn-text);
-      background-color: var(--color-btn-bg);
-      border-radius: 0;
-      &:hover {
-        background-color: var(--color-btn-bg-hover);
-      }
-    }
-    .user-cvs__try-to-reload-label {
-      @include default-text(20px, 26px);
-    }
   }
   &__main-content-wrapper {
     padding: 32px 24px;

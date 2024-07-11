@@ -1,20 +1,11 @@
 <template>
   <div class="user-skills">
     <AppSpinner v-if="isLoading" />
-    <div v-else-if="isError" class="user-skills__error-wrapper">
-      <h4 class="user-skills__error-message">❌ {{ errorMessage }}</h4>
-      <v-btn
-        v-if="isNotFoundError"
-        class="user-skills__back-to-main-btn"
-        router
-        :to="ROUTES.USERS.PATH"
-      >
-        Back to the main page
-      </v-btn>
-      <span v-if="!isNotFoundError" class="user-skills__try-to-reload-label">
-        Please try to reload the page
-      </span>
-    </div>
+    <AppErrorSection
+      v-else-if="isError"
+      :errorMessage="errorMessage"
+      :isNotFoundError="isNotFoundError"
+    />
     <div v-else-if="userSkills" class="user-skills__main-content-wrapper">
       <v-btn
         v-if="isOwner"
@@ -90,7 +81,6 @@ import {
 } from "@/types/userSkillsUI";
 import { storeToRefs } from "pinia";
 import { useAuthStore } from "@/store/authStore";
-import { ROUTES } from "@/constants/router";
 import handleScrollPadding from "@/utils/handleScrollPadding";
 import {
   createUserSkill,
@@ -350,27 +340,6 @@ function submitUserSkillsDeletion() {
   display: flex;
   flex-direction: column;
   align-items: center;
-  &__error-wrapper {
-    width: 100%;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    row-gap: 20px;
-    .user-skills__error-message {
-      @include default-text(26px, 32px);
-    }
-    .user-skills__back-to-main-btn {
-      color: var(--color-btn-text);
-      background-color: var(--color-btn-bg);
-      border-radius: 0;
-      &:hover {
-        background-color: var(--color-btn-bg-hover);
-      }
-    }
-    .user-skills__try-to-reload-label {
-      @include default-text(20px, 26px);
-    }
-  }
   &__main-content-wrapper {
     position: relative;
     margin: 0 auto;

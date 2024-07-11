@@ -1,20 +1,11 @@
 <template>
   <div class="user-languages">
     <AppSpinner v-if="isLoading" />
-    <div v-else-if="isError" class="user-languages__error-wrapper">
-      <h4 class="user-languages__error-message">❌ {{ errorMessage }}</h4>
-      <v-btn
-        v-if="isNotFoundError"
-        class="user-languages__back-to-main-btn"
-        router
-        :to="ROUTES.USERS.PATH"
-      >
-        Back to the main page
-      </v-btn>
-      <span v-if="!isNotFoundError" class="user-languages__try-to-reload-label">
-        Please try to reload the page
-      </span>
-    </div>
+    <AppErrorSection
+      v-else-if="isError"
+      :errorMessage="errorMessage"
+      :isNotFoundError="isNotFoundError"
+    />
     <div v-else-if="userLanguages" class="user-languages__main-content-wrapper">
       <v-btn
         v-if="isOwner"
@@ -117,7 +108,6 @@ import {
 import { ILanguagesNamesData } from "@/types/userLanguagesUI";
 import { storeToRefs } from "pinia";
 import { useAuthStore } from "@/store/authStore";
-import { ROUTES } from "@/constants/router";
 import handleScrollPadding from "@/utils/handleScrollPadding";
 import {
   createUserLanguage,
@@ -364,27 +354,6 @@ function getClassByProficiency(value: Proficiency) {
   display: flex;
   flex-direction: column;
   align-items: center;
-  &__error-wrapper {
-    width: 100%;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    row-gap: 20px;
-    .user-languages__error-message {
-      @include default-text(26px, 32px);
-    }
-    .user-languages__back-to-main-btn {
-      color: var(--color-btn-text);
-      background-color: var(--color-btn-bg);
-      border-radius: 0;
-      &:hover {
-        background-color: var(--color-btn-bg-hover);
-      }
-    }
-    .user-languages__try-to-reload-label {
-      @include default-text(20px, 26px);
-    }
-  }
   &__main-content-wrapper {
     margin: 0 auto;
     max-width: 850px;

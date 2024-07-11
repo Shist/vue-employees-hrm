@@ -1,20 +1,12 @@
 <template>
   <div class="main-page">
     <AppSpinner v-if="isLoading" class="main-page__spinner" />
-    <div v-else-if="isError" class="main-page__error-wrapper">
-      <h4 class="main-page__error-message">❌ {{ errorMessage }}</h4>
-      <v-btn
-        v-if="isNotFoundError"
-        class="main-page__back-to-main-btn"
-        router
-        :to="ROUTES.USERS.PATH"
-      >
-        Back to the main page
-      </v-btn>
-      <span v-if="!isNotFoundError" class="main-page__try-to-reload-label">
-        Please try to reload the page
-      </span>
-    </div>
+    <AppErrorSection
+      v-else-if="isError"
+      :errorMessage="errorMessage"
+      :isNotFoundError="isNotFoundError"
+      class="main-page__error-wrapper"
+    />
     <div v-else class="main-page__main-content-wrapper">
       <v-text-field
         v-model="search"
@@ -141,25 +133,6 @@ onMounted(async () => {
   }
   &__error-wrapper {
     padding-top: 64px;
-    width: 100%;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    row-gap: 20px;
-    .main-page__error-message {
-      @include default-text(26px, 32px);
-    }
-    .main-page__back-to-main-btn {
-      color: var(--color-btn-text);
-      background-color: var(--color-btn-bg);
-      border-radius: 0;
-      &:hover {
-        background-color: var(--color-btn-bg-hover);
-      }
-    }
-    .main-page__try-to-reload-label {
-      @include default-text(20px, 26px);
-    }
   }
   &__main-content-wrapper {
     align-self: stretch;

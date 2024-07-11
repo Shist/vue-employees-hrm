@@ -1,20 +1,12 @@
 <template>
   <div class="projects-page">
     <AppSpinner v-if="isLoading" class="projects-page__spinner" />
-    <div v-else-if="isError" class="projects-page__error-wrapper">
-      <h4 class="projects-page__error-message">❌ {{ errorMessage }}</h4>
-      <v-btn
-        v-if="isNotFoundError"
-        class="projects-page__back-to-main-btn"
-        router
-        :to="ROUTES.USERS.PATH"
-      >
-        Back to the main page
-      </v-btn>
-      <span v-if="!isNotFoundError" class="projects-page__try-to-reload-label">
-        Please try to reload the page
-      </span>
-    </div>
+    <AppErrorSection
+      v-else-if="isError"
+      :errorMessage="errorMessage"
+      :isNotFoundError="isNotFoundError"
+      class="projects-page__error-wrapper"
+    />
     <div class="projects-page__main-content-wrapper" v-else>
       <v-text-field
         v-model="search"
@@ -63,7 +55,6 @@
 import { getAllProjects } from "@/services/projects";
 import { IProjectsTableData } from "@/types/projectsTableUI";
 import { onMounted, reactive, ref } from "vue";
-import { ROUTES } from "@/constants/router";
 import useErrorState from "@/composables/useErrorState";
 
 const search = ref("");
@@ -115,25 +106,6 @@ onMounted(async () => {
   }
   &__error-wrapper {
     padding-top: 64px;
-    width: 100%;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    row-gap: 20px;
-    .projects-page__error-message {
-      @include default-text(26px, 32px);
-    }
-    .projects-page__back-to-main-btn {
-      color: var(--color-btn-text);
-      background-color: var(--color-btn-bg);
-      border-radius: 0;
-      &:hover {
-        background-color: var(--color-btn-bg-hover);
-      }
-    }
-    .projects-page__try-to-reload-label {
-      @include default-text(20px, 26px);
-    }
   }
   &__main-content-wrapper {
     align-self: stretch;

@@ -1,20 +1,11 @@
 <template>
   <div class="user-profile">
     <AppSpinner v-if="isLoading" />
-    <div v-else-if="isError" class="user-profile__error-wrapper">
-      <h4 class="user-profile__error-message">❌ {{ errorMessage }}</h4>
-      <v-btn
-        v-if="isNotFoundError"
-        class="user-profile__back-to-main-btn"
-        router
-        :to="ROUTES.USERS.PATH"
-      >
-        Back to the main page
-      </v-btn>
-      <span v-if="!isNotFoundError" class="user-profile__try-to-reload-label">
-        Please try to reload the page
-      </span>
-    </div>
+    <AppErrorSection
+      v-else-if="isError"
+      :errorMessage="errorMessage"
+      :isNotFoundError="isNotFoundError"
+    />
     <div v-else-if="user" class="user-profile__main-content-wrapper">
       <AvatarUpload
         :isOwner="isOwner"
@@ -58,7 +49,6 @@ import {
 import { IUpdateUserInput } from "@/types/backend-interfaces/user";
 import { IUpdateProfileInput } from "@/types/backend-interfaces/user/profile";
 import { IUploadAvatarInput } from "@/types/backend-interfaces/user/avatar";
-import { ROUTES } from "@/constants/router";
 import useToast from "@/composables/useToast";
 import { storeToRefs } from "pinia";
 import { useAuthStore } from "@/store/authStore";
@@ -267,27 +257,6 @@ function submitUserAvatarDeletion(userID: string) {
   display: flex;
   flex-direction: column;
   align-items: center;
-  &__error-wrapper {
-    width: 100%;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    row-gap: 20px;
-    .user-profile__error-message {
-      @include default-text(26px, 32px);
-    }
-    .user-profile__back-to-main-btn {
-      color: var(--color-btn-text);
-      background-color: var(--color-btn-bg);
-      border-radius: 0;
-      &:hover {
-        background-color: var(--color-btn-bg-hover);
-      }
-    }
-    .user-profile__try-to-reload-label {
-      @include default-text(20px, 26px);
-    }
-  }
   &__spinner-wrapper {
     width: 100%;
   }
