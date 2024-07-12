@@ -34,6 +34,7 @@ import { ref, onMounted, computed, watch } from "vue";
 import { useRoute } from "vue-router";
 import { storeToRefs } from "pinia";
 import { useAuthStore } from "@/store/authStore";
+import { useBreadCrumbsStore } from "@/store/breadCrumbs";
 import AvatarUpload from "@/components/user/profile/AvatarUpload.vue";
 import UserInfo from "@/components/user/profile/UserInfo.vue";
 import useToast from "@/composables/useToast";
@@ -68,6 +69,8 @@ const id = computed<string>(() => {
 const authStore = useAuthStore();
 const authStoreUser = storeToRefs(authStore).user;
 const isOwner = computed(() => authStoreUser.value?.id === id.value);
+
+const { newEnityName } = storeToRefs(useBreadCrumbsStore());
 
 const {
   isLoading,
@@ -164,9 +167,24 @@ function submitUserData(
   isLoading.value = true;
 
   updateUserData(userInputObj, profileInputObj)
-    .then((response) => {
-      if (!response) return;
-      updateUserValue(response);
+    .then((freshUserData) => {
+      if (!freshUserData) return;
+
+      updateUserValue(freshUserData);
+
+      const firstName = freshUserData.profile.first_name;
+      const lastName = freshUserData.profile.last_name;
+      const email = freshUserData.email;
+
+      if (firstName && lastName) {
+        newEnityName.value = `${firstName} ${lastName}`;
+      } else if (firstName) {
+        newEnityName.value = firstName;
+      } else if (lastName) {
+        newEnityName.value = lastName;
+      } else {
+        newEnityName.value = email;
+      }
 
       setErrorValuesToDefault();
     })

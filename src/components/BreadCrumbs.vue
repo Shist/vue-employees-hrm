@@ -27,6 +27,7 @@ import { reactive, Reactive, watch } from "vue";
 import { useRoute } from "vue-router";
 import { storeToRefs } from "pinia";
 import { useAuthStore } from "@/store/authStore";
+import { useBreadCrumbsStore } from "@/store/breadCrumbs";
 import { getUserNameDataByID } from "@/services/users/users";
 import { getCVNameDataByID } from "@/services/cvs";
 import { ROUTES } from "@/constants/router";
@@ -37,15 +38,17 @@ import {
 } from "@/constants/breadCrumbs";
 import { IBreadCrumbsItem } from "@/types/navigation";
 
-const authStore = useAuthStore();
-const user = storeToRefs(authStore).user;
-
 const breadcrumbsItems: Reactive<IBreadCrumbsItem[]> = reactive([]);
+
+const { user } = storeToRefs(useAuthStore());
 
 const route = useRoute();
 
 watch(route, updateBreadCrumbs);
-watch(user, updateBreadCrumbs, { deep: true });
+
+const { newEnityName } = storeToRefs(useBreadCrumbsStore());
+
+watch(newEnityName, updateEntityName);
 
 updateBreadCrumbs();
 
@@ -131,11 +134,18 @@ function updateBreadCrumbs() {
     });
   }
 }
+
+function updateEntityName() {
+  if (!breadcrumbsItems[2] || !newEnityName.value) return;
+
+  breadcrumbsItems[2].title = newEnityName.value;
+
+  newEnityName.value = null;
+}
 </script>
 
 <style lang="scss" scopped>
 .v-breadcrumbs-item > .v-breadcrumbs-item--link > .breadcrumbs-user-icon {
-  margin-right: 10px;
   min-width: 24px;
   min-height: 24px;
   &::before {
@@ -146,5 +156,18 @@ function updateBreadCrumbs() {
 }
 .red-breadcrumb > .v-breadcrumbs-item--link {
   color: var(--color-active-text);
+  display: flex;
+  align-items: center;
+  column-gap: 8px;
+  i {
+    display: inline;
+    text-decoration: none;
+  }
+  span {
+    max-width: 370px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    text-wrap: nowrap;
+  }
 }
 </style>
