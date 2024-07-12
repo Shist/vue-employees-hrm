@@ -7,21 +7,34 @@
       class="cvs-page__error-wrapper"
     />
     <div v-else class="cvs-page__main-content-wrapper">
-      <v-text-field
-        v-model="search"
-        prepend-inner-icon="mdi-magnify"
-        variant="outlined"
-        single-line
-        density="compact"
-        placeholder="Search"
-        class="cvs-page__text-field-wrapper"
-      />
+      <div class="cvs-page__search-create-controls-wrapper">
+        <v-text-field
+          v-model="search"
+          prepend-inner-icon="mdi-magnify"
+          variant="outlined"
+          single-line
+          hide-details
+          density="compact"
+          placeholder="Search"
+          class="cvs-page__text-field-wrapper"
+        />
+        <v-btn
+          rounded
+          prepend-icon="mdi-plus"
+          color="var(--color-wrapper-bg)"
+          elevation="0"
+          class="cvs-page__button text-red-darken-4"
+          @click="handleOpenCreateModal"
+        >
+          Create CV
+        </v-btn>
+      </div>
       <v-data-table
         :headers="headers"
         :items="cvs"
         :search="search"
         class="cvs-page__data-table"
-        item-key="name"
+        hide-details
       >
         <template v-slot:[`item.options`]="{ item }">
           <v-menu>
@@ -36,7 +49,8 @@
               <v-list-item
                 v-for="cvItem in cvMenuItems"
                 :key="cvItem.title"
-                v-on:click="cvItem.click(item.id)"
+                v-on:click="cvItem.click(item.id, item.name)"
+                :disabled="checkOwner(cvItem.title, item.email)"
               >
                 <v-list-item-title class="cvs-page__popup-menu-label">
                   {{ cvItem.title }}
@@ -48,27 +62,46 @@
       </v-data-table>
     </div>
   </div>
+  <CreateCVModal
+    :isOpen="isCreateModalOpen"
+    :userID="authStoreUser?.id.toString() || ''"
+    @onCreateUserCV="submitUserCVCreate"
+    @closeModal="handleCloseCreateModal"
+  />
+  <DeleteCVModal
+    :isOpen="isDeleteModalOpen"
+    :cvID="openedCVID"
+    :cvName="openedCVName"
+    @onDeleteUserCV="submitUserCVDeletion"
+    @closeModal="handleCloseDeleteModal"
+  />
 </template>
 
 <script setup lang="ts">
-import useErrorState from "@/composables/useErrorState";
-import { ROUTES } from "@/constants/router";
-import { getAllCvs } from "@/services/cvs";
-import { ICvsTableData } from "@/types/cvsTableUI";
-import { onMounted, reactive, ref } from "vue";
+import { computed, onMounted, reactive, ref } from "vue";
 import { useRouter } from "vue-router";
+import { storeToRefs } from "pinia";
+import { useAuthStore } from "@/store/authStore";
+import CreateCVModal from "@/components/user/cvs/CreateCVModal.vue";
+import DeleteCVModal from "@/components/user/cvs/DeleteCVModal.vue";
+import useErrorState from "@/composables/useErrorState";
+import { createCV, deleteCV, getAllCvs } from "@/services/cvs";
+import { ROUTES } from "@/constants/router";
+import { ICvsTableData } from "@/types/cvsTableUI";
+import { ICreateCVInput, IDeleteCVInput } from "@/types/backend-interfaces/cv";
 
 const router = useRouter();
 
-function openCvDetails(cvID: number) {
-  router.push(`${ROUTES.CVS.PATH}/${cvID}`);
-}
+const authStore = useAuthStore();
+const authStoreUser = storeToRefs(authStore).user;
 
-function deleteCvByID(cvID: number) {
-  console.log(`delete cv with id ${cvID}`);
-}
+const openedCVID = ref<string | null>(null);
+const openedCVName = ref<string | null>(null);
 
 const search = ref("");
+
+const isCreateModalOpen = ref(false);
+const isDeleteModalOpen = ref(false);
 
 const headers = [
   { key: "name", title: "Name" },
@@ -87,7 +120,7 @@ const {
 
 const cvMenuItems = [
   { title: "Details", click: openCvDetails },
-  { title: "Delete CV", click: deleteCvByID },
+  { title: "Delete CV", click: handleOpenDeleteModal },
 ];
 
 const cvs = reactive<ICvsTableData[]>([]);
@@ -107,6 +140,67 @@ onMounted(async () => {
     isLoading.value = false;
   }
 });
+
+function checkOwner(cvItemTitle: string, cvEmail: string) {
+  if (cvItemTitle === "Details") return false;
+  return authStoreUser.value?.email !== cvEmail;
+}
+
+function openCvDetails(cvID: number) {
+  router.push(`${ROUTES.CVS.PATH}/${cvID}`);
+}
+
+function handleOpenCreateModal() {
+  isCreateModalOpen.value = true;
+}
+
+function handleCloseCreateModal() {
+  isCreateModalOpen.value = false;
+}
+
+function handleOpenDeleteModal(cvID: number, cvName: string) {
+  openedCVID.value = cvID.toString();
+  openedCVName.value = cvName;
+  isDeleteModalOpen.value = true;
+}
+
+function handleCloseDeleteModal() {
+  isDeleteModalOpen.value = false;
+}
+
+function submitUserCVCreate(cvInputObj: ICreateCVInput) {
+  isLoading.value = true;
+
+  // createCV(cvInputObj)
+  //   .then((createdUserCV) => {
+  //     if (!createdUserCV) return;
+  //     cvs.push(createdUserCV);
+
+  //     setErrorValuesToDefault();
+  //   })
+  //   .catch((error: unknown) => {
+  //     setErrorValues(error);
+  //   })
+  //   .finally(() => {
+  //     isLoading.value = false;
+  //   });
+}
+
+async function submitUserCVDeletion(cvInputObj: IDeleteCVInput) {
+  isLoading.value = true;
+
+  // try {
+  //   await deleteCV(cvInputObj);
+
+  //   await fetchData();
+
+  //   setErrorValuesToDefault();
+  // } catch (error: unknown) {
+  //   setErrorValues(error);
+  // } finally {
+  //   isLoading.value = false;
+  // }
+}
 </script>
 
 <style lang="scss" scoped>
@@ -122,9 +216,18 @@ onMounted(async () => {
   }
   &__main-content-wrapper {
     align-self: stretch;
+    .cvs-page__search-create-controls-wrapper {
+      margin-bottom: 22px;
+      padding-inline: 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
     .cvs-page__text-field-wrapper {
-      margin-left: 20px;
       max-width: 320px;
+    }
+    .cvs-page__button {
+      border: 1px solid var(--color-text-red);
     }
     .cvs-page__data-table {
       background-color: var(--color-wrapper-bg);
@@ -178,6 +281,6 @@ onMounted(async () => {
   max-width: 200px;
 }
 :deep(.v-table > .v-table__wrapper > table > tbody > tr > td:last-child) {
-  max-width: 20px;
+  width: 52px;
 }
 </style>
