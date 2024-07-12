@@ -135,7 +135,6 @@ function updateBreadCrumbs() {
 
 <style lang="scss" scopped>
 .v-breadcrumbs-item > .v-breadcrumbs-item--link > .breadcrumbs-user-icon {
-  margin-right: 10px;
   min-width: 24px;
   min-height: 24px;
   &::before {
@@ -146,5 +145,18 @@ function updateBreadCrumbs() {
 }
 .red-breadcrumb > .v-breadcrumbs-item--link {
   color: var(--color-active-text);
+  display: flex;
+  align-items: center;
+  column-gap: 8px;
+  i {
+    display: inline;
+    text-decoration: none;
+  }
+  span {
+    max-width: 370px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    text-wrap: nowrap;
+  }
 }
 </style>
