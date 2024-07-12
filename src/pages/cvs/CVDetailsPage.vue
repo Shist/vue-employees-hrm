@@ -47,8 +47,9 @@ import { useRoute } from "vue-router";
 import { storeToRefs } from "pinia";
 import { useAuthStore } from "@/store/authStore";
 import useErrorState from "@/composables/useErrorState";
-import { getCVDetailsDataByID } from "@/services/cvs/details";
+import { getCVDetailsDataByID, updateCV } from "@/services/cvs/details";
 import { IUpdateCVInput } from "@/types/backend-interfaces/cv";
+import { ICVDetailsServerData } from "@/types/cvDetailsUI";
 
 const route = useRoute();
 
@@ -96,6 +97,20 @@ watch(id, () => {
   fetchData();
 });
 
+function updateCVDetailsValue(cvDetailsData: ICVDetailsServerData) {
+  cvNameInitial.value = cvDetailsData.name;
+  cvEducationInitial.value = cvDetailsData.education;
+  cvDescriptionInitial.value = cvDetailsData.description;
+
+  cvName.value = cvNameInitial.value;
+  cvEducation.value = cvEducationInitial.value;
+  cvDescription.value = cvDescriptionInitial.value;
+
+  if (cvDetailsData.user) {
+    cvUserID.value = cvDetailsData.user.id;
+  }
+}
+
 function fetchData() {
   isLoading.value = true;
 
@@ -103,17 +118,7 @@ function fetchData() {
     .then((cvDetailsData) => {
       if (!cvDetailsData) return;
 
-      cvNameInitial.value = cvDetailsData.name;
-      cvEducationInitial.value = cvDetailsData.education;
-      cvDescriptionInitial.value = cvDetailsData.description;
-
-      cvName.value = cvNameInitial.value;
-      cvEducation.value = cvEducationInitial.value;
-      cvDescription.value = cvDescriptionInitial.value;
-
-      if (cvDetailsData.user) {
-        cvUserID.value = cvDetailsData.user.id;
-      }
+      updateCVDetailsValue(cvDetailsData);
 
       setErrorValuesToDefault();
     })
@@ -125,21 +130,32 @@ function fetchData() {
     });
 }
 
-function submitCVDetailsUpdate(cvInputObj: IUpdateCVInput) {
-  // if (!isOwner.value) return;
-  // isLoading.value = true;
-  // updateUserSkill(skillInputObj)
-  //   .then((freshUserSkills) => {
-  //     if (!freshUserSkills) return;
-  //     updateUserSkillsValue(freshUserSkills);
-  //     setErrorValuesToDefault();
-  //   })
-  //   .catch((error: unknown) => {
-  //     setErrorValues(error);
-  //   })
-  //   .finally(() => {
-  //     isLoading.value = false;
-  //   });
+function submitCVDetailsUpdate() {
+  if (!isOwner.value) return;
+
+  const cvInputObj: IUpdateCVInput = {
+    cvId: Number(id.value),
+    name: `${cvName.value}`,
+    education: cvEducation.value,
+    description: `${cvDescription.value}`,
+  };
+
+  isLoading.value = true;
+
+  updateCV(cvInputObj)
+    .then((freshCVDetails) => {
+      if (!freshCVDetails) return;
+
+      updateCVDetailsValue(freshCVDetails);
+
+      setErrorValuesToDefault();
+    })
+    .catch((error: unknown) => {
+      setErrorValues(error);
+    })
+    .finally(() => {
+      isLoading.value = false;
+    });
 }
 </script>
 
