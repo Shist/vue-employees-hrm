@@ -6,7 +6,7 @@
       :errorMessage="errorMessage"
       class="projects-page__error-wrapper"
     />
-    <div class="projects-page__main-content-wrapper" v-else>
+    <div v-else class="projects-page__main-content-wrapper">
       <v-text-field
         v-model="search"
         prepend-inner-icon="mdi-magnify"
@@ -20,7 +20,7 @@
         :headers="headers"
         :items="projects"
         :search="search"
-        :class="{ 'projects-page__data-table': true }"
+        class="projects-page__data-table"
         item-key="name"
       >
         <template v-slot:[`item.options`]>
@@ -84,9 +84,9 @@ onMounted(async () => {
   isLoading.value = true;
 
   try {
-    const projectData = await getAllProjects();
+    const projectsData = await getAllProjects();
 
-    projects.splice(0, projects.length, ...projectData);
+    projects.splice(0, projects.length, ...projectsData);
 
     setErrorValuesToDefault();
   } catch (error: unknown) {

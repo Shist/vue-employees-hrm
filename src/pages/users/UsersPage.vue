@@ -21,7 +21,7 @@
         :headers="headers"
         :items="users"
         :search="search"
-        :class="{ 'main-page__data-table': true }"
+        class="main-page__data-table"
         hide-details
       >
         <template v-slot:[`item.avatar`]="{ item }">

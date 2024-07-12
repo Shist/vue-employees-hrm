@@ -1,0 +1,11 @@
+query GET_ALL_CVS {
+  cvs {
+    id
+    name
+    description
+    education
+    user {
+      email
+    }
+  }
+}

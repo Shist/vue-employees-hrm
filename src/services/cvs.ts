@@ -2,10 +2,12 @@ import apolloClient from "@/plugins/apolloConfig";
 import getCVNameByIDQuery from "@/graphql/cvs/getCVNameByID.query.gql";
 import createCVQuery from "@/graphql/cvs/createCV.mutation.gql";
 import deleteCVQuery from "@/graphql/cvs/deleteCV.mutation.gql";
+import getAllCvsQuery from "@/graphql/cvs/getAllCvs.query.gql";
 import { checkCvID, getDetailedError } from "@/utils/handleErrors";
 import { ICVNameData } from "@/types/breadcrumbsUI";
 import { IUserCVNameData } from "@/types/userCVsUI";
 import { ICreateCVInput, IDeleteCVInput } from "@/types/backend-interfaces/cv";
+import { ICvsTableData, ICvsTableServerData } from "@/types/cvsTableUI";
 
 export const getCVNameDataByID = async (id: string) => {
   try {
@@ -44,4 +46,27 @@ export const deleteCV = async (inputCVObj: IDeleteCVInput) => {
   } catch (error: unknown) {
     throw getDetailedError(error);
   }
+};
+
+export const getAllCvs = async () => {
+  const result: ICvsTableData[] = [];
+  try {
+    const { cvs } = (
+      await apolloClient.query({
+        query: getAllCvsQuery,
+      })
+    ).data;
+    cvs.forEach((cv: ICvsTableServerData) => {
+      result.push({
+        id: cv.id,
+        name: cv.name,
+        description: cv.description,
+        education: cv.education ? cv.education : "",
+        email: cv.user ? cv.user.email : "",
+      });
+    });
+  } catch (error: unknown) {
+    throw getDetailedError(error);
+  }
+  return result;
 };
