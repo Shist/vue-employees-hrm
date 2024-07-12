@@ -27,6 +27,7 @@ import { reactive, Reactive, watch } from "vue";
 import { useRoute } from "vue-router";
 import { storeToRefs } from "pinia";
 import { useAuthStore } from "@/store/authStore";
+import { useBreadCrumbsStore } from "@/store/breadCrumbs";
 import { getUserNameDataByID } from "@/services/users/users";
 import { getCVNameDataByID } from "@/services/cvs";
 import { ROUTES } from "@/constants/router";
@@ -37,15 +38,18 @@ import {
 } from "@/constants/breadCrumbs";
 import { IBreadCrumbsItem } from "@/types/navigation";
 
-const authStore = useAuthStore();
-const user = storeToRefs(authStore).user;
-
 const breadcrumbsItems: Reactive<IBreadCrumbsItem[]> = reactive([]);
+
+const { user } = storeToRefs(useAuthStore());
 
 const route = useRoute();
 
 watch(route, updateBreadCrumbs);
-watch(user, updateBreadCrumbs, { deep: true });
+
+const { currUserName, currCVName } = storeToRefs(useBreadCrumbsStore());
+
+watch(currUserName, () => updateEntityName("user"));
+watch(currCVName, () => updateEntityName("CV"));
 
 updateBreadCrumbs();
 
@@ -129,6 +133,19 @@ function updateBreadCrumbs() {
         path: `/${section}/${id}`,
       },
     });
+  }
+}
+
+function updateEntityName(entityType: "user" | "CV") {
+  if (!breadcrumbsItems[2]) return;
+
+  switch (entityType) {
+    case "user":
+      breadcrumbsItems[2].title = currUserName.value;
+      break;
+    case "CV":
+      breadcrumbsItems[2].title = currCVName.value;
+      break;
   }
 }
 </script>

@@ -46,6 +46,7 @@ import { ref, computed, watch, onMounted } from "vue";
 import { useRoute } from "vue-router";
 import { storeToRefs } from "pinia";
 import { useAuthStore } from "@/store/authStore";
+import { useBreadCrumbsStore } from "@/store/breadCrumbs";
 import useErrorState from "@/composables/useErrorState";
 import { getCVDetailsDataByID, updateCV } from "@/services/cvs/details";
 import { IUpdateCVInput } from "@/types/backend-interfaces/cv";
@@ -79,6 +80,8 @@ const cvUserID = ref<string | null>(null);
 const authStore = useAuthStore();
 const authStoreUser = storeToRefs(authStore).user;
 const isOwner = computed(() => authStoreUser.value?.id === cvUserID.value);
+
+const { currCVName } = storeToRefs(useBreadCrumbsStore());
 
 const isUpdateBtnDisabled = computed(
   () =>
@@ -147,6 +150,8 @@ function submitCVDetailsUpdate() {
       if (!freshCVDetails) return;
 
       updateCVDetailsValue(freshCVDetails);
+
+      currCVName.value = freshCVDetails.name;
 
       setErrorValuesToDefault();
     })
