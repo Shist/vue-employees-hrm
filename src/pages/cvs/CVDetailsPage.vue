@@ -81,7 +81,7 @@ const authStore = useAuthStore();
 const authStoreUser = storeToRefs(authStore).user;
 const isOwner = computed(() => authStoreUser.value?.id === cvUserID.value);
 
-const { currCVName } = storeToRefs(useBreadCrumbsStore());
+const { newEnityName } = storeToRefs(useBreadCrumbsStore());
 
 const isUpdateBtnDisabled = computed(
   () =>
@@ -151,7 +151,7 @@ function submitCVDetailsUpdate() {
 
       updateCVDetailsValue(freshCVDetails);
 
-      currCVName.value = freshCVDetails.name;
+      newEnityName.value = freshCVDetails.name;
 
       setErrorValuesToDefault();
     })

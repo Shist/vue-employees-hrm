@@ -2,8 +2,7 @@ import { ref } from "vue";
 import { defineStore } from "pinia";
 
 export const useBreadCrumbsStore = defineStore("breadCrumbs", () => {
-  const currUserName = ref<string>("");
-  const currCVName = ref<string>("");
+  const newEnityName = ref<string | null>(null);
 
-  return { currUserName, currCVName };
+  return { newEnityName };
 });

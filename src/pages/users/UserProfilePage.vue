@@ -70,7 +70,7 @@ const authStore = useAuthStore();
 const authStoreUser = storeToRefs(authStore).user;
 const isOwner = computed(() => authStoreUser.value?.id === id.value);
 
-const { currUserName } = storeToRefs(useBreadCrumbsStore());
+const { newEnityName } = storeToRefs(useBreadCrumbsStore());
 
 const {
   isLoading,
@@ -177,13 +177,13 @@ function submitUserData(
       const email = freshUserData.email;
 
       if (firstName && lastName) {
-        currUserName.value = `${firstName} ${lastName}`;
+        newEnityName.value = `${firstName} ${lastName}`;
       } else if (firstName) {
-        currUserName.value = firstName;
+        newEnityName.value = firstName;
       } else if (lastName) {
-        currUserName.value = lastName;
+        newEnityName.value = lastName;
       } else {
-        currUserName.value = email;
+        newEnityName.value = email;
       }
 
       setErrorValuesToDefault();

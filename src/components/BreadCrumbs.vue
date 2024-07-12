@@ -46,10 +46,9 @@ const route = useRoute();
 
 watch(route, updateBreadCrumbs);
 
-const { currUserName, currCVName } = storeToRefs(useBreadCrumbsStore());
+const { newEnityName } = storeToRefs(useBreadCrumbsStore());
 
-watch(currUserName, () => updateEntityName("user"));
-watch(currCVName, () => updateEntityName("CV"));
+watch(newEnityName, updateEntityName);
 
 updateBreadCrumbs();
 
@@ -136,17 +135,12 @@ function updateBreadCrumbs() {
   }
 }
 
-function updateEntityName(entityType: "user" | "CV") {
-  if (!breadcrumbsItems[2]) return;
+function updateEntityName() {
+  if (!breadcrumbsItems[2] || !newEnityName.value) return;
 
-  switch (entityType) {
-    case "user":
-      breadcrumbsItems[2].title = currUserName.value;
-      break;
-    case "CV":
-      breadcrumbsItems[2].title = currCVName.value;
-      break;
-  }
+  breadcrumbsItems[2].title = newEnityName.value;
+
+  newEnityName.value = null;
 }
 </script>
 
