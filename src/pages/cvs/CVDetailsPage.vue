@@ -8,6 +8,7 @@
         label="Name"
         variant="outlined"
         class="cv-details__text-field-wrapper"
+        :readonly="!isOwner"
         hide-details
       />
       <v-text-field
@@ -15,6 +16,7 @@
         label="Education"
         variant="outlined"
         class="cv-details__text-field-wrapper"
+        :readonly="!isOwner"
         hide-details
       />
       <v-textarea
@@ -22,6 +24,7 @@
         label="Description"
         variant="outlined"
         class="cv-details__text-field-wrapper"
+        :readonly="!isOwner"
         no-resize
         hide-details
       />
