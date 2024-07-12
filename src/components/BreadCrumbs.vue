@@ -25,17 +25,17 @@
 <script setup lang="ts">
 import { reactive, Reactive, watch } from "vue";
 import { useRoute } from "vue-router";
+import { storeToRefs } from "pinia";
+import { useAuthStore } from "@/store/authStore";
+import { getUserNameDataByID } from "@/services/users/users";
+import { getCVNameDataByID } from "@/services/cvs";
 import { ROUTES } from "@/constants/router";
-import { IBreadCrumbsItem } from "@/types/navigation";
 import {
   SECTIONS_NAMES,
   SECTIONS_ICONS,
   TABS_NAMES,
 } from "@/constants/breadCrumbs";
-import { getUserNameDataByID } from "@/services/users/users";
-import { getCVNameDataByID } from "@/services/cvs";
-import { storeToRefs } from "pinia";
-import { useAuthStore } from "@/store/authStore";
+import { IBreadCrumbsItem } from "@/types/navigation";
 
 const authStore = useAuthStore();
 const user = storeToRefs(authStore).user;

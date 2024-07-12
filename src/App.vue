@@ -12,16 +12,16 @@
 
 <script setup lang="ts">
 import { watch, onMounted, onUnmounted, ref } from "vue";
+import { useTheme } from "vuetify";
+import { updateGlobalOptions } from "vue3-toastify";
+import { storeToRefs } from "pinia";
+import { useAuthStore } from "@/store/authStore";
+import { useScrollbarWidth } from "@/store/scrollbarWidth";
+import { useThemeStore } from "@/store/theme";
 import AppHeader from "@/components/AppHeader.vue";
 import BreadCrumbs from "@/components/BreadCrumbs.vue";
 import AppTabs from "@/components/AppTabs.vue";
-import { storeToRefs } from "pinia";
-import { useScrollbarWidth } from "@/store/scrollbarWidth";
-import { useThemeStore } from "@/store/theme";
 import { getThemeValue } from "@/utils/theme";
-import { useTheme } from "vuetify";
-import { updateGlobalOptions } from "vue3-toastify";
-import { useAuthStore } from "./store/authStore";
 
 const { scrollbarWidth } = storeToRefs(useScrollbarWidth());
 

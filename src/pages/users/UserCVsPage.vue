@@ -83,18 +83,18 @@
 
 <script setup lang="ts">
 import { ref, reactive, computed, watch, onMounted } from "vue";
-import CreateCVModal from "@/components/user/cvs/CreateCVModal.vue";
-import DeleteCVModal from "@/components/user/cvs/DeleteCVModal.vue";
 import { useRouter, useRoute } from "vue-router";
-import { ROUTES } from "@/constants/router";
-import { createCV, deleteCV } from "@/services/cvs";
-import { IUserCVNameData } from "@/types/userCVsUI";
-import { ICreateCVInput, IDeleteCVInput } from "@/types/backend-interfaces/cv";
 import { storeToRefs } from "pinia";
 import { useAuthStore } from "@/store/authStore";
-import handleScrollPadding from "@/utils/handleScrollPadding";
-import { getUserCVsNamesByID } from "@/services/users/cvs";
+import CreateCVModal from "@/components/user/cvs/CreateCVModal.vue";
+import DeleteCVModal from "@/components/user/cvs/DeleteCVModal.vue";
 import useErrorState from "@/composables/useErrorState";
+import { getUserCVsNamesByID } from "@/services/users/cvs";
+import { createCV, deleteCV } from "@/services/cvs";
+import handleScrollPadding from "@/utils/handleScrollPadding";
+import { ROUTES } from "@/constants/router";
+import { IUserCVNameData } from "@/types/userCVsUI";
+import { ICreateCVInput, IDeleteCVInput } from "@/types/backend-interfaces/cv";
 
 const router = useRouter();
 const route = useRoute();

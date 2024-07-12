@@ -51,10 +51,10 @@
 </template>
 
 <script setup lang="ts">
-import { getAllProjects } from "@/services/projects";
-import { IProjectsTableData } from "@/types/projectsTableUI";
 import { onMounted, reactive, ref } from "vue";
 import useErrorState from "@/composables/useErrorState";
+import { getAllProjects } from "@/services/projects";
+import { IProjectsTableData } from "@/types/projectsTableUI";
 
 const search = ref("");
 
@@ -82,9 +82,12 @@ const projects = reactive<IProjectsTableData[]>([]);
 
 onMounted(async () => {
   isLoading.value = true;
+
   try {
     const projectData = await getAllProjects();
+
     projects.splice(0, projects.length, ...projectData);
+
     setErrorValuesToDefault();
   } catch (error: unknown) {
     setErrorValues(error);

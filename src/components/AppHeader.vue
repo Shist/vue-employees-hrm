@@ -37,20 +37,16 @@
         <v-app-bar-nav-icon
           @click="handleNavigationShow"
           color="var(--color-text-red)"
-        ></v-app-bar-nav-icon>
-
-        <v-spacer></v-spacer>
-
+        />
+        <v-spacer />
         <v-icon style="color: #767676">mdi-web</v-icon>
-
         <div class="toolbar__language text-white">
           <v-select :items="languages" v-model="language">
             <template v-slot:item="{ props, item }">
-              <v-list-item v-bind="props" :title="item.raw.value"></v-list-item>
+              <v-list-item v-bind="props" :title="item.raw.value" />
             </template>
           </v-select>
         </div>
-
         <p v-if="user?.email" class="toolbar__email text-white">
           {{ userHeaderName }}
         </p>
@@ -59,7 +55,7 @@
           type="text"
           width="130px"
           color="var(--color-header-bg)"
-        ></v-skeleton-loader>
+        />
         <v-menu max-width="150px" rounded>
           <template v-slot:activator="{ props }">
             <v-btn icon v-bind="props">
@@ -96,7 +92,7 @@
               >
                 {{ item.title }}
               </v-btn>
-              <v-divider class="my-3"></v-divider>
+              <v-divider class="my-3" />
               <v-btn
                 @click="handleLogout"
                 prepend-icon="mdi-logout"
@@ -129,7 +125,6 @@
             <v-icon>mdi-close</v-icon>
           </v-btn>
         </div>
-
         <v-btn
           block
           rounded="0"
@@ -143,8 +138,7 @@
           <v-icon size="x-large" class="mr-8 ml-4">mdi-home-outline</v-icon>
           Home
         </v-btn>
-        <v-divider></v-divider>
-
+        <v-divider />
         <v-list class="pa-0">
           <v-list-item
             class="pa-0"
@@ -177,16 +171,17 @@
 <script setup lang="ts">
 import { computed, ref, watch } from "vue";
 import { useRoute, useRouter } from "vue-router";
+import { storeToRefs } from "pinia";
+import { useAuthStore } from "@/store/authStore";
+import { useScrollbarWidth } from "@/store/scrollbarWidth";
+import handleScrollPadding from "@/utils/handleScrollPadding";
 import { ROUTES } from "@/constants/router";
 import { NAVIGATION__ITEMS } from "@/constants/navigationItems";
 import { INavigationItem } from "@/types/navigation";
-import { useScrollbarWidth } from "@/store/scrollbarWidth";
-import { storeToRefs } from "pinia";
-import { useAuthStore } from "@/store/authStore";
-import handleScrollPadding from "@/utils/handleScrollPadding";
 
 const router = useRouter();
 const route = useRoute();
+
 const authStore = useAuthStore();
 const user = storeToRefs(authStore).user;
 

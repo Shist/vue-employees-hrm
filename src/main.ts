@@ -1,13 +1,13 @@
 import { createApp, provide, h } from "vue";
-import App from "@/App.vue";
-import appComponents from "@/components/UI";
-import router from "@/router";
-import { createPinia } from "pinia";
+import { DefaultApolloClient } from "@vue/apollo-composable";
+import apolloClient from "@/plugins/apolloConfig";
 import vuetifyConfig from "@/plugins/vuetify";
 import Vue3Toasity from "vue3-toastify";
 import toastifyConfig from "@/plugins/toastifyConfig";
-import { DefaultApolloClient } from "@vue/apollo-composable";
-import apolloClient from "@/plugins/apolloConfig";
+import router from "@/router";
+import { createPinia } from "pinia";
+import App from "@/App.vue";
+import appComponents from "@/components/UI";
 
 const app = createApp({
   setup() {

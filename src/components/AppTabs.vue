@@ -80,7 +80,6 @@ const userTabs = ref(ROUTES.USER_PROFILE.NAME);
 const cvsTabs = ref(ROUTES.CV_DETAILS.NAME);
 
 const router = useRouter();
-
 const route = useRoute();
 
 watch(route, updateTabs);

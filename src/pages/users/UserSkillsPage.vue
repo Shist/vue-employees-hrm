@@ -61,10 +61,20 @@
 
 <script setup lang="ts">
 import { ref, reactive, computed, watch, onMounted } from "vue";
+import { useRoute } from "vue-router";
+import { storeToRefs } from "pinia";
+import { useAuthStore } from "@/store/authStore";
 import SkillModal from "@/components/user/skills/SkillModal.vue";
 import SkillsCategory from "@/components/user/skills/SkillsCategory.vue";
-import { useRoute } from "vue-router";
+import useErrorState from "@/composables/useErrorState";
 import { getAllSkills, getSkillCategories } from "@/services/skills";
+import {
+  createUserSkill,
+  deleteUserSkills,
+  getUserSkillsByID,
+  updateUserSkill,
+} from "@/services/users/skills";
+import handleScrollPadding from "@/utils/handleScrollPadding";
 import {
   IProfileSkill,
   IAddOrUpdateProfileSkillInput,
@@ -75,16 +85,6 @@ import {
   ICategorySkill,
   ISkillsData,
 } from "@/types/userSkillsUI";
-import { storeToRefs } from "pinia";
-import { useAuthStore } from "@/store/authStore";
-import handleScrollPadding from "@/utils/handleScrollPadding";
-import {
-  createUserSkill,
-  deleteUserSkills,
-  getUserSkillsByID,
-  updateUserSkill,
-} from "@/services/users/skills";
-import useErrorState from "@/composables/useErrorState";
 
 const route = useRoute();
 
@@ -116,6 +116,7 @@ const leftSkills = computed<ISkillsData[]>(() => {
   }
 
   const userSkillsSet = new Set(userSkills.value.map((skill) => skill.name));
+
   return skills.value.filter((skill) => !userSkillsSet.has(skill.name));
 });
 

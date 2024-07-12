@@ -1,10 +1,10 @@
 import apolloClient from "@/plugins/apolloConfig";
+import getAllProjectsQuery from "@/graphql/projects/getAllProjects.query.gql";
+import { getDetailedError } from "@/utils/handleErrors";
 import {
   IProjectsTableData,
   IProjectsTableServerData,
 } from "@/types/projectsTableUI";
-import getAllProjectsQuery from "@/graphql/projects/getAllProjects.query.gql";
-import { getDetailedError } from "@/utils/handleErrors";
 
 export const getAllProjects = async () => {
   const result: IProjectsTableData[] = [];

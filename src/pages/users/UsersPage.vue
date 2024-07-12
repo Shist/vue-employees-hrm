@@ -64,10 +64,10 @@
 <script setup lang="ts">
 import { ref, reactive, onMounted } from "vue";
 import { useRouter } from "vue-router";
-import { ROUTES } from "@/constants/router";
-import { getAllUsers } from "@/services/users/users";
-import { IUsersTableData } from "@/types/usersTableUI";
 import useErrorState from "@/composables/useErrorState";
+import { getAllUsers } from "@/services/users/users";
+import { ROUTES } from "@/constants/router";
+import { IUsersTableData } from "@/types/usersTableUI";
 
 const router = useRouter();
 

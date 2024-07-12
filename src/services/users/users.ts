@@ -2,10 +2,10 @@ import apolloClient from "@/plugins/apolloConfig";
 import getAllUsersQuery from "@/graphql/users/getAllUsers.query.gql";
 import getUserAuthDataByIDQuery from "@/graphql/users/getUserAuthDataByID.query.gql";
 import getUserFullnameByIDQuery from "@/graphql/users/getUserFullnameByID.query.gql";
+import { checkUserID, getDetailedError } from "@/utils/handleErrors";
 import { IUsersTableData, IUsersTableServerData } from "@/types/usersTableUI";
 import { IUsersNameServerData } from "@/types/breadcrumbsUI";
 import { IUserAuthServerData } from "@/types/userAuthUI";
-import { checkUserID, getDetailedError } from "@/utils/handleErrors";
 
 export const getAllUsers = async () => {
   const result: IUsersTableData[] = [];

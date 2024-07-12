@@ -2,7 +2,6 @@
   <div class="auth">
     <h1 class="auth__title">{{ props.title }}</h1>
     <p class="auth__subtitle">{{ props.subtitleText }}</p>
-
     <form @submit.prevent="submitForm" class="auth__form" novalidate>
       <v-text-field
         v-model="formData.email"
@@ -43,10 +42,12 @@
 
 <script setup lang="ts">
 import { computed, reactive, ref } from "vue";
-import { useRoute, useRouter } from "vue-router";
-import { ROUTES } from "@/constants/router";
 import useVuelidate from "@vuelidate/core";
 import { required, minLength, email, helpers } from "@vuelidate/validators";
+import { useRoute, useRouter } from "vue-router";
+import { useAuthStore } from "@/store/authStore";
+import { handleValidationErrors } from "@/utils/handleValidationErrors";
+import { ROUTES } from "@/constants/router";
 import {
   EMAIL_REQUIRED_FIELD,
   EMAIL_TYPE_FIELD,
@@ -54,8 +55,6 @@ import {
   PASSWORD_REQUIRED_FIELD,
 } from "@/constants/errorMessage";
 import { IForm, IAuthForm } from "@/types/form";
-import { handleValidationErrors } from "@/utils/handleValidationErrors";
-import { useAuthStore } from "@/store/authStore";
 
 const authStore = useAuthStore();
 

@@ -92,9 +92,19 @@
 
 <script setup lang="ts">
 import { ref, reactive, computed, watch, onMounted } from "vue";
-import LanguageModal from "@/components/user/languages/LanguageModal.vue";
 import { useRoute } from "vue-router";
+import { storeToRefs } from "pinia";
+import { useAuthStore } from "@/store/authStore";
+import LanguageModal from "@/components/user/languages/LanguageModal.vue";
+import useErrorState from "@/composables/useErrorState";
+import {
+  createUserLanguage,
+  deleteUserLanguages,
+  getUserLanguagesByID,
+  updateUserLanguage,
+} from "@/services/users/languages";
 import { getAllLanguagesNames } from "@/services/languages";
+import handleScrollPadding from "@/utils/handleScrollPadding";
 import { Proficiency } from "@/types/backend-interfaces/language/proficiency";
 import {
   IProfileLanguage,
@@ -102,16 +112,6 @@ import {
   IDeleteProfileLanguageInput,
 } from "@/types/backend-interfaces/user/profile/language";
 import { ILanguagesNamesData } from "@/types/userLanguagesUI";
-import { storeToRefs } from "pinia";
-import { useAuthStore } from "@/store/authStore";
-import handleScrollPadding from "@/utils/handleScrollPadding";
-import {
-  createUserLanguage,
-  deleteUserLanguages,
-  getUserLanguagesByID,
-  updateUserLanguage,
-} from "@/services/users/languages";
-import useErrorState from "@/composables/useErrorState";
 
 const route = useRoute();
 
@@ -144,6 +144,7 @@ const leftLanguages = computed<ILanguagesNamesData[]>(() => {
   const userLanguagesSet = new Set(
     userLanguages.value.map((language) => language.name)
   );
+
   return languages.value.filter(
     (language) => !userLanguagesSet.has(language.name)
   );

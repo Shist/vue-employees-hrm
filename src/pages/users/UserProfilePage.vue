@@ -31,11 +31,22 @@
 
 <script setup lang="ts">
 import { ref, onMounted, computed, watch } from "vue";
+import { useRoute } from "vue-router";
+import { storeToRefs } from "pinia";
+import { useAuthStore } from "@/store/authStore";
 import AvatarUpload from "@/components/user/profile/AvatarUpload.vue";
 import UserInfo from "@/components/user/profile/UserInfo.vue";
-import { useRoute } from "vue-router";
+import useToast from "@/composables/useToast";
+import useErrorState from "@/composables/useErrorState";
 import { getAllDepartmentNames } from "@/services/departments";
 import { getAllPositionNames } from "@/services/positions";
+import {
+  deleteUserAvatar,
+  getUserProfileByID,
+  updateUserAvatar,
+  updateUserData,
+} from "@/services/users/profile";
+import { TOO_LARGE_FILE, INVALID_FILE_TYPE } from "@/constants/errorMessage";
 import {
   IUserProfileData,
   IUserProfileServerData,
@@ -45,17 +56,6 @@ import {
 import { IUpdateUserInput } from "@/types/backend-interfaces/user";
 import { IUpdateProfileInput } from "@/types/backend-interfaces/user/profile";
 import { IUploadAvatarInput } from "@/types/backend-interfaces/user/avatar";
-import useToast from "@/composables/useToast";
-import { storeToRefs } from "pinia";
-import { useAuthStore } from "@/store/authStore";
-import { TOO_LARGE_FILE, INVALID_FILE_TYPE } from "@/constants/errorMessage";
-import {
-  deleteUserAvatar,
-  getUserProfileByID,
-  updateUserAvatar,
-  updateUserData,
-} from "@/services/users/profile";
-import useErrorState from "@/composables/useErrorState";
 
 const route = useRoute();
 
@@ -200,6 +200,7 @@ function submitUserAvatar(avatarInputObj: IUploadAvatarInput) {
   updateUserAvatar(avatarInputObj)
     .then((newAvatarSRC) => {
       if (!newAvatarSRC) return;
+
       if (user.value) {
         user.value.avatar = newAvatarSRC;
       }

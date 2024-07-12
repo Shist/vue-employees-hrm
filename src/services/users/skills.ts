@@ -1,14 +1,14 @@
 import apolloClient from "@/plugins/apolloConfig";
-import {
-  IAddOrUpdateProfileSkillInput,
-  IDeleteProfileSkillInput,
-  IProfileSkill,
-} from "@/types/backend-interfaces/user/profile/skill";
 import getUserSkillsByIDQuery from "@/graphql/users/skills/getUserSkillsByID.query.gql";
 import createUserSkillQuery from "@/graphql/users/skills/createUserSkill.mutation.gql";
 import updateUserSkillQuery from "@/graphql/users/skills/updateUserSkill.mutation.gql";
 import deleteUserSkillsQuery from "@/graphql/users/skills/deleteUserSkills.mutation.gql";
 import { checkUserID, getDetailedError } from "@/utils/handleErrors";
+import {
+  IAddOrUpdateProfileSkillInput,
+  IDeleteProfileSkillInput,
+  IProfileSkill,
+} from "@/types/backend-interfaces/user/profile/skill";
 
 export const getUserSkillsByID = async (id: string) => {
   try {

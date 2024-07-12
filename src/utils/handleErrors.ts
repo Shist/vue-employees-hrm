@@ -1,3 +1,5 @@
+import { storeToRefs } from "pinia";
+import { useAuthStore } from "@/store/authStore";
 import useToast from "@/composables/useToast";
 import {
   EMAIL_DUPLICATE_ERROR,
@@ -8,8 +10,6 @@ import {
   UNAUTHORIZED_ERROR,
   UNEXPECTED_ERROR,
 } from "@/constants/errorMessage";
-import { useAuthStore } from "@/store/authStore";
-import { storeToRefs } from "pinia";
 
 export function checkUserID(id: string) {
   if (!Number.isInteger(Number(id)) || BigInt(id) > 2147483647n) {
@@ -44,6 +44,7 @@ export function getDetailedError(error: unknown) {
         return new Error(UNAUTHORIZED_ERROR, { cause: UNAUTHORIZED_ERROR });
     }
   }
+
   return new Error(UNEXPECTED_ERROR);
 }
 

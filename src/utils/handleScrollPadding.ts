@@ -1,5 +1,5 @@
-import { useScrollbarWidth } from "@/store/scrollbarWidth";
 import { storeToRefs } from "pinia";
+import { useScrollbarWidth } from "@/store/scrollbarWidth";
 
 export default function handleScrollPadding(isNeedToBeHidden: boolean) {
   const { scrollbarWidth } = storeToRefs(useScrollbarWidth());
@@ -9,6 +9,7 @@ export default function handleScrollPadding(isNeedToBeHidden: boolean) {
       20 + window.innerWidth - document.body.offsetWidth
     }px`;
   }
+
   if (isNeedToBeHidden) {
     document.documentElement.style.overflowY = "hidden";
   } else {

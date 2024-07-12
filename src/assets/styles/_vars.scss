@@ -8,10 +8,27 @@ $font-roboto: "Roboto", Helvetica, Arial, sans-serif;
 :root {
   color-scheme: light;
 
+  // ====== Variables for light theme =====
+  --color-header-bg: #2e2e2e;
+
+  --color-wrapper-bg: #ffffff;
+  --color-wrapper-bg-rgb: 255, 255, 255;
+
+  --color-text: #2e2e2e;
+  --color-gray-label-text: #7e7e7e;
+
+  --color-active-borders: #000000;
+
+  --color-toast-bg: #e1e1e1;
+
+  --color-avatar-bg: #bdbdbd;
+  --color-avatar-initials: #f5f5f7;
+  // ========================================
+
+  // ====== Variables that are same for both themes =====
   --color-btn-text: #ffffff;
   --color-btn-gray-text: #767676;
   --color-btn-gray-text-rgb: 117, 117, 117;
-
   --color-btn-bg: #c62f31;
   --color-btn-bg-hover: #8a2122;
 
@@ -22,34 +39,23 @@ $font-roboto: "Roboto", Helvetica, Arial, sans-serif;
   --color-active-text: #c63031;
 
   --color-header-text: #ffffff;
-  --color-header-bg: #2e2e2e;
-
-  --color-wrapper-bg: #ffffff;
-  --color-wrapper-bg-rgb: 255, 255, 255;
 
   --color-wrapper-bg-dark-red-filter: 198, 48, 49;
 
-  --color-text: #2e2e2e;
-  --color-gray-label-text: #7e7e7e;
   --color-text-red: #c62f31;
   --color-text-error: #cf6679;
 
   --color-modal-overlay: rgba(0, 0, 0, 0.5);
 
-  --color-active-borders: #000000;
-
-  --color-toast-bg: #e1e1e1;
-
   --color-spinner: #c62f31;
-
-  --color-avatar-bg: #bdbdbd;
-  --color-avatar-initials: #f5f5f7;
+  // ========================================
 }
 
 // Class for dark theme colors
 .dark-theme {
   color-scheme: dark;
 
+  // ====== Variables for dark theme =====
   --color-header-bg: #272727;
 
   --color-wrapper-bg: #353535;
@@ -64,6 +70,7 @@ $font-roboto: "Roboto", Helvetica, Arial, sans-serif;
 
   --color-avatar-bg: #757575;
   --color-avatar-initials: #353535;
+  // ========================================
 }
 
 // Default checkpoints for adaptive

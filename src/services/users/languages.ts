@@ -1,14 +1,14 @@
 import apolloClient from "@/plugins/apolloConfig";
+import getUserLanguagesByIDQuery from "@/graphql/users/languages/getUserLanguagesByID.query.gql";
+import createUserLanguageQuery from "@/graphql/users/languages/createUserLanguage.mutation.gql";
+import updateUserLanguageQuery from "@/graphql/users/languages/updateUserLanguage.mutation.gql";
+import deleteUserLanguagesQuery from "@/graphql/users/languages/deleteUserLanguages.mutation.gql";
+import { checkUserID, getDetailedError } from "@/utils/handleErrors";
 import {
   IAddOrUpdateProfileLanguageInput,
   IProfileLanguage,
 } from "@/types/backend-interfaces/user/profile/language";
-import { checkUserID, getDetailedError } from "@/utils/handleErrors";
-import getUserLanguagesByIDQuery from "@/graphql/users/languages/getUserLanguagesByID.query.gql";
-import createUserLanguageQuery from "@/graphql/users/languages/createUserLanguage.mutation.gql";
-import updateUserLanguageQuery from "@/graphql/users/languages/updateUserLanguage.mutation.gql";
 import { IDeleteProfileLanguageInput } from "@/types/backend-interfaces/language/proficiency";
-import deleteUserLanguagesQuery from "@/graphql/users/languages/deleteUserLanguages.mutation.gql";
 
 export const getUserLanguagesByID = async (id: string) => {
   try {

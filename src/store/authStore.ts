@@ -1,18 +1,19 @@
-import { defineStore } from "pinia";
 import { computed, ref } from "vue";
+import { useRouter } from "vue-router";
+import { defineStore } from "pinia";
+import useToast from "@/composables/useToast";
 import { login, register } from "@/services/auth";
 import { getUserAuthDataByID } from "@/services/users/users";
+import { handleLogout } from "@/utils/handleErrors";
 import { ROUTES } from "@/constants/router";
-import { useRouter } from "vue-router";
+import { UNAUTHORIZED_ERROR } from "@/constants/errorMessage";
 import { IUserAuthData } from "@/types/userAuthUI";
 import { ITokenData } from "@/types/tokenData";
-import useToast from "@/composables/useToast";
-import { handleLogout } from "@/utils/handleErrors";
-import { UNAUTHORIZED_ERROR } from "@/constants/errorMessage";
 
 export const useAuthStore = defineStore("authStore", () => {
   const user = ref<IUserAuthData | null>(null);
   const token = ref<string | null>(localStorage.getItem("token"));
+
   const decodedToken = computed<ITokenData | null>(() => {
     const decodedData = atob(token.value ? token.value.split(".")[1] : "");
     return decodedData ? JSON.parse(decodedData) : null;
@@ -21,6 +22,7 @@ export const useAuthStore = defineStore("authStore", () => {
   const wasAuthErrorToastShown = ref(false);
 
   const router = useRouter();
+
   const { setErrorToast } = useToast();
 
   const fetchUserAuthData = async () => {
