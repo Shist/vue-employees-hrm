@@ -63,6 +63,10 @@ const {
   setErrorValues,
 } = useErrorState();
 
+const cvNameInitial = ref<string | null>(null);
+const cvEducationInitial = ref<string | null>(null);
+const cvDescriptionInitial = ref<string | null>(null);
+
 const cvName = ref<string | null>(null);
 const cvEducation = ref<string | null>(null);
 const cvDescription = ref<string | null>(null);
@@ -73,7 +77,12 @@ const authStoreUser = storeToRefs(authStore).user;
 const isOwner = computed(() => authStoreUser.value?.id === cvUserID.value);
 
 const isUpdateBtnDisabled = computed(
-  () => !cvName.value || !cvDescription.value
+  () =>
+    !cvName.value ||
+    !cvDescription.value ||
+    (cvNameInitial.value === cvName.value &&
+      cvEducationInitial.value === cvEducation.value &&
+      cvDescriptionInitial.value === cvDescription.value)
 );
 
 onMounted(() => {
@@ -91,9 +100,13 @@ function fetchData() {
     .then((cvDetailsData) => {
       if (!cvDetailsData) return;
 
-      cvName.value = cvDetailsData.name;
-      cvEducation.value = cvDetailsData.education;
-      cvDescription.value = cvDetailsData.description;
+      cvNameInitial.value = cvDetailsData.name;
+      cvEducationInitial.value = cvDetailsData.education;
+      cvDescriptionInitial.value = cvDetailsData.description;
+
+      cvName.value = cvNameInitial.value;
+      cvEducation.value = cvEducationInitial.value;
+      cvDescription.value = cvDescriptionInitial.value;
 
       if (cvDetailsData.user) {
         cvUserID.value = cvDetailsData.user.id;
