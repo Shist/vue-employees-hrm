@@ -1,0 +1,11 @@
+query GET_CV_DETAILS_BY_ID($cvId: ID!) {
+  cv(cvId: $cvId) {
+    id
+    name
+    education
+    description
+    user {
+      id
+    }
+  }
+}
