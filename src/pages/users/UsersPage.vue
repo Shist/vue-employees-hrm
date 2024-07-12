@@ -4,7 +4,6 @@
     <AppErrorSection
       v-else-if="isError"
       :errorMessage="errorMessage"
-      :isNotFoundError="isNotFoundError"
       class="main-page__error-wrapper"
     />
     <div v-else class="main-page__main-content-wrapper">
@@ -98,7 +97,6 @@ const {
   isLoading,
   isError,
   errorMessage,
-  isNotFoundError,
   setErrorValuesToDefault,
   setErrorValues,
 } = useErrorState();

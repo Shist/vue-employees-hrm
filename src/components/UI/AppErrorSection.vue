@@ -16,17 +16,22 @@
 </template>
 
 <script setup lang="ts">
-import { defineComponent } from "vue";
+import { computed, defineComponent } from "vue";
 import { ROUTES } from "@/constants/router";
+import { NOT_FOUND_USER, NOT_FOUND_CV } from "@/constants/errorMessage";
 
 defineComponent({
   name: "AppErrorSection",
 });
 
-defineProps<{
+const props = defineProps<{
   errorMessage: string;
-  isNotFoundError: boolean;
 }>();
+
+const isNotFoundError = computed(
+  () =>
+    props.errorMessage === NOT_FOUND_USER || props.errorMessage === NOT_FOUND_CV
+);
 </script>
 
 <style scoped lang="scss">

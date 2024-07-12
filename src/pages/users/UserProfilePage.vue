@@ -1,11 +1,7 @@
 <template>
   <div class="user-profile">
     <AppSpinner v-if="isLoading" />
-    <AppErrorSection
-      v-else-if="isError"
-      :errorMessage="errorMessage"
-      :isNotFoundError="isNotFoundError"
-    />
+    <AppErrorSection v-else-if="isError" :errorMessage="errorMessage" />
     <div v-else-if="user" class="user-profile__main-content-wrapper">
       <AvatarUpload
         :isOwner="isOwner"
@@ -77,7 +73,6 @@ const {
   isLoading,
   isError,
   errorMessage,
-  isNotFoundError,
   setErrorValuesToDefault,
   setErrorValues,
 } = useErrorState();

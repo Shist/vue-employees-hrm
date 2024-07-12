@@ -1,11 +1,7 @@
 <template>
   <div class="user-languages">
     <AppSpinner v-if="isLoading" />
-    <AppErrorSection
-      v-else-if="isError"
-      :errorMessage="errorMessage"
-      :isNotFoundError="isNotFoundError"
-    />
+    <AppErrorSection v-else-if="isError" :errorMessage="errorMessage" />
     <div v-else-if="userLanguages" class="user-languages__main-content-wrapper">
       <v-btn
         v-if="isOwner"
@@ -133,7 +129,6 @@ const {
   isLoading,
   isError,
   errorMessage,
-  isNotFoundError,
   setErrorValuesToDefault,
   setErrorValues,
 } = useErrorState();
