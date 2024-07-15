@@ -50,7 +50,7 @@
   <SkillModal
     :isOpen="isModalOpen"
     :oSkillForModal="oSkillForModal"
-    :userID="id"
+    :userID="userID"
     :skills="leftSkills"
     :skill-categories="skillCategories"
     @onCreateUserSkill="submitUserSkillCreate"
@@ -88,15 +88,15 @@ import {
 
 const route = useRoute();
 
-const id = computed<string>(() => {
+const userID = computed<string>(() => {
   // eslint-disable-next-line
-  const [section, id, tab] = route.fullPath.slice(1).split("/");
-  return id;
+  const [section, userID, tab] = route.fullPath.slice(1).split("/");
+  return userID;
 });
 
 const authStore = useAuthStore();
 const authStoreUser = storeToRefs(authStore).user;
-const isOwner = computed(() => authStoreUser.value?.id === id.value);
+const isOwner = computed(() => authStoreUser.value?.id === userID.value);
 
 const {
   isLoading,
@@ -171,7 +171,7 @@ onMounted(() => {
   fetchData();
 });
 
-watch(id, () => {
+watch(userID, () => {
   fetchData();
 });
 
@@ -193,7 +193,7 @@ function fetchData() {
   isLoading.value = true;
 
   Promise.all([
-    getUserSkillsByID(id.value),
+    getUserSkillsByID(userID.value),
     getAllSkills(),
     getSkillCategories(),
   ])
@@ -306,7 +306,7 @@ function submitUserSkillsDeletion() {
   isLoading.value = true;
 
   const skillsToBeDeleted: IDeleteProfileSkillInput = {
-    userId: Number(id.value),
+    userId: Number(userID.value),
     name: [...skillsForDeletionNames],
   };
 
