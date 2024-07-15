@@ -7,7 +7,7 @@
       class="user-cvs__error-wrapper"
     />
     <div v-else class="user-cvs__main-content-wrapper">
-      <div class="users-cvs__search-create-controls-wrapper">
+      <div class="user-cvs__search-create-controls-wrapper">
         <v-text-field
           v-model="search"
           label="Search"
@@ -24,7 +24,7 @@
           prepend-icon="mdi-plus"
           color="var(--color-wrapper-bg)"
           elevation="0"
-          class="project-page__button text-red-darken-4"
+          class="user-cvs__button text-red-darken-4"
           @click="handleOpenCreateModal"
         >
           Create CV
@@ -44,7 +44,7 @@
                 icon="mdi-dots-vertical"
                 v-bind="props"
                 class="user-cvs__popup-menu-btn"
-              ></v-btn>
+              />
             </template>
             <v-list>
               <v-list-item @click="() => openUserCV(item.id)">
@@ -245,7 +245,7 @@ function handleCloseDeleteModal() {
   &__main-content-wrapper {
     padding: 32px 24px;
     align-self: stretch;
-    .users-cvs__search-create-controls-wrapper {
+    .user-cvs__search-create-controls-wrapper {
       margin-bottom: 22px;
       padding-inline: 20px;
       display: flex;
@@ -254,7 +254,7 @@ function handleCloseDeleteModal() {
       .user-cvs__text-field-wrapper {
         max-width: 320px;
       }
-      .project-page__button {
+      .user-cvs__button {
         border: 1px solid var(--color-text-red);
       }
     }
