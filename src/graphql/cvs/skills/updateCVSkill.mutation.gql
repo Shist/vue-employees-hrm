@@ -1,0 +1,13 @@
+mutation UPDATE_CV_SKILL($skill: UpdateCvSkillInput!) {
+  updateCvSkill(skill: $skill) {
+    id
+    skills {
+      name
+      category
+      mastery
+    }
+    user {
+      id
+    }
+  }
+}

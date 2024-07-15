@@ -68,7 +68,7 @@
   </div>
   <CreateCVModal
     :isOpen="isCreateModalOpen"
-    :userID="id"
+    :userID="userID"
     @onCreateUserCV="submitUserCVCreate"
     @closeModal="handleCloseCreateModal"
   />
@@ -99,15 +99,15 @@ import { ICreateCVInput, IDeleteCVInput } from "@/types/backend-interfaces/cv";
 const router = useRouter();
 const route = useRoute();
 
-const id = computed<string>(() => {
+const userID = computed<string>(() => {
   // eslint-disable-next-line
-  const [section, id, tab] = route.fullPath.slice(1).split("/");
-  return id;
+  const [section, userID, tab] = route.fullPath.slice(1).split("/");
+  return userID;
 });
 
 const authStore = useAuthStore();
 const authStoreUser = storeToRefs(authStore).user;
-const isOwner = computed(() => authStoreUser.value?.id === id.value);
+const isOwner = computed(() => authStoreUser.value?.id === userID.value);
 
 const openedCVID = ref<string | null>(null);
 const openedCVName = ref<string | null>(null);
@@ -142,7 +142,7 @@ onMounted(async () => {
   isLoading.value = false;
 });
 
-watch(id, async () => {
+watch(userID, async () => {
   isLoading.value = true;
   await fetchData();
   isLoading.value = false;
@@ -158,7 +158,7 @@ watch(isDeleteModalOpen, (newValue) => {
 
 async function fetchData() {
   try {
-    const cvsData = await getUserCVsNamesByID(id.value);
+    const cvsData = await getUserCVsNamesByID(userID.value);
 
     if (!cvsData) return;
 

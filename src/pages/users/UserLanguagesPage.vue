@@ -82,7 +82,7 @@
   <LanguageModal
     :isOpen="isModalOpen"
     :oLanguageForModal="oLanguageForModal"
-    :userID="id"
+    :userID="userID"
     :languages="leftLanguages"
     @onCreateUserLanguage="submitUserLanguageCreate"
     @onUpdateUserLanguage="submitUserLanguageUpdate"
@@ -115,15 +115,15 @@ import { ILanguagesNamesData } from "@/types/userLanguagesUI";
 
 const route = useRoute();
 
-const id = computed<string>(() => {
+const userID = computed<string>(() => {
   // eslint-disable-next-line
-  const [section, id, tab] = route.fullPath.slice(1).split("/");
-  return id;
+  const [section, userID, tab] = route.fullPath.slice(1).split("/");
+  return userID;
 });
 
 const authStore = useAuthStore();
 const authStoreUser = storeToRefs(authStore).user;
-const isOwner = computed(() => authStoreUser.value?.id === id.value);
+const isOwner = computed(() => authStoreUser.value?.id === userID.value);
 
 const {
   isLoading,
@@ -168,7 +168,7 @@ onMounted(() => {
   fetchData();
 });
 
-watch(id, () => {
+watch(userID, () => {
   fetchData();
 });
 
@@ -188,7 +188,7 @@ function updateUserLanguagesValue(userLanguagesData: IProfileLanguage[]) {
 
 function fetchData() {
   isLoading.value = true;
-  Promise.all([getUserLanguagesByID(id.value), getAllLanguagesNames()])
+  Promise.all([getUserLanguagesByID(userID.value), getAllLanguagesNames()])
     .then(([userLanguagesData, languagesData]) => {
       if (!userLanguagesData || !languagesData) return;
 
@@ -299,7 +299,7 @@ function submitUserLanguagesDeletion() {
   isLoading.value = true;
 
   const languagesToBeDeleted: IDeleteProfileLanguageInput = {
-    userId: Number(id.value),
+    userId: Number(userID.value),
     name: [...languagesForDeletionNames],
   };
 

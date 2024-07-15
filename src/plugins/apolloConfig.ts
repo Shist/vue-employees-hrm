@@ -46,6 +46,16 @@ const cache = new InMemoryCache({
         },
       },
     },
+    Cv: {
+      fields: {
+        skills: {
+          keyArgs: false,
+          merge(existing, incoming) {
+            return incoming;
+          },
+        },
+      },
+    },
   },
 });
 

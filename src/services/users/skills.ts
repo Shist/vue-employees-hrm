@@ -7,8 +7,8 @@ import { checkUserID, getDetailedError } from "@/utils/handleErrors";
 import {
   IAddOrUpdateProfileSkillInput,
   IDeleteProfileSkillInput,
-  IProfileSkill,
 } from "@/types/backend-interfaces/user/profile/skill";
+import { ISkill } from "@/types/skillsUI";
 
 export const getUserSkillsByID = async (id: string) => {
   try {
@@ -17,7 +17,7 @@ export const getUserSkillsByID = async (id: string) => {
     const response = (await apolloClient.query({
       query: getUserSkillsByIDQuery,
       variables: { userId: Number(id) },
-    })) as { data: { user: { profile: { skills: IProfileSkill[] } } } };
+    })) as { data: { user: { profile: { skills: ISkill[] } } } };
 
     return response.data.user.profile.skills;
   } catch (error: unknown) {
@@ -32,7 +32,7 @@ export const createUserSkill = async (
     const response = (await apolloClient.mutate({
       mutation: createUserSkillQuery,
       variables: { skill: inputSkillObj },
-    })) as { data: { addProfileSkill: { skills: IProfileSkill[] } } };
+    })) as { data: { addProfileSkill: { skills: ISkill[] } } };
 
     return response.data.addProfileSkill.skills;
   } catch (error: unknown) {
@@ -47,7 +47,7 @@ export const updateUserSkill = async (
     const response = (await apolloClient.mutate({
       mutation: updateUserSkillQuery,
       variables: { skill: inputSkillObj },
-    })) as { data: { updateProfileSkill: { skills: IProfileSkill[] } } };
+    })) as { data: { updateProfileSkill: { skills: ISkill[] } } };
 
     return response.data.updateProfileSkill.skills;
   } catch (error: unknown) {
@@ -62,7 +62,7 @@ export const deleteUserSkills = async (
     const response = (await apolloClient.mutate({
       mutation: deleteUserSkillsQuery,
       variables: { skills: inputSkillObj },
-    })) as { data: { deleteProfileSkill: { skills: IProfileSkill[] } } };
+    })) as { data: { deleteProfileSkill: { skills: ISkill[] } } };
 
     return response.data.deleteProfileSkill.skills;
   } catch (error: unknown) {

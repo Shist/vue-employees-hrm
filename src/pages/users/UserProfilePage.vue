@@ -5,7 +5,7 @@
     <div v-else-if="user" class="user-profile__main-content-wrapper">
       <AvatarUpload
         :isOwner="isOwner"
-        :userID="id"
+        :userID="userID"
         :avatar="user.avatar"
         :userInitials="userInitials"
         @onUpdateUserAvatar="submitUserAvatar"
@@ -13,7 +13,7 @@
       />
       <UserInfo
         :isOwner="isOwner"
-        :userID="id"
+        :userID="userID"
         :firstName="user.firstName"
         :lastName="user.lastName"
         :email="user.email"
@@ -60,15 +60,15 @@ import { IUploadAvatarInput } from "@/types/backend-interfaces/user/avatar";
 
 const route = useRoute();
 
-const id = computed<string>(() => {
+const userID = computed<string>(() => {
   // eslint-disable-next-line
-  const [section, id, tab] = route.fullPath.slice(1).split("/");
-  return id;
+  const [section, userID, tab] = route.fullPath.slice(1).split("/");
+  return userID;
 });
 
 const authStore = useAuthStore();
 const authStoreUser = storeToRefs(authStore).user;
-const isOwner = computed(() => authStoreUser.value?.id === id.value);
+const isOwner = computed(() => authStoreUser.value?.id === userID.value);
 
 const { newEnityName } = storeToRefs(useBreadCrumbsStore());
 
@@ -102,7 +102,7 @@ onMounted(() => {
   fetchData();
 });
 
-watch(id, () => {
+watch(userID, () => {
   fetchData();
 });
 
@@ -118,7 +118,7 @@ function updateUserValue(newUser: IUserProfileServerData) {
     positionID: newUser.position ? newUser.position.id : null,
   };
 
-  if (!authStoreUser.value || authStoreUser.value.id !== id.value) return;
+  if (!authStoreUser.value || authStoreUser.value.id !== userID.value) return;
 
   authStoreUser.value.firstName = newUser.profile.first_name;
   authStoreUser.value.lastName = newUser.profile.last_name;
@@ -138,7 +138,7 @@ function fetchData() {
   isLoading.value = true;
 
   Promise.all([
-    getUserProfileByID(id.value),
+    getUserProfileByID(userID.value),
     getAllDepartmentNames(),
     getAllPositionNames(),
   ])
@@ -223,7 +223,7 @@ function submitUserAvatar(avatarInputObj: IUploadAvatarInput) {
         user.value.avatar = newAvatarSRC;
       }
 
-      if (authStoreUser.value && authStoreUser.value.id === id.value) {
+      if (authStoreUser.value && authStoreUser.value.id === userID.value) {
         authStoreUser.value.avatar = newAvatarSRC;
       }
 
@@ -237,18 +237,18 @@ function submitUserAvatar(avatarInputObj: IUploadAvatarInput) {
     });
 }
 
-function submitUserAvatarDeletion(userID: string) {
+function submitUserAvatarDeletion(_userID: string) {
   if (!isOwner.value) return;
 
   isLoading.value = true;
 
-  deleteUserAvatar(userID)
+  deleteUserAvatar(_userID)
     .then(() => {
       if (user.value) {
         user.value.avatar = null;
       }
 
-      if (authStoreUser.value && authStoreUser.value.id === id.value) {
+      if (authStoreUser.value && authStoreUser.value.id === userID.value) {
         authStoreUser.value.avatar = null;
       }
 

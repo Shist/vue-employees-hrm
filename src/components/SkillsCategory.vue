@@ -49,8 +49,7 @@
 
 <script setup lang="ts">
 import { reactive } from "vue";
-import { IProfileSkill } from "@/types/backend-interfaces/user/profile/skill";
-import { ICategorySkill } from "@/types/userSkillsUI";
+import { ISkill, ICategorySkill } from "@/types/skillsUI";
 import { Mastery } from "@/types/backend-interfaces/skill/mastery";
 
 const props = defineProps<{
@@ -61,7 +60,7 @@ const props = defineProps<{
 const emit = defineEmits<{
   (
     event: "openEditModal",
-    skillForModal: IProfileSkill,
+    skillForModal: ISkill,
     skillName: string,
     skillIndex: number
   ): void;
@@ -88,7 +87,7 @@ const skillsMasteries = reactive(
 );
 
 function handleOpenEditModal(
-  skillForModal: IProfileSkill,
+  skillForModal: ISkill,
   skillName: string,
   skillIndex: number
 ) {
