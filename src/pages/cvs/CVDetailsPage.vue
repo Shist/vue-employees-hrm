@@ -54,10 +54,10 @@ import { ICVDetailsServerData } from "@/types/cvDetailsUI";
 
 const route = useRoute();
 
-const id = computed<string>(() => {
+const cvID = computed<string>(() => {
   // eslint-disable-next-line
-  const [section, id, tab] = route.fullPath.slice(1).split("/");
-  return id;
+  const [section, cvID, tab] = route.fullPath.slice(1).split("/");
+  return cvID;
 });
 
 const {
@@ -96,7 +96,7 @@ onMounted(() => {
   fetchData();
 });
 
-watch(id, () => {
+watch(cvID, () => {
   fetchData();
 });
 
@@ -117,7 +117,7 @@ function updateCVDetailsValue(cvDetailsData: ICVDetailsServerData) {
 function fetchData() {
   isLoading.value = true;
 
-  getCVDetailsDataByID(id.value)
+  getCVDetailsDataByID(cvID.value)
     .then((cvDetailsData) => {
       if (!cvDetailsData) return;
 
@@ -137,7 +137,7 @@ function submitCVDetailsUpdate() {
   if (!isOwner.value) return;
 
   const cvInputObj: IUpdateCVInput = {
-    cvId: Number(id.value),
+    cvId: Number(cvID.value),
     name: `${cvName.value}`,
     education: cvEducation.value,
     description: `${cvDescription.value}`,

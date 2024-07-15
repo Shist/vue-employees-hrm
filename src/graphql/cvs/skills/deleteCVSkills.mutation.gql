@@ -1,0 +1,13 @@
+mutation DELETE_CV_SKILLS($skills: DeleteCvSkillInput!) {
+  deleteCvSkill(skill: $skills) {
+    id
+    skills {
+      name
+      category
+      mastery
+    }
+    user {
+      id
+    }
+  }
+}
