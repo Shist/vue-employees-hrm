@@ -12,11 +12,11 @@
           v-model="search"
           prepend-inner-icon="mdi-magnify"
           variant="outlined"
-          single-line
-          hide-details
           density="compact"
+          single-line
           placeholder="Search"
           class="cvs-page__text-field-wrapper"
+          hide-details
         />
         <v-btn
           rounded
@@ -78,7 +78,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed, onMounted, reactive, ref } from "vue";
+import { onMounted, reactive, ref, watch } from "vue";
 import { useRouter } from "vue-router";
 import { storeToRefs } from "pinia";
 import { useAuthStore } from "@/store/authStore";
@@ -86,9 +86,10 @@ import CreateCVModal from "@/components/user/cvs/CreateCVModal.vue";
 import DeleteCVModal from "@/components/user/cvs/DeleteCVModal.vue";
 import useErrorState from "@/composables/useErrorState";
 import { createCV, deleteCV, getAllCvs } from "@/services/cvs";
+import handleScrollPadding from "@/utils/handleScrollPadding";
 import { ROUTES } from "@/constants/router";
-import { ICvsTableData } from "@/types/cvsTableUI";
 import { ICreateCVInput, IDeleteCVInput } from "@/types/backend-interfaces/cv";
+import { ICvsTableData } from "@/types/cvsTableUI";
 
 const router = useRouter();
 
@@ -103,11 +104,18 @@ const search = ref("");
 const isCreateModalOpen = ref(false);
 const isDeleteModalOpen = ref(false);
 
+const cvs = reactive<ICvsTableData[]>([]);
+
 const headers = [
   { key: "name", title: "Name" },
   { key: "description", title: "Description", sortable: false },
   { key: "email", title: "Employee" },
   { key: "options", sortable: false },
+];
+
+const cvMenuItems = [
+  { title: "Details", click: openCvDetails },
+  { title: "Delete CV", click: handleOpenDeleteModal },
 ];
 
 const {
@@ -118,16 +126,19 @@ const {
   setErrorValues,
 } = useErrorState();
 
-const cvMenuItems = [
-  { title: "Details", click: openCvDetails },
-  { title: "Delete CV", click: handleOpenDeleteModal },
-];
-
-const cvs = reactive<ICvsTableData[]>([]);
-
 onMounted(async () => {
-  isLoading.value = true;
+  await fetchData();
+  isLoading.value = false;
+});
 
+watch(
+  [isCreateModalOpen, isDeleteModalOpen],
+  ([newIsCreateModalOpen, newIsDeleteModalOpen]) => {
+    handleScrollPadding(newIsCreateModalOpen || newIsDeleteModalOpen);
+  }
+);
+
+async function fetchData() {
   try {
     const cvsData = await getAllCvs();
 
@@ -136,10 +147,8 @@ onMounted(async () => {
     setErrorValuesToDefault();
   } catch (error: unknown) {
     setErrorValues(error);
-  } finally {
-    isLoading.value = false;
   }
-});
+}
 
 function checkOwner(cvItemTitle: string, cvEmail: string) {
   if (cvItemTitle === "Details") return false;
@@ -168,38 +177,36 @@ function handleCloseDeleteModal() {
   isDeleteModalOpen.value = false;
 }
 
-function submitUserCVCreate(cvInputObj: ICreateCVInput) {
+async function submitUserCVCreate(cvInputObj: ICreateCVInput) {
   isLoading.value = true;
 
-  // createCV(cvInputObj)
-  //   .then((createdUserCV) => {
-  //     if (!createdUserCV) return;
-  //     cvs.push(createdUserCV);
+  try {
+    await createCV(cvInputObj);
 
-  //     setErrorValuesToDefault();
-  //   })
-  //   .catch((error: unknown) => {
-  //     setErrorValues(error);
-  //   })
-  //   .finally(() => {
-  //     isLoading.value = false;
-  //   });
+    await fetchData();
+
+    setErrorValuesToDefault();
+  } catch (error: unknown) {
+    setErrorValues(error);
+  } finally {
+    isLoading.value = false;
+  }
 }
 
 async function submitUserCVDeletion(cvInputObj: IDeleteCVInput) {
   isLoading.value = true;
 
-  // try {
-  //   await deleteCV(cvInputObj);
+  try {
+    await deleteCV(cvInputObj);
 
-  //   await fetchData();
+    await fetchData();
 
-  //   setErrorValuesToDefault();
-  // } catch (error: unknown) {
-  //   setErrorValues(error);
-  // } finally {
-  //   isLoading.value = false;
-  // }
+    setErrorValuesToDefault();
+  } catch (error: unknown) {
+    setErrorValues(error);
+  } finally {
+    isLoading.value = false;
+  }
 }
 </script>
 
