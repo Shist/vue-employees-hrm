@@ -65,7 +65,7 @@ import { useRoute } from "vue-router";
 import { storeToRefs } from "pinia";
 import { useAuthStore } from "@/store/authStore";
 import SkillModal from "@/components/cv/skills/SkillModal.vue";
-import SkillsCategory from "@/components/cv/skills/SkillsCategory.vue";
+import SkillsCategory from "@/components/SkillsCategory.vue";
 import useErrorState from "@/composables/useErrorState";
 import { getAllSkills, getSkillCategories } from "@/services/skills";
 import {
@@ -76,16 +76,16 @@ import {
 } from "@/services/cvs/skills";
 import handleScrollPadding from "@/utils/handleScrollPadding";
 import {
-  ICvSkill,
   IAddOrUpdateCvSkillInput,
   IDeleteCvSkillInput,
 } from "@/types/backend-interfaces/cv/skill";
 import {
+  ISkill,
   ICVSkillsServerData,
   ISkillCategoriesMap,
   ICategorySkill,
   ISkillsData,
-} from "@/types/cvSkillsUI";
+} from "@/types/skillsUI";
 
 const route = useRoute();
 
@@ -109,7 +109,7 @@ const {
   setErrorValues,
 } = useErrorState();
 
-const cvSkills = ref<ICvSkill[] | null>(null);
+const cvSkills = ref<ISkill[] | null>(null);
 const skills = ref<ISkillsData[] | null>(null);
 const skillCategories = ref<string[] | null>(null);
 
@@ -123,7 +123,7 @@ const leftSkills = computed<ISkillsData[]>(() => {
   return skills.value.filter((skill) => !cvSkillsSet.has(skill.name));
 });
 
-const oSkillForModal = ref<ICvSkill | null>(null);
+const oSkillForModal = ref<ISkill | null>(null);
 const isModalOpen = ref(false);
 
 const skillsForDeletionNames = reactive(new Set<string>());
@@ -230,7 +230,7 @@ function handleOpenCreateModal() {
 }
 
 function handleOpenEditModal(
-  _oSkillForModal: ICvSkill,
+  _oSkillForModal: ISkill,
   skillName: string,
   skillIndex: number
 ) {

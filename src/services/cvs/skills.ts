@@ -8,7 +8,7 @@ import {
   IAddOrUpdateCvSkillInput,
   IDeleteCvSkillInput,
 } from "@/types/backend-interfaces/cv/skill";
-import { ICVSkillsServerData } from "@/types/cvSkillsUI";
+import { ICVSkillsServerData } from "@/types/skillsUI";
 
 export const getCVSkillsByID = async (id: string) => {
   try {

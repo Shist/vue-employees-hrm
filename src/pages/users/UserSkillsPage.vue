@@ -65,7 +65,7 @@ import { useRoute } from "vue-router";
 import { storeToRefs } from "pinia";
 import { useAuthStore } from "@/store/authStore";
 import SkillModal from "@/components/user/skills/SkillModal.vue";
-import SkillsCategory from "@/components/user/skills/SkillsCategory.vue";
+import SkillsCategory from "@/components/SkillsCategory.vue";
 import useErrorState from "@/composables/useErrorState";
 import { getAllSkills, getSkillCategories } from "@/services/skills";
 import {
@@ -76,15 +76,15 @@ import {
 } from "@/services/users/skills";
 import handleScrollPadding from "@/utils/handleScrollPadding";
 import {
-  IProfileSkill,
   IAddOrUpdateProfileSkillInput,
   IDeleteProfileSkillInput,
 } from "@/types/backend-interfaces/user/profile/skill";
 import {
+  ISkill,
   ISkillCategoriesMap,
   ICategorySkill,
   ISkillsData,
-} from "@/types/userSkillsUI";
+} from "@/types/skillsUI";
 
 const route = useRoute();
 
@@ -106,7 +106,7 @@ const {
   setErrorValues,
 } = useErrorState();
 
-const userSkills = ref<IProfileSkill[] | null>(null);
+const userSkills = ref<ISkill[] | null>(null);
 const skills = ref<ISkillsData[] | null>(null);
 const skillCategories = ref<string[] | null>(null);
 
@@ -120,7 +120,7 @@ const leftSkills = computed<ISkillsData[]>(() => {
   return skills.value.filter((skill) => !userSkillsSet.has(skill.name));
 });
 
-const oSkillForModal = ref<IProfileSkill | null>(null);
+const oSkillForModal = ref<ISkill | null>(null);
 const isModalOpen = ref(false);
 
 const skillsForDeletionNames = reactive(new Set<string>());
@@ -179,7 +179,7 @@ watch(isModalOpen, (newValue) => {
   handleScrollPadding(newValue);
 });
 
-function updateUserSkillsValue(userSkillsData: IProfileSkill[]) {
+function updateUserSkillsValue(userSkillsData: ISkill[]) {
   skillsForDeletionNames.clear();
   aSkillsDeletionState.splice(
     0,
@@ -223,7 +223,7 @@ function handleOpenCreateModal() {
 }
 
 function handleOpenEditModal(
-  _oSkillForModal: IProfileSkill,
+  _oSkillForModal: ISkill,
   skillName: string,
   skillIndex: number
 ) {

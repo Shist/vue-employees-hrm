@@ -1,12 +1,9 @@
 import { Mastery } from "@/types/backend-interfaces/skill/mastery";
-import { ICvSkill } from "@/types/backend-interfaces/cv/skill";
 
-export interface ICVSkillsServerData {
-  id: string;
-  skills: ICvSkill[];
-  user: {
-    id: string;
-  } | null;
+export interface ISkill {
+  name: string;
+  category: string | null;
+  mastery: Mastery;
 }
 
 export interface ICategorySkill {
@@ -24,4 +21,12 @@ export interface ISkillsData {
   id: number;
   name: string;
   category: string;
+}
+
+export interface ICVSkillsServerData {
+  id: string;
+  skills: ISkill[];
+  user: {
+    id: string;
+  } | null;
 }

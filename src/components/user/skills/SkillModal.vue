@@ -70,16 +70,13 @@
 
 <script setup lang="ts">
 import { ref, computed, watch, onUpdated } from "vue";
-import {
-  IProfileSkill,
-  IAddOrUpdateProfileSkillInput,
-} from "@/types/backend-interfaces/user/profile/skill";
+import { IAddOrUpdateProfileSkillInput } from "@/types/backend-interfaces/user/profile/skill";
 import { Mastery } from "@/types/backend-interfaces/skill/mastery";
-import { ISkillsData } from "@/types/userSkillsUI";
+import { ISkill, ISkillsData } from "@/types/skillsUI";
 
 const props = defineProps<{
   isOpen: boolean;
-  oSkillForModal: IProfileSkill | null;
+  oSkillForModal: ISkill | null;
   userID: string;
   skills: ISkillsData[] | null;
   skillCategories: string[] | null;
