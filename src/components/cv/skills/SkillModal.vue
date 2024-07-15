@@ -70,28 +70,22 @@
 
 <script setup lang="ts">
 import { ref, computed, watch, onUpdated } from "vue";
-import { IAddOrUpdateProfileSkillInput } from "@/types/backend-interfaces/user/profile/skill";
+import { IAddOrUpdateCvSkillInput } from "@/types/backend-interfaces/cv/skill";
 import { Mastery } from "@/types/backend-interfaces/skill/mastery";
 import { ISkill, ISkillsData } from "@/types/skillsUI";
 
 const props = defineProps<{
   isOpen: boolean;
   oSkillForModal: ISkill | null;
-  userID: string;
+  cvID: string;
   skills: ISkillsData[] | null;
   skillCategories: string[] | null;
 }>();
 
 const emit = defineEmits<{
   (event: "closeModal"): void;
-  (
-    event: "onCreateUserSkill",
-    skillInputObj: IAddOrUpdateProfileSkillInput
-  ): void;
-  (
-    event: "onUpdateUserSkill",
-    skillInputObj: IAddOrUpdateProfileSkillInput
-  ): void;
+  (event: "onCreateCVSkill", skillInputObj: IAddOrUpdateCvSkillInput): void;
+  (event: "onUpdateCVSkill", skillInputObj: IAddOrUpdateCvSkillInput): void;
 }>();
 
 const modalState = computed({
@@ -149,17 +143,17 @@ watch(selectSkill, () => {
 });
 
 function makeCreateOrUpdateOperation() {
-  const skillInputObj: IAddOrUpdateProfileSkillInput = {
-    userId: Number(props.userID),
+  const skillInputObj: IAddOrUpdateCvSkillInput = {
+    cvId: Number(props.cvID),
     name: `${selectSkill.value}`,
     category: selectCategory.value,
     mastery: selectSkillMastery.value,
   };
 
   if (props.oSkillForModal) {
-    emit("onUpdateUserSkill", skillInputObj);
+    emit("onUpdateCVSkill", skillInputObj);
   } else {
-    emit("onCreateUserSkill", skillInputObj);
+    emit("onCreateCVSkill", skillInputObj);
   }
   emit("closeModal");
 }

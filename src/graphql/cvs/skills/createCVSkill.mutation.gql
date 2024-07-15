@@ -1,0 +1,13 @@
+mutation CREATE_CV_SKILL($skill: AddCvSkillInput!) {
+  addCvSkill(skill: $skill) {
+    id
+    skills {
+      name
+      category
+      mastery
+    }
+    user {
+      id
+    }
+  }
+}
