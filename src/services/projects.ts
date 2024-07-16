@@ -6,7 +6,7 @@ import {
   IProjectsTableData,
   IProjectsTableServerData,
 } from "@/types/projectsTableUI";
-import { IProjectsDatesData } from "@/types/cvProjectsUI";
+import { IProjectsDatesServerData } from "@/types/cvProjectsUI";
 
 export const getAllProjects = async () => {
   const result: IProjectsTableData[] = [];
@@ -39,7 +39,7 @@ export const getAllProjectsDatesData = async () => {
   try {
     const response = (await apolloClient.query({
       query: getAllProjectsCVDataQuery,
-    })) as { data: { projects: IProjectsDatesData[] } };
+    })) as { data: { projects: IProjectsDatesServerData[] } };
 
     return response.data.projects;
   } catch (error: unknown) {

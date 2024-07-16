@@ -95,7 +95,7 @@ function makeCreateOperation() {
 
   const projectInputObj: IAddOrUpdateCVProjectInput = {
     cvId: Number(props.cvID),
-    projectId: selectProject.value.id,
+    projectId: Number(selectProject.value.id),
     start_date: selectProject.value.startDate,
     end_date: selectProject.value.endDate,
     roles: [],

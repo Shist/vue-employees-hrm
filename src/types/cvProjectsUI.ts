@@ -26,8 +26,15 @@ export interface ICVProjectsTableServerData {
 }
 
 export interface IProjectsDatesData {
-  id: number;
+  id: string;
   name: string;
   startDate: string;
   endDate: string;
+}
+
+export interface IProjectsDatesServerData {
+  id: string;
+  name: string;
+  start_date: string;
+  end_date: string;
 }

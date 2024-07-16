@@ -201,7 +201,12 @@ function fetchData() {
       projectsDatesData.splice(
         0,
         projectsDatesData.length,
-        ...projectsDatesServerData
+        ...projectsDatesServerData.map((projectDatesServerData) => ({
+          id: projectDatesServerData.id,
+          name: projectDatesServerData.name,
+          startDate: projectDatesServerData.start_date,
+          endDate: projectDatesServerData.end_date,
+        }))
       );
 
       setErrorValuesToDefault();
