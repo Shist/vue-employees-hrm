@@ -294,8 +294,8 @@ function handleCloseDeleteModal() {
 }
 
 const handleTableFilter: ICVProjectsFilterFunction = (value, query, item) => {
+  if (!item) return false;
   return (
-    !item ||
     item.raw.name.toLowerCase().includes(query.toLowerCase()) ||
     item.raw.internalName.toLowerCase().includes(query.toLowerCase())
   );
