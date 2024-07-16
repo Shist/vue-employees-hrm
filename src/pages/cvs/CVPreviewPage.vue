@@ -2,7 +2,11 @@
   <div class="cv-preview">
     <AppSpinner v-if="isLoading" />
     <AppErrorSection v-else-if="isError" :errorMessage="errorMessage" />
-    <div v-else class="cv-preview__main-content-wrapper">
+    <div
+      v-else
+      ref="cvDocumentContent"
+      class="cv-preview__main-content-wrapper"
+    >
       <div class="cv-preview__title-and-btn-wrapper">
         <div class="cv-preview__title-wrapper">
           <h2 class="cv-preview__title">{{ cvTitle }}</h2>
@@ -12,6 +16,7 @@
           color="var(--color-wrapper-bg)"
           elevation="0"
           class="cv-preview__export-pdf-btn text-red-darken-4"
+          :class="{ 'no-print': isExportBtnHidden }"
           @click="handleExportPDF"
         >
           Export PDF
@@ -76,7 +81,10 @@
 
 <script setup lang="ts">
 import { ref, reactive, computed, watch, onMounted } from "vue";
+import html2pdf from "html2pdf.js";
 import { useRoute } from "vue-router";
+import { storeToRefs } from "pinia";
+import { useThemeStore } from "@/store/theme";
 import useErrorState from "@/composables/useErrorState";
 import { getCVPreviewDataByID } from "@/services/cvs/preview";
 import { ICVPreviewLanguage, ICVPreviewSkill } from "@/types/cvPreviewUI";
@@ -85,6 +93,9 @@ import {
   ICategorySkillData,
 } from "@/types/skillsUI";
 
+const cvDocumentContent = ref<HTMLDivElement>();
+const isExportBtnHidden = ref(false);
+
 const route = useRoute();
 
 const cvID = computed<string>(() => {
@@ -92,6 +103,8 @@ const cvID = computed<string>(() => {
   const [section, cvID, tab] = route.fullPath.slice(1).split("/");
   return cvID;
 });
+
+const { currTheme } = storeToRefs(useThemeStore());
 
 const {
   isLoading,
@@ -203,12 +216,32 @@ function fetchData() {
     });
 }
 
-function handleExportPDF() {
-  // TODO
+async function handleExportPDF() {
+  if (!cvDocumentContent.value) return;
+
+  const options = {
+    margin: 1,
+    filename: "CV.pdf",
+    jsPDF: { unit: "in" },
+  };
+
+  const prevTheme = currTheme.value;
+
+  isExportBtnHidden.value = true;
+  currTheme.value = "Light";
+
+  await html2pdf().from(cvDocumentContent.value).set(options).save();
+
+  isExportBtnHidden.value = false;
+  currTheme.value = prevTheme;
 }
 </script>
 
 <style lang="scss" scoped>
+.no-print {
+  display: none;
+}
+
 .cv-preview {
   margin: 0 auto;
   padding: 32px 24px;
