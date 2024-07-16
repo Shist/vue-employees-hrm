@@ -305,10 +305,10 @@ const handleTableFilter: ICVsFilterFunction = (value, query, item) => {
   overflow: hidden;
 }
 :deep(.v-table > .v-table__wrapper > table > tbody > tr > td:first-child) {
-  max-width: 120px;
+  max-width: 119px;
 }
 :deep(.v-table > .v-table__wrapper > table > tbody > tr > td:nth-child(2)) {
-  max-width: 200px;
+  max-width: 198px;
 }
 :deep(.v-table > .v-table__wrapper > table > tbody > tr > td:last-child) {
   width: 52px;

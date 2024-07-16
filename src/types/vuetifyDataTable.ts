@@ -5,6 +5,7 @@ import { ICvsTableData } from "@/types/cvsTableUI";
 import { IDepartmentsTableData } from "@/types/departmentsTableUI";
 import { IPositionsTableData } from "@/types/positionsTableUI";
 import { ISkillsTableData } from "@/types/skillsTableUI";
+import { ILanguagesTableData } from "@/types/languagesTableUI";
 import { ICVProjectsTableData } from "@/types/cvProjectsUI";
 
 type FilterMatch = boolean | number | [number, number] | [number, number][];
@@ -31,5 +32,7 @@ export type IDepartmentsFilterFunction = FilterFunction<IDepartmentsTableData>;
 export type IPositionsFilterFunction = FilterFunction<IPositionsTableData>;
 
 export type ISkillsFilterFunction = FilterFunction<ISkillsTableData>;
+
+export type ILanguagesFilterFunction = FilterFunction<ILanguagesTableData>;
 
 export type ICVProjectsFilterFunction = FilterFunction<ICVProjectsTableData>;

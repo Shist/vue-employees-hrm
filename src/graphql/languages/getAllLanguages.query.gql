@@ -1,0 +1,8 @@
+query GET_ALL_LANGUAGES {
+  languages {
+    id
+    name
+    native_name
+    iso2
+  }
+}
