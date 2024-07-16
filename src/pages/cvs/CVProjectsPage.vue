@@ -37,7 +37,7 @@
         class="cv-projects__data-table"
         hide-details
       >
-        <template v-slot:[`item.options`]>
+        <template v-slot:[`item.options`]="{ item }">
           <v-menu>
             <template v-slot:activator="{ props }">
               <v-btn
@@ -57,7 +57,10 @@
                   Update project
                 </v-list-item-title>
               </v-list-item>
-              <v-list-item disabled>
+              <v-list-item
+                @click="() => handleOpenDeleteModal(item.projectID, item.name)"
+                :disabled="!isOwner"
+              >
                 <v-list-item-title class="cv-projects__popup-menu-label">
                   Remove project
                 </v-list-item-title>
@@ -75,7 +78,14 @@
     @onCreateCVProject="submitCVProjectCreate"
     @closeModal="handleCloseCreateModal"
   />
-  <RemoveProjectModal />
+  <RemoveProjectModal
+    :isOpen="isDeleteModalOpen"
+    :cvID="cvID"
+    :projectID="openedProjectID"
+    :projectName="openedProjectName"
+    @onRemoveCVProject="submitCVProjectDeletion"
+    @closeModal="handleCloseDeleteModal"
+  />
 </template>
 
 <script setup lang="ts">
@@ -117,8 +127,8 @@ const authStore = useAuthStore();
 const authStoreUser = storeToRefs(authStore).user;
 const isOwner = computed(() => authStoreUser.value?.id === cvUserID.value);
 
-const openedCVID = ref<string | null>(null);
-const openedCVName = ref<string | null>(null);
+const openedProjectID = ref<string | null>(null);
+const openedProjectName = ref<string | null>(null);
 
 const search = ref("");
 
@@ -168,7 +178,7 @@ function updateCVProjectsValue(
 
   const cvProjectsTableData: ICVProjectsTableData[] =
     cvProjectsServerData.projects.map((projectFromServer) => ({
-      projectID: projectFromServer.project.id,
+      projectID: `${projectFromServer.project.id}`,
       name: projectFromServer.name,
       internalName: projectFromServer.internal_name,
       domain: projectFromServer.domain,
@@ -252,11 +262,11 @@ function handleCloseCreateModal() {
   isCreateModalOpen.value = false;
 }
 
-function handleOpenDeleteModal(cvID: string, cvName: string) {
+function handleOpenDeleteModal(projectID: string, projectName: string) {
   if (!isOwner.value) return;
 
-  openedCVID.value = cvID;
-  openedCVName.value = cvName;
+  openedProjectID.value = projectID;
+  openedProjectName.value = projectName;
   isDeleteModalOpen.value = true;
 }
 

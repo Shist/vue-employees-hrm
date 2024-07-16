@@ -1,5 +1,5 @@
 export interface ICVProjectsTableData {
-  projectID: number;
+  projectID: string;
   name: string;
   internalName: string;
   domain: string;
