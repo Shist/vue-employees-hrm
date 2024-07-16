@@ -25,14 +25,14 @@ export interface ICVProjectsTableServerData {
   projects: ICVProject[] | null;
 }
 
-export interface IProjectsDatesData {
+export interface IProjectsData {
   id: string;
   name: string;
   startDate: string;
   endDate: string;
 }
 
-export interface IProjectsDatesServerData {
+export interface IProjectsServerData {
   id: string;
   name: string;
   start_date: string;

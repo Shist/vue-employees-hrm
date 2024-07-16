@@ -48,13 +48,13 @@
 
 <script setup lang="ts">
 import { ref, computed, onUpdated } from "vue";
-import { IProjectsDatesData } from "@/types/cvProjectsUI";
+import { IProjectsData } from "@/types/cvProjectsUI";
 import { IAddOrUpdateCVProjectInput } from "@/types/backend-interfaces/cv/project";
 
 const props = defineProps<{
   isOpen: boolean;
   cvID: string;
-  projects: IProjectsDatesData[] | null;
+  projects: IProjectsData[] | null;
 }>();
 
 const emit = defineEmits<{
@@ -74,7 +74,7 @@ const modalState = computed({
   },
 });
 
-const selectProject = ref<IProjectsDatesData | null>(null);
+const selectProject = ref<IProjectsData | null>(null);
 
 const isConfirmBtnDisabled = computed(() => !selectProject.value);
 

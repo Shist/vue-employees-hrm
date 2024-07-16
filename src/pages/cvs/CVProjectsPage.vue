@@ -74,16 +74,16 @@
   <AddProjectModal
     :isOpen="isCreateModalOpen"
     :cvID="cvID"
-    :projects="leftProjects"
-    @onCreateCVProject="submitCVProjectCreate"
+    :projects="leftProjectsData"
+    @onCreateCVProject="submitCVProjectAdding"
     @closeModal="handleCloseCreateModal"
   />
   <RemoveProjectModal
     :isOpen="isDeleteModalOpen"
     :cvID="cvID"
-    :projectID="openedProjectID"
-    :projectName="openedProjectName"
-    @onRemoveCVProject="submitCVProjectDeletion"
+    :projectID="addingProjectID"
+    :projectName="addingProjectName"
+    @onRemoveCVProject="submitCVProjectRemoving"
     @closeModal="handleCloseDeleteModal"
   />
 </template>
@@ -101,12 +101,12 @@ import {
   createCvProject,
   deleteCvProject,
 } from "@/services/cvs/projects";
-import { getAllProjectsDatesData } from "@/services/projects";
+import { getAllProjectsData } from "@/services/projects";
 import handleScrollPadding from "@/utils/handleScrollPadding";
 import {
   ICVProjectsTableData,
   ICVProjectsTableServerData,
-  IProjectsDatesData,
+  IProjectsData,
 } from "@/types/cvProjectsUI";
 import {
   IAddOrUpdateCVProjectInput,
@@ -127,8 +127,8 @@ const authStore = useAuthStore();
 const authStoreUser = storeToRefs(authStore).user;
 const isOwner = computed(() => authStoreUser.value?.id === cvUserID.value);
 
-const openedProjectID = ref<string | null>(null);
-const openedProjectName = ref<string | null>(null);
+const addingProjectID = ref<string | null>(null);
+const addingProjectName = ref<string | null>(null);
 
 const search = ref("");
 
@@ -150,16 +150,16 @@ const {
 } = useErrorState();
 
 const cvProjects = reactive<ICVProjectsTableData[]>([]);
-const projectsDatesData = reactive<IProjectsDatesData[]>([]);
+const allProjectsData = reactive<IProjectsData[]>([]);
 
-const leftProjects = computed<IProjectsDatesData[]>(() => {
-  if (!projectsDatesData.length) {
+const leftProjectsData = computed<IProjectsData[]>(() => {
+  if (!allProjectsData.length) {
     return [];
   }
 
   const cvProjectsSet = new Set(cvProjects.map((cvProject) => cvProject.name));
 
-  return projectsDatesData.filter(
+  return allProjectsData.filter(
     (cvProject) => !cvProjectsSet.has(cvProject.name)
   );
 });
@@ -206,18 +206,18 @@ function updateCVProjectsValue(
 function fetchData() {
   isLoading.value = true;
 
-  Promise.all([getCVProjectsByID(cvID.value), getAllProjectsDatesData()])
-    .then(([cvProjectsServerData, projectsDatesServerData]) => {
+  Promise.all([getCVProjectsByID(cvID.value), getAllProjectsData()])
+    .then(([cvProjectsServerData, allProjectsServerData]) => {
       updateCVProjectsValue(cvProjectsServerData);
 
-      projectsDatesData.splice(
+      allProjectsData.splice(
         0,
-        projectsDatesData.length,
-        ...projectsDatesServerData.map((projectDatesServerData) => ({
-          id: projectDatesServerData.id,
-          name: projectDatesServerData.name,
-          startDate: projectDatesServerData.start_date,
-          endDate: projectDatesServerData.end_date,
+        allProjectsData.length,
+        ...allProjectsServerData.map((projectServerData) => ({
+          id: projectServerData.id,
+          name: projectServerData.name,
+          startDate: projectServerData.start_date,
+          endDate: projectServerData.end_date,
         }))
       );
 
@@ -231,7 +231,7 @@ function fetchData() {
     });
 }
 
-function submitCVProjectCreate(inputProjectObj: IAddOrUpdateCVProjectInput) {
+function submitCVProjectAdding(inputProjectObj: IAddOrUpdateCVProjectInput) {
   if (!isOwner.value) return;
 
   isLoading.value = true;
@@ -250,7 +250,7 @@ function submitCVProjectCreate(inputProjectObj: IAddOrUpdateCVProjectInput) {
     });
 }
 
-function submitCVProjectDeletion(inputProjectObj: IRemoveCVProjectInput) {
+function submitCVProjectRemoving(inputProjectObj: IRemoveCVProjectInput) {
   if (!isOwner.value) return;
 
   isLoading.value = true;
@@ -282,8 +282,8 @@ function handleCloseCreateModal() {
 function handleOpenDeleteModal(projectID: string, projectName: string) {
   if (!isOwner.value) return;
 
-  openedProjectID.value = projectID;
-  openedProjectName.value = projectName;
+  addingProjectID.value = projectID;
+  addingProjectName.value = projectName;
   isDeleteModalOpen.value = true;
 }
 
