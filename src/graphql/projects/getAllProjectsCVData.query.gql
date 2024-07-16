@@ -1,6 +1,7 @@
 query GET_ALL_PROJECTS_CV_DATA {
   projects {
     id
+    name
     start_date
     end_date
   }

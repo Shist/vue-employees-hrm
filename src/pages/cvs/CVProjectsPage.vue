@@ -68,7 +68,13 @@
       </v-data-table>
     </div>
   </div>
-  <AddProjectModal />
+  <AddProjectModal
+    :isOpen="isCreateModalOpen"
+    :cvID="cvID"
+    :projects="projectsDatesData"
+    @onCreateCVProject="submitCVProjectCreate"
+    @closeModal="handleCloseCreateModal"
+  />
   <RemoveProjectModal />
 </template>
 
@@ -85,10 +91,12 @@ import {
   createCvProject,
   deleteCvProject,
 } from "@/services/cvs/projects";
+import { getAllProjectsDatesData } from "@/services/projects";
 import handleScrollPadding from "@/utils/handleScrollPadding";
 import {
   ICVProjectsTableData,
   ICVProjectsTableServerData,
+  IProjectsDatesData,
 } from "@/types/cvProjectsUI";
 import {
   IAddOrUpdateCVProjectInput,
@@ -132,6 +140,7 @@ const {
 } = useErrorState();
 
 const cvProjects = reactive<ICVProjectsTableData[]>([]);
+const projectsDatesData = reactive<IProjectsDatesData[]>([]);
 
 const isCreateModalOpen = ref(false);
 const isDeleteModalOpen = ref(false);
@@ -175,9 +184,15 @@ function updateCVProjectsValue(
 function fetchData() {
   isLoading.value = true;
 
-  getCVProjectsByID(cvID.value)
-    .then((cvProjectsServerData) => {
+  Promise.all([getCVProjectsByID(cvID.value), getAllProjectsDatesData()])
+    .then(([cvProjectsServerData, projectsDatesServerData]) => {
       updateCVProjectsValue(cvProjectsServerData);
+
+      projectsDatesData.splice(
+        0,
+        projectsDatesData.length,
+        ...projectsDatesServerData
+      );
 
       setErrorValuesToDefault();
     })

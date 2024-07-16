@@ -1,17 +1,203 @@
 <template>
-  <h2 class="page-headline">This is Add Project Modal Component</h2>
-  <h3 class="page-headline-dev">This component is now under development...</h3>
+  <div class="add-project-modal">
+    <v-dialog
+      v-model="modalState"
+      max-width="600"
+      class="add-project-modal__dialog-wrapper"
+      scrim="var(--color-modal-overlay)"
+      opacity="100%"
+    >
+      <v-card title="Add project to CV" class="add-project-modal__card-wrapper">
+        <v-btn
+          icon="mdi-close"
+          class="add-project-modal__cross-btn"
+          @click.prevent="closeModal"
+        ></v-btn>
+        <v-card-item class="add-project-modal__text-fields-container">
+          <v-select
+            v-model="selectProject"
+            :items="aProjectsItems"
+            label="Project"
+            variant="outlined"
+            class="add-project-modal__text-field-wrapper"
+            hide-details
+          />
+        </v-card-item>
+        <v-card-actions>
+          <v-btn
+            variant="outlined"
+            @click="closeModal"
+            class="add-project-modal__btn-cancel"
+          >
+            Cancel
+          </v-btn>
+          <v-btn
+            type="submit"
+            variant="text"
+            @click="makeCreateOperation"
+            class="add-project-modal__btn-confirm"
+            :disabled="isConfirmBtnDisabled"
+          >
+            Confirm
+          </v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
+  </div>
 </template>
 
-<script setup lang="ts"></script>
+<script setup lang="ts">
+import { ref, computed, onUpdated } from "vue";
+import { IProjectsDatesData } from "@/types/cvProjectsUI";
+import { IAddOrUpdateCVProjectInput } from "@/types/backend-interfaces/cv/project";
+
+const props = defineProps<{
+  isOpen: boolean;
+  cvID: string;
+  projects: IProjectsDatesData[] | null;
+}>();
+
+const emit = defineEmits<{
+  (event: "closeModal"): void;
+  (
+    event: "onCreateCVProject",
+    projectInputObj: IAddOrUpdateCVProjectInput
+  ): void;
+}>();
+
+const modalState = computed({
+  get() {
+    return props.isOpen;
+  },
+  set() {
+    emit("closeModal");
+  },
+});
+
+const selectProject = ref<IProjectsDatesData | null>(null);
+
+const isConfirmBtnDisabled = computed(() => !selectProject.value);
+
+const aProjectsItems = computed(() => {
+  if (!props.projects) return [];
+  return props.projects.map((project) => ({
+    title: project.name,
+    value: project,
+  }));
+});
+
+onUpdated(() => {
+  selectProject.value = null;
+});
+
+function makeCreateOperation() {
+  if (!selectProject.value) return;
+
+  const projectInputObj: IAddOrUpdateCVProjectInput = {
+    cvId: Number(props.cvID),
+    projectId: selectProject.value.id,
+    start_date: selectProject.value.startDate,
+    end_date: selectProject.value.endDate,
+    roles: [],
+    responsibilities: [],
+  };
+
+  emit("onCreateCVProject", projectInputObj);
+  emit("closeModal");
+}
+
+function closeModal() {
+  emit("closeModal");
+}
+</script>
 
 <style lang="scss" scoped>
-.page-headline {
-  @include default-headline(36px, 36px);
-  padding: 20px;
+.add-project-modal {
+  &__card-wrapper {
+    background-color: var(--color-wrapper-bg);
+    .add-project-modal__cross-btn {
+      font-family: $font-roboto;
+      position: absolute;
+      width: 40px;
+      height: 40px;
+      top: 12px;
+      right: 12px;
+      background-color: var(--color-wrapper-bg);
+      box-shadow: none;
+    }
+    .add-project-modal__btn-cancel {
+      padding: 6px;
+      max-width: 100px;
+      width: 100%;
+      color: var(--color-btn-gray-text);
+      background-color: var(--color-wrapper-bg);
+      border-radius: 0;
+      border: 1px solid rgba(var(--color-btn-gray-text-rgb), 0.5);
+      &:hover {
+        background-color: rgba(var(--color-btn-gray-text-rgb), 0.08);
+        border: 1px solid var(--color-btn-gray-text);
+      }
+    }
+    .add-project-modal__btn-confirm {
+      padding: 6px;
+      max-width: 100px;
+      width: 100%;
+      color: var(--color-btn-text);
+      background-color: var(--color-btn-bg);
+      border-radius: 0;
+      box-shadow: rgba(0, 0, 0, 0.2) 0px 3px 1px -2px,
+        rgba(0, 0, 0, 0.14) 0px 2px 2px 0px, rgba(0, 0, 0, 0.12) 0px 1px 5px 0px;
+      &:hover {
+        background-color: var(--color-btn-bg-hover);
+      }
+      &:disabled {
+        filter: grayscale(50%);
+      }
+    }
+  }
 }
-.page-headline-dev {
-  @include default-headline(32px, 32px);
-  padding: 20px;
+
+:deep(.add-project-modal__text-field-wrapper .v-field__outline__start) {
+  border-radius: 0;
+  transition: 0.3s;
+}
+:deep(.add-project-modal__text-field-wrapper .v-field__outline__end) {
+  border-radius: 0;
+  transition: 0.3s;
+}
+:deep(.v-field--focused .v-field__outline__start) {
+  border-block: 1px solid var(--color-input-borders);
+  border-left: 1px solid var(--color-input-borders);
+}
+:deep(.v-field--focused .v-field__outline__end) {
+  border-block: 1px solid var(--color-input-borders);
+  border-right: 1px solid var(--color-input-borders);
+}
+:deep(.add-project-modal__text-field-wrapper .v-field__outline__notch::before) {
+  transition: 0.3s;
+}
+:deep(.v-field--focused .v-field__outline__notch::before) {
+  border-top: 1px solid var(--color-input-borders);
+}
+:deep(.add-project-modal__text-field-wrapper .v-field__outline__notch::after) {
+  transition: 0.3s;
+}
+:deep(.v-field--focused .v-field__outline__notch::after) {
+  border-bottom: 1px solid var(--color-input-borders);
+}
+:deep(.add-project-modal__text-field-wrapper .v-field-label) {
+  transition: background-color 0.3s;
+}
+:deep(.v-field--focused .v-field-label) {
+  color: var(--color-active-text);
+}
+:deep(.add-project-modal__text-fields-container .v-card-item__content) {
+  padding-block: 10px;
+  display: flex;
+  flex-direction: column;
+  row-gap: 32px;
+}
+:deep(.v-overlay-container .v-overlay .v-overlay__scrim) {
+  display: none;
 }
 </style>
