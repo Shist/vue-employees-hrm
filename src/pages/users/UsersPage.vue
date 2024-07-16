@@ -123,10 +123,13 @@ onMounted(async () => {
 });
 
 const handleTableFilter: IUsersFilterFunction = (value, query, item) => {
-  if (!item || !item.raw.firstName || !item.raw.lastName) return false;
+  if (!item) return false;
+
   return (
-    item.raw.firstName.toLowerCase().includes(query.toLowerCase()) ||
-    item.raw.lastName.toLowerCase().includes(query.toLowerCase())
+    (!!item.raw.firstName &&
+      item.raw.firstName.toLowerCase().includes(query.toLowerCase())) ||
+    (!!item.raw.lastName &&
+      item.raw.lastName.toLowerCase().includes(query.toLowerCase()))
   );
 };
 </script>
