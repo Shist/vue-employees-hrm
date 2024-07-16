@@ -170,24 +170,22 @@ async function fetchData() {
   }
 }
 
-function submitUserCVCreate(cvInputObj: ICreateCVInput) {
+async function submitUserCVCreate(cvInputObj: ICreateCVInput) {
   if (!isOwner.value) return;
 
   isLoading.value = true;
 
-  createCV(cvInputObj)
-    .then((createdUserCV) => {
-      if (!createdUserCV) return;
-      userCVs.push(createdUserCV);
+  try {
+    await createCV(cvInputObj);
 
-      setErrorValuesToDefault();
-    })
-    .catch((error: unknown) => {
-      setErrorValues(error);
-    })
-    .finally(() => {
-      isLoading.value = false;
-    });
+    await fetchData();
+
+    setErrorValuesToDefault();
+  } catch (error: unknown) {
+    setErrorValues(error);
+  } finally {
+    isLoading.value = false;
+  }
 }
 
 async function submitUserCVDeletion(cvInputObj: IDeleteCVInput) {
