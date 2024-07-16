@@ -34,6 +34,7 @@
         :headers="headers"
         :items="cvProjects"
         :search="search"
+        :custom-filter="handleTableFilter"
         class="cv-projects__data-table"
         hide-details
       >
@@ -112,6 +113,7 @@ import {
   IAddOrUpdateCVProjectInput,
   IRemoveCVProjectInput,
 } from "@/types/backend-interfaces/cv/project";
+import { ICVProjectsFilterFunction } from "@/types/vuetifyDataTable";
 
 const route = useRoute();
 
@@ -290,6 +292,14 @@ function handleOpenDeleteModal(projectID: string, projectName: string) {
 function handleCloseDeleteModal() {
   isDeleteModalOpen.value = false;
 }
+
+const handleTableFilter: ICVProjectsFilterFunction = (value, query, item) => {
+  return (
+    !item ||
+    item.raw.name.toLowerCase().includes(query.toLowerCase()) ||
+    item.raw.internalName.toLowerCase().includes(query.toLowerCase())
+  );
+};
 </script>
 
 <style lang="scss" scoped>
