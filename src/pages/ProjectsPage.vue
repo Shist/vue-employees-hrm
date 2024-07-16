@@ -20,6 +20,7 @@
         :headers="headers"
         :items="projects"
         :search="search"
+        :custom-filter="handleTableFilter"
         :class="{ 'projects-page__data-table': true }"
         item-key="name"
       >
@@ -55,6 +56,7 @@ import { onMounted, reactive, ref } from "vue";
 import useErrorState from "@/composables/useErrorState";
 import { getAllProjects } from "@/services/projects";
 import { IProjectsTableData } from "@/types/projectsTableUI";
+import { IProjectsFilterFunction } from "@/types/vuetifyDataTable";
 
 const search = ref("");
 
@@ -95,6 +97,14 @@ onMounted(async () => {
     isLoading.value = false;
   }
 });
+
+const handleTableFilter: IProjectsFilterFunction = (value, query, item) => {
+  if (!item) return false;
+  return (
+    item.raw.name.toLowerCase().includes(query.toLowerCase()) ||
+    item.raw.internalName.toLowerCase().includes(query.toLowerCase())
+  );
+};
 </script>
 
 <style lang="scss" scoped>
