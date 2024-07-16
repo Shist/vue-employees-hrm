@@ -15,7 +15,6 @@
         single-line
         placeholder="Search"
         class="main-page__text-field-wrapper"
-        hide-details
       />
       <v-data-table
         :headers="headers"
@@ -148,8 +147,7 @@ const handleTableFilter: IUsersFilterFunction = (value, query, item) => {
   &__main-content-wrapper {
     align-self: stretch;
     .main-page__text-field-wrapper {
-      margin-left: 20px;
-      margin-bottom: 22px;
+      margin-left: 33px;
       max-width: 320px;
     }
     .main-page__data-table {

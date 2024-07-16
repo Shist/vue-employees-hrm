@@ -59,6 +59,8 @@ import { IProjectsFilterFunction } from "@/types/vuetifyDataTable";
 
 const search = ref("");
 
+const projects = reactive<IProjectsTableData[]>([]);
+
 const headers = [
   { key: "name", title: "Name" },
   { key: "internalName", title: "Internal Name" },
@@ -69,6 +71,8 @@ const headers = [
   { key: "options", sortable: false },
 ];
 
+const projectMenuItems = ["Project", "Update project", "Delete project"];
+
 const {
   isLoading,
   isError,
@@ -76,10 +80,6 @@ const {
   setErrorValuesToDefault,
   setErrorValues,
 } = useErrorState();
-
-const projectMenuItems = ["Project", "Update project", "Delete project"];
-
-const projects = reactive<IProjectsTableData[]>([]);
 
 onMounted(async () => {
   isLoading.value = true;
@@ -120,7 +120,7 @@ const handleTableFilter: IProjectsFilterFunction = (value, query, item) => {
   &__main-content-wrapper {
     align-self: stretch;
     .projects-page__text-field-wrapper {
-      margin-left: 20px;
+      margin-left: 33px;
       max-width: 320px;
     }
     .projects-page__data-table {

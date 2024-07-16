@@ -45,7 +45,7 @@
                 icon="mdi-dots-vertical"
                 v-bind="props"
                 class="cvs-page__popup-menu-btn"
-              ></v-btn>
+              />
             </template>
             <v-list>
               <v-list-item
@@ -247,7 +247,7 @@ const handleTableFilter: ICVsFilterFunction = (value, query, item) => {
     align-self: stretch;
     .cvs-page__search-create-controls-wrapper {
       margin-bottom: 22px;
-      padding-inline: 20px;
+      padding: 0 20px 0 33px;
       display: flex;
       justify-content: space-between;
       align-items: center;
