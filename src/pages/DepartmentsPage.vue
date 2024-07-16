@@ -53,11 +53,11 @@
 </template>
 
 <script setup lang="ts">
+import { onMounted, reactive, ref } from "vue";
 import useErrorState from "@/composables/useErrorState";
 import { getAllDepartmentNames } from "@/services/departments";
 import { IDepartmentsTableData } from "@/types/departmentsTableUI";
 import { IDepartmentsFilterFunction } from "@/types/vuetifyDataTable";
-import { onMounted, reactive, ref } from "vue";
 
 const search = ref("");
 

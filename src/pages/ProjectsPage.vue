@@ -67,7 +67,7 @@ const headers = [
   { key: "domain", title: "Domain" },
   { key: "startDate", title: "Start Date" },
   { key: "endDate", title: "End Date" },
-  { key: "teamSize", title: "Team Size", sortable: false },
+  { key: "teamSize", title: "Team Size" },
   { key: "options", sortable: false },
 ];
 
