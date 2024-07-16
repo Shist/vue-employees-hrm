@@ -74,7 +74,7 @@
   <AddProjectModal
     :isOpen="isCreateModalOpen"
     :cvID="cvID"
-    :projects="projectsDatesData"
+    :projects="leftProjects"
     @onCreateCVProject="submitCVProjectCreate"
     @closeModal="handleCloseCreateModal"
   />
@@ -151,6 +151,18 @@ const {
 
 const cvProjects = reactive<ICVProjectsTableData[]>([]);
 const projectsDatesData = reactive<IProjectsDatesData[]>([]);
+
+const leftProjects = computed<IProjectsDatesData[]>(() => {
+  if (!projectsDatesData.length) {
+    return [];
+  }
+
+  const cvProjectsSet = new Set(cvProjects.map((cvProject) => cvProject.name));
+
+  return projectsDatesData.filter(
+    (cvProject) => !cvProjectsSet.has(cvProject.name)
+  );
+});
 
 const isCreateModalOpen = ref(false);
 const isDeleteModalOpen = ref(false);
