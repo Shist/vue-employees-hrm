@@ -33,6 +33,7 @@
         :headers="headers"
         :items="cvs"
         :search="search"
+        :custom-filter="handleTableFilter"
         item-key="id"
         class="cvs-page__data-table"
         hide-details
@@ -91,6 +92,7 @@ import handleScrollPadding from "@/utils/handleScrollPadding";
 import { ROUTES } from "@/constants/router";
 import { ICreateCVInput, IDeleteCVInput } from "@/types/backend-interfaces/cv";
 import { ICvsTableData } from "@/types/cvsTableUI";
+import { ICVsFilterFunction } from "@/types/vuetifyDataTable";
 
 const router = useRouter();
 
@@ -220,6 +222,14 @@ async function submitUserCVDeletion(cvInputObj: IDeleteCVInput) {
     isLoading.value = false;
   }
 }
+
+const handleTableFilter: ICVsFilterFunction = (value, query, item) => {
+  if (!item) return false;
+  return (
+    item.raw.name.toLowerCase().includes(query.toLowerCase()) ||
+    item.raw.description.toLowerCase().includes(query.toLowerCase())
+  );
+};
 </script>
 
 <style lang="scss" scoped>
