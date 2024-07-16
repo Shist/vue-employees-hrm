@@ -90,7 +90,7 @@ import { createCV, deleteCV, getAllCvs } from "@/services/cvs";
 import handleScrollPadding from "@/utils/handleScrollPadding";
 import { ROUTES } from "@/constants/router";
 import { ICreateCVInput, IDeleteCVInput } from "@/types/backend-interfaces/cv";
-import { ICvsTableData, ICvsTableServerData } from "@/types/cvsTableUI";
+import { ICvsTableData } from "@/types/cvsTableUI";
 
 const router = useRouter();
 
@@ -143,18 +143,18 @@ async function fetchData() {
   try {
     const cvsData = await getAllCvs();
 
-    cvs.splice(0, cvs.length);
-
-    cvsData.forEach((cv: ICvsTableServerData) => {
-      cvs.push({
+    cvs.splice(
+      0,
+      cvs.length,
+      ...cvsData.map((cv) => ({
         id: cv.id,
         name: cv.name,
         description: cv.description,
         education: cv.education ? cv.education : "",
         email: cv.user ? cv.user.email : "",
         userID: cv.user ? cv.user.id : null,
-      });
-    });
+      }))
+    );
 
     setErrorValuesToDefault();
   } catch (error: unknown) {
