@@ -66,14 +66,14 @@
   </div>
   <CreateCVModal
     :isOpen="isCreateModalOpen"
-    :userID="authStoreUser?.id.toString() || ''"
+    :userID="`${authStoreUser?.id}`"
     @onCreateUserCV="submitUserCVCreate"
     @closeModal="handleCloseCreateModal"
   />
   <DeleteCVModal
     :isOpen="isDeleteModalOpen"
-    :cvID="openedCVID"
-    :cvName="openedCVName"
+    :cvID="deletingCVID"
+    :cvName="deletingCVName"
     @onDeleteUserCV="submitUserCVDeletion"
     @closeModal="handleCloseDeleteModal"
   />
@@ -99,8 +99,8 @@ const router = useRouter();
 const authStore = useAuthStore();
 const authStoreUser = storeToRefs(authStore).user;
 
-const openedCVID = ref<string | null>(null);
-const openedCVName = ref<string | null>(null);
+const deletingCVID = ref<string | null>(null);
+const deletingCVName = ref<string | null>(null);
 
 const search = ref("");
 
@@ -182,8 +182,8 @@ function handleCloseCreateModal() {
 }
 
 function handleOpenDeleteModal(cvID: number, cvName: string) {
-  openedCVID.value = cvID.toString();
-  openedCVName.value = cvName;
+  deletingCVID.value = cvID.toString();
+  deletingCVName.value = cvName;
   isDeleteModalOpen.value = true;
 }
 

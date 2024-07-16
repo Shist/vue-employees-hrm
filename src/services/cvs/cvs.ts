@@ -9,6 +9,18 @@ import { IUserCVNameData } from "@/types/userCVsUI";
 import { ICreateCVInput, IDeleteCVInput } from "@/types/backend-interfaces/cv";
 import { ICvsTableServerData } from "@/types/cvsTableUI";
 
+export const getAllCvs = async () => {
+  try {
+    const response = (await apolloClient.query({
+      query: getAllCvsQuery,
+    })) as { data: { cvs: ICvsTableServerData[] } };
+
+    return response.data.cvs;
+  } catch (error: unknown) {
+    throw getDetailedError(error);
+  }
+};
+
 export const getCVNameDataByID = async (id: string) => {
   try {
     checkCvID(id);
@@ -43,18 +55,6 @@ export const deleteCV = async (inputCVObj: IDeleteCVInput) => {
       mutation: deleteCVQuery,
       variables: { cv: inputCVObj },
     });
-  } catch (error: unknown) {
-    throw getDetailedError(error);
-  }
-};
-
-export const getAllCvs = async () => {
-  try {
-    const response = (await apolloClient.query({
-      query: getAllCvsQuery,
-    })) as { data: { cvs: ICvsTableServerData[] } };
-
-    return response.data.cvs;
   } catch (error: unknown) {
     throw getDetailedError(error);
   }
