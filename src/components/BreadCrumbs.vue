@@ -29,7 +29,7 @@ import { storeToRefs } from "pinia";
 import { useAuthStore } from "@/store/authStore";
 import { useBreadCrumbsStore } from "@/store/breadCrumbs";
 import { getUserNameDataByID } from "@/services/users/users";
-import { getCVNameDataByID } from "@/services/cvs";
+import { getCVNameDataByID } from "@/services/cvs/cvs";
 import { ROUTES } from "@/constants/router";
 import {
   SECTIONS_NAMES,

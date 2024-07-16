@@ -90,7 +90,7 @@ import CreateCVModal from "@/components/user/cvs/CreateCVModal.vue";
 import DeleteCVModal from "@/components/user/cvs/DeleteCVModal.vue";
 import useErrorState from "@/composables/useErrorState";
 import { getUserCVsNamesByID } from "@/services/users/cvs";
-import { createCV, deleteCV } from "@/services/cvs";
+import { createCV, deleteCV } from "@/services/cvs/cvs";
 import handleScrollPadding from "@/utils/handleScrollPadding";
 import { ROUTES } from "@/constants/router";
 import { IUserCVNameData } from "@/types/userCVsUI";

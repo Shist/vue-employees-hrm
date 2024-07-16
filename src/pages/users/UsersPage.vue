@@ -9,11 +9,11 @@
     <div v-else class="main-page__main-content-wrapper">
       <v-text-field
         v-model="search"
-        label="Search"
         prepend-inner-icon="mdi-magnify"
         variant="outlined"
         density="compact"
         single-line
+        placeholder="Search"
         class="main-page__text-field-wrapper"
         hide-details
       />
@@ -21,8 +21,8 @@
         :headers="headers"
         :items="users"
         :search="search"
+        class="main-page__data-table"
         :custom-filter="handleTableFilter"
-        :class="{ 'main-page__data-table': true }"
         hide-details
       >
         <template v-slot:[`item.avatar`]="{ item }">
