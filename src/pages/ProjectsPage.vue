@@ -67,7 +67,7 @@ const headers = [
   { key: "domain", title: "Domain" },
   { key: "startDate", title: "Start Date" },
   { key: "endDate", title: "End Date" },
-  { key: "teamSize", title: "Team Size" },
+  { key: "teamSize", title: "Team Size", sortable: false },
   { key: "options", sortable: false },
 ];
 
@@ -87,7 +87,20 @@ onMounted(async () => {
   try {
     const projectsData = await getAllProjects();
 
-    projects.splice(0, projects.length, ...projectsData);
+    projects.splice(
+      0,
+      projects.length,
+      ...projectsData.map((project) => ({
+        id: project.id,
+        name: project.name,
+        internalName: project.internal_name,
+        domain: project.domain,
+        startDate: project.start_date,
+        endDate: project.end_date ? project.end_date : "Till now",
+        teamSize: project.team_size,
+        description: project.description,
+      }))
+    );
 
     setErrorValuesToDefault();
   } catch (error: unknown) {

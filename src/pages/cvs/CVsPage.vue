@@ -130,6 +130,7 @@ const {
 } = useErrorState();
 
 onMounted(async () => {
+  isLoading.value = true;
   await fetchData();
   isLoading.value = false;
 });
