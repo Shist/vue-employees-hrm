@@ -17,13 +17,17 @@ export interface ICVPreviewServerData {
     };
     position_name: string | null;
   } | null;
-  skills: {
-    name: string;
-    category: string | null;
-    mastery: string | Mastery;
-  }[];
-  languages: {
-    name: string;
-    proficiency: Proficiency;
-  }[];
+  skills: ICVPreviewSkill[];
+  languages: ICVPreviewLanguage[];
+}
+
+export interface ICVPreviewSkill {
+  name: string;
+  category: string | null;
+  mastery: string | Mastery;
+}
+
+export interface ICVPreviewLanguage {
+  name: string;
+  proficiency: Proficiency;
 }

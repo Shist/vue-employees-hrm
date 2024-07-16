@@ -5,8 +5,8 @@
     <div v-else class="cv-preview__main-content-wrapper">
       <div class="cv-preview__title-and-btn-wrapper">
         <div class="cv-preview__title-wrapper">
-          <h2 class="cv-preview__title">Rostislav Harlanov</h2>
-          <span class="cv-preview__position">Software Engineer</span>
+          <h2 class="cv-preview__title">{{ cvTitle }}</h2>
+          <span class="cv-preview__position">{{ empPosition }}</span>
         </div>
         <v-btn
           color="var(--color-wrapper-bg)"
@@ -22,32 +22,33 @@
           <div class="cv-preview__education-wrapper">
             <h3 class="cv-preview__education-headline">Education</h3>
             <span class="cv-preview__education-info">
-              Engineer System Programmer
+              {{ empEducation }}
             </span>
           </div>
           <div class="cv-preview__languages-section-wrapper">
             <h3 class="cv-preview__languages-headline">Language proficiency</h3>
             <div class="cv-preview__languages-wrapper">
-              <span class="cv-preview__language-info">English — B2</span>
-              <span class="cv-preview__language-info">Russian — Native</span>
-              <span class="cv-preview__language-info">Polish — A2</span>
+              <span
+                v-for="language in empLanguages"
+                :key="language.name"
+                class="cv-preview__language-info"
+              >
+                {{ language.name }} — {{ language.proficiency }}
+              </span>
+              <span
+                v-if="!empLanguages.length"
+                class="cv-preview__language-info"
+              >
+                No any languages
+              </span>
             </div>
           </div>
         </div>
         <div class="cv-preview__cv-description-and-skills-wrapper">
           <div class="cv-preview__cv-description-wrapper">
-            <h3 class="cv-preview__cv-description-headline">
-              Front-end developer with 5+ years of experience
-            </h3>
+            <h3 class="cv-preview__cv-description-headline">{{ empCVName }}</h3>
             <p class="cv-preview__cv-description-info">
-              A software engineer with over 5 years of experience in coding. My
-              top skills are TypeScript, React, HTML, CSS. I have worked in
-              various industries like Business applications, E-commerce, dApp.
-              In previous years my focus has been in the areas of WebGL and
-              back-end development. Good knowledge of software development
-              methodologies (Scrum, Waterfall, Kanban). Good team-working
-              skills. Quick learner. Always ready to acquire new skills and gain
-              new knowledge.
+              {{ empCVDescription }}
             </p>
           </div>
           <div class="cv-preview__skills-wrapper">
@@ -95,10 +96,11 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, watch, onMounted } from "vue";
+import { ref, reactive, computed, watch, onMounted } from "vue";
 import { useRoute } from "vue-router";
 import useErrorState from "@/composables/useErrorState";
 import { getCVPreviewDataByID } from "@/services/cvs/preview";
+import { ICVPreviewLanguage, ICVPreviewSkill } from "@/types/cvPreviewUI";
 
 const route = useRoute();
 
@@ -116,17 +118,28 @@ const {
   setErrorValues,
 } = useErrorState();
 
-const userFullName = ref<string | null>(null);
-const userFirstName = ref<string | null>(null);
-const userLastName = ref<string | null>(null);
-const userEmail = ref<string | null>(null);
+const empFullName = ref<string | null>(null);
+const empFirstName = ref<string | null>(null);
+const empLastName = ref<string | null>(null);
+const empEmail = ref<string | null>(null);
 
 const cvTitle = computed(() => {
-  if (userFullName.value) return userFullName.value;
-  if (userFirstName.value) return userFirstName.value;
-  if (userLastName.value) return userLastName.value;
-  return userEmail.value;
+  if (empFullName.value) return empFullName.value;
+  if (empFirstName.value) return empFirstName.value;
+  if (empLastName.value) return empLastName.value;
+  return empEmail.value;
 });
+
+const empPosition = ref("Position is not specified");
+
+const empEducation = ref("Education is not specified");
+
+const empLanguages = reactive<ICVPreviewLanguage[]>([]);
+
+const empCVName = ref<string | null>(null);
+const empCVDescription = ref<string | null>(null);
+
+const empSkills = reactive<ICVPreviewSkill[]>([]);
 
 onMounted(() => {
   fetchData();
@@ -143,7 +156,29 @@ function fetchData() {
     .then((cvDetailsData) => {
       if (!cvDetailsData) return;
 
-      console.dir(cvDetailsData);
+      if (cvDetailsData.user) {
+        empFullName.value = cvDetailsData.user.profile.full_name;
+        empFirstName.value = cvDetailsData.user.profile.first_name;
+        empLastName.value = cvDetailsData.user.profile.last_name;
+        empEmail.value = cvDetailsData.user.email;
+
+        if (cvDetailsData.user.position_name) {
+          empPosition.value = cvDetailsData.user.position_name;
+        }
+      }
+
+      if (cvDetailsData.education) {
+        empEducation.value = cvDetailsData.education;
+      }
+
+      empLanguages.splice(0, empLanguages.length, ...cvDetailsData.languages);
+
+      empCVName.value = cvDetailsData.name;
+      empCVDescription.value = cvDetailsData.description;
+
+      empSkills.splice(0, empSkills.length, ...cvDetailsData.skills);
+
+      console.log(empSkills);
 
       setErrorValuesToDefault();
     })
