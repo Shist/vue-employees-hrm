@@ -52,40 +52,16 @@
             </p>
           </div>
           <div class="cv-preview__skills-wrapper">
-            <div class="cv-preview__skill-category">
+            <div
+              v-for="(aSkillNames, sCategory) in previewSkillCategoriesMap"
+              :key="sCategory"
+              class="cv-preview__skill-category"
+            >
               <h3 class="cv-preview__skill-category-headline">
-                Programming languages
+                {{ sCategory }}
               </h3>
               <span class="cv-preview__skill-category-skills">
-                JavaScript, TypeScript
-              </span>
-            </div>
-            <div class="cv-preview__skill-category">
-              <h3 class="cv-preview__skill-category-headline">
-                Programming technologies
-              </h3>
-              <span class="cv-preview__skill-category-skills">
-                Node.js, React, GraphQL, Three.js, Redux, MobX, NestJS
-              </span>
-            </div>
-            <div class="cv-preview__skill-category">
-              <h3 class="cv-preview__skill-category-headline">
-                Database management system
-              </h3>
-              <span class="cv-preview__skill-category-skills">
-                PostgreSQL, MongoDB
-              </span>
-            </div>
-            <div class="cv-preview__skill-category">
-              <h3 class="cv-preview__skill-category-headline">
-                Source control systems
-              </h3>
-              <span class="cv-preview__skill-category-skills"> Git </span>
-            </div>
-            <div class="cv-preview__skill-category">
-              <h3 class="cv-preview__skill-category-headline">Other skills</h3>
-              <span class="cv-preview__skill-category-skills">
-                HTML, CSS, SCSS
+                {{ aSkillNames.join(", ") }}
               </span>
             </div>
           </div>
@@ -101,6 +77,10 @@ import { useRoute } from "vue-router";
 import useErrorState from "@/composables/useErrorState";
 import { getCVPreviewDataByID } from "@/services/cvs/preview";
 import { ICVPreviewLanguage, ICVPreviewSkill } from "@/types/cvPreviewUI";
+import {
+  IPreviewSkillCategoriesMap,
+  ICategorySkillData,
+} from "@/types/skillsUI";
 
 const route = useRoute();
 
@@ -141,6 +121,38 @@ const empCVDescription = ref<string | null>(null);
 
 const empSkills = reactive<ICVPreviewSkill[]>([]);
 
+const previewSkillCategoriesMap = computed(() => {
+  if (!empSkills.length) return null;
+
+  const resultObj: IPreviewSkillCategoriesMap = {};
+
+  empSkills.forEach((skill, index) => {
+    const category = skill.category;
+
+    const oCategorySkill: ICategorySkillData = {
+      name: skill.name,
+      mastery: skill.mastery,
+      skillIndex: index,
+    };
+
+    if (category) {
+      if (resultObj[category]) {
+        resultObj[category].push(oCategorySkill.name);
+      } else {
+        resultObj[category] = [oCategorySkill.name];
+      }
+    } else {
+      if (resultObj["Other skills"]) {
+        resultObj["Other skills"].push(oCategorySkill.name);
+      } else {
+        resultObj["Other skills"] = [oCategorySkill.name];
+      }
+    }
+  });
+
+  return resultObj;
+});
+
 onMounted(() => {
   fetchData();
 });
@@ -177,8 +189,6 @@ function fetchData() {
       empCVDescription.value = cvDetailsData.description;
 
       empSkills.splice(0, empSkills.length, ...cvDetailsData.skills);
-
-      console.log(empSkills);
 
       setErrorValuesToDefault();
     })

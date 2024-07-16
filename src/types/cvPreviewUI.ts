@@ -24,7 +24,7 @@ export interface ICVPreviewServerData {
 export interface ICVPreviewSkill {
   name: string;
   category: string | null;
-  mastery: string | Mastery;
+  mastery: Mastery;
 }
 
 export interface ICVPreviewLanguage {
