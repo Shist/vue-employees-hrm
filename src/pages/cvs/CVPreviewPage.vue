@@ -64,6 +64,9 @@
                 {{ aSkillNames.join(", ") }}
               </span>
             </div>
+            <span v-if="!empSkills.length" class="cv-preview__no-skills-label">
+              No any skills
+            </span>
           </div>
         </div>
       </div>
@@ -307,6 +310,9 @@ function handleExportPDF() {
             .cv-preview__skill-category-skills {
               @include default-text(16px, 22px);
             }
+          }
+          .cv-preview__no-skills-label {
+            @include default-text(16px, 22px);
           }
         }
       }
