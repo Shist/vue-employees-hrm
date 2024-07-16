@@ -59,15 +59,19 @@ import { IProjectsFilterFunction } from "@/types/vuetifyDataTable";
 
 const search = ref("");
 
+const projects = reactive<IProjectsTableData[]>([]);
+
 const headers = [
   { key: "name", title: "Name" },
   { key: "internalName", title: "Internal Name" },
   { key: "domain", title: "Domain" },
   { key: "startDate", title: "Start Date" },
   { key: "endDate", title: "End Date" },
-  { key: "teamSize", title: "Team Size" },
+  { key: "teamSize", title: "Team Size", sortable: false },
   { key: "options", sortable: false },
 ];
+
+const projectMenuItems = ["Project", "Update project", "Delete project"];
 
 const {
   isLoading,
@@ -77,17 +81,26 @@ const {
   setErrorValues,
 } = useErrorState();
 
-const projectMenuItems = ["Project", "Update project", "Delete project"];
-
-const projects = reactive<IProjectsTableData[]>([]);
-
 onMounted(async () => {
   isLoading.value = true;
 
   try {
     const projectsData = await getAllProjects();
 
-    projects.splice(0, projects.length, ...projectsData);
+    projects.splice(
+      0,
+      projects.length,
+      ...projectsData.map((project) => ({
+        id: project.id,
+        name: project.name,
+        internalName: project.internal_name,
+        domain: project.domain,
+        startDate: project.start_date,
+        endDate: project.end_date ? project.end_date : "Till now",
+        teamSize: project.team_size,
+        description: project.description,
+      }))
+    );
 
     setErrorValuesToDefault();
   } catch (error: unknown) {
@@ -120,7 +133,7 @@ const handleTableFilter: IProjectsFilterFunction = (value, query, item) => {
   &__main-content-wrapper {
     align-self: stretch;
     .projects-page__text-field-wrapper {
-      margin-left: 20px;
+      margin-left: 33px;
       max-width: 320px;
     }
     .projects-page__data-table {

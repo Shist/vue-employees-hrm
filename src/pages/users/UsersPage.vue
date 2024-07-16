@@ -15,7 +15,6 @@
         single-line
         placeholder="Search"
         class="main-page__text-field-wrapper"
-        hide-details
       />
       <v-data-table
         :headers="headers"
@@ -79,6 +78,8 @@ function openUserProfile(userID: number) {
 
 const search = ref("");
 
+const users = reactive<IUsersTableData[]>([]);
+
 const headers = [
   { key: "avatar", sortable: false },
   { key: "firstName", title: "First Name" },
@@ -103,23 +104,32 @@ const {
   setErrorValues,
 } = useErrorState();
 
-const users = reactive<IUsersTableData[]>([]);
-
 onMounted(async () => {
   isLoading.value = true;
 
-  getAllUsers()
-    .then((usersData) => {
-      users.splice(0, users.length, ...usersData);
+  try {
+    const usersData = await getAllUsers();
 
-      setErrorValuesToDefault();
-    })
-    .catch((error: unknown) => {
-      setErrorValues(error);
-    })
-    .finally(() => {
-      isLoading.value = false;
-    });
+    users.splice(
+      0,
+      users.length,
+      ...usersData.map((user) => ({
+        id: user.id,
+        email: user.email,
+        avatar: user.profile.avatar,
+        firstName: user.profile.first_name,
+        lastName: user.profile.last_name,
+        departmentName: user.department_name,
+        positionName: user.position_name,
+      }))
+    );
+
+    setErrorValuesToDefault();
+  } catch (error: unknown) {
+    setErrorValues(error);
+  } finally {
+    isLoading.value = false;
+  }
 });
 
 const handleTableFilter: IUsersFilterFunction = (value, query, item) => {
@@ -148,8 +158,7 @@ const handleTableFilter: IUsersFilterFunction = (value, query, item) => {
   &__main-content-wrapper {
     align-self: stretch;
     .main-page__text-field-wrapper {
-      margin-left: 20px;
-      margin-bottom: 22px;
+      margin-left: 33px;
       max-width: 320px;
     }
     .main-page__data-table {
