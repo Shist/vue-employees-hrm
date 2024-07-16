@@ -14,16 +14,7 @@ export interface ICVProject {
   responsibilities: string[];
 }
 
-export interface IAddCVProjectInput {
-  cvId: number;
-  projectId: number;
-  start_date: string;
-  end_date: string | null;
-  roles: string[];
-  responsibilities: string[];
-}
-
-export interface IUpdateCVProjectInput {
+export interface IAddOrUpdateCVProjectInput {
   cvId: number;
   projectId: number;
   start_date: string;

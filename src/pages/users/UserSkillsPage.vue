@@ -331,7 +331,7 @@ function submitUserSkillsDeletion() {
 <style lang="scss" scoped>
 .user-skills {
   margin: 0 auto;
-  padding: 64px 24px;
+  padding: 64px 24px 100px;
   max-width: 850px;
   display: flex;
   flex-direction: column;

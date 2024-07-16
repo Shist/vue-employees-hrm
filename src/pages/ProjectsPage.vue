@@ -21,7 +21,7 @@
         :items="projects"
         :search="search"
         class="projects-page__data-table"
-        item-key="name"
+        :custom-filter="handleTableFilter"
       >
         <template v-slot:[`item.options`]>
           <v-menu>
@@ -55,6 +55,7 @@ import { onMounted, reactive, ref } from "vue";
 import useErrorState from "@/composables/useErrorState";
 import { getAllProjects } from "@/services/projects";
 import { IProjectsTableData } from "@/types/projectsTableUI";
+import { IProjectsFilterFunction } from "@/types/vuetifyDataTable";
 
 const search = ref("");
 
@@ -95,6 +96,14 @@ onMounted(async () => {
     isLoading.value = false;
   }
 });
+
+const handleTableFilter: IProjectsFilterFunction = (value, query, item) => {
+  if (!item) return false;
+  return (
+    item.raw.name.toLowerCase().includes(query.toLowerCase()) ||
+    item.raw.internalName.toLowerCase().includes(query.toLowerCase())
+  );
+};
 </script>
 
 <style lang="scss" scoped>

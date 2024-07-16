@@ -86,7 +86,7 @@ import { useAuthStore } from "@/store/authStore";
 import CreateCVModal from "@/components/user/cvs/CreateCVModal.vue";
 import DeleteCVModal from "@/components/user/cvs/DeleteCVModal.vue";
 import useErrorState from "@/composables/useErrorState";
-import { createCV, deleteCV, getAllCvs } from "@/services/cvs";
+import { createCV, deleteCV, getAllCvs } from "@/services/cvs/cvs";
 import handleScrollPadding from "@/utils/handleScrollPadding";
 import { ROUTES } from "@/constants/router";
 import { ICreateCVInput, IDeleteCVInput } from "@/types/backend-interfaces/cv";

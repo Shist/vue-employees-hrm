@@ -1,17 +1,383 @@
 <template>
-  <h2 class="page-headline">This is CV Projects page</h2>
-  <h3 class="page-headline-dev">This page is now under development...</h3>
+  <div class="cv-projects">
+    <AppSpinner v-if="isLoading" class="cv-projects__spinner" />
+    <AppErrorSection
+      v-else-if="isError"
+      :errorMessage="errorMessage"
+      class="cv-projects__error-wrapper"
+    />
+    <div v-else class="cv-projects__main-content-wrapper">
+      <div class="cv-projects__search-create-controls-wrapper">
+        <v-text-field
+          v-model="search"
+          label="Search"
+          prepend-inner-icon="mdi-magnify"
+          variant="outlined"
+          density="compact"
+          single-line
+          class="cv-projects__text-field-wrapper"
+          hide-details
+        />
+        <v-btn
+          v-if="isOwner"
+          rounded
+          prepend-icon="mdi-plus"
+          color="var(--color-wrapper-bg)"
+          elevation="0"
+          class="cv-projects__button text-red-darken-4"
+          @click="handleOpenCreateModal"
+        >
+          Add project to CV
+        </v-btn>
+      </div>
+      <v-data-table
+        :headers="headers"
+        :items="cvProjects"
+        :search="search"
+        :custom-filter="handleTableFilter"
+        class="cv-projects__data-table"
+        hide-details
+      >
+        <template v-slot:[`item.options`]="{ item }">
+          <v-menu>
+            <template v-slot:activator="{ props }">
+              <v-btn
+                icon="mdi-dots-vertical"
+                v-bind="props"
+                class="cv-projects__popup-menu-btn"
+              />
+            </template>
+            <v-list>
+              <v-list-item disabled>
+                <v-list-item-title class="cv-projects__popup-menu-label">
+                  Project
+                </v-list-item-title>
+              </v-list-item>
+              <v-list-item disabled>
+                <v-list-item-title class="cv-projects__popup-menu-label">
+                  Update project
+                </v-list-item-title>
+              </v-list-item>
+              <v-list-item
+                @click="() => handleOpenDeleteModal(item.projectID, item.name)"
+                :disabled="!isOwner"
+              >
+                <v-list-item-title class="cv-projects__popup-menu-label">
+                  Remove project
+                </v-list-item-title>
+              </v-list-item>
+            </v-list>
+          </v-menu>
+        </template>
+      </v-data-table>
+    </div>
+  </div>
+  <AddProjectModal
+    :isOpen="isCreateModalOpen"
+    :cvID="cvID"
+    :projects="leftProjectsData"
+    @onCreateCVProject="submitCVProjectAdding"
+    @closeModal="handleCloseCreateModal"
+  />
+  <RemoveProjectModal
+    :isOpen="isDeleteModalOpen"
+    :cvID="cvID"
+    :projectID="addingProjectID"
+    :projectName="addingProjectName"
+    @onRemoveCVProject="submitCVProjectRemoving"
+    @closeModal="handleCloseDeleteModal"
+  />
 </template>
 
-<script setup lang="ts"></script>
+<script setup lang="ts">
+import { ref, reactive, computed, watch, onMounted } from "vue";
+import { useRoute } from "vue-router";
+import { storeToRefs } from "pinia";
+import { useAuthStore } from "@/store/authStore";
+import AddProjectModal from "@/components/cv/projects/AddProjectModal.vue";
+import RemoveProjectModal from "@/components/cv/projects/RemoveProjectModal.vue";
+import useErrorState from "@/composables/useErrorState";
+import {
+  getCVProjectsByID,
+  createCvProject,
+  deleteCvProject,
+} from "@/services/cvs/projects";
+import { getAllProjectsData } from "@/services/projects";
+import handleScrollPadding from "@/utils/handleScrollPadding";
+import {
+  ICVProjectsTableData,
+  ICVProjectsTableServerData,
+  IProjectsData,
+} from "@/types/cvProjectsUI";
+import {
+  IAddOrUpdateCVProjectInput,
+  IRemoveCVProjectInput,
+} from "@/types/backend-interfaces/cv/project";
+import { ICVProjectsFilterFunction } from "@/types/vuetifyDataTable";
+
+const route = useRoute();
+
+const cvID = computed<string>(() => {
+  // eslint-disable-next-line
+  const [section, cvID, tab] = route.fullPath.slice(1).split("/");
+  return cvID;
+});
+
+const cvUserID = ref<string | null>(null);
+
+const authStore = useAuthStore();
+const authStoreUser = storeToRefs(authStore).user;
+const isOwner = computed(() => authStoreUser.value?.id === cvUserID.value);
+
+const addingProjectID = ref<string | null>(null);
+const addingProjectName = ref<string | null>(null);
+
+const search = ref("");
+
+const headers = [
+  { key: "name", title: "Name" },
+  { key: "internalName", title: "Internal Name", sortable: false },
+  { key: "domain", title: "Domain", sortable: false },
+  { key: "startDate", title: "Start Date", sortable: false },
+  { key: "endDate", title: "End Date", sortable: false },
+  { key: "options", sortable: false },
+];
+
+const {
+  isLoading,
+  isError,
+  errorMessage,
+  setErrorValuesToDefault,
+  setErrorValues,
+} = useErrorState();
+
+const cvProjects = reactive<ICVProjectsTableData[]>([]);
+const allProjectsData = reactive<IProjectsData[]>([]);
+
+const leftProjectsData = computed<IProjectsData[]>(() => {
+  if (!allProjectsData.length) {
+    return [];
+  }
+
+  const cvProjectsSet = new Set(cvProjects.map((cvProject) => cvProject.name));
+
+  return allProjectsData.filter(
+    (cvProject) => !cvProjectsSet.has(cvProject.name)
+  );
+});
+
+const isCreateModalOpen = ref(false);
+const isDeleteModalOpen = ref(false);
+
+onMounted(() => {
+  fetchData();
+});
+
+watch(cvID, () => {
+  fetchData();
+});
+
+watch(isCreateModalOpen, (newValue) => {
+  handleScrollPadding(newValue);
+});
+
+watch(isDeleteModalOpen, (newValue) => {
+  handleScrollPadding(newValue);
+});
+
+function updateCVProjectsValue(
+  cvProjectsServerData: ICVProjectsTableServerData
+) {
+  if (!cvProjectsServerData.projects || !cvProjectsServerData.user) return;
+
+  const cvProjectsTableData: ICVProjectsTableData[] =
+    cvProjectsServerData.projects.map((projectFromServer) => ({
+      projectID: `${projectFromServer.project.id}`,
+      name: projectFromServer.name,
+      internalName: projectFromServer.internal_name,
+      domain: projectFromServer.domain,
+      startDate: projectFromServer.start_date,
+      endDate: projectFromServer.end_date,
+    }));
+
+  cvProjects.splice(0, cvProjects.length, ...cvProjectsTableData);
+
+  cvUserID.value = cvProjectsServerData.user.id;
+}
+
+function fetchData() {
+  isLoading.value = true;
+
+  Promise.all([getCVProjectsByID(cvID.value), getAllProjectsData()])
+    .then(([cvProjectsServerData, allProjectsServerData]) => {
+      updateCVProjectsValue(cvProjectsServerData);
+
+      allProjectsData.splice(
+        0,
+        allProjectsData.length,
+        ...allProjectsServerData.map((projectServerData) => ({
+          id: projectServerData.id,
+          name: projectServerData.name,
+          startDate: projectServerData.start_date,
+          endDate: projectServerData.end_date,
+        }))
+      );
+
+      setErrorValuesToDefault();
+    })
+    .catch((error: unknown) => {
+      setErrorValues(error);
+    })
+    .finally(() => {
+      isLoading.value = false;
+    });
+}
+
+function submitCVProjectAdding(inputProjectObj: IAddOrUpdateCVProjectInput) {
+  if (!isOwner.value) return;
+
+  isLoading.value = true;
+
+  createCvProject(inputProjectObj)
+    .then((freshCVProjectsServerData) => {
+      updateCVProjectsValue(freshCVProjectsServerData);
+
+      setErrorValuesToDefault();
+    })
+    .catch((error: unknown) => {
+      setErrorValues(error);
+    })
+    .finally(() => {
+      isLoading.value = false;
+    });
+}
+
+function submitCVProjectRemoving(inputProjectObj: IRemoveCVProjectInput) {
+  if (!isOwner.value) return;
+
+  isLoading.value = true;
+
+  deleteCvProject(inputProjectObj)
+    .then((freshCVProjectsServerData) => {
+      updateCVProjectsValue(freshCVProjectsServerData);
+
+      setErrorValuesToDefault();
+    })
+    .catch((error: unknown) => {
+      setErrorValues(error);
+    })
+    .finally(() => {
+      isLoading.value = false;
+    });
+}
+
+function handleOpenCreateModal() {
+  if (!isOwner.value) return;
+
+  isCreateModalOpen.value = true;
+}
+
+function handleCloseCreateModal() {
+  isCreateModalOpen.value = false;
+}
+
+function handleOpenDeleteModal(projectID: string, projectName: string) {
+  if (!isOwner.value) return;
+
+  addingProjectID.value = projectID;
+  addingProjectName.value = projectName;
+  isDeleteModalOpen.value = true;
+}
+
+function handleCloseDeleteModal() {
+  isDeleteModalOpen.value = false;
+}
+
+const handleTableFilter: ICVProjectsFilterFunction = (value, query, item) => {
+  if (!item) return false;
+  return (
+    item.raw.name.toLowerCase().includes(query.toLowerCase()) ||
+    item.raw.internalName.toLowerCase().includes(query.toLowerCase())
+  );
+};
+</script>
 
 <style lang="scss" scoped>
-.page-headline {
-  @include default-headline(36px, 36px);
-  padding: 20px;
+.cv-projects {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  &__spinner {
+    margin-top: 64px;
+  }
+  &__error-wrapper {
+    padding-top: 64px;
+  }
+  &__main-content-wrapper {
+    padding: 32px 24px;
+    align-self: stretch;
+    .cv-projects__search-create-controls-wrapper {
+      margin-bottom: 22px;
+      padding-inline: 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      .cv-projects__text-field-wrapper {
+        max-width: 320px;
+      }
+      .cv-projects__button {
+        border: 1px solid var(--color-text-red);
+      }
+    }
+    .cv-projects__data-table {
+      background-color: var(--color-wrapper-bg);
+    }
+    .cv-projects__table-img-avatar {
+      margin: 10px;
+      border-radius: 50%;
+      height: 50px;
+      width: 50px;
+    }
+    .cv-projects__popup-menu-btn {
+      background-color: var(--color-wrapper-bg);
+      box-shadow: none;
+    }
+    .cv-projects__popup-menu-label {
+      font-family: $font-roboto;
+    }
+  }
 }
-.page-headline-dev {
-  @include default-headline(32px, 32px);
-  padding: 20px;
+
+:deep(.cv-projects__text-field-wrapper .v-field__outline__start) {
+  transition: 0.3s;
+  border-radius: 0;
+}
+:deep(.cv-projects__text-field-wrapper .v-field__outline__end) {
+  transition: 0.3s;
+  border-radius: 0;
+}
+:deep(
+    .cv-projects__text-field-wrapper .v-field--active .v-field__outline__start
+  ) {
+  border-block: 1px solid var(--color-input-borders);
+  border-left: 1px solid var(--color-input-borders);
+}
+:deep(
+    .cv-projects__text-field-wrapper .v-field--active .v-field__outline__end
+  ) {
+  border-block: 1px solid var(--color-input-borders);
+  border-right: 1px solid var(--color-input-borders);
+}
+:deep(.v-table > .v-table__wrapper > table > thead > tr > th) {
+  padding: 12px 16px;
+}
+:deep(.v-table > .v-table__wrapper > table > tbody > tr > td) {
+  padding: 12px 16px;
+}
+:deep(.v-table > .v-table__wrapper > table > thead > tr > th:last-child) {
+  width: 80px;
+}
+:deep(.v-table > .v-table__wrapper > table > tbody > tr > td:last-child) {
+  width: 80px;
 }
 </style>

@@ -22,6 +22,7 @@
         :items="users"
         :search="search"
         class="main-page__data-table"
+        :custom-filter="handleTableFilter"
         hide-details
       >
         <template v-slot:[`item.avatar`]="{ item }">
@@ -68,6 +69,7 @@ import useErrorState from "@/composables/useErrorState";
 import { getAllUsers } from "@/services/users/users";
 import { ROUTES } from "@/constants/router";
 import { IUsersTableData } from "@/types/usersTableUI";
+import { IUsersFilterFunction } from "@/types/vuetifyDataTable";
 
 const router = useRouter();
 
@@ -119,6 +121,17 @@ onMounted(async () => {
       isLoading.value = false;
     });
 });
+
+const handleTableFilter: IUsersFilterFunction = (value, query, item) => {
+  if (!item) return false;
+
+  return (
+    (!!item.raw.firstName &&
+      item.raw.firstName.toLowerCase().includes(query.toLowerCase())) ||
+    (!!item.raw.lastName &&
+      item.raw.lastName.toLowerCase().includes(query.toLowerCase()))
+  );
+};
 </script>
 
 <style lang="scss" scoped>
