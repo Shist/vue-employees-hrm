@@ -5,6 +5,7 @@ query GET_ALL_CVS {
     description
     education
     user {
+      id
       email
     }
   }

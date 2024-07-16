@@ -7,7 +7,7 @@ import { checkCvID, getDetailedError } from "@/utils/handleErrors";
 import { ICVNameData } from "@/types/breadcrumbsUI";
 import { IUserCVNameData } from "@/types/userCVsUI";
 import { ICreateCVInput, IDeleteCVInput } from "@/types/backend-interfaces/cv";
-import { ICvsTableData, ICvsTableServerData } from "@/types/cvsTableUI";
+import { ICvsTableServerData } from "@/types/cvsTableUI";
 
 export const getCVNameDataByID = async (id: string) => {
   try {
@@ -49,24 +49,13 @@ export const deleteCV = async (inputCVObj: IDeleteCVInput) => {
 };
 
 export const getAllCvs = async () => {
-  const result: ICvsTableData[] = [];
   try {
-    const { cvs } = (
-      await apolloClient.query({
-        query: getAllCvsQuery,
-      })
-    ).data;
-    cvs.forEach((cv: ICvsTableServerData) => {
-      result.push({
-        id: cv.id,
-        name: cv.name,
-        description: cv.description,
-        education: cv.education ? cv.education : "",
-        email: cv.user ? cv.user.email : "",
-      });
-    });
+    const response = (await apolloClient.query({
+      query: getAllCvsQuery,
+    })) as { data: { cvs: ICvsTableServerData[] } };
+
+    return response.data.cvs;
   } catch (error: unknown) {
     throw getDetailedError(error);
   }
-  return result;
 };

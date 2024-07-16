@@ -33,6 +33,7 @@
         :headers="headers"
         :items="cvs"
         :search="search"
+        item-key="id"
         class="cvs-page__data-table"
         hide-details
       >
@@ -50,7 +51,7 @@
                 v-for="cvItem in cvMenuItems"
                 :key="cvItem.title"
                 v-on:click="cvItem.click(item.id, item.name)"
-                :disabled="checkOwner(cvItem.title, item.email)"
+                :disabled="checkOwner(cvItem.title, item.userID)"
               >
                 <v-list-item-title class="cvs-page__popup-menu-label">
                   {{ cvItem.title }}
@@ -89,7 +90,7 @@ import { createCV, deleteCV, getAllCvs } from "@/services/cvs";
 import handleScrollPadding from "@/utils/handleScrollPadding";
 import { ROUTES } from "@/constants/router";
 import { ICreateCVInput, IDeleteCVInput } from "@/types/backend-interfaces/cv";
-import { ICvsTableData } from "@/types/cvsTableUI";
+import { ICvsTableData, ICvsTableServerData } from "@/types/cvsTableUI";
 
 const router = useRouter();
 
@@ -142,7 +143,18 @@ async function fetchData() {
   try {
     const cvsData = await getAllCvs();
 
-    cvs.splice(0, cvs.length, ...cvsData);
+    cvs.splice(0, cvs.length);
+
+    cvsData.forEach((cv: ICvsTableServerData) => {
+      cvs.push({
+        id: cv.id,
+        name: cv.name,
+        description: cv.description,
+        education: cv.education ? cv.education : "",
+        email: cv.user ? cv.user.email : "",
+        userID: cv.user ? cv.user.id : null,
+      });
+    });
 
     setErrorValuesToDefault();
   } catch (error: unknown) {
@@ -150,9 +162,9 @@ async function fetchData() {
   }
 }
 
-function checkOwner(cvItemTitle: string, cvEmail: string) {
+function checkOwner(cvItemTitle: string, cvUserID: number | null) {
   if (cvItemTitle === "Details") return false;
-  return authStoreUser.value?.email !== cvEmail;
+  return Number(authStoreUser.value?.id) !== Number(cvUserID);
 }
 
 function openCvDetails(cvID: number) {

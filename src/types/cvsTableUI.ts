@@ -4,6 +4,7 @@ export interface ICvsTableData {
   description: string;
   education: string;
   email: string;
+  userID: number | null;
 }
 
 export interface ICvsTableServerData {
@@ -12,6 +13,7 @@ export interface ICvsTableServerData {
   description: string;
   education: string;
   user: {
+    id: number;
     email: string;
   };
 }
