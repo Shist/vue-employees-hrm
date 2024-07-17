@@ -305,11 +305,6 @@ async function handleExportPDF() {
 
   iframeDoc.body.appendChild(clonedContent);
 
-  const docExportBtn = iframeDoc.querySelector(".cv-preview__export-pdf-btn");
-  if (docExportBtn && docExportBtn.nodeName === "BUTTON") {
-    (docExportBtn as HTMLButtonElement).style.display = "none";
-  }
-
   const docFontLink = iframeDoc.createElement("link");
   docFontLink.rel = "stylesheet";
   docFontLink.href =

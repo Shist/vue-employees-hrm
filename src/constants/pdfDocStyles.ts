@@ -44,8 +44,7 @@ export const PDF_DOC_STYLES = `
       text-transform: uppercase;
     }
     .cv-preview__export-pdf-btn {
-      border: 1px solid var(--color-text-red);
-      border-radius: 0;
+      display: none;
     }
     .cv-preview__export-pdf-btn:disabled {
       filter: grayscale(50%);
