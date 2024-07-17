@@ -41,7 +41,7 @@
                 {{ language.name }} — {{ language.proficiency }}
               </li>
               <li v-if="!empLanguages.length" class="cv-preview__language-info">
-                No any languages specified
+                No languages specified
               </li>
             </ul>
           </div>
@@ -69,7 +69,7 @@
               </span>
             </li>
             <li v-if="!empSkills.length" class="cv-preview__no-skills-label">
-              No any skills specified
+              No skills specified
             </li>
           </ul>
         </div>
@@ -99,7 +99,7 @@
                   {{ project.roles.join(", ") }}
                 </span>
                 <span v-else class="cv-preview__project-info-section-label">
-                  No any roles specified for this project
+                  No roles specified for this project
                 </span>
               </div>
               <div class="cv-preview__project-info-section-wrapper">
@@ -113,8 +113,7 @@
                   {{ project.responsibilities.join(", ") }}
                 </span>
                 <span v-else class="cv-preview__project-info-section-label">
-                  No any responsibilities or achievements specified for this
-                  project
+                  No responsibilities or achievements specified for this project
                 </span>
               </div>
               <div class="cv-preview__project-info-section-wrapper">
@@ -131,7 +130,7 @@
             </div>
           </li>
           <li v-if="!empProjects.length" class="cv-preview__no-projects-label">
-            No any projects specified
+            No projects specified
           </li>
         </ul>
       </div>

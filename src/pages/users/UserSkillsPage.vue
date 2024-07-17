@@ -14,7 +14,7 @@
         <span>Add skill</span>
       </v-btn>
       <span v-if="!userSkills?.length" class="user-skills__no-skills-label">
-        No any employee skills specified yet
+        No employee skills specified yet
       </span>
       <SkillsCategory
         v-for="(aSkills, sCategory) in skillCategoriesMap"

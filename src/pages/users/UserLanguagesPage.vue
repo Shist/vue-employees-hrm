@@ -17,7 +17,7 @@
         v-if="!userLanguages?.length"
         class="user-languages__no-languages-label"
       >
-        No any employee languages specified yet
+        No employee languages specified yet
       </span>
       <div class="user-languages__languages-wrapper">
         <div
