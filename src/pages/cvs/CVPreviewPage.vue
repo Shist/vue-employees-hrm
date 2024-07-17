@@ -16,8 +16,8 @@
           color="var(--color-wrapper-bg)"
           elevation="0"
           class="cv-preview__export-pdf-btn text-red-darken-4"
-          :class="{ 'no-print': isExportBtnHidden }"
           @click="handleExportPDF"
+          :disabled="isExportBtnDisabled"
         >
           Export PDF
         </v-btn>
@@ -83,8 +83,6 @@
 import { ref, reactive, computed, watch, onMounted } from "vue";
 import html2pdf from "html2pdf.js";
 import { useRoute } from "vue-router";
-import { storeToRefs } from "pinia";
-import { useThemeStore } from "@/store/theme";
 import useErrorState from "@/composables/useErrorState";
 import { getCVPreviewDataByID } from "@/services/cvs/preview";
 import { ICVPreviewLanguage, ICVPreviewSkill } from "@/types/cvPreviewUI";
@@ -94,7 +92,7 @@ import {
 } from "@/types/skillsUI";
 
 const cvDocumentContent = ref<HTMLDivElement>();
-const isExportBtnHidden = ref(false);
+const isExportBtnDisabled = ref(false);
 
 const route = useRoute();
 
@@ -103,8 +101,6 @@ const cvID = computed<string>(() => {
   const [section, cvID, tab] = route.fullPath.slice(1).split("/");
   return cvID;
 });
-
-const { currTheme } = storeToRefs(useThemeStore());
 
 const {
   isLoading,
@@ -219,29 +215,55 @@ function fetchData() {
 async function handleExportPDF() {
   if (!cvDocumentContent.value) return;
 
-  const options = {
-    margin: 1,
-    filename: "CV.pdf",
-    jsPDF: { unit: "in" },
-  };
+  const clonedContent = cvDocumentContent.value.cloneNode(true);
 
-  const prevTheme = currTheme.value;
+  const iframe = document.createElement("iframe");
+  iframe.style.position = "absolute";
+  iframe.style.width = "0";
+  iframe.style.height = "0";
+  iframe.style.border = "none";
+  document.body.appendChild(iframe);
 
-  isExportBtnHidden.value = true;
-  currTheme.value = "Light";
+  const iframeDoc = iframe.contentDocument || iframe.contentWindow?.document;
 
-  await html2pdf().from(cvDocumentContent.value).set(options).save();
+  if (!iframeDoc) return;
 
-  isExportBtnHidden.value = false;
-  currTheme.value = prevTheme;
+  iframeDoc.open();
+  iframeDoc.write("<html><head></head><body></body></html>");
+  iframeDoc.close();
+  iframeDoc.body.appendChild(clonedContent);
+
+  const docExportBtn = iframeDoc.querySelector(".cv-preview__export-pdf-btn");
+  if (docExportBtn && docExportBtn.nodeName === "BUTTON") {
+    (docExportBtn as HTMLButtonElement).style.display = "none";
+  }
+
+  const docWrapper = iframeDoc.querySelector(
+    ".cv-preview__main-content-wrapper"
+  );
+  if (docWrapper && docWrapper.nodeName === "DIV") {
+    (docWrapper as HTMLDivElement).style.color = "var(--color-cv-doc-text)";
+  }
+
+  if (clonedContent instanceof HTMLElement) {
+    const options = {
+      margin: 1,
+      filename: `${empCVName.value}.pdf`,
+      jsPDF: { unit: "in" },
+    };
+
+    isExportBtnDisabled.value = true;
+
+    await html2pdf().from(clonedContent).set(options).save();
+
+    isExportBtnDisabled.value = false;
+  }
+
+  document.body.removeChild(iframe);
 }
 </script>
 
 <style lang="scss" scoped>
-.no-print {
-  display: none;
-}
-
 .cv-preview {
   margin: 0 auto;
   padding: 32px 24px;
@@ -253,6 +275,7 @@ async function handleExportPDF() {
     display: flex;
     flex-direction: column;
     row-gap: 30px;
+    color: var(--color-text);
     .cv-preview__title-and-btn-wrapper {
       display: flex;
       justify-content: space-between;
@@ -272,6 +295,9 @@ async function handleExportPDF() {
       .cv-preview__export-pdf-btn {
         border: 1px solid var(--color-text-red);
         border-radius: 0;
+        &:disabled {
+          filter: grayscale(50%);
+        }
       }
     }
     .cv-preview__cv-main-info-wrapper {

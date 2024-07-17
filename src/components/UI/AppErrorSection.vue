@@ -43,6 +43,7 @@ const isNotFoundError = computed(
   row-gap: 20px;
   &__message {
     @include default-text(26px, 32px);
+    color: var(--color-text);
   }
   &__back-to-main-btn {
     color: var(--color-btn-text);
@@ -54,6 +55,7 @@ const isNotFoundError = computed(
   }
   &__try-to-reload-label {
     @include default-text(20px, 26px);
+    color: var(--color-text);
   }
 }
 </style>

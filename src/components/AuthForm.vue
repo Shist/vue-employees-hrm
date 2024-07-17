@@ -150,9 +150,11 @@ const submitForm = async (): Promise<void> => {
   min-height: 400px;
   &__title {
     @include default-text(34px, 1.2);
+    color: var(--color-text);
   }
   &__subtitle {
     @include default-text(16px, 1.235);
+    color: var(--color-text);
   }
   &__form {
     width: 90%;
