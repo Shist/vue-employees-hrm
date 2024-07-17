@@ -287,6 +287,14 @@ const handleTableFilter: ICVsFilterFunction = (value, query, item) => {
   border-block: 1px solid var(--color-input-borders);
   border-right: 1px solid var(--color-input-borders);
 }
+:deep(
+    .cvs-page__text-field-wrapper
+      .v-field--active
+      .v-field__prepend-inner
+      .v-icon
+  ) {
+  opacity: 1;
+}
 :deep(.v-table > .v-table__wrapper > table > thead > tr > th) {
   font-family: $font-roboto;
   font-size: 14px;
@@ -305,10 +313,10 @@ const handleTableFilter: ICVsFilterFunction = (value, query, item) => {
   overflow: hidden;
 }
 :deep(.v-table > .v-table__wrapper > table > tbody > tr > td:first-child) {
-  max-width: 120px;
+  max-width: 119px;
 }
 :deep(.v-table > .v-table__wrapper > table > tbody > tr > td:nth-child(2)) {
-  max-width: 200px;
+  max-width: 198px;
 }
 :deep(.v-table > .v-table__wrapper > table > tbody > tr > td:last-child) {
   width: 52px;
