@@ -25,55 +25,110 @@
       <div class="cv-preview__cv-main-info-wrapper">
         <div class="cv-preview__education-and-langauges-wrapper">
           <div class="cv-preview__education-wrapper">
-            <h3 class="cv-preview__education-headline">Education</h3>
+            <h4 class="cv-preview__education-headline">Education</h4>
             <span class="cv-preview__education-info">
               {{ empEducation }}
             </span>
           </div>
           <div class="cv-preview__languages-section-wrapper">
-            <h3 class="cv-preview__languages-headline">Language proficiency</h3>
-            <div class="cv-preview__languages-wrapper">
-              <span
+            <h4 class="cv-preview__languages-headline">Language proficiency</h4>
+            <ul class="cv-preview__languages-wrapper">
+              <li
                 v-for="language in empLanguages"
                 :key="language.name"
                 class="cv-preview__language-info"
               >
                 {{ language.name }} — {{ language.proficiency }}
-              </span>
-              <span
-                v-if="!empLanguages.length"
-                class="cv-preview__language-info"
-              >
+              </li>
+              <li v-if="!empLanguages.length" class="cv-preview__language-info">
                 No any languages
-              </span>
-            </div>
+              </li>
+            </ul>
           </div>
         </div>
         <div class="cv-preview__cv-description-and-skills-wrapper">
           <div class="cv-preview__cv-description-wrapper">
-            <h3 class="cv-preview__cv-description-headline">{{ empCVName }}</h3>
+            <h4 class="cv-preview__cv-description-headline">
+              {{ empCVName }}
+            </h4>
             <p class="cv-preview__cv-description-info">
               {{ empCVDescription }}
             </p>
           </div>
-          <div class="cv-preview__skills-wrapper">
-            <div
+          <ul class="cv-preview__skills-wrapper">
+            <li
               v-for="(aSkillNames, sCategory) in previewSkillCategoriesMap"
               :key="sCategory"
               class="cv-preview__skill-category"
             >
-              <h3 class="cv-preview__skill-category-headline">
+              <h4 class="cv-preview__skill-category-headline">
                 {{ sCategory }}
-              </h3>
+              </h4>
               <span class="cv-preview__skill-category-skills">
                 {{ aSkillNames.join(", ") }}
               </span>
-            </div>
-            <span v-if="!empSkills.length" class="cv-preview__no-skills-label">
+            </li>
+            <li v-if="!empSkills.length" class="cv-preview__no-skills-label">
               No any skills
-            </span>
-          </div>
+            </li>
+          </ul>
         </div>
+      </div>
+      <div class="cv-preview__emp-projects-wrapper">
+        <h2 class="cv-preview__projects-headline">Projects</h2>
+        <ul class="cv-preview__projects-list-wrapper">
+          <li
+            v-for="project in empProjects"
+            :key="project.name"
+            class="cv-preview__project-info-wrapper"
+          >
+            <div class="cv-preview__project-name-wrapper">
+              <h3 class="cv-preview__project-name-headline">
+                {{ project.name }}
+              </h3>
+            </div>
+            <div class="cv-preview__project-info-sections-wrapper">
+              <div class="cv-preview__project-info-section-wrapper">
+                <h4 class="cv-preview__project-info-section-title">
+                  Project roles
+                </h4>
+                <span
+                  v-if="project.roles.length"
+                  class="cv-preview__project-info-section-label"
+                >
+                  {{ project.roles.join(", ") }}
+                </span>
+                <span v-else class="cv-preview__project-info-section-label">
+                  No any roles at this project
+                </span>
+              </div>
+              <div class="cv-preview__project-info-section-wrapper">
+                <h4 class="cv-preview__project-info-section-title">
+                  Responsibilities & achievements
+                </h4>
+                <span
+                  v-if="project.responsibilities.length"
+                  class="cv-preview__project-info-section-label"
+                >
+                  {{ project.responsibilities.join(", ") }}
+                </span>
+                <span v-else class="cv-preview__project-info-section-label">
+                  No any roles at this project
+                </span>
+              </div>
+              <div class="cv-preview__project-info-section-wrapper">
+                <h4 class="cv-preview__project-info-section-title">Period</h4>
+                <span class="cv-preview__project-info-section-label">
+                  {{ project.start_date }} —
+                  {{ project.end_date ?? "Till now" }}
+                </span>
+              </div>
+            </div>
+          </li>
+          <li v-if="!empProjects.length" class="cv-preview__no-projects-label">
+            No any projects
+          </li>
+        </ul>
       </div>
     </div>
   </div>
@@ -86,7 +141,11 @@ import useToast from "@/composables/useToast";
 import useErrorState from "@/composables/useErrorState";
 import { getCVPreviewDataByID, exportPDF } from "@/services/cvs/preview";
 import { PDF_DOC_STYLES } from "@/constants/pdfDocStyles";
-import { ICVPreviewLanguage, ICVPreviewSkill } from "@/types/cvPreviewUI";
+import {
+  ICVPreviewLanguage,
+  ICVPreviewSkill,
+  ICVPreviewProject,
+} from "@/types/cvPreviewUI";
 import {
   IPreviewSkillCategoriesMap,
   ICategorySkillData,
@@ -169,6 +228,8 @@ const previewSkillCategoriesMap = computed(() => {
   return resultObj;
 });
 
+const empProjects = reactive<ICVPreviewProject[]>([]);
+
 onMounted(() => {
   fetchData();
 });
@@ -205,6 +266,8 @@ function fetchData() {
       empCVDescription.value = cvDetailsData.description;
 
       empSkills.splice(0, empSkills.length, ...cvDetailsData.skills);
+
+      empProjects.splice(0, empProjects.length, ...cvDetailsData.projects);
 
       setErrorValuesToDefault();
     })
@@ -415,6 +478,8 @@ function downloadPDF(base64: string) {
           }
         }
       }
+    }
+    .cv-preview__emp-projects-wrapper {
     }
   }
 }
