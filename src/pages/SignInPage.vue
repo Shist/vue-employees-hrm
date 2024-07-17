@@ -1,8 +1,9 @@
 <template>
   <div class="sign-in">
     <auth-form
-      title="Welcome Back"
-      subtitleText="Hello again! Sign in to continue."
+      :title="$t('signIn.title')"
+      subtitleText="Hello again! Sign in
+    to continue."
       buttonText="SIGN IN"
       linkText="I DON'T HAVE AN ACCOUNT"
     />

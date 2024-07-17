@@ -5,6 +5,7 @@ import apolloClient from "@/plugins/apolloConfig";
 import vuetifyConfig from "@/plugins/vuetify";
 import Vue3Toasity from "vue3-toastify";
 import toastifyConfig from "@/plugins/toastifyConfig";
+import i18n from "./plugins/i18n";
 import router from "@/router";
 import { createPinia } from "pinia";
 import appComponents from "@/components/UI";
@@ -27,6 +28,7 @@ app
   .use(router)
   .use(createPinia())
   .use(vuetifyConfig)
-  .use(Vue3Toasity, toastifyConfig);
+  .use(Vue3Toasity, toastifyConfig)
+  .use(i18n);
 
 app.mount("#app");
