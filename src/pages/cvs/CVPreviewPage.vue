@@ -81,11 +81,11 @@
 
 <script setup lang="ts">
 import { ref, reactive, computed, watch, onMounted } from "vue";
-import html2pdf from "html2pdf.js";
 import { useRoute } from "vue-router";
 import useToast from "@/composables/useToast";
 import useErrorState from "@/composables/useErrorState";
 import { getCVPreviewDataByID, exportPDF } from "@/services/cvs/preview";
+import { PDF_DOC_STYLES } from "@/constants/pdfDocStyles";
 import { ICVPreviewLanguage, ICVPreviewSkill } from "@/types/cvPreviewUI";
 import {
   IPreviewSkillCategoriesMap,
@@ -235,6 +235,7 @@ async function handleExportPDF() {
   iframeDoc.open();
   iframeDoc.write("<html><head></head><body></body></html>");
   iframeDoc.close();
+
   iframeDoc.body.appendChild(clonedContent);
 
   const docExportBtn = iframeDoc.querySelector(".cv-preview__export-pdf-btn");
@@ -242,45 +243,38 @@ async function handleExportPDF() {
     (docExportBtn as HTMLButtonElement).style.display = "none";
   }
 
-  const docWrapper = iframeDoc.querySelector(
-    ".cv-preview__main-content-wrapper"
-  );
-  if (docWrapper && docWrapper.nodeName === "DIV") {
-    (docWrapper as HTMLDivElement).style.color = "var(--color-cv-doc-text)";
-  }
+  const docFontLink = iframeDoc.createElement("link");
+  docFontLink.rel = "stylesheet";
+  docFontLink.href =
+    "https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap";
+  iframeDoc.head.appendChild(docFontLink);
 
-  if (clonedContent instanceof HTMLElement) {
-    const options = {
-      margin: 1,
-      filename: `${empCVName.value}.pdf`,
-      jsPDF: { unit: "in" },
-    };
+  const docStyleElement = iframeDoc.createElement("style");
+  docStyleElement.textContent = PDF_DOC_STYLES;
+  iframeDoc.head.appendChild(docStyleElement);
 
-    const exportPDFInput: IExportPDFInput = {
-      html: "<div><h1>Some Test CV</h1><p>Some description of the CV...</p></div>",
-      margin: {
-        top: "15mm",
-        bottom: "15mm",
-        left: "12mm",
-        right: "12mm",
-      },
-    };
+  const exportPDFInput: IExportPDFInput = {
+    html: iframeDoc.documentElement.outerHTML,
+    margin: {
+      top: "15mm",
+      bottom: "15mm",
+      left: "12mm",
+      right: "12mm",
+    },
+  };
 
-    isExportBtnDisabled.value = true;
+  isExportBtnDisabled.value = true;
 
-    try {
-      const base64 = await exportPDF(exportPDFInput);
+  try {
+    const base64 = await exportPDF(exportPDFInput);
 
-      downloadPDF(base64);
-    } catch (error: unknown) {
-      if (error instanceof Error) {
-        setErrorToast(error.message);
-      }
-    } finally {
-      isExportBtnDisabled.value = false;
+    downloadPDF(base64);
+  } catch (error: unknown) {
+    if (error instanceof Error) {
+      setErrorToast(error.message);
     }
-
-    //await html2pdf().from(clonedContent).set(options).save();
+  } finally {
+    isExportBtnDisabled.value = false;
   }
 
   document.body.removeChild(iframe);

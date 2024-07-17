@@ -22,13 +22,10 @@ export const getCVPreviewDataByID = async (id: string) => {
 
 export const exportPDF = async (exportPDFInput: IExportPDFInput) => {
   try {
-    console.log(exportPDFInput);
     const response = (await apolloClient.query({
       query: exportPDFQuery,
       variables: { pdf: exportPDFInput },
     })) as { data: { exportPdf: string } };
-
-    console.log(response.data.exportPdf);
 
     return response.data.exportPdf;
   } catch (error: unknown) {
