@@ -113,7 +113,8 @@
                   {{ project.responsibilities.join(", ") }}
                 </span>
                 <span v-else class="cv-preview__project-info-section-label">
-                  No any roles specified for this project
+                  No any responsibilities or achievements specified for this
+                  project
                 </span>
               </div>
               <div class="cv-preview__project-info-section-wrapper">
@@ -285,8 +286,6 @@ function fetchData() {
 
 async function handleExportPDF() {
   if (!cvDocumentContent.value) return;
-
-  console.log("handleExportPDF");
 
   const clonedContent = cvDocumentContent.value.cloneNode(true);
 

@@ -1,4 +1,12 @@
 export const PDF_DOC_STYLES = `
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    ul {
+      list-style: none;
+    }
     .cv-preview {
       margin: 0 auto;
       padding: 32px 24px;
@@ -139,5 +147,65 @@ export const PDF_DOC_STYLES = `
       font-family: "Roboto", Helvetica, Arial, sans-serif;
       font-size: 16px;
       line-height: 22px;
+    }
+    .cv-preview__emp-projects-wrapper {
+	    display: flex;
+	    flex-direction: column;
+	    row-gap: 25px;
+    }
+    .cv-preview__projects-headline {
+	    font-family: "Roboto", Helvetica, Arial, sans-serif;
+	    font-size: 34px;
+	    line-height: 38px;
+    }
+   .cv-preview__projects-list-wrapper {
+	    display: flex;
+	    flex-direction: column;
+	    row-gap: 20px;
+    }
+   .cv-preview__project-info-wrapper {
+	    display: flex;
+	    column-gap: 30px;
+    }
+   .cv-preview__project-name-wrapper {
+	    padding-block: 15px;
+	    padding-right: 10px;
+	    min-width: 300px;
+	    border-right: 1px solid #c62f31;
+    }
+   .cv-preview__project-name-headline {
+	    font-family: "Roboto", Helvetica, Arial, sans-serif;
+	    font-weight: 700;
+	    font-size: 16px;
+	    line-height: 20px;
+	    color: #c62f31;
+	    text-transform: uppercase;
+    }
+   .cv-preview__project-info-sections-wrapper {
+	    padding-block: 15px;
+	    display: flex;
+	    flex-direction: column;
+	    row-gap: 20px;
+    }
+   .cv-preview__project-info-section-wrapper {
+	    display: flex;
+	    flex-direction: column;
+	    row-gap: 10px;
+    }
+   .cv-preview__project-info-section-title {
+	    font-family: "Roboto", Helvetica, Arial, sans-serif;
+	    font-weight: 700;
+	    font-size: 16px;
+	    line-height: 22px;
+    }
+   .cv-preview__project-info-section-label {
+	    font-family: "Roboto", Helvetica, Arial, sans-serif;
+	    font-size: 16px;
+	    line-height: 22px;
+    }
+   .cv-preview__no-projects-label {
+	    font-family: "Roboto", Helvetica, Arial, sans-serif;
+	    font-size: 16px;
+	    line-height: 22px;
     }
   `;
