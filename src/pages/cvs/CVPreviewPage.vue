@@ -41,7 +41,7 @@
                 {{ language.name }} — {{ language.proficiency }}
               </li>
               <li v-if="!empLanguages.length" class="cv-preview__language-info">
-                No any languages
+                No any languages specified
               </li>
             </ul>
           </div>
@@ -69,7 +69,7 @@
               </span>
             </li>
             <li v-if="!empSkills.length" class="cv-preview__no-skills-label">
-              No any skills
+              No any skills specified
             </li>
           </ul>
         </div>
@@ -99,7 +99,7 @@
                   {{ project.roles.join(", ") }}
                 </span>
                 <span v-else class="cv-preview__project-info-section-label">
-                  No any roles at this project
+                  No any roles specified for this project
                 </span>
               </div>
               <div class="cv-preview__project-info-section-wrapper">
@@ -113,20 +113,24 @@
                   {{ project.responsibilities.join(", ") }}
                 </span>
                 <span v-else class="cv-preview__project-info-section-label">
-                  No any roles at this project
+                  No any roles specified for this project
                 </span>
               </div>
               <div class="cv-preview__project-info-section-wrapper">
                 <h4 class="cv-preview__project-info-section-title">Period</h4>
                 <span class="cv-preview__project-info-section-label">
-                  {{ project.start_date }} —
-                  {{ project.end_date ?? "Till now" }}
+                  {{ new Date(project.start_date).toLocaleDateString() }} —
+                  {{
+                    project.end_date
+                      ? new Date(project.end_date).toLocaleDateString()
+                      : "Till now"
+                  }}
                 </span>
               </div>
             </div>
           </li>
           <li v-if="!empProjects.length" class="cv-preview__no-projects-label">
-            No any projects
+            No any projects specified
           </li>
         </ul>
       </div>
@@ -480,6 +484,52 @@ function downloadPDF(base64: string) {
       }
     }
     .cv-preview__emp-projects-wrapper {
+      display: flex;
+      flex-direction: column;
+      row-gap: 25px;
+      .cv-preview__projects-headline {
+        @include default-text(34px, 38px);
+      }
+      .cv-preview__projects-list-wrapper {
+        display: flex;
+        flex-direction: column;
+        row-gap: 20px;
+        .cv-preview__project-info-wrapper {
+          display: flex;
+          column-gap: 30px;
+          .cv-preview__project-name-wrapper {
+            padding-block: 15px;
+            padding-right: 10px;
+            min-width: 300px;
+            border-right: 1px solid var(--color-text-red);
+            .cv-preview__project-name-headline {
+              @include default-headline(16px, 20px);
+              color: var(--color-text-red);
+              text-transform: uppercase;
+            }
+          }
+          .cv-preview__project-info-sections-wrapper {
+            padding-block: 15px;
+            display: flex;
+            flex-direction: column;
+            row-gap: 20px;
+            .cv-preview__project-info-section-wrapper {
+              display: flex;
+              flex-direction: column;
+              row-gap: 10px;
+              .cv-preview__project-info-section-title {
+                @include default-headline(16px, 22px);
+              }
+              .cv-preview__project-info-section-label {
+                @include default-text(16px, 22px);
+              }
+              .cv-preview__no-projects-label {
+                @include default-text(16px, 22px);
+              }
+            }
+          }
+        }
+      }
     }
   }
 }
