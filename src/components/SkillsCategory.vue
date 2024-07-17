@@ -122,6 +122,7 @@ function getColorByValue(value: number) {
   row-gap: 16px;
   &__category-headline {
     @include default-text(18px, 24px);
+    color: var(--color-text);
   }
   &__category-wrapper {
     display: grid;
