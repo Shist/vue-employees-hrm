@@ -2,7 +2,7 @@
   <div class="user-skills">
     <AppSpinner v-if="isLoading" />
     <AppErrorSection v-else-if="isError" :errorMessage="errorMessage" />
-    <div v-else-if="userSkills" class="user-skills__main-content-wrapper">
+    <div v-else class="user-skills__main-content-wrapper">
       <v-btn
         v-if="isOwner"
         variant="text"
@@ -13,6 +13,9 @@
         <v-icon class="user-skills__add-icon">mdi-plus</v-icon>
         <span>Add skill</span>
       </v-btn>
+      <span v-if="!userSkills?.length" class="user-skills__no-skills-label">
+        No any employee skills specified yet
+      </span>
       <SkillsCategory
         v-for="(aSkills, sCategory) in skillCategoriesMap"
         :key="sCategory"
@@ -352,6 +355,11 @@ function submitUserSkillsDeletion() {
       .user-skills__add-icon {
         font-size: 28px;
       }
+    }
+    .user-skills__no-skills-label {
+      @include default-text(28px, 32px);
+      color: var(--color-gray-label-text);
+      text-align: center;
     }
     .user-skills__delete-btns-wrapper {
       padding-block: 32px;

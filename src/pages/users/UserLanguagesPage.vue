@@ -2,7 +2,7 @@
   <div class="user-languages">
     <AppSpinner v-if="isLoading" />
     <AppErrorSection v-else-if="isError" :errorMessage="errorMessage" />
-    <div v-else-if="userLanguages" class="user-languages__main-content-wrapper">
+    <div v-else class="user-languages__main-content-wrapper">
       <v-btn
         v-if="isOwner"
         variant="text"
@@ -13,6 +13,12 @@
         <v-icon class="user-languages__add-icon">mdi-plus</v-icon>
         <span>Add language</span>
       </v-btn>
+      <span
+        v-if="!userLanguages?.length"
+        class="user-languages__no-languages-label"
+      >
+        No any employee languages specified yet
+      </span>
       <div class="user-languages__languages-wrapper">
         <div
           v-for="(userLanguage, userLanguageIndex) in userLanguages"
@@ -365,6 +371,11 @@ function getClassByProficiency(value: Proficiency) {
       .user-languages__add-icon {
         font-size: 28px;
       }
+    }
+    .user-languages__no-languages-label {
+      @include default-text(28px, 32px);
+      color: var(--color-gray-label-text);
+      text-align: center;
     }
     .user-languages__languages-wrapper {
       display: grid;
