@@ -287,6 +287,14 @@ const handleTableFilter: ICVsFilterFunction = (value, query, item) => {
   border-block: 1px solid var(--color-input-borders);
   border-right: 1px solid var(--color-input-borders);
 }
+:deep(
+    .cvs-page__text-field-wrapper
+      .v-field--active
+      .v-field__prepend-inner
+      .v-icon
+  ) {
+  opacity: 1;
+}
 :deep(.v-table > .v-table__wrapper > table > thead > tr > th) {
   font-family: $font-roboto;
   font-size: 14px;
