@@ -272,6 +272,7 @@ async function handleExportPDF() {
   flex-direction: column;
   align-items: center;
   &__main-content-wrapper {
+    width: 100%;
     display: flex;
     flex-direction: column;
     row-gap: 30px;
