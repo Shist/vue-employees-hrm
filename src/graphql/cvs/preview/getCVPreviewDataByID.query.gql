@@ -1,0 +1,35 @@
+query GET_CV_PREVIEW_DATA_BY_ID($cvId: ID!) {
+  cv(cvId: $cvId) {
+    id
+    name
+    education
+    description
+    user {
+      id
+      email
+      profile {
+        id
+        first_name
+        last_name
+        full_name
+      }
+      position_name
+    }
+    projects {
+      name
+      start_date
+      end_date
+      roles
+      responsibilities
+    }
+    skills {
+      name
+      category
+      mastery
+    }
+    languages {
+      name
+      proficiency
+    }
+  }
+}

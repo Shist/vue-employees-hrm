@@ -6,15 +6,22 @@ export interface ISkill {
   mastery: Mastery;
 }
 
-export interface ICategorySkill {
+export interface ICategorySkillData {
   name: string;
   mastery: Mastery;
   skillIndex: number;
+}
+
+export interface ICategorySkill extends ICategorySkillData {
   isDeleting: boolean;
 }
 
 export type ISkillCategoriesMap = {
   [key: string]: ICategorySkill[];
+};
+
+export type IPreviewSkillCategoriesMap = {
+  [key: string]: string[];
 };
 
 export interface ISkillsData {

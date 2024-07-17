@@ -185,6 +185,7 @@ function onUpdateBtnClicked() {
     row-gap: 2px;
     .user-info__name-caption {
       @include default-text(26px, 32px);
+      color: var(--color-text);
     }
     .user-info__mail-caption-wrapper {
       display: flex;
@@ -192,6 +193,7 @@ function onUpdateBtnClicked() {
       column-gap: 5px;
       .user-info__mail-caption {
         @include default-text(18px, 24px);
+        color: var(--color-text);
       }
       .user-info__mail-verified-icon {
         width: 24px;
@@ -201,6 +203,7 @@ function onUpdateBtnClicked() {
     }
     .user-info__date-caption {
       @include default-text(18px, 24px);
+      color: var(--color-text);
     }
   }
   &__info-inputs-form {

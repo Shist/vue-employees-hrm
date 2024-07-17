@@ -304,6 +304,15 @@ function handleCloseDeleteModal() {
 }
 :deep(.v-table > .v-table__wrapper > table > tbody > tr > td) {
   padding: 12px 16px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+}
+:deep(.v-table > .v-table__wrapper > table > tbody > tr > td:first-child) {
+  max-width: 200px;
+}
+:deep(.v-table > .v-table__wrapper > table > tbody > tr > td:nth-child(2)) {
+  max-width: 400px;
 }
 :deep(.v-table > .v-table__wrapper > table > thead > tr > th:last-child) {
   width: 80px;
