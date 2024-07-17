@@ -15,6 +15,13 @@ query GET_CV_PREVIEW_DATA_BY_ID($cvId: ID!) {
       }
       position_name
     }
+    projects {
+      name
+      start_date
+      end_date
+      roles
+      responsibilities
+    }
     skills {
       name
       category

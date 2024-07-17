@@ -17,8 +17,17 @@ export interface ICVPreviewServerData {
     };
     position_name: string | null;
   } | null;
+  projects: ICVPreviewProject[];
   skills: ICVPreviewSkill[];
   languages: ICVPreviewLanguage[];
+}
+
+export interface ICVPreviewProject {
+  name: string;
+  start_date: string;
+  end_date: string | null;
+  roles: string[];
+  responsibilities: string[];
 }
 
 export interface ICVPreviewSkill {
