@@ -17,7 +17,7 @@
           elevation="0"
           class="cv-preview__export-pdf-btn text-red-darken-4"
           @click="handleExportPDF"
-          :disabled="isExportBtnDisabled"
+          :loading="isExportBtnBusy"
         >
           Export PDF
         </v-btn>
@@ -94,7 +94,7 @@ import {
 import { IExportPDFInput } from "@/types/backend-interfaces/cv/exportPDFInput";
 
 const cvDocumentContent = ref<HTMLDivElement>();
-const isExportBtnDisabled = ref(false);
+const isExportBtnBusy = ref(false);
 
 const route = useRoute();
 
@@ -219,6 +219,8 @@ function fetchData() {
 async function handleExportPDF() {
   if (!cvDocumentContent.value) return;
 
+  console.log("handleExportPDF");
+
   const clonedContent = cvDocumentContent.value.cloneNode(true);
 
   const iframe = document.createElement("iframe");
@@ -263,7 +265,7 @@ async function handleExportPDF() {
     },
   };
 
-  isExportBtnDisabled.value = true;
+  isExportBtnBusy.value = true;
 
   try {
     const base64 = await exportPDF(exportPDFInput);
@@ -274,7 +276,7 @@ async function handleExportPDF() {
       setErrorToast(error.message);
     }
   } finally {
-    isExportBtnDisabled.value = false;
+    isExportBtnBusy.value = false;
   }
 
   document.body.removeChild(iframe);
@@ -336,9 +338,6 @@ function downloadPDF(base64: string) {
       .cv-preview__export-pdf-btn {
         border: 1px solid var(--color-text-red);
         border-radius: 0;
-        &:disabled {
-          filter: grayscale(50%);
-        }
       }
     }
     .cv-preview__cv-main-info-wrapper {
