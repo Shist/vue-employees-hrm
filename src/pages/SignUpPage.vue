@@ -1,10 +1,10 @@
 <template>
   <div class="sign-up">
     <auth-form
-      title="Register Now"
-      subtitleText="Welcome! Sign up to continue."
-      buttonText="SIGN UP"
-      linkText="I HAVE AN ACCOUNT"
+      :title="$t('signUp.title')"
+      :subtitleText="$t('signUp.subtitleText')"
+      :buttonText="$t('signUp.buttonText')"
+      :linkText="$t('signUp.linkText').toUpperCase()"
     />
   </div>
 </template>

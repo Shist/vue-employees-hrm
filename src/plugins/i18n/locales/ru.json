@@ -1,8 +1,23 @@
 {
+  "appHeader": {
+    "btnLogin": "войти",
+    "btnSignup": "создать"
+  },
   "signIn": {
     "title": "С Возвращением",
     "subtitleText": "Привет! Войдите, чтобы продолжить.",
-    "buttonText": "ВОЙТИ",
-    "linkText": "У МЕНЯ НЕТ АККАУНТА"
+    "buttonText": "войти",
+    "linkText": "у меня нет аккаунта"
+  },
+  "signUp": {
+    "title": "Зарегистрируйтесь Сейчас",
+    "subtitleText": "Привет! Создайте аккаунт, чтобы продолжить.",
+    "buttonText": "создать аккаунт",
+    "linkText": "у меня есть аккаунт"
+  },
+  "placeholder": {
+    "email": "Почта",
+    "password": "Пароль",
+    "search": "Поиск"
   }
 }

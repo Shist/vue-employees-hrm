@@ -13,7 +13,7 @@
         variant="outlined"
         density="compact"
         single-line
-        placeholder="Search"
+        :placeholder="$t('placeholder.search')"
         class="main-page__text-field-wrapper"
       />
       <v-data-table

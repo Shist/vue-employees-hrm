@@ -6,7 +6,7 @@
       <v-text-field
         v-model="formData.email"
         class="auth__input"
-        label="Email"
+        :label="$t('placeholder.email')"
         variant="outlined"
         :error-messages="formErrors.email"
       />
@@ -14,7 +14,7 @@
       <v-text-field
         v-model="formData.password"
         class="auth__input"
-        label="Password"
+        :label="$t('placeholder.password')"
         variant="outlined"
         :type="showPassword ? 'text' : 'password'"
         :append-inner-icon="showPassword ? 'mdi-eye' : 'mdi-eye-off'"

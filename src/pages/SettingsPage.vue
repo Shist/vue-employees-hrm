@@ -22,18 +22,44 @@
 <script setup lang="ts">
 import { ref, watch } from "vue";
 import { storeToRefs } from "pinia";
+import { useI18n } from "vue-i18n";
 import { useThemeStore } from "@/store/theme";
+import { useLangStore } from "@/store/lang";
 
 const { currTheme } = storeToRefs(useThemeStore());
+
+const langStore = useLangStore();
+const currLang = storeToRefs(langStore).currLang;
+
+const { locale } = useI18n({ useScope: "global" });
 
 const selectTheme = ref(currTheme.value);
 const themeItems = ["Light", "Dark", "Device settings"];
 
-const selectLanguage = ref("English");
+const selectLanguage = ref(currLang.value);
 const languageItems = ["English", "Deutsch", "Русский"];
 
 watch(selectTheme, (newValue) => {
   currTheme.value = newValue;
+});
+
+watch(selectLanguage, (newLocale) => {
+  if (newLocale === "Deutsch") {
+    locale.value = "de";
+    localStorage.setItem("language", locale.value);
+  } else if (newLocale === "Русский") {
+    locale.value = "ru";
+    localStorage.setItem("language", locale.value);
+  } else {
+    locale.value = "en";
+    localStorage.setItem("language", locale.value);
+  }
+});
+
+watch(locale, (newValue) => {
+  if (newValue) {
+    selectLanguage.value = currLang.value;
+  }
 });
 </script>
 

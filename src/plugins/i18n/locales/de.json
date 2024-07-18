@@ -1,0 +1,23 @@
+{
+  "appHeader": {
+    "btnLogin": "einloggen",
+    "btnSignup": "anmelden"
+  },
+  "signIn": {
+    "title": "Willkommen zurück",
+    "subtitleText": "Hallo nochmal! Melden Sie sich an, um fortzufahren.",
+    "buttonText": "anmelden",
+    "linkText": "ich habe kein konto"
+  },
+  "signUp": {
+    "title": "Jetzt registrieren",
+    "subtitleText": "Willkommen! Melden Sie sich an, um fortzufahren.",
+    "buttonText": "registrieren",
+    "linkText": "ich habe ein konto"
+  },
+  "placeholder": {
+    "email": "Email",
+    "password": "Passwort",
+    "search": "Suchen"
+  }
+}

@@ -2,10 +2,9 @@
   <div class="sign-in">
     <auth-form
       :title="$t('signIn.title')"
-      subtitleText="Hello again! Sign in
-    to continue."
-      buttonText="SIGN IN"
-      linkText="I DON'T HAVE AN ACCOUNT"
+      :subtitleText="$t('signIn.subtitleText')"
+      :buttonText="$t('signIn.buttonText')"
+      :linkText="$t('signIn.linkText').toUpperCase()"
     />
   </div>
 </template>

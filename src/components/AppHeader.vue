@@ -11,7 +11,7 @@
           ]"
           @click="handleIsActive"
         >
-          LOGIN
+          {{ $t("appHeader.btnLogin") }}
         </v-btn>
         <v-btn
           variant="text"
@@ -21,7 +21,7 @@
           ]"
           @click="handleIsActive"
         >
-          SIGNUP
+          {{ $t("appHeader.btnSignup") }}
         </v-btn>
       </div>
     </v-toolbar>
@@ -43,7 +43,7 @@
         <div class="toolbar__language text-white">
           <v-select :items="languages" v-model="language">
             <template v-slot:item="{ props, item }">
-              <v-list-item v-bind="props" :title="item.raw.value" />
+              <v-list-item v-bind="props" :title="item.value" />
             </template>
           </v-select>
         </div>
@@ -172,7 +172,9 @@
 import { computed, ref, watch } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import { storeToRefs } from "pinia";
+import { useI18n } from "vue-i18n";
 import { useAuthStore } from "@/store/authStore";
+import { useLangStore } from "@/store/lang";
 import { useScrollbarWidth } from "@/store/scrollbarWidth";
 import handleScrollPadding from "@/utils/handleScrollPadding";
 import { ROUTES } from "@/constants/router";
@@ -184,6 +186,11 @@ const route = useRoute();
 
 const authStore = useAuthStore();
 const user = storeToRefs(authStore).user;
+
+const langStore = useLangStore();
+const currLang = storeToRefs(langStore).currLang;
+
+const { locale } = useI18n({ useScope: "global" });
 
 const { scrollbarWidth } = storeToRefs(useScrollbarWidth());
 
@@ -198,7 +205,7 @@ const profileMenu = [
   { title: "Settings", link: ROUTES.SETTINGS.PATH, icon: "mdi-cog" },
 ];
 
-const language = ref<string>("English");
+const language = ref<string>(currLang.value);
 
 const drawer = ref<boolean>(false);
 
@@ -240,6 +247,25 @@ const handleLogout = (): void => {
 
 watch(drawer, (newValue) => {
   handleScrollPadding(newValue);
+});
+
+watch(language, (newLocale) => {
+  if (newLocale === "Deutsch") {
+    locale.value = "de";
+    localStorage.setItem("language", locale.value);
+  } else if (newLocale === "Русский") {
+    locale.value = "ru";
+    localStorage.setItem("language", locale.value);
+  } else {
+    locale.value = "en";
+    localStorage.setItem("language", locale.value);
+  }
+});
+
+watch(locale, (newValue) => {
+  if (newValue) {
+    language.value = currLang.value;
+  }
 });
 </script>
 

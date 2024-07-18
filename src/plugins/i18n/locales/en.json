@@ -1,8 +1,23 @@
 {
+  "appHeader": {
+    "btnLogin": "login",
+    "btnSignup": "signup"
+  },
   "signIn": {
     "title": "Welcome Back",
     "subtitleText": "Hello again! Sign in to continue.",
-    "buttonText": "SIGN IN",
-    "linkText": "I DON'T HAVE AN ACCOUNT"
+    "buttonText": "sign in",
+    "linkText": "i don't have an account"
+  },
+  "signUp": {
+    "title": "Register Now",
+    "subtitleText": "Welcome! Sign up to continue.",
+    "buttonText": "sign up",
+    "linkText": "i have an account"
+  },
+  "placeholder": {
+    "email": "Email",
+    "password": "Password",
+    "search": "Search"
   }
 }

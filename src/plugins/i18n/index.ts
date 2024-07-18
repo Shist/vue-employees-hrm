@@ -1,31 +1,16 @@
 import { createI18n } from "vue-i18n";
+import en from "@/plugins/i18n/locales/en.json";
+import ru from "@/plugins/i18n/locales/ru.json";
+import de from "@/plugins/i18n/locales/de.json";
 
-const messages = {
-  en: {
-    signIn: {
-      title: "Welcome Back",
-      subtitleText: "Hello again! Sign in to continue.",
-      buttonText: "SIGN IN",
-      linkText: "I DON'T HAVE AN ACCOUNT",
-    },
-  },
-  ru: {
-    signIn: {
-      title: "С Возвращением",
-      subtitleText: "Привет! Войдите, чтобы продолжить.",
-      buttonText: "ВОЙТИ",
-      linkText: "У МЕНЯ НЕТ АККАУНТА",
-    },
-  },
-};
+const localStorageLang = localStorage.getItem("language");
 
-export default createI18n({
-  locale: process.env.VUE_APP_DEFAULT_LOCALE,
+const i18n = createI18n({
+  locale: localStorageLang || process.env.VUE_APP_DEFAULT_LOCALE,
   fallbackLocale: process.env.VUE_APP_FALLBACK_LOCALE,
   legacy: false,
   globalInjection: true,
-  messages: {
-    en: require("./locales/en.json"),
-    ru: require("./locales/ru.json"),
-  },
+  messages: { en, ru, de },
 });
+
+export default i18n;
