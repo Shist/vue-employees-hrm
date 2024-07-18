@@ -12,5 +12,6 @@ query LOGIN($auth: AuthInput!) {
       }
     }
     access_token
+    refresh_token
   }
 }

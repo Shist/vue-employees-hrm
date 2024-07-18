@@ -11,5 +11,6 @@ mutation SIGN_UP($auth: AuthInput!) {
       }
     }
     access_token
+    refresh_token
   }
 }

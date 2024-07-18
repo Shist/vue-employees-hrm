@@ -1,6 +1,7 @@
 import apolloClient from "@/plugins/apolloConfig";
 import loginQuery from "@/graphql/auth/login.query.gql";
 import signupMutation from "@/graphql/auth/signUp.mutation.gql";
+import updateAccessTokenMutation from "@/graphql/auth/updateAccessToken.mutation.gql";
 import { getDetailedError } from "@/utils/handleErrors";
 
 export const login = async (email: string, password: string) => {
@@ -54,6 +55,18 @@ export const register = async (email: string, password: string) => {
     };
 
     return { user, token };
+  } catch (error: unknown) {
+    throw getDetailedError(error);
+  }
+};
+
+export const updateAccessToken = async () => {
+  try {
+    const response = (await apolloClient.mutate({
+      mutation: updateAccessTokenMutation,
+    })) as { data: { updateToken: { access_token: string } } };
+
+    return response.data.updateToken.access_token;
   } catch (error: unknown) {
     throw getDetailedError(error);
   }

@@ -11,10 +11,12 @@ import { IUserAuthData, ITokenData } from "@/types/authData";
 
 export const useAuthStore = defineStore("authStore", () => {
   const user = ref<IUserAuthData | null>(null);
-  const token = ref<string | null>(localStorage.getItem("token"));
 
-  const decodedToken = computed<ITokenData | null>(() => {
-    const decodedData = atob(token.value ? token.value.split(".")[1] : "");
+  const accessToken = ref<string | null>(localStorage.getItem("accessToken"));
+  const decodedAccessToken = computed<ITokenData | null>(() => {
+    const decodedData = atob(
+      accessToken.value ? accessToken.value.split(".")[1] : ""
+    );
     return decodedData ? JSON.parse(decodedData) : null;
   });
 
@@ -25,10 +27,12 @@ export const useAuthStore = defineStore("authStore", () => {
   const { setErrorToast } = useToast();
 
   const fetchUserAuthData = async () => {
-    if (!token.value) return;
+    if (!accessToken.value) return;
 
     try {
-      const userData = await getUserAuthDataById(`${decodedToken.value?.sub}`);
+      const userData = await getUserAuthDataById(
+        `${decodedAccessToken.value?.sub}`
+      );
 
       if (!userData) return;
 
@@ -56,10 +60,10 @@ export const useAuthStore = defineStore("authStore", () => {
     const result = await login(email, password);
     if (result) {
       user.value = result.user;
-      token.value = result.token;
+      accessToken.value = result.token;
     }
 
-    localStorage.setItem("token", `Bearer ${token.value}`);
+    localStorage.setItem("accessToken", `Bearer ${accessToken.value}`);
 
     wasAuthErrorToastShown.value = false;
   };
@@ -68,17 +72,17 @@ export const useAuthStore = defineStore("authStore", () => {
     const result = await register(email, password);
     if (result) {
       user.value = result.user;
-      token.value = result.token;
+      accessToken.value = result.token;
     }
 
-    localStorage.setItem("token", `Bearer ${token.value}`);
+    localStorage.setItem("accessToken", `Bearer ${accessToken.value}`);
 
     wasAuthErrorToastShown.value = false;
   };
 
   const logout = () => {
     user.value = null;
-    token.value = null;
+    accessToken.value = null;
     localStorage.removeItem("token");
     router.push(ROUTES.SIGN_IN.PATH);
   };
@@ -89,8 +93,6 @@ export const useAuthStore = defineStore("authStore", () => {
     loginUser,
     logout,
     registerUser,
-    token,
-    decodedToken,
     wasAuthErrorToastShown,
   };
 });
