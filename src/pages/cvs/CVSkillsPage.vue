@@ -177,10 +177,6 @@ onMounted(() => {
   fetchData();
 });
 
-watch(cvId, () => {
-  fetchData();
-});
-
 watch(isModalOpen, (newValue) => {
   handleScrollPadding(newValue);
 });

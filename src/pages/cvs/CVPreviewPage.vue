@@ -139,7 +139,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, reactive, computed, watch, onMounted } from "vue";
+import { ref, reactive, computed, onMounted } from "vue";
 import { useRoute } from "vue-router";
 import useToast from "@/composables/useToast";
 import useErrorState from "@/composables/useErrorState";
@@ -233,10 +233,6 @@ const previewSkillCategoriesMap = computed(() => {
 const empProjects = reactive<ICvPreviewProject[]>([]);
 
 onMounted(() => {
-  fetchData();
-});
-
-watch(cvId, () => {
   fetchData();
 });
 

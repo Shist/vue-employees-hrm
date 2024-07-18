@@ -42,7 +42,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, watch, onMounted } from "vue";
+import { ref, computed, onMounted } from "vue";
 import { useRoute } from "vue-router";
 import { storeToRefs } from "pinia";
 import { useAuthStore } from "@/store/authStore";
@@ -93,10 +93,6 @@ const isUpdateBtnDisabled = computed(
 );
 
 onMounted(() => {
-  fetchData();
-});
-
-watch(cvId, () => {
   fetchData();
 });
 

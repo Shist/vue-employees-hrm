@@ -142,12 +142,6 @@ onMounted(async () => {
   isLoading.value = false;
 });
 
-watch(userId, async () => {
-  isLoading.value = true;
-  await fetchData();
-  isLoading.value = false;
-});
-
 watch(isCreateModalOpen, (newValue) => {
   handleScrollPadding(newValue);
 });
