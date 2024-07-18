@@ -1,4 +1,4 @@
-import { Proficiency } from "@/types/languageProficiency";
+import { Proficiency } from "@/types/enums";
 
 export interface ILanguagesNamesData {
   id: number;

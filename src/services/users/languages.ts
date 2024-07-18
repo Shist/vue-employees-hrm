@@ -8,7 +8,7 @@ import {
   IProfileLanguage,
   IAddOrUpdateProfileLanguageInput,
   IDeleteProfileLanguageInput,
-} from "@/types/userLanguagesUI";
+} from "@/types/pages/users/languages";
 
 export const getUserLanguagesById = async (id: string) => {
   try {

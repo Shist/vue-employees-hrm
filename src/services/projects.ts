@@ -2,8 +2,8 @@ import apolloClient from "@/plugins/apolloConfig";
 import getAllProjectsQuery from "@/graphql/projects/getAllProjects.query.gql";
 import getAllProjectsCvDataQuery from "@/graphql/projects/getAllProjectsCvData.query.gql";
 import { getDetailedError } from "@/utils/handleErrors";
-import { IProjectsTableServerData } from "@/types/projectsTableUI";
-import { IProjectsServerData } from "@/types/cvProjectsUI";
+import { IProjectsTableServerData } from "@/types/pages/projectsTable";
+import { IProjectsServerData } from "@/types/pages/cvs/projects";
 
 export const getAllProjects = async () => {
   try {

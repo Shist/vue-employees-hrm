@@ -111,13 +111,13 @@ import {
 } from "@/services/users/languages";
 import { getAllLanguagesNames } from "@/services/languages";
 import handleScrollPadding from "@/utils/handleScrollPadding";
-import { Proficiency } from "@/types/languageProficiency";
+import { Proficiency } from "@/types/enums";
 import {
   ILanguagesNamesData,
   IProfileLanguage,
   IAddOrUpdateProfileLanguageInput,
   IDeleteProfileLanguageInput,
-} from "@/types/userLanguagesUI";
+} from "@/types/pages/users/languages";
 
 const route = useRoute();
 

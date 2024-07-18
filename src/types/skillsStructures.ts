@@ -1,4 +1,4 @@
-import { Mastery } from "@/types/skillMastery";
+import { Mastery } from "@/types/enums";
 
 export interface ISkill {
   name: string;
@@ -20,10 +20,6 @@ export type ISkillCategoriesMap = {
   [key: string]: ICategorySkill[];
 };
 
-export type IPreviewSkillCategoriesMap = {
-  [key: string]: string[];
-};
-
 export interface ISkillsData {
   id: number;
   name: string;
@@ -36,28 +32,4 @@ export interface ICvSkillsServerData {
   user: {
     id: string;
   } | null;
-}
-
-export interface IAddOrUpdateProfileSkillInput {
-  userId: number;
-  name: string;
-  category: string | null;
-  mastery: Mastery;
-}
-
-export interface IDeleteProfileSkillInput {
-  userId: number;
-  name: string[];
-}
-
-export interface IAddOrUpdateCvSkillInput {
-  cvId: number;
-  name: string;
-  category: string | null;
-  mastery: Mastery;
-}
-
-export interface IDeleteCvSkillInput {
-  cvId: number;
-  name: string[];
 }

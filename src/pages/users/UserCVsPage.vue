@@ -93,8 +93,8 @@ import { getUserCvsNamesById } from "@/services/users/cvs";
 import { createCv, deleteCv } from "@/services/cvs/cvs";
 import handleScrollPadding from "@/utils/handleScrollPadding";
 import { ROUTES } from "@/constants/router";
-import { IUserCvNameData } from "@/types/userCvsUI";
-import { ICreateCvInput, IDeleteCvInput } from "@/types/cvsUI";
+import { IUserCvNameData } from "@/types/pages/users/cvs";
+import { ICreateCvInput, IDeleteCvInput } from "@/types/cvsOperations";
 
 const router = useRouter();
 const route = useRoute();

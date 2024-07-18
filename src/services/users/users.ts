@@ -3,9 +3,9 @@ import getAllUsersQuery from "@/graphql/users/getAllUsers.query.gql";
 import getUserAuthDataByIdQuery from "@/graphql/users/getUserAuthDataById.query.gql";
 import getUserFullnameByIdQuery from "@/graphql/users/getUserFullnameById.query.gql";
 import { checkUserId, getDetailedError } from "@/utils/handleErrors";
-import { IUsersTableServerData } from "@/types/usersTableUI";
-import { IUsersNameServerData } from "@/types/breadcrumbsUI";
-import { IUserAuthServerData } from "@/types/userAuthUI";
+import { IUsersTableServerData } from "@/types/pages/users/table";
+import { IUsersNameServerData } from "@/types/navigation";
+import { IUserAuthServerData } from "@/types/authData";
 
 export const getAllUsers = async () => {
   try {

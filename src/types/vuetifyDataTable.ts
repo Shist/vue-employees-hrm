@@ -1,12 +1,12 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { IUsersTableData } from "@/types/usersTableUI";
-import { IProjectsTableData } from "@/types/projectsTableUI";
-import { ICvsTableData } from "@/types/cvsTableUI";
-import { IDepartmentsTableData } from "@/types/departmentsTableUI";
-import { IPositionsTableData } from "@/types/positionsTableUI";
-import { ISkillsTableData } from "@/types/skillsTableUI";
-import { ILanguagesTableData } from "@/types/languagesTableUI";
-import { ICvProjectsTableData } from "@/types/cvProjectsUI";
+import { IUsersTableData } from "@/types/pages/users/table";
+import { IProjectsTableData } from "@/types/pages/projectsTable";
+import { ICvsTableData } from "@/types/pages/cvs/table";
+import { IDepartmentsTableData } from "@/types/pages/departmentsTable";
+import { IPositionsTableData } from "@/types/pages/positionsTable";
+import { ISkillsTableData } from "@/types/pages/skillsTable";
+import { ILanguagesTableData } from "@/types/pages/languagesTable";
+import { ICvProjectsTableData } from "@/types/pages/cvs/projects";
 
 type FilterMatch = boolean | number | [number, number] | [number, number][];
 

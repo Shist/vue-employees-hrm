@@ -67,7 +67,7 @@ import { useRouter } from "vue-router";
 import useErrorState from "@/composables/useErrorState";
 import { getAllUsers } from "@/services/users/users";
 import { ROUTES } from "@/constants/router";
-import { IUsersTableData } from "@/types/usersTableUI";
+import { IUsersTableData } from "@/types/pages/users/table";
 import { IUsersFilterFunction } from "@/types/vuetifyDataTable";
 
 const router = useRouter();

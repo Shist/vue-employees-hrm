@@ -84,9 +84,11 @@ import {
   ISkillCategoriesMap,
   ICategorySkill,
   ISkillsData,
+} from "@/types/skillsStructures";
+import {
   IAddOrUpdateCvSkillInput,
   IDeleteCvSkillInput,
-} from "@/types/skillsUI";
+} from "@/types/pages/cvs/skills";
 
 const route = useRoute();
 

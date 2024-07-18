@@ -69,7 +69,7 @@ import {
   IPositionNamesData,
   IUpdateUserInput,
   IUpdateProfileInput,
-} from "@/types/userProfileUI";
+} from "@/types/pages/users/profile";
 
 const props = defineProps<{
   isOwner: boolean;

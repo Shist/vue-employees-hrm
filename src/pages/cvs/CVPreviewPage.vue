@@ -150,11 +150,9 @@ import {
   ICvPreviewSkill,
   ICvPreviewProject,
   IExportPDFInput,
-} from "@/types/cvPreviewUI";
-import {
   IPreviewSkillCategoriesMap,
-  ICategorySkillData,
-} from "@/types/skillsUI";
+} from "@/types/pages/cvs/preview";
+import { ICategorySkillData } from "@/types/skillsStructures";
 
 const cvDocumentContent = ref<HTMLDivElement>();
 const isExportBtnBusy = ref(false);

@@ -110,7 +110,7 @@ import {
   IProjectsData,
   IAddOrUpdateCvProjectInput,
   IRemoveCvProjectInput,
-} from "@/types/cvProjectsUI";
+} from "@/types/pages/cvs/projects";
 import { ICvProjectsFilterFunction } from "@/types/vuetifyDataTable";
 
 const route = useRoute();

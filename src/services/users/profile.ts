@@ -10,7 +10,7 @@ import {
   IUploadAvatarInput,
   IUpdateUserInput,
   IUpdateProfileInput,
-} from "@/types/userProfileUI";
+} from "@/types/pages/users/profile";
 
 export const getUserProfileById = async (id: string) => {
   try {

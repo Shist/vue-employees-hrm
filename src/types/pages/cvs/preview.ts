@@ -1,5 +1,4 @@
-import { Mastery } from "@/types/skillMastery";
-import { Proficiency } from "@/types/languageProficiency";
+import { Mastery, Proficiency } from "@/types/enums";
 
 export interface ICvPreviewServerData {
   id: string;
@@ -41,6 +40,11 @@ export interface ICvPreviewLanguage {
   proficiency: Proficiency;
 }
 
+export interface IExportPDFInput {
+  html: string;
+  margin: IMarginInput | null;
+}
+
 export interface IMarginInput {
   top: string;
   bottom: string;
@@ -48,7 +52,6 @@ export interface IMarginInput {
   right: string;
 }
 
-export interface IExportPDFInput {
-  html: string;
-  margin: IMarginInput | null;
-}
+export type IPreviewSkillCategoriesMap = {
+  [key: string]: string[];
+};

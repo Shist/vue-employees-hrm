@@ -1,7 +1,7 @@
 import apolloClient from "@/plugins/apolloConfig";
 import getUserCvsNamesByIdQuery from "@/graphql/users/cvs/getUserCvsNamesById.query.gql";
 import { checkUserId, getDetailedError } from "@/utils/handleErrors";
-import { IUserCvNameData } from "@/types/userCvsUI";
+import { IUserCvNameData } from "@/types/pages/users/cvs";
 
 export const getUserCvsNamesById = async (id: string) => {
   try {

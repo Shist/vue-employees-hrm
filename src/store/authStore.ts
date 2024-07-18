@@ -7,8 +7,7 @@ import { getUserAuthDataById } from "@/services/users/users";
 import { handleLogout } from "@/utils/handleErrors";
 import { ROUTES } from "@/constants/router";
 import { UNAUTHORIZED_ERROR } from "@/constants/errorMessage";
-import { IUserAuthData } from "@/types/userAuthUI";
-import { ITokenData } from "@/types/tokenData";
+import { IUserAuthData, ITokenData } from "@/types/authData";
 
 export const useAuthStore = defineStore("authStore", () => {
   const user = ref<IUserAuthData | null>(null);

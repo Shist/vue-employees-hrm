@@ -49,8 +49,8 @@
 </template>
 
 <script setup lang="ts">
-import { IUploadAvatarInput } from "@/types/userProfileUI";
 import fileToBase64 from "@/utils/fileToBase64";
+import { IUploadAvatarInput } from "@/types/pages/users/profile";
 
 const props = defineProps<{
   isOwner: boolean;

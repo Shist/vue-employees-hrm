@@ -62,7 +62,7 @@
 
 <script setup lang="ts">
 import { ref, computed, onUpdated } from "vue";
-import { ICreateCvInput } from "@/types/cvsUI";
+import { ICreateCvInput } from "@/types/cvsOperations";
 
 const props = defineProps<{
   isOpen: boolean;

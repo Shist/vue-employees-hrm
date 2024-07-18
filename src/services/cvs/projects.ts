@@ -7,7 +7,7 @@ import {
   ICvProjectsTableServerData,
   IAddOrUpdateCvProjectInput,
   IRemoveCvProjectInput,
-} from "@/types/cvProjectsUI";
+} from "@/types/pages/cvs/projects";
 
 export const getCvProjectsById = async (id: string) => {
   try {

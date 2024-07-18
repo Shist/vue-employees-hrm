@@ -56,7 +56,7 @@
 import { onMounted, reactive, ref } from "vue";
 import useErrorState from "@/composables/useErrorState";
 import { getAllSkills } from "@/services/skills";
-import { ISkillsTableData } from "@/types/skillsTableUI";
+import { ISkillsTableData } from "@/types/pages/skillsTable";
 import { ISkillsFilterFunction } from "@/types/vuetifyDataTable";
 
 const search = ref("");

@@ -4,10 +4,10 @@ import createCvQuery from "@/graphql/cvs/createCv.mutation.gql";
 import deleteCvQuery from "@/graphql/cvs/deleteCv.mutation.gql";
 import getAllCvsQuery from "@/graphql/cvs/getAllCvs.query.gql";
 import { checkCvId, getDetailedError } from "@/utils/handleErrors";
-import { ICvNameData } from "@/types/breadcrumbsUI";
-import { IUserCvNameData } from "@/types/userCvsUI";
-import { ICreateCvInput, IDeleteCvInput } from "@/types/cvsUI";
-import { ICvsTableServerData } from "@/types/cvsTableUI";
+import { ICvNameData } from "@/types/navigation";
+import { IUserCvNameData } from "@/types/pages/users/cvs";
+import { ICreateCvInput, IDeleteCvInput } from "@/types/cvsOperations";
+import { ICvsTableServerData } from "@/types/pages/cvs/table";
 
 export const getAllCvs = async () => {
   try {

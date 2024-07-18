@@ -44,7 +44,7 @@
 
 <script setup lang="ts">
 import { computed } from "vue";
-import { IRemoveCvProjectInput } from "@/types/backend-interfaces/cv/project";
+import { IRemoveCvProjectInput } from "@/types/pages/cvs/projects";
 
 const props = defineProps<{
   isOpen: boolean;

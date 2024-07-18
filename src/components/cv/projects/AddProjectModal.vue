@@ -51,7 +51,7 @@ import { ref, computed, onUpdated } from "vue";
 import {
   IProjectsData,
   IAddOrUpdateCvProjectInput,
-} from "@/types/cvProjectsUI";
+} from "@/types/pages/cvs/projects";
 
 const props = defineProps<{
   isOpen: boolean;

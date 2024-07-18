@@ -56,7 +56,7 @@
 import { onMounted, reactive, ref } from "vue";
 import useErrorState from "@/composables/useErrorState";
 import { getAllDepartmentNames } from "@/services/departments";
-import { IDepartmentsTableData } from "@/types/departmentsTableUI";
+import { IDepartmentsTableData } from "@/types/pages/departmentsTable";
 import { IDepartmentsFilterFunction } from "@/types/vuetifyDataTable";
 
 const search = ref("");

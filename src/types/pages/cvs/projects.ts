@@ -7,6 +7,13 @@ export interface ICvProjectsTableData {
   endDate: string | null;
 }
 
+export interface ICvProjectsTableServerData {
+  user: {
+    id: string;
+  } | null;
+  projects: ICvProject[] | null;
+}
+
 export interface ICvProject {
   project: {
     id: number;
@@ -16,13 +23,6 @@ export interface ICvProject {
   domain: string;
   start_date: string;
   end_date: string | null;
-}
-
-export interface ICvProjectsTableServerData {
-  user: {
-    id: string;
-  } | null;
-  projects: ICvProject[] | null;
 }
 
 export interface IProjectsData {

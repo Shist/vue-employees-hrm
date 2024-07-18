@@ -4,11 +4,11 @@ import createCvSkillQuery from "@/graphql/cvs/skills/createCvSkill.mutation.gql"
 import updateCvSkillQuery from "@/graphql/cvs/skills/updateCvSkill.mutation.gql";
 import deleteCvSkillsQuery from "@/graphql/cvs/skills/deleteCvSkills.mutation.gql";
 import { checkCvId, getDetailedError } from "@/utils/handleErrors";
+import { ICvSkillsServerData } from "@/types/skillsStructures";
 import {
-  ICvSkillsServerData,
   IAddOrUpdateCvSkillInput,
   IDeleteCvSkillInput,
-} from "@/types/skillsUI";
+} from "@/types/pages/cvs/skills";
 
 export const getCvSkillsById = async (id: string) => {
   try {

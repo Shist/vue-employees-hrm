@@ -90,8 +90,8 @@ import useErrorState from "@/composables/useErrorState";
 import { createCv, deleteCv, getAllCvs } from "@/services/cvs/cvs";
 import handleScrollPadding from "@/utils/handleScrollPadding";
 import { ROUTES } from "@/constants/router";
-import { ICreateCvInput, IDeleteCvInput } from "@/types/cvsUI";
-import { ICvsTableData } from "@/types/cvsTableUI";
+import { ICreateCvInput, IDeleteCvInput } from "@/types/cvsOperations";
+import { ICvsTableData } from "@/types/pages/cvs/table";
 import { ICvsFilterFunction } from "@/types/vuetifyDataTable";
 
 const router = useRouter();

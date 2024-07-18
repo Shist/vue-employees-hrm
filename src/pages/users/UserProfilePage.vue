@@ -56,7 +56,7 @@ import {
   IUploadAvatarInput,
   IUpdateUserInput,
   IUpdateProfileInput,
-} from "@/types/userProfileUI";
+} from "@/types/pages/users/profile";
 
 const route = useRoute();
 

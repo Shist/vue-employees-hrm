@@ -83,9 +83,11 @@ import {
   ISkillCategoriesMap,
   ICategorySkill,
   ISkillsData,
+} from "@/types/skillsStructures";
+import {
   IAddOrUpdateProfileSkillInput,
   IDeleteProfileSkillInput,
-} from "@/types/skillsUI";
+} from "@/types/pages/users/skills";
 
 const route = useRoute();
 
