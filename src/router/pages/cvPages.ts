@@ -1,13 +1,13 @@
-import CVsPage from "@/pages/cvs/CVsPage.vue";
-import CVDetailsPage from "@/pages/cvs/CVDetailsPage.vue";
-import CVSkillsPage from "@/pages/cvs/CVSkillsPage.vue";
-import CVProjectsPage from "@/pages/cvs/CVProjectsPage.vue";
-import CVPreviewPage from "@/pages/cvs/CVPreviewPage.vue";
+import CvsPage from "@/pages/cvs/CvsPage.vue";
+import CvDetailsPage from "@/pages/cvs/CvDetailsPage.vue";
+import CvSkillsPage from "@/pages/cvs/CvSkillsPage.vue";
+import CvProjectsPage from "@/pages/cvs/CvProjectsPage.vue";
+import CvPreviewPage from "@/pages/cvs/CvPreviewPage.vue";
 
 export default {
-  CVsPage,
-  CVDetailsPage,
-  CVSkillsPage,
-  CVProjectsPage,
-  CVPreviewPage,
+  CvsPage,
+  CvDetailsPage,
+  CvSkillsPage,
+  CvProjectsPage,
+  CvPreviewPage,
 };

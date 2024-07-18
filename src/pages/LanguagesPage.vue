@@ -56,7 +56,7 @@
 import { onMounted, reactive, ref } from "vue";
 import useErrorState from "@/composables/useErrorState";
 import { getAllLanguages } from "@/services/languages";
-import { ILanguagesTableData } from "@/types/languagesTableUI";
+import { ILanguagesTableData } from "@/types/pages/languagesTable";
 import { ILanguagesFilterFunction } from "@/types/vuetifyDataTable";
 
 const search = ref("");

@@ -61,17 +61,17 @@
 
 <script setup lang="ts">
 import { ref, computed, onUpdated } from "vue";
-import { Proficiency } from "@/types/backend-interfaces/language/proficiency";
+import { Proficiency } from "@/types/enums";
 import {
+  ILanguagesNamesData,
   IProfileLanguage,
   IAddOrUpdateProfileLanguageInput,
-} from "@/types/backend-interfaces/user/profile/language";
-import { ILanguagesNamesData } from "@/types/userLanguagesUI";
+} from "@/types/pages/users/languages";
 
 const props = defineProps<{
   isOpen: boolean;
   oLanguageForModal: IProfileLanguage | null;
-  userID: string;
+  userId: string;
   languages: ILanguagesNamesData[] | null;
 }>();
 
@@ -121,7 +121,7 @@ onUpdated(() => {
 
 function makeCreateOrUpdateOperation() {
   const languageInputObj: IAddOrUpdateProfileLanguageInput = {
-    userId: Number(props.userID),
+    userId: Number(props.userId),
     name: `${selectLanguage.value}`,
     proficiency: selectLanguageProficiency.value,
   };

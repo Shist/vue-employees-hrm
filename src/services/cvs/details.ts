@@ -1,18 +1,18 @@
 import apolloClient from "@/plugins/apolloConfig";
-import getCVDetailsByIDQuery from "@/graphql/cvs/details/getCVDetailsByID.query.gql";
-import updateCVQuery from "@/graphql/cvs/details/updateCV.mutation.gql";
-import { checkCvID, getDetailedError } from "@/utils/handleErrors";
-import { ICVDetailsServerData } from "@/types/cvDetailsUI";
-import { IUpdateCVInput } from "@/types/backend-interfaces/cv";
+import getCvDetailsByIdQuery from "@/graphql/cvs/details/getCvDetailsById.query.gql";
+import updateCvQuery from "@/graphql/cvs/details/updateCv.mutation.gql";
+import { checkCvId, getDetailedError } from "@/utils/handleErrors";
+import { ICvDetailsServerData } from "@/types/pages/cvs/details";
+import { IUpdateCvInput } from "@/types/cvsOperations";
 
-export const getCVDetailsDataByID = async (id: string) => {
+export const getCvDetailsDataById = async (id: string) => {
   try {
-    checkCvID(id);
+    checkCvId(id);
 
     const response = (await apolloClient.query({
-      query: getCVDetailsByIDQuery,
+      query: getCvDetailsByIdQuery,
       variables: { cvId: Number(id) },
-    })) as { data: { cv: ICVDetailsServerData } };
+    })) as { data: { cv: ICvDetailsServerData } };
 
     return response.data.cv;
   } catch (error: unknown) {
@@ -20,12 +20,12 @@ export const getCVDetailsDataByID = async (id: string) => {
   }
 };
 
-export const updateCV = async (inputCVObj: IUpdateCVInput) => {
+export const updateCv = async (inputCvObj: IUpdateCvInput) => {
   try {
     const response = (await apolloClient.mutate({
-      mutation: updateCVQuery,
-      variables: { cv: inputCVObj },
-    })) as { data: { updateCv: ICVDetailsServerData } };
+      mutation: updateCvQuery,
+      variables: { cv: inputCvObj },
+    })) as { data: { updateCv: ICvDetailsServerData } };
 
     return response.data.updateCv;
   } catch (error: unknown) {

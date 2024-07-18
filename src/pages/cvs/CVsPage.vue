@@ -52,7 +52,7 @@
                 v-for="cvItem in cvMenuItems"
                 :key="cvItem.title"
                 v-on:click="cvItem.click(item.id, item.name)"
-                :disabled="checkOwner(cvItem.title, item.userID)"
+                :disabled="checkOwner(cvItem.title, item.userId)"
               >
                 <v-list-item-title class="cvs-page__popup-menu-label">
                   {{ cvItem.title }}
@@ -64,17 +64,17 @@
       </v-data-table>
     </div>
   </div>
-  <CreateCVModal
+  <CreateCvModal
     :isOpen="isCreateModalOpen"
-    :userID="`${authStoreUser?.id}`"
-    @onCreateUserCV="submitUserCVCreate"
+    :userId="`${authStoreUser?.id}`"
+    @onCreateUserCv="submitUserCvCreate"
     @closeModal="handleCloseCreateModal"
   />
-  <DeleteCVModal
+  <DeleteCvModal
     :isOpen="isDeleteModalOpen"
-    :cvID="deletingCVID"
-    :cvName="deletingCVName"
-    @onDeleteUserCV="submitUserCVDeletion"
+    :cvId="deletingCvId"
+    :cvName="deletingCvName"
+    @onDeleteUserCv="submitUserCvDeletion"
     @closeModal="handleCloseDeleteModal"
   />
 </template>
@@ -84,23 +84,23 @@ import { onMounted, reactive, ref, watch } from "vue";
 import { useRouter } from "vue-router";
 import { storeToRefs } from "pinia";
 import { useAuthStore } from "@/store/authStore";
-import CreateCVModal from "@/components/user/cvs/CreateCVModal.vue";
-import DeleteCVModal from "@/components/user/cvs/DeleteCVModal.vue";
+import CreateCvModal from "@/components/user/cvs/CreateCvModal.vue";
+import DeleteCvModal from "@/components/user/cvs/DeleteCvModal.vue";
 import useErrorState from "@/composables/useErrorState";
-import { createCV, deleteCV, getAllCvs } from "@/services/cvs/cvs";
+import { createCv, deleteCv, getAllCvs } from "@/services/cvs/cvs";
 import handleScrollPadding from "@/utils/handleScrollPadding";
 import { ROUTES } from "@/constants/router";
-import { ICreateCVInput, IDeleteCVInput } from "@/types/backend-interfaces/cv";
-import { ICvsTableData } from "@/types/cvsTableUI";
-import { ICVsFilterFunction } from "@/types/vuetifyDataTable";
+import { ICreateCvInput, IDeleteCvInput } from "@/types/cvsOperations";
+import { ICvsTableData } from "@/types/pages/cvs/table";
+import { ICvsFilterFunction } from "@/types/vuetifyDataTable";
 
 const router = useRouter();
 
 const authStore = useAuthStore();
 const authStoreUser = storeToRefs(authStore).user;
 
-const deletingCVID = ref<string | null>(null);
-const deletingCVName = ref<string | null>(null);
+const deletingCvId = ref<string | null>(null);
+const deletingCvName = ref<string | null>(null);
 
 const search = ref("");
 
@@ -155,7 +155,7 @@ async function fetchData() {
         description: cv.description,
         education: cv.education ? cv.education : "",
         email: cv.user ? cv.user.email : "",
-        userID: cv.user ? cv.user.id : null,
+        userId: cv.user ? cv.user.id : null,
       }))
     );
 
@@ -165,13 +165,13 @@ async function fetchData() {
   }
 }
 
-function checkOwner(cvItemTitle: string, cvUserID: number | null) {
+function checkOwner(cvItemTitle: string, cvUserId: number | null) {
   if (cvItemTitle === "Details") return false;
-  return Number(authStoreUser.value?.id) !== Number(cvUserID);
+  return Number(authStoreUser.value?.id) !== Number(cvUserId);
 }
 
-function openCvDetails(cvID: number) {
-  router.push(`${ROUTES.CVS.PATH}/${cvID}`);
+function openCvDetails(cvId: number) {
+  router.push(`${ROUTES.CVS.PATH}/${cvId}`);
 }
 
 function handleOpenCreateModal() {
@@ -182,9 +182,9 @@ function handleCloseCreateModal() {
   isCreateModalOpen.value = false;
 }
 
-function handleOpenDeleteModal(cvID: number, cvName: string) {
-  deletingCVID.value = cvID.toString();
-  deletingCVName.value = cvName;
+function handleOpenDeleteModal(cvId: number, cvName: string) {
+  deletingCvId.value = cvId.toString();
+  deletingCvName.value = cvName;
   isDeleteModalOpen.value = true;
 }
 
@@ -192,11 +192,11 @@ function handleCloseDeleteModal() {
   isDeleteModalOpen.value = false;
 }
 
-async function submitUserCVCreate(cvInputObj: ICreateCVInput) {
+async function submitUserCvCreate(cvInputObj: ICreateCvInput) {
   isLoading.value = true;
 
   try {
-    await createCV(cvInputObj);
+    await createCv(cvInputObj);
 
     await fetchData();
 
@@ -208,11 +208,11 @@ async function submitUserCVCreate(cvInputObj: ICreateCVInput) {
   }
 }
 
-async function submitUserCVDeletion(cvInputObj: IDeleteCVInput) {
+async function submitUserCvDeletion(cvInputObj: IDeleteCvInput) {
   isLoading.value = true;
 
   try {
-    await deleteCV(cvInputObj);
+    await deleteCv(cvInputObj);
 
     await fetchData();
 
@@ -224,7 +224,7 @@ async function submitUserCVDeletion(cvInputObj: IDeleteCVInput) {
   }
 }
 
-const handleTableFilter: ICVsFilterFunction = (value, query, item) => {
+const handleTableFilter: ICvsFilterFunction = (value, query, item) => {
   if (!item) return false;
   return (
     item.raw.name.toLowerCase().includes(query.toLowerCase()) ||

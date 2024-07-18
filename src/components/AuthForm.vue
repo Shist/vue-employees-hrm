@@ -54,7 +54,7 @@ import {
   PASSWORD_MINLENGTH_FIELD,
   PASSWORD_REQUIRED_FIELD,
 } from "@/constants/errorMessage";
-import { IForm, IAuthForm } from "@/types/form";
+import { IForm, IAuthForm } from "@/types/forms";
 
 const authStore = useAuthStore();
 

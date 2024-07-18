@@ -1,13 +1,13 @@
 import apolloClient from "@/plugins/apolloConfig";
-import getCVNameByIDQuery from "@/graphql/cvs/getCVNameByID.query.gql";
-import createCVQuery from "@/graphql/cvs/createCV.mutation.gql";
-import deleteCVQuery from "@/graphql/cvs/deleteCV.mutation.gql";
+import getCvNameByIdQuery from "@/graphql/cvs/getCvNameById.query.gql";
+import createCvQuery from "@/graphql/cvs/createCv.mutation.gql";
+import deleteCvQuery from "@/graphql/cvs/deleteCv.mutation.gql";
 import getAllCvsQuery from "@/graphql/cvs/getAllCvs.query.gql";
-import { checkCvID, getDetailedError } from "@/utils/handleErrors";
-import { ICVNameData } from "@/types/breadcrumbsUI";
-import { IUserCVNameData } from "@/types/userCVsUI";
-import { ICreateCVInput, IDeleteCVInput } from "@/types/backend-interfaces/cv";
-import { ICvsTableServerData } from "@/types/cvsTableUI";
+import { checkCvId, getDetailedError } from "@/utils/handleErrors";
+import { ICvNameData } from "@/types/navigation";
+import { IUserCvNameData } from "@/types/pages/users/cvs";
+import { ICreateCvInput, IDeleteCvInput } from "@/types/cvsOperations";
+import { ICvsTableServerData } from "@/types/pages/cvs/table";
 
 export const getAllCvs = async () => {
   try {
@@ -21,14 +21,14 @@ export const getAllCvs = async () => {
   }
 };
 
-export const getCVNameDataByID = async (id: string) => {
+export const getCvNameDataById = async (id: string) => {
   try {
-    checkCvID(id);
+    checkCvId(id);
 
     const response = (await apolloClient.query({
-      query: getCVNameByIDQuery,
+      query: getCvNameByIdQuery,
       variables: { cvId: Number(id) },
-    })) as { data: { cv: ICVNameData } };
+    })) as { data: { cv: ICvNameData } };
 
     return response.data.cv;
   } catch (error: unknown) {
@@ -36,12 +36,12 @@ export const getCVNameDataByID = async (id: string) => {
   }
 };
 
-export const createCV = async (inputCVObj: ICreateCVInput) => {
+export const createCv = async (inputCvObj: ICreateCvInput) => {
   try {
     const response = (await apolloClient.mutate({
-      mutation: createCVQuery,
-      variables: { cv: inputCVObj },
-    })) as { data: { createCv: IUserCVNameData } };
+      mutation: createCvQuery,
+      variables: { cv: inputCvObj },
+    })) as { data: { createCv: IUserCvNameData } };
 
     return response.data.createCv;
   } catch (error: unknown) {
@@ -49,11 +49,11 @@ export const createCV = async (inputCVObj: ICreateCVInput) => {
   }
 };
 
-export const deleteCV = async (inputCVObj: IDeleteCVInput) => {
+export const deleteCv = async (inputCvObj: IDeleteCvInput) => {
   try {
     await apolloClient.mutate({
-      mutation: deleteCVQuery,
-      variables: { cv: inputCVObj },
+      mutation: deleteCvQuery,
+      variables: { cv: inputCvObj },
     });
   } catch (error: unknown) {
     throw getDetailedError(error);

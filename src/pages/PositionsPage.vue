@@ -56,7 +56,7 @@
 import { onMounted, reactive, ref } from "vue";
 import useErrorState from "@/composables/useErrorState";
 import { getAllPositionNames } from "@/services/positions";
-import { IPositionsTableData } from "@/types/positionsTableUI";
+import { IPositionsTableData } from "@/types/pages/positionsTable";
 import { IPositionsFilterFunction } from "@/types/vuetifyDataTable";
 
 const search = ref("");

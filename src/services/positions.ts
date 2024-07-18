@@ -1,7 +1,7 @@
 import apolloClient from "@/plugins/apolloConfig";
 import getAllPositionNamesQuery from "@/graphql/positions/getAllPositionNames.query.gql";
 import { getDetailedError } from "@/utils/handleErrors";
-import { IPositionNamesData } from "@/types/userProfileUI";
+import { IPositionNamesData } from "@/types/pages/users/profile";
 
 export const getAllPositionNames = async () => {
   try {

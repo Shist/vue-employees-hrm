@@ -71,7 +71,7 @@ const routes: Array<RouteRecordRaw> = [
       {
         path: ROUTES.USER_CVS.PATH,
         name: ROUTES.USER_CVS.NAME,
-        component: pages.UserCVsPage,
+        component: pages.UserCvsPage,
         meta: {
           requiresAuth: true,
           hasBreadcrumbs: true,
@@ -89,7 +89,7 @@ const routes: Array<RouteRecordRaw> = [
   {
     path: ROUTES.CVS.PATH,
     name: ROUTES.CVS.NAME,
-    component: pages.CVsPage,
+    component: pages.CvsPage,
     meta: { requiresAuth: true, hasBreadcrumbs: true, hasTabs: false },
   },
   {
@@ -100,7 +100,7 @@ const routes: Array<RouteRecordRaw> = [
       {
         path: ROUTES.CV_DETAILS.PATH,
         name: ROUTES.CV_DETAILS.NAME,
-        component: pages.CVDetailsPage,
+        component: pages.CvDetailsPage,
         meta: {
           requiresAuth: true,
           hasBreadcrumbs: true,
@@ -110,7 +110,7 @@ const routes: Array<RouteRecordRaw> = [
       {
         path: ROUTES.CV_SKILLS.PATH,
         name: ROUTES.CV_SKILLS.NAME,
-        component: pages.CVSkillsPage,
+        component: pages.CvSkillsPage,
         meta: {
           requiresAuth: true,
           hasBreadcrumbs: true,
@@ -120,7 +120,7 @@ const routes: Array<RouteRecordRaw> = [
       {
         path: ROUTES.CV_PROJECTS.PATH,
         name: ROUTES.CV_PROJECTS.NAME,
-        component: pages.CVProjectsPage,
+        component: pages.CvProjectsPage,
         meta: {
           requiresAuth: true,
           hasBreadcrumbs: true,
@@ -130,7 +130,7 @@ const routes: Array<RouteRecordRaw> = [
       {
         path: ROUTES.CV_PREVIEW.PATH,
         name: ROUTES.CV_PREVIEW.NAME,
-        component: pages.CVPreviewPage,
+        component: pages.CvPreviewPage,
         meta: {
           requiresAuth: true,
           hasBreadcrumbs: true,

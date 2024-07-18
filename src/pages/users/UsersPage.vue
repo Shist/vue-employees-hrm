@@ -67,13 +67,13 @@ import { useRouter } from "vue-router";
 import useErrorState from "@/composables/useErrorState";
 import { getAllUsers } from "@/services/users/users";
 import { ROUTES } from "@/constants/router";
-import { IUsersTableData } from "@/types/usersTableUI";
+import { IUsersTableData } from "@/types/pages/users/table";
 import { IUsersFilterFunction } from "@/types/vuetifyDataTable";
 
 const router = useRouter();
 
-function openUserProfile(userID: number) {
-  router.push(`${ROUTES.USERS.PATH}/${userID}`);
+function openUserProfile(userId: number) {
+  router.push(`${ROUTES.USERS.PATH}/${userId}`);
 }
 
 const search = ref("");

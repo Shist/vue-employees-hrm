@@ -40,28 +40,28 @@
   >
     <v-tab
       :value="ROUTES.CV_DETAILS.NAME"
-      @click="() => openCVInfoRoute(ROUTES.CV_DETAILS.PATH)"
+      @click="() => openCvInfoRoute(ROUTES.CV_DETAILS.PATH)"
       class="app-tab"
     >
       Details
     </v-tab>
     <v-tab
       :value="ROUTES.CV_SKILLS.NAME"
-      @click="() => openCVInfoRoute(ROUTES.CV_SKILLS.PATH)"
+      @click="() => openCvInfoRoute(ROUTES.CV_SKILLS.PATH)"
       class="app-tab"
     >
       Skills
     </v-tab>
     <v-tab
       :value="ROUTES.CV_PROJECTS.NAME"
-      @click="() => openCVInfoRoute(ROUTES.CV_PROJECTS.PATH)"
+      @click="() => openCvInfoRoute(ROUTES.CV_PROJECTS.PATH)"
       class="app-tab"
     >
       Projects
     </v-tab>
     <v-tab
       :value="ROUTES.CV_PREVIEW.NAME"
-      @click="() => openCVInfoRoute(ROUTES.CV_PREVIEW.PATH)"
+      @click="() => openCvInfoRoute(ROUTES.CV_PREVIEW.PATH)"
       class="app-tab"
     >
       Preview
@@ -129,10 +129,10 @@ function openUserInfoRoute(routePath: string) {
   router.replace(`${ROUTES.USERS.PATH}/${currentUserId}${routePath}`);
 }
 
-function openCVInfoRoute(routePath: string) {
+function openCvInfoRoute(routePath: string) {
   if (routePath) routePath = `/${routePath}`;
-  const currentCVId = router.currentRoute.value.params.cvId;
-  router.replace(`${ROUTES.CVS.PATH}/${currentCVId}${routePath}`);
+  const currentCvId = router.currentRoute.value.params.cvId;
+  router.replace(`${ROUTES.CVS.PATH}/${currentCvId}${routePath}`);
 }
 </script>
 

@@ -70,14 +70,14 @@
 
 <script setup lang="ts">
 import { ref, computed, watch, onUpdated } from "vue";
-import { IAddOrUpdateProfileSkillInput } from "@/types/backend-interfaces/user/profile/skill";
-import { Mastery } from "@/types/backend-interfaces/skill/mastery";
-import { ISkill, ISkillsData } from "@/types/skillsUI";
+import { Mastery } from "@/types/enums";
+import { ISkill, ISkillsData } from "@/types/skillsStructures";
+import { IAddOrUpdateProfileSkillInput } from "@/types/pages/users/skills";
 
 const props = defineProps<{
   isOpen: boolean;
   oSkillForModal: ISkill | null;
-  userID: string;
+  userId: string;
   skills: ISkillsData[] | null;
   skillCategories: string[] | null;
 }>();
@@ -150,7 +150,7 @@ watch(selectSkill, () => {
 
 function makeCreateOrUpdateOperation() {
   const skillInputObj: IAddOrUpdateProfileSkillInput = {
-    userId: Number(props.userID),
+    userId: Number(props.userId),
     name: `${selectSkill.value}`,
     category: selectCategory.value,
     mastery: selectSkillMastery.value,
