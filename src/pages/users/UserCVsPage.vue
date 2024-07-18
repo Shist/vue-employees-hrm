@@ -94,7 +94,7 @@ import { createCv, deleteCv } from "@/services/cvs/cvs";
 import handleScrollPadding from "@/utils/handleScrollPadding";
 import { ROUTES } from "@/constants/router";
 import { IUserCvNameData } from "@/types/userCvsUI";
-import { ICreateCvInput, IDeleteCvInput } from "@/types/backend-interfaces/cv";
+import { ICreateCvInput, IDeleteCvInput } from "@/types/cvsUI";
 
 const router = useRouter();
 const route = useRoute();

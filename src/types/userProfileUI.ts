@@ -35,3 +35,29 @@ export interface IPositionNamesData {
   id: number;
   name: string;
 }
+
+export interface IUploadAvatarInput {
+  userId: number;
+  base64: string;
+  size: number;
+  type: string;
+}
+
+export enum UserRole {
+  Employee,
+  Admin,
+}
+
+export interface IUpdateUserInput {
+  userId: number;
+  cvsIds: string[] | null;
+  departmentId: number | null;
+  positionId: number | null;
+  role: UserRole | null;
+}
+
+export interface IUpdateProfileInput {
+  userId: number;
+  first_name: string | null;
+  last_name: string | null;
+}

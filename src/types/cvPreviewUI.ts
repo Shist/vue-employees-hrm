@@ -1,5 +1,5 @@
-import { Mastery } from "@/types/backend-interfaces/skill/mastery";
-import { Proficiency } from "@/types/backend-interfaces/language/proficiency";
+import { Mastery } from "@/types/skillMastery";
+import { Proficiency } from "@/types/languageProficiency";
 
 export interface ICvPreviewServerData {
   id: string;
@@ -39,4 +39,16 @@ export interface ICvPreviewSkill {
 export interface ICvPreviewLanguage {
   name: string;
   proficiency: Proficiency;
+}
+
+export interface IMarginInput {
+  top: string;
+  bottom: string;
+  left: string;
+  right: string;
+}
+
+export interface IExportPDFInput {
+  html: string;
+  margin: IMarginInput | null;
 }

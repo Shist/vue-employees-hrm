@@ -67,9 +67,9 @@ import { ref, computed, watchEffect } from "vue";
 import {
   IDepartmentNamesData,
   IPositionNamesData,
+  IUpdateUserInput,
+  IUpdateProfileInput,
 } from "@/types/userProfileUI";
-import { IUpdateUserInput } from "@/types/backend-interfaces/user";
-import { IUpdateProfileInput } from "@/types/backend-interfaces/user/profile";
 
 const props = defineProps<{
   isOwner: boolean;

@@ -49,7 +49,7 @@ import { useAuthStore } from "@/store/authStore";
 import { useBreadCrumbsStore } from "@/store/breadCrumbs";
 import useErrorState from "@/composables/useErrorState";
 import { getCvDetailsDataById, updateCv } from "@/services/cvs/details";
-import { IUpdateCvInput } from "@/types/backend-interfaces/cv";
+import { IUpdateCvInput } from "@/types/cvsUI";
 import { ICvDetailsServerData } from "@/types/cvDetailsUI";
 
 const route = useRoute();

@@ -108,11 +108,9 @@ import {
   ICvProjectsTableData,
   ICvProjectsTableServerData,
   IProjectsData,
-} from "@/types/cvProjectsUI";
-import {
   IAddOrUpdateCvProjectInput,
   IRemoveCvProjectInput,
-} from "@/types/backend-interfaces/cv/project";
+} from "@/types/cvProjectsUI";
 import { ICvProjectsFilterFunction } from "@/types/vuetifyDataTable";
 
 const route = useRoute();

@@ -1,10 +1,3 @@
-export interface IUserNameData {
-  email: string;
-  fullName: string | null;
-  firstName: string | null;
-  lastName: string | null;
-}
-
 export interface IUsersNameServerData {
   email: string;
   profile: {

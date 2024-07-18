@@ -70,9 +70,12 @@
 
 <script setup lang="ts">
 import { ref, computed, watch, onUpdated } from "vue";
-import { IAddOrUpdateProfileSkillInput } from "@/types/backend-interfaces/user/profile/skill";
-import { Mastery } from "@/types/backend-interfaces/skill/mastery";
-import { ISkill, ISkillsData } from "@/types/skillsUI";
+import { Mastery } from "@/types/skillMastery";
+import {
+  ISkill,
+  ISkillsData,
+  IAddOrUpdateProfileSkillInput,
+} from "@/types/skillsUI";
 
 const props = defineProps<{
   isOpen: boolean;

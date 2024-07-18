@@ -1,4 +1,4 @@
-import { Mastery } from "@/types/backend-interfaces/skill/mastery";
+import { Mastery } from "@/types/skillMastery";
 
 export interface ISkill {
   name: string;
@@ -36,4 +36,28 @@ export interface ICvSkillsServerData {
   user: {
     id: string;
   } | null;
+}
+
+export interface IAddOrUpdateProfileSkillInput {
+  userId: number;
+  name: string;
+  category: string | null;
+  mastery: Mastery;
+}
+
+export interface IDeleteProfileSkillInput {
+  userId: number;
+  name: string[];
+}
+
+export interface IAddOrUpdateCvSkillInput {
+  cvId: number;
+  name: string;
+  category: string | null;
+  mastery: Mastery;
+}
+
+export interface IDeleteCvSkillInput {
+  cvId: number;
+  name: string[];
 }

@@ -3,7 +3,7 @@ import getCvDetailsByIdQuery from "@/graphql/cvs/details/getCvDetailsById.query.
 import updateCvQuery from "@/graphql/cvs/details/updateCv.mutation.gql";
 import { checkCvId, getDetailedError } from "@/utils/handleErrors";
 import { ICvDetailsServerData } from "@/types/cvDetailsUI";
-import { IUpdateCvInput } from "@/types/backend-interfaces/cv";
+import { IUpdateCvInput } from "@/types/cvsUI";
 
 export const getCvDetailsDataById = async (id: string) => {
   try {

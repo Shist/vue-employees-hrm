@@ -4,10 +4,10 @@ import createCvProjectQuery from "@/graphql/cvs/projects/createCvProject.mutatio
 import deleteCvProjectQuery from "@/graphql/cvs/projects/deleteCvProject.mutation.gql";
 import { checkCvId, getDetailedError } from "@/utils/handleErrors";
 import {
+  ICvProjectsTableServerData,
   IAddOrUpdateCvProjectInput,
   IRemoveCvProjectInput,
-} from "@/types/backend-interfaces/cv/project";
-import { ICvProjectsTableServerData } from "@/types/cvProjectsUI";
+} from "@/types/cvProjectsUI";
 
 export const getCvProjectsById = async (id: string) => {
   try {

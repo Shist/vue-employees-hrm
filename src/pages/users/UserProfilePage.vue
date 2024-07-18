@@ -53,10 +53,10 @@ import {
   IUserProfileServerData,
   IDepartmentNamesData,
   IPositionNamesData,
+  IUploadAvatarInput,
+  IUpdateUserInput,
+  IUpdateProfileInput,
 } from "@/types/userProfileUI";
-import { IUpdateUserInput } from "@/types/backend-interfaces/user";
-import { IUpdateProfileInput } from "@/types/backend-interfaces/user/profile";
-import { IUploadAvatarInput } from "@/types/backend-interfaces/user/avatar";
 
 const route = useRoute();
 

@@ -90,7 +90,7 @@ import useErrorState from "@/composables/useErrorState";
 import { createCv, deleteCv, getAllCvs } from "@/services/cvs/cvs";
 import handleScrollPadding from "@/utils/handleScrollPadding";
 import { ROUTES } from "@/constants/router";
-import { ICreateCvInput, IDeleteCvInput } from "@/types/backend-interfaces/cv";
+import { ICreateCvInput, IDeleteCvInput } from "@/types/cvsUI";
 import { ICvsTableData } from "@/types/cvsTableUI";
 import { ICvsFilterFunction } from "@/types/vuetifyDataTable";
 

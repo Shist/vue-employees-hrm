@@ -79,14 +79,12 @@ import {
 } from "@/services/users/skills";
 import handleScrollPadding from "@/utils/handleScrollPadding";
 import {
-  IAddOrUpdateProfileSkillInput,
-  IDeleteProfileSkillInput,
-} from "@/types/backend-interfaces/user/profile/skill";
-import {
   ISkill,
   ISkillCategoriesMap,
   ICategorySkill,
   ISkillsData,
+  IAddOrUpdateProfileSkillInput,
+  IDeleteProfileSkillInput,
 } from "@/types/skillsUI";
 
 const route = useRoute();

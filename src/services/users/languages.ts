@@ -5,10 +5,10 @@ import updateUserLanguageQuery from "@/graphql/users/languages/updateUserLanguag
 import deleteUserLanguagesQuery from "@/graphql/users/languages/deleteUserLanguages.mutation.gql";
 import { checkUserId, getDetailedError } from "@/utils/handleErrors";
 import {
-  IAddOrUpdateProfileLanguageInput,
   IProfileLanguage,
-} from "@/types/backend-interfaces/user/profile/language";
-import { IDeleteProfileLanguageInput } from "@/types/backend-interfaces/language/proficiency";
+  IAddOrUpdateProfileLanguageInput,
+  IDeleteProfileLanguageInput,
+} from "@/types/userLanguagesUI";
 
 export const getUserLanguagesById = async (id: string) => {
   try {

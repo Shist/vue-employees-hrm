@@ -111,13 +111,13 @@ import {
 } from "@/services/users/languages";
 import { getAllLanguagesNames } from "@/services/languages";
 import handleScrollPadding from "@/utils/handleScrollPadding";
-import { Proficiency } from "@/types/backend-interfaces/language/proficiency";
+import { Proficiency } from "@/types/languageProficiency";
 import {
+  ILanguagesNamesData,
   IProfileLanguage,
   IAddOrUpdateProfileLanguageInput,
   IDeleteProfileLanguageInput,
-} from "@/types/backend-interfaces/user/profile/language";
-import { ILanguagesNamesData } from "@/types/userLanguagesUI";
+} from "@/types/userLanguagesUI";
 
 const route = useRoute();
 

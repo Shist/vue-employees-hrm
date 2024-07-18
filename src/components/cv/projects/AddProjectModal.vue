@@ -48,8 +48,10 @@
 
 <script setup lang="ts">
 import { ref, computed, onUpdated } from "vue";
-import { IProjectsData } from "@/types/cvProjectsUI";
-import { IAddOrUpdateCvProjectInput } from "@/types/backend-interfaces/cv/project";
+import {
+  IProjectsData,
+  IAddOrUpdateCvProjectInput,
+} from "@/types/cvProjectsUI";
 
 const props = defineProps<{
   isOpen: boolean;

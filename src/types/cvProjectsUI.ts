@@ -38,3 +38,17 @@ export interface IProjectsServerData {
   start_date: string;
   end_date: string;
 }
+
+export interface IAddOrUpdateCvProjectInput {
+  cvId: number;
+  projectId: number;
+  start_date: string;
+  end_date: string | null;
+  roles: string[];
+  responsibilities: string[];
+}
+
+export interface IRemoveCvProjectInput {
+  cvId: number;
+  projectId: number;
+}

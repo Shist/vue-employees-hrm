@@ -5,10 +5,10 @@ import updateCvSkillQuery from "@/graphql/cvs/skills/updateCvSkill.mutation.gql"
 import deleteCvSkillsQuery from "@/graphql/cvs/skills/deleteCvSkills.mutation.gql";
 import { checkCvId, getDetailedError } from "@/utils/handleErrors";
 import {
+  ICvSkillsServerData,
   IAddOrUpdateCvSkillInput,
   IDeleteCvSkillInput,
-} from "@/types/backend-interfaces/cv/skill";
-import { ICvSkillsServerData } from "@/types/skillsUI";
+} from "@/types/skillsUI";
 
 export const getCvSkillsById = async (id: string) => {
   try {

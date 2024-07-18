@@ -5,10 +5,12 @@ import updateUserQuery from "@/graphql/users/updateUser.mutation.gql";
 import uploadAvatarQuery from "@/graphql/users/profile/uploadAvatar.mutation.gql";
 import deleteAvatarQuery from "@/graphql/users/profile/deleteAvatar.mutation.gql";
 import { checkUserId, getDetailedError } from "@/utils/handleErrors";
-import { IUserProfileServerData } from "@/types/userProfileUI";
-import { IUpdateUserInput } from "@/types/backend-interfaces/user";
-import { IUpdateProfileInput } from "@/types/backend-interfaces/user/profile";
-import { IUploadAvatarInput } from "@/types/backend-interfaces/user/avatar";
+import {
+  IUserProfileServerData,
+  IUploadAvatarInput,
+  IUpdateUserInput,
+  IUpdateProfileInput,
+} from "@/types/userProfileUI";
 
 export const getUserProfileById = async (id: string) => {
   try {

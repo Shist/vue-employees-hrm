@@ -79,15 +79,13 @@ import {
 } from "@/services/cvs/skills";
 import handleScrollPadding from "@/utils/handleScrollPadding";
 import {
-  IAddOrUpdateCvSkillInput,
-  IDeleteCvSkillInput,
-} from "@/types/backend-interfaces/cv/skill";
-import {
   ISkill,
   ICvSkillsServerData,
   ISkillCategoriesMap,
   ICategorySkill,
   ISkillsData,
+  IAddOrUpdateCvSkillInput,
+  IDeleteCvSkillInput,
 } from "@/types/skillsUI";
 
 const route = useRoute();

@@ -61,12 +61,12 @@
 
 <script setup lang="ts">
 import { ref, computed, onUpdated } from "vue";
-import { Proficiency } from "@/types/backend-interfaces/language/proficiency";
+import { Proficiency } from "@/types/languageProficiency";
 import {
+  ILanguagesNamesData,
   IProfileLanguage,
   IAddOrUpdateProfileLanguageInput,
-} from "@/types/backend-interfaces/user/profile/language";
-import { ILanguagesNamesData } from "@/types/userLanguagesUI";
+} from "@/types/userLanguagesUI";
 
 const props = defineProps<{
   isOpen: boolean;

@@ -5,9 +5,3 @@ export enum Mastery {
   Proficient = "Proficient",
   Expert = "Expert",
 }
-
-export interface ISkillMastery {
-  name: string;
-  category: string | null;
-  mastery: Mastery;
-}

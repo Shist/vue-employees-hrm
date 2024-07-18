@@ -49,7 +49,7 @@
 </template>
 
 <script setup lang="ts">
-import { IUploadAvatarInput } from "@/types/backend-interfaces/user/avatar";
+import { IUploadAvatarInput } from "@/types/userProfileUI";
 import fileToBase64 from "@/utils/fileToBase64";
 
 const props = defineProps<{

@@ -5,10 +5,10 @@ import updateUserSkillQuery from "@/graphql/users/skills/updateUserSkill.mutatio
 import deleteUserSkillsQuery from "@/graphql/users/skills/deleteUserSkills.mutation.gql";
 import { checkUserId, getDetailedError } from "@/utils/handleErrors";
 import {
+  ISkill,
   IAddOrUpdateProfileSkillInput,
   IDeleteProfileSkillInput,
-} from "@/types/backend-interfaces/user/profile/skill";
-import { ISkill } from "@/types/skillsUI";
+} from "@/types/skillsUI";
 
 export const getUserSkillsById = async (id: string) => {
   try {

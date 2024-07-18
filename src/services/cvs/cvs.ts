@@ -6,7 +6,7 @@ import getAllCvsQuery from "@/graphql/cvs/getAllCvs.query.gql";
 import { checkCvId, getDetailedError } from "@/utils/handleErrors";
 import { ICvNameData } from "@/types/breadcrumbsUI";
 import { IUserCvNameData } from "@/types/userCvsUI";
-import { ICreateCvInput, IDeleteCvInput } from "@/types/backend-interfaces/cv";
+import { ICreateCvInput, IDeleteCvInput } from "@/types/cvsUI";
 import { ICvsTableServerData } from "@/types/cvsTableUI";
 
 export const getAllCvs = async () => {

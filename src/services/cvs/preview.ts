@@ -2,8 +2,7 @@ import apolloClient from "@/plugins/apolloConfig";
 import getCvPreviewDataByIdQuery from "@/graphql/cvs/preview/getCvPreviewDataById.query.gql";
 import exportPDFQuery from "@/graphql/cvs/preview/exportPDF.mutation.gql";
 import { checkCvId, getDetailedError } from "@/utils/handleErrors";
-import { ICvPreviewServerData } from "@/types/cvPreviewUI";
-import { IExportPDFInput } from "@/types/backend-interfaces/cv/exportPDFInput";
+import { ICvPreviewServerData, IExportPDFInput } from "@/types/cvPreviewUI";
 
 export const getCvPreviewDataById = async (id: string) => {
   try {
