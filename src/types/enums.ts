@@ -1,3 +1,8 @@
+export enum UserRole {
+  Employee = "Employee",
+  Admin = "Admin",
+}
+
 export enum Mastery {
   Novice = "Novice",
   Advanced = "Advanced",

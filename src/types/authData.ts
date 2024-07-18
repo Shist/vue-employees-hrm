@@ -1,3 +1,5 @@
+import { UserRole } from "@/types/enums";
+
 export interface IUserAuthData {
   id: string;
   email: string;
@@ -21,7 +23,7 @@ export interface IUserAuthServerData {
 export interface ITokenData {
   sub: number;
   email: string;
-  role: "Employee" | "Admin";
+  role: UserRole;
   iat: number;
   exp: number;
 }
