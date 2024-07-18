@@ -1,5 +1,17 @@
 import { UserRole } from "@/types/enums";
 
+export interface IAuthData {
+  user: IUserAuthData;
+  accessToken: string;
+  refreshToken: string;
+}
+
+export interface IAuthServerData {
+  user: IUserAuthServerData;
+  access_token: string;
+  refresh_token: string;
+}
+
 export interface IUserAuthData {
   id: string;
   email: string;

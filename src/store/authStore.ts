@@ -7,7 +7,12 @@ import { getUserAuthDataById } from "@/services/users/users";
 import { handleLogout } from "@/utils/handleErrors";
 import { ROUTES } from "@/constants/router";
 import { UNAUTHORIZED_ERROR } from "@/constants/errorMessage";
-import { IUserAuthData, ITokenData } from "@/types/authData";
+import {
+  IAuthData,
+  IAuthServerData,
+  IUserAuthData,
+  ITokenData,
+} from "@/types/authData";
 
 export const useAuthStore = defineStore("authStore", () => {
   const user = ref<IUserAuthData | null>(null);
@@ -56,34 +61,48 @@ export const useAuthStore = defineStore("authStore", () => {
     }
   };
 
-  const loginUser = async (email: string, password: string) => {
-    const result = await login(email, password);
-    if (result) {
-      user.value = result.user;
-      accessToken.value = result.token;
-    }
+  const setAuthValues = (authServerData: IAuthServerData) => {
+    if (!authServerData) return;
+
+    const authData: IAuthData = {
+      user: {
+        id: authServerData.user.id,
+        email: authServerData.user.email,
+        firstName: authServerData.user.profile.first_name,
+        lastName: authServerData.user.profile.last_name,
+        fullName: authServerData.user.profile.full_name,
+        avatar: authServerData.user.profile.avatar,
+      },
+      accessToken: authServerData.access_token,
+      refreshToken: authServerData.refresh_token,
+    };
+
+    user.value = authData.user;
+    accessToken.value = authData.accessToken;
 
     localStorage.setItem("accessToken", `Bearer ${accessToken.value}`);
+
+    // TODO: set refreshToken to cookies
 
     wasAuthErrorToastShown.value = false;
   };
 
+  const loginUser = async (email: string, password: string) => {
+    const authServerData = await login(email, password);
+
+    setAuthValues(authServerData);
+  };
+
   const registerUser = async (email: string, password: string) => {
-    const result = await register(email, password);
-    if (result) {
-      user.value = result.user;
-      accessToken.value = result.token;
-    }
+    const authServerData = await register(email, password);
 
-    localStorage.setItem("accessToken", `Bearer ${accessToken.value}`);
-
-    wasAuthErrorToastShown.value = false;
+    setAuthValues(authServerData);
   };
 
   const logout = () => {
     user.value = null;
     accessToken.value = null;
-    localStorage.removeItem("token");
+    localStorage.removeItem("accessToken");
     router.push(ROUTES.SIGN_IN.PATH);
   };
 
