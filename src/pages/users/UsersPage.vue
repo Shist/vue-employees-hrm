@@ -72,8 +72,8 @@ import { IUsersFilterFunction } from "@/types/vuetifyDataTable";
 
 const router = useRouter();
 
-function openUserProfile(userID: number) {
-  router.push(`${ROUTES.USERS.PATH}/${userID}`);
+function openUserProfile(userId: number) {
+  router.push(`${ROUTES.USERS.PATH}/${userId}`);
 }
 
 const search = ref("");

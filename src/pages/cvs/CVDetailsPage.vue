@@ -48,16 +48,16 @@ import { storeToRefs } from "pinia";
 import { useAuthStore } from "@/store/authStore";
 import { useBreadCrumbsStore } from "@/store/breadCrumbs";
 import useErrorState from "@/composables/useErrorState";
-import { getCVDetailsDataByID, updateCV } from "@/services/cvs/details";
+import { getCVDetailsDataById, updateCV } from "@/services/cvs/details";
 import { IUpdateCVInput } from "@/types/backend-interfaces/cv";
 import { ICVDetailsServerData } from "@/types/cvDetailsUI";
 
 const route = useRoute();
 
-const cvID = computed<string>(() => {
+const cvId = computed<string>(() => {
   // eslint-disable-next-line
-  const [section, cvID, tab] = route.fullPath.slice(1).split("/");
-  return cvID;
+  const [section, cvId, tab] = route.fullPath.slice(1).split("/");
+  return cvId;
 });
 
 const {
@@ -75,11 +75,11 @@ const cvDescriptionInitial = ref<string | null>(null);
 const cvName = ref<string | null>(null);
 const cvEducation = ref<string | null>(null);
 const cvDescription = ref<string | null>(null);
-const cvUserID = ref<string | null>(null);
+const cvUserId = ref<string | null>(null);
 
 const authStore = useAuthStore();
 const authStoreUser = storeToRefs(authStore).user;
-const isOwner = computed(() => authStoreUser.value?.id === cvUserID.value);
+const isOwner = computed(() => authStoreUser.value?.id === cvUserId.value);
 
 const { newEnityName } = storeToRefs(useBreadCrumbsStore());
 
@@ -96,7 +96,7 @@ onMounted(() => {
   fetchData();
 });
 
-watch(cvID, () => {
+watch(cvId, () => {
   fetchData();
 });
 
@@ -110,14 +110,14 @@ function updateCVDetailsValue(cvDetailsData: ICVDetailsServerData) {
   cvDescription.value = cvDescriptionInitial.value;
 
   if (cvDetailsData.user) {
-    cvUserID.value = cvDetailsData.user.id;
+    cvUserId.value = cvDetailsData.user.id;
   }
 }
 
 function fetchData() {
   isLoading.value = true;
 
-  getCVDetailsDataByID(cvID.value)
+  getCVDetailsDataById(cvId.value)
     .then((cvDetailsData) => {
       if (!cvDetailsData) return;
 
@@ -137,7 +137,7 @@ function submitCVDetailsUpdate() {
   if (!isOwner.value) return;
 
   const cvInputObj: IUpdateCVInput = {
-    cvId: Number(cvID.value),
+    cvId: Number(cvId.value),
     name: `${cvName.value}`,
     education: cvEducation.value,
     description: `${cvDescription.value}`,

@@ -77,7 +77,7 @@ import { ISkill, ISkillsData } from "@/types/skillsUI";
 const props = defineProps<{
   isOpen: boolean;
   oSkillForModal: ISkill | null;
-  userID: string;
+  userId: string;
   skills: ISkillsData[] | null;
   skillCategories: string[] | null;
 }>();
@@ -150,7 +150,7 @@ watch(selectSkill, () => {
 
 function makeCreateOrUpdateOperation() {
   const skillInputObj: IAddOrUpdateProfileSkillInput = {
-    userId: Number(props.userID),
+    userId: Number(props.userId),
     name: `${selectSkill.value}`,
     category: selectCategory.value,
     mastery: selectSkillMastery.value,

@@ -54,24 +54,24 @@ import fileToBase64 from "@/utils/fileToBase64";
 
 const props = defineProps<{
   isOwner: boolean;
-  userID: string;
+  userId: string;
   avatar: string | null;
   userInitials: string;
 }>();
 
 const emit = defineEmits<{
   (event: "onUpdateUserAvatar", avatarInputObj: IUploadAvatarInput): void;
-  (event: "onDeleteUserAvatar", userID: string): void;
+  (event: "onDeleteUserAvatar", userId: string): void;
 }>();
 
 function avatarRemove() {
-  emit("onDeleteUserAvatar", props.userID);
+  emit("onDeleteUserAvatar", props.userId);
 }
 
 async function uploadAvatar(file: File) {
   const fileBase64 = await fileToBase64(file);
   emit("onUpdateUserAvatar", {
-    userId: Number(props.userID),
+    userId: Number(props.userId),
     base64: fileBase64,
     size: file.size,
     type: file.type,

@@ -52,7 +52,7 @@
                 v-for="cvItem in cvMenuItems"
                 :key="cvItem.title"
                 v-on:click="cvItem.click(item.id, item.name)"
-                :disabled="checkOwner(cvItem.title, item.userID)"
+                :disabled="checkOwner(cvItem.title, item.userId)"
               >
                 <v-list-item-title class="cvs-page__popup-menu-label">
                   {{ cvItem.title }}
@@ -66,13 +66,13 @@
   </div>
   <CreateCVModal
     :isOpen="isCreateModalOpen"
-    :userID="`${authStoreUser?.id}`"
+    :userId="`${authStoreUser?.id}`"
     @onCreateUserCV="submitUserCVCreate"
     @closeModal="handleCloseCreateModal"
   />
   <DeleteCVModal
     :isOpen="isDeleteModalOpen"
-    :cvID="deletingCVID"
+    :cvId="deletingCVId"
     :cvName="deletingCVName"
     @onDeleteUserCV="submitUserCVDeletion"
     @closeModal="handleCloseDeleteModal"
@@ -99,7 +99,7 @@ const router = useRouter();
 const authStore = useAuthStore();
 const authStoreUser = storeToRefs(authStore).user;
 
-const deletingCVID = ref<string | null>(null);
+const deletingCVId = ref<string | null>(null);
 const deletingCVName = ref<string | null>(null);
 
 const search = ref("");
@@ -155,7 +155,7 @@ async function fetchData() {
         description: cv.description,
         education: cv.education ? cv.education : "",
         email: cv.user ? cv.user.email : "",
-        userID: cv.user ? cv.user.id : null,
+        userId: cv.user ? cv.user.id : null,
       }))
     );
 
@@ -165,13 +165,13 @@ async function fetchData() {
   }
 }
 
-function checkOwner(cvItemTitle: string, cvUserID: number | null) {
+function checkOwner(cvItemTitle: string, cvUserId: number | null) {
   if (cvItemTitle === "Details") return false;
-  return Number(authStoreUser.value?.id) !== Number(cvUserID);
+  return Number(authStoreUser.value?.id) !== Number(cvUserId);
 }
 
-function openCvDetails(cvID: number) {
-  router.push(`${ROUTES.CVS.PATH}/${cvID}`);
+function openCvDetails(cvId: number) {
+  router.push(`${ROUTES.CVS.PATH}/${cvId}`);
 }
 
 function handleOpenCreateModal() {
@@ -182,8 +182,8 @@ function handleCloseCreateModal() {
   isCreateModalOpen.value = false;
 }
 
-function handleOpenDeleteModal(cvID: number, cvName: string) {
-  deletingCVID.value = cvID.toString();
+function handleOpenDeleteModal(cvId: number, cvName: string) {
+  deletingCVId.value = cvId.toString();
   deletingCVName.value = cvName;
   isDeleteModalOpen.value = true;
 }

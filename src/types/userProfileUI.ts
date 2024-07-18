@@ -5,8 +5,8 @@ export interface IUserProfileData {
   firstName: string | null;
   lastName: string | null;
   avatar: string | null;
-  departmentID: string | null;
-  positionID: string | null;
+  departmentId: string | null;
+  positionId: string | null;
 }
 
 export interface IUserProfileServerData {

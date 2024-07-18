@@ -1,8 +1,8 @@
 import apolloClient from "@/plugins/apolloConfig";
 import getAllUsersQuery from "@/graphql/users/getAllUsers.query.gql";
-import getUserAuthDataByIDQuery from "@/graphql/users/getUserAuthDataByID.query.gql";
-import getUserFullnameByIDQuery from "@/graphql/users/getUserFullnameByID.query.gql";
-import { checkUserID, getDetailedError } from "@/utils/handleErrors";
+import getUserAuthDataByIdQuery from "@/graphql/users/getUserAuthDataById.query.gql";
+import getUserFullnameByIdQuery from "@/graphql/users/getUserFullnameById.query.gql";
+import { checkUserId, getDetailedError } from "@/utils/handleErrors";
 import { IUsersTableServerData } from "@/types/usersTableUI";
 import { IUsersNameServerData } from "@/types/breadcrumbsUI";
 import { IUserAuthServerData } from "@/types/userAuthUI";
@@ -19,12 +19,12 @@ export const getAllUsers = async () => {
   }
 };
 
-export const getUserAuthDataByID = async (id: string) => {
+export const getUserAuthDataById = async (id: string) => {
   try {
-    checkUserID(id);
+    checkUserId(id);
 
     const response = (await apolloClient.query({
-      query: getUserAuthDataByIDQuery,
+      query: getUserAuthDataByIdQuery,
       variables: { userId: Number(id) },
     })) as { data: { user: IUserAuthServerData } };
 
@@ -34,12 +34,12 @@ export const getUserAuthDataByID = async (id: string) => {
   }
 };
 
-export const getUserNameDataByID = async (id: string) => {
+export const getUserNameDataById = async (id: string) => {
   try {
-    checkUserID(id);
+    checkUserId(id);
 
     const response = (await apolloClient.query({
-      query: getUserFullnameByIDQuery,
+      query: getUserFullnameByIdQuery,
       variables: { userId: Number(id) },
     })) as { data: { user: IUsersNameServerData } };
 

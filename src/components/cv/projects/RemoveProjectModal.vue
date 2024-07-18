@@ -48,8 +48,8 @@ import { IRemoveCVProjectInput } from "@/types/backend-interfaces/cv/project";
 
 const props = defineProps<{
   isOpen: boolean;
-  cvID: string | null;
-  projectID: string | null;
+  cvId: string | null;
+  projectId: string | null;
   projectName: string | null;
 }>();
 
@@ -68,11 +68,11 @@ const modalState = computed({
 });
 
 function makeDeleteOperation() {
-  if (!props.cvID) return;
+  if (!props.cvId) return;
 
   const projectInputObj: IRemoveCVProjectInput = {
-    cvId: Number(props.cvID),
-    projectId: Number(props.projectID),
+    cvId: Number(props.cvId),
+    projectId: Number(props.projectId),
   };
 
   emit("onRemoveCVProject", projectInputObj);

@@ -1,16 +1,16 @@
 import apolloClient from "@/plugins/apolloConfig";
-import getCVDetailsByIDQuery from "@/graphql/cvs/details/getCVDetailsByID.query.gql";
+import getCVDetailsByIdQuery from "@/graphql/cvs/details/getCVDetailsById.query.gql";
 import updateCVQuery from "@/graphql/cvs/details/updateCV.mutation.gql";
-import { checkCvID, getDetailedError } from "@/utils/handleErrors";
+import { checkCvId, getDetailedError } from "@/utils/handleErrors";
 import { ICVDetailsServerData } from "@/types/cvDetailsUI";
 import { IUpdateCVInput } from "@/types/backend-interfaces/cv";
 
-export const getCVDetailsDataByID = async (id: string) => {
+export const getCVDetailsDataById = async (id: string) => {
   try {
-    checkCvID(id);
+    checkCvId(id);
 
     const response = (await apolloClient.query({
-      query: getCVDetailsByIDQuery,
+      query: getCVDetailsByIdQuery,
       variables: { cvId: Number(id) },
     })) as { data: { cv: ICVDetailsServerData } };
 

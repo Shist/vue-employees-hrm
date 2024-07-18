@@ -59,7 +59,7 @@
                 </v-list-item-title>
               </v-list-item>
               <v-list-item
-                @click="() => handleOpenDeleteModal(item.projectID, item.name)"
+                @click="() => handleOpenDeleteModal(item.projectId, item.name)"
                 :disabled="!isOwner"
               >
                 <v-list-item-title class="cv-projects__popup-menu-label">
@@ -74,15 +74,15 @@
   </div>
   <AddProjectModal
     :isOpen="isCreateModalOpen"
-    :cvID="cvID"
+    :cvId="cvId"
     :projects="leftProjectsData"
     @onCreateCVProject="submitCVProjectAdding"
     @closeModal="handleCloseCreateModal"
   />
   <RemoveProjectModal
     :isOpen="isDeleteModalOpen"
-    :cvID="cvID"
-    :projectID="addingProjectID"
+    :cvId="cvId"
+    :projectId="addingProjectId"
     :projectName="addingProjectName"
     @onRemoveCVProject="submitCVProjectRemoving"
     @closeModal="handleCloseDeleteModal"
@@ -98,7 +98,7 @@ import AddProjectModal from "@/components/cv/projects/AddProjectModal.vue";
 import RemoveProjectModal from "@/components/cv/projects/RemoveProjectModal.vue";
 import useErrorState from "@/composables/useErrorState";
 import {
-  getCVProjectsByID,
+  getCVProjectsById,
   createCvProject,
   deleteCvProject,
 } from "@/services/cvs/projects";
@@ -117,19 +117,19 @@ import { ICVProjectsFilterFunction } from "@/types/vuetifyDataTable";
 
 const route = useRoute();
 
-const cvID = computed<string>(() => {
+const cvId = computed<string>(() => {
   // eslint-disable-next-line
-  const [section, cvID, tab] = route.fullPath.slice(1).split("/");
-  return cvID;
+  const [section, cvId, tab] = route.fullPath.slice(1).split("/");
+  return cvId;
 });
 
-const cvUserID = ref<string | null>(null);
+const cvUserId = ref<string | null>(null);
 
 const authStore = useAuthStore();
 const authStoreUser = storeToRefs(authStore).user;
-const isOwner = computed(() => authStoreUser.value?.id === cvUserID.value);
+const isOwner = computed(() => authStoreUser.value?.id === cvUserId.value);
 
-const addingProjectID = ref<string | null>(null);
+const addingProjectId = ref<string | null>(null);
 const addingProjectName = ref<string | null>(null);
 
 const search = ref("");
@@ -173,7 +173,7 @@ onMounted(() => {
   fetchData();
 });
 
-watch(cvID, () => {
+watch(cvId, () => {
   fetchData();
 });
 
@@ -192,7 +192,7 @@ function updateCVProjectsValue(
 
   const cvProjectsTableData: ICVProjectsTableData[] =
     cvProjectsServerData.projects.map((projectFromServer) => ({
-      projectID: `${projectFromServer.project.id}`,
+      projectId: `${projectFromServer.project.id}`,
       name: projectFromServer.name,
       internalName: projectFromServer.internal_name,
       domain: projectFromServer.domain,
@@ -202,13 +202,13 @@ function updateCVProjectsValue(
 
   cvProjects.splice(0, cvProjects.length, ...cvProjectsTableData);
 
-  cvUserID.value = cvProjectsServerData.user.id;
+  cvUserId.value = cvProjectsServerData.user.id;
 }
 
 function fetchData() {
   isLoading.value = true;
 
-  Promise.all([getCVProjectsByID(cvID.value), getAllProjectsData()])
+  Promise.all([getCVProjectsById(cvId.value), getAllProjectsData()])
     .then(([cvProjectsServerData, allProjectsServerData]) => {
       updateCVProjectsValue(cvProjectsServerData);
 
@@ -281,10 +281,10 @@ function handleCloseCreateModal() {
   isCreateModalOpen.value = false;
 }
 
-function handleOpenDeleteModal(projectID: string, projectName: string) {
+function handleOpenDeleteModal(projectId: string, projectName: string) {
   if (!isOwner.value) return;
 
-  addingProjectID.value = projectID;
+  addingProjectId.value = projectId;
   addingProjectName.value = projectName;
   isDeleteModalOpen.value = true;
 }

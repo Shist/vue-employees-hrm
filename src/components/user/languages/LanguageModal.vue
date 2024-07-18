@@ -71,7 +71,7 @@ import { ILanguagesNamesData } from "@/types/userLanguagesUI";
 const props = defineProps<{
   isOpen: boolean;
   oLanguageForModal: IProfileLanguage | null;
-  userID: string;
+  userId: string;
   languages: ILanguagesNamesData[] | null;
 }>();
 
@@ -121,7 +121,7 @@ onUpdated(() => {
 
 function makeCreateOrUpdateOperation() {
   const languageInputObj: IAddOrUpdateProfileLanguageInput = {
-    userId: Number(props.userID),
+    userId: Number(props.userId),
     name: `${selectLanguage.value}`,
     proficiency: selectLanguageProficiency.value,
   };

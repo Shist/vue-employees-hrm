@@ -66,7 +66,7 @@ import { ICreateCVInput } from "@/types/backend-interfaces/cv";
 
 const props = defineProps<{
   isOpen: boolean;
-  userID: string;
+  userId: string;
 }>();
 
 const emit = defineEmits<{
@@ -102,7 +102,7 @@ function makeCreateOperation() {
     name: `${cvName.value}`,
     education: cvEducation.value,
     description: `${cvDescription.value}`,
-    userId: Number(props.userID),
+    userId: Number(props.userId),
   };
 
   emit("onCreateUserCV", cvInputObj);

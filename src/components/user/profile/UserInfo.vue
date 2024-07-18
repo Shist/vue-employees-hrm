@@ -32,7 +32,7 @@
         hide-details
       />
       <v-select
-        v-model="departmentID"
+        v-model="departmentId"
         :items="departmentsItems"
         label="Department"
         variant="outlined"
@@ -41,7 +41,7 @@
         hide-details
       />
       <v-select
-        v-model="positionID"
+        v-model="positionId"
         :items="positionsItems"
         label="Position"
         variant="outlined"
@@ -73,14 +73,14 @@ import { IUpdateProfileInput } from "@/types/backend-interfaces/user/profile";
 
 const props = defineProps<{
   isOwner: boolean;
-  userID: string;
+  userId: string;
   email: string;
   createdAt: number;
   isVerified: boolean;
   firstName: string | null;
   lastName: string | null;
-  departmentID: string | null;
-  positionID: string | null;
+  departmentId: string | null;
+  positionId: string | null;
   departmentNames: IDepartmentNamesData[] | null;
   positionNames: IPositionNamesData[] | null;
 }>();
@@ -133,38 +133,38 @@ const prepareSelectItems = (
   ]);
 };
 
-const departmentID = ref(props.departmentID);
+const departmentId = ref(props.departmentId);
 const departmentsItems = prepareSelectItems(
   props.departmentNames,
   "No department"
 );
 
-const positionID = ref(props.positionID);
+const positionId = ref(props.positionId);
 const positionsItems = prepareSelectItems(props.positionNames, "No position");
 
 watchEffect(() => {
   firstName.value = props.firstName;
   lastName.value = props.lastName;
-  departmentID.value = props.departmentID;
-  positionID.value = props.positionID;
+  departmentId.value = props.departmentId;
+  positionId.value = props.positionId;
 });
 
 const isSubmitBtnDisabled = computed(
   () =>
     firstName.value === props.firstName &&
     lastName.value === props.lastName &&
-    departmentID.value === props.departmentID &&
-    positionID.value === props.positionID
+    departmentId.value === props.departmentId &&
+    positionId.value === props.positionId
 );
 
 function onUpdateBtnClicked() {
   const userInputObj: Omit<IUpdateUserInput, "cvsIds" | "role"> = {
-    userId: Number(props.userID),
-    departmentId: Number(departmentID.value),
-    positionId: Number(positionID.value),
+    userId: Number(props.userId),
+    departmentId: Number(departmentId.value),
+    positionId: Number(positionId.value),
   };
   const profileInputObj: IUpdateProfileInput = {
-    userId: Number(props.userID),
+    userId: Number(props.userId),
     first_name: firstName.value,
     last_name: lastName.value,
   };

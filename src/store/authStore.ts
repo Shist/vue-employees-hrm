@@ -3,7 +3,7 @@ import { useRouter } from "vue-router";
 import { defineStore } from "pinia";
 import useToast from "@/composables/useToast";
 import { login, register } from "@/services/auth";
-import { getUserAuthDataByID } from "@/services/users/users";
+import { getUserAuthDataById } from "@/services/users/users";
 import { handleLogout } from "@/utils/handleErrors";
 import { ROUTES } from "@/constants/router";
 import { UNAUTHORIZED_ERROR } from "@/constants/errorMessage";
@@ -29,7 +29,7 @@ export const useAuthStore = defineStore("authStore", () => {
     if (!token.value) return;
 
     try {
-      const userData = await getUserAuthDataByID(`${decodedToken.value?.sub}`);
+      const userData = await getUserAuthDataById(`${decodedToken.value?.sub}`);
 
       if (!userData) return;
 

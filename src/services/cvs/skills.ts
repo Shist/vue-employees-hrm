@@ -1,21 +1,21 @@
 import apolloClient from "@/plugins/apolloConfig";
-import getCvSkillsByIDQuery from "@/graphql/cvs/skills/getCVSkillsByID.query.gql";
+import getCvSkillsByIdQuery from "@/graphql/cvs/skills/getCVSkillsById.query.gql";
 import createCvSkillQuery from "@/graphql/cvs/skills/createCVSkill.mutation.gql";
 import updateCvSkillQuery from "@/graphql/cvs/skills/updateCVSkill.mutation.gql";
 import deleteCvSkillsQuery from "@/graphql/cvs/skills/deleteCVSkills.mutation.gql";
-import { checkCvID, getDetailedError } from "@/utils/handleErrors";
+import { checkCvId, getDetailedError } from "@/utils/handleErrors";
 import {
   IAddOrUpdateCvSkillInput,
   IDeleteCvSkillInput,
 } from "@/types/backend-interfaces/cv/skill";
 import { ICVSkillsServerData } from "@/types/skillsUI";
 
-export const getCVSkillsByID = async (id: string) => {
+export const getCVSkillsById = async (id: string) => {
   try {
-    checkCvID(id);
+    checkCvId(id);
 
     const response = (await apolloClient.query({
-      query: getCvSkillsByIDQuery,
+      query: getCvSkillsByIdQuery,
       variables: { cvId: Number(id) },
     })) as { data: { cv: ICVSkillsServerData } };
 

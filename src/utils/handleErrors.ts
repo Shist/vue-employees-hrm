@@ -11,13 +11,13 @@ import {
   UNEXPECTED_ERROR,
 } from "@/constants/errorMessage";
 
-export function checkUserID(id: string) {
+export function checkUserId(id: string) {
   if (!Number.isInteger(Number(id)) || BigInt(id) > 2147483647n) {
     throw new Error(NOT_FOUND_USER);
   }
 }
 
-export function checkCvID(id: string) {
+export function checkCvId(id: string) {
   if (!Number.isInteger(Number(id)) || BigInt(id) > 2147483647n) {
     throw new Error(NOT_FOUND_CV);
   }

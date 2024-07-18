@@ -48,7 +48,7 @@ import { IDeleteCVInput } from "@/types/backend-interfaces/cv";
 
 const props = defineProps<{
   isOpen: boolean;
-  cvID: string | null;
+  cvId: string | null;
   cvName: string | null;
 }>();
 
@@ -67,10 +67,10 @@ const modalState = computed({
 });
 
 function makeDeleteOperation() {
-  if (!props.cvID) return;
+  if (!props.cvId) return;
 
   const cvInputObj: IDeleteCVInput = {
-    cvId: Number(props.cvID),
+    cvId: Number(props.cvId),
   };
 
   emit("onDeleteUserCV", cvInputObj);

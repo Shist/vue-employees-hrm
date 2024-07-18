@@ -53,7 +53,7 @@ import { IAddOrUpdateCVProjectInput } from "@/types/backend-interfaces/cv/projec
 
 const props = defineProps<{
   isOpen: boolean;
-  cvID: string;
+  cvId: string;
   projects: IProjectsData[] | null;
 }>();
 
@@ -94,7 +94,7 @@ function makeCreateOperation() {
   if (!selectProject.value) return;
 
   const projectInputObj: IAddOrUpdateCVProjectInput = {
-    cvId: Number(props.cvID),
+    cvId: Number(props.cvId),
     projectId: Number(selectProject.value.id),
     start_date: selectProject.value.startDate,
     end_date: selectProject.value.endDate,

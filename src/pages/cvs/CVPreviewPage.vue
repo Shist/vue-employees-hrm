@@ -143,7 +143,7 @@ import { ref, reactive, computed, watch, onMounted } from "vue";
 import { useRoute } from "vue-router";
 import useToast from "@/composables/useToast";
 import useErrorState from "@/composables/useErrorState";
-import { getCVPreviewDataByID, exportPDF } from "@/services/cvs/preview";
+import { getCVPreviewDataById, exportPDF } from "@/services/cvs/preview";
 import { PDF_DOC_STYLES } from "@/constants/pdfDocStyles";
 import {
   ICVPreviewLanguage,
@@ -161,10 +161,10 @@ const isExportBtnBusy = ref(false);
 
 const route = useRoute();
 
-const cvID = computed<string>(() => {
+const cvId = computed<string>(() => {
   // eslint-disable-next-line
-  const [section, cvID, tab] = route.fullPath.slice(1).split("/");
-  return cvID;
+  const [section, cvId, tab] = route.fullPath.slice(1).split("/");
+  return cvId;
 });
 
 const {
@@ -238,14 +238,14 @@ onMounted(() => {
   fetchData();
 });
 
-watch(cvID, () => {
+watch(cvId, () => {
   fetchData();
 });
 
 function fetchData() {
   isLoading.value = true;
 
-  getCVPreviewDataByID(cvID.value)
+  getCVPreviewDataById(cvId.value)
     .then((cvDetailsData) => {
       if (!cvDetailsData) return;
 

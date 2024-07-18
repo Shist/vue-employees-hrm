@@ -53,7 +53,7 @@
   <SkillModal
     :isOpen="isModalOpen"
     :oSkillForModal="oSkillForModal"
-    :cvID="cvID"
+    :cvId="cvId"
     :skills="leftSkills"
     :skill-categories="skillCategories"
     @onCreateCVSkill="submitCVSkillCreate"
@@ -72,7 +72,7 @@ import SkillsCategory from "@/components/SkillsCategory.vue";
 import useErrorState from "@/composables/useErrorState";
 import { getAllSkills, getSkillCategories } from "@/services/skills";
 import {
-  getCVSkillsByID,
+  getCVSkillsById,
   createCvSkill,
   updateCvSkill,
   deleteCvSkills,
@@ -92,17 +92,17 @@ import {
 
 const route = useRoute();
 
-const cvID = computed<string>(() => {
+const cvId = computed<string>(() => {
   // eslint-disable-next-line
-  const [section, cvID, tab] = route.fullPath.slice(1).split("/");
-  return cvID;
+  const [section, cvId, tab] = route.fullPath.slice(1).split("/");
+  return cvId;
 });
 
-const cvUserID = ref<string | null>(null);
+const cvUserId = ref<string | null>(null);
 
 const authStore = useAuthStore();
 const authStoreUser = storeToRefs(authStore).user;
-const isOwner = computed(() => authStoreUser.value?.id === cvUserID.value);
+const isOwner = computed(() => authStoreUser.value?.id === cvUserId.value);
 
 const {
   isLoading,
@@ -177,7 +177,7 @@ onMounted(() => {
   fetchData();
 });
 
-watch(cvID, () => {
+watch(cvId, () => {
   fetchData();
 });
 
@@ -195,7 +195,7 @@ function updateCVSkillsValue(cvSkillsData: ICVSkillsServerData) {
   cvSkills.value = cvSkillsData.skills;
 
   if (cvSkillsData.user) {
-    cvUserID.value = cvSkillsData.user.id;
+    cvUserId.value = cvSkillsData.user.id;
   }
 }
 
@@ -203,7 +203,7 @@ function fetchData() {
   isLoading.value = true;
 
   Promise.all([
-    getCVSkillsByID(cvID.value),
+    getCVSkillsById(cvId.value),
     getAllSkills(),
     getSkillCategories(),
   ])
@@ -316,7 +316,7 @@ function submitCVSkillsDeletion() {
   isLoading.value = true;
 
   const skillsToBeDeleted: IDeleteCvSkillInput = {
-    cvId: Number(cvID.value),
+    cvId: Number(cvId.value),
     name: [...skillsForDeletionNames],
   };
 

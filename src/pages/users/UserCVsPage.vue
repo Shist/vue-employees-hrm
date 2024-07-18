@@ -68,13 +68,13 @@
   </div>
   <CreateCVModal
     :isOpen="isCreateModalOpen"
-    :userID="userID"
+    :userId="userId"
     @onCreateUserCV="submitUserCVCreate"
     @closeModal="handleCloseCreateModal"
   />
   <DeleteCVModal
     :isOpen="isDeleteModalOpen"
-    :cvID="openedCVID"
+    :cvId="openedCVId"
     :cvName="openedCVName"
     @onDeleteUserCV="submitUserCVDeletion"
     @closeModal="handleCloseDeleteModal"
@@ -89,7 +89,7 @@ import { useAuthStore } from "@/store/authStore";
 import CreateCVModal from "@/components/user/cvs/CreateCVModal.vue";
 import DeleteCVModal from "@/components/user/cvs/DeleteCVModal.vue";
 import useErrorState from "@/composables/useErrorState";
-import { getUserCVsNamesByID } from "@/services/users/cvs";
+import { getUserCVsNamesById } from "@/services/users/cvs";
 import { createCV, deleteCV } from "@/services/cvs/cvs";
 import handleScrollPadding from "@/utils/handleScrollPadding";
 import { ROUTES } from "@/constants/router";
@@ -99,21 +99,21 @@ import { ICreateCVInput, IDeleteCVInput } from "@/types/backend-interfaces/cv";
 const router = useRouter();
 const route = useRoute();
 
-const userID = computed<string>(() => {
+const userId = computed<string>(() => {
   // eslint-disable-next-line
-  const [section, userID, tab] = route.fullPath.slice(1).split("/");
-  return userID;
+  const [section, userId, tab] = route.fullPath.slice(1).split("/");
+  return userId;
 });
 
 const authStore = useAuthStore();
 const authStoreUser = storeToRefs(authStore).user;
-const isOwner = computed(() => authStoreUser.value?.id === userID.value);
+const isOwner = computed(() => authStoreUser.value?.id === userId.value);
 
-const openedCVID = ref<string | null>(null);
+const openedCVId = ref<string | null>(null);
 const openedCVName = ref<string | null>(null);
 
-function openUserCV(cvID: string) {
-  router.push(`${ROUTES.CVS.PATH}/${cvID}`);
+function openUserCV(cvId: string) {
+  router.push(`${ROUTES.CVS.PATH}/${cvId}`);
 }
 
 const search = ref("");
@@ -142,7 +142,7 @@ onMounted(async () => {
   isLoading.value = false;
 });
 
-watch(userID, async () => {
+watch(userId, async () => {
   isLoading.value = true;
   await fetchData();
   isLoading.value = false;
@@ -158,7 +158,7 @@ watch(isDeleteModalOpen, (newValue) => {
 
 async function fetchData() {
   try {
-    const cvsData = await getUserCVsNamesByID(userID.value);
+    const cvsData = await getUserCVsNamesById(userId.value);
 
     if (!cvsData) return;
 
@@ -216,10 +216,10 @@ function handleCloseCreateModal() {
   isCreateModalOpen.value = false;
 }
 
-function handleOpenDeleteModal(cvID: string, cvName: string) {
+function handleOpenDeleteModal(cvId: string, cvName: string) {
   if (!isOwner.value) return;
 
-  openedCVID.value = cvID;
+  openedCVId.value = cvId;
   openedCVName.value = cvName;
   isDeleteModalOpen.value = true;
 }
