@@ -88,7 +88,7 @@
   <LanguageModal
     :isOpen="isModalOpen"
     :oLanguageForModal="oLanguageForModal"
-    :userID="userID"
+    :userId="userId"
     :languages="leftLanguages"
     @onCreateUserLanguage="submitUserLanguageCreate"
     @onUpdateUserLanguage="submitUserLanguageUpdate"
@@ -106,30 +106,30 @@ import useErrorState from "@/composables/useErrorState";
 import {
   createUserLanguage,
   deleteUserLanguages,
-  getUserLanguagesByID,
+  getUserLanguagesById,
   updateUserLanguage,
 } from "@/services/users/languages";
 import { getAllLanguagesNames } from "@/services/languages";
 import handleScrollPadding from "@/utils/handleScrollPadding";
-import { Proficiency } from "@/types/backend-interfaces/language/proficiency";
+import { Proficiency } from "@/types/enums";
 import {
+  ILanguagesNamesData,
   IProfileLanguage,
   IAddOrUpdateProfileLanguageInput,
   IDeleteProfileLanguageInput,
-} from "@/types/backend-interfaces/user/profile/language";
-import { ILanguagesNamesData } from "@/types/userLanguagesUI";
+} from "@/types/pages/users/languages";
 
 const route = useRoute();
 
-const userID = computed<string>(() => {
+const userId = computed<string>(() => {
   // eslint-disable-next-line
-  const [section, userID, tab] = route.fullPath.slice(1).split("/");
-  return userID;
+  const [section, userId, tab] = route.fullPath.slice(1).split("/");
+  return userId;
 });
 
 const authStore = useAuthStore();
 const authStoreUser = storeToRefs(authStore).user;
-const isOwner = computed(() => authStoreUser.value?.id === userID.value);
+const isOwner = computed(() => authStoreUser.value?.id === userId.value);
 
 const {
   isLoading,
@@ -174,10 +174,6 @@ onMounted(() => {
   fetchData();
 });
 
-watch(userID, () => {
-  fetchData();
-});
-
 watch(isModalOpen, (newValue) => {
   handleScrollPadding(newValue);
 });
@@ -194,7 +190,7 @@ function updateUserLanguagesValue(userLanguagesData: IProfileLanguage[]) {
 
 function fetchData() {
   isLoading.value = true;
-  Promise.all([getUserLanguagesByID(userID.value), getAllLanguagesNames()])
+  Promise.all([getUserLanguagesById(userId.value), getAllLanguagesNames()])
     .then(([userLanguagesData, languagesData]) => {
       if (!userLanguagesData || !languagesData) return;
 
@@ -305,7 +301,7 @@ function submitUserLanguagesDeletion() {
   isLoading.value = true;
 
   const languagesToBeDeleted: IDeleteProfileLanguageInput = {
-    userId: Number(userID.value),
+    userId: Number(userId.value),
     name: [...languagesForDeletionNames],
   };
 

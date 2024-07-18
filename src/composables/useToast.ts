@@ -12,16 +12,6 @@ export default function useToast() {
     }
   };
 
-  const setSuccessToast = (msg: string) => {
-    removeCurrToast();
-    const successToastId = toast(msg, {
-      type: "success",
-      position: toast.POSITION.BOTTOM_CENTER,
-      closeOnClick: false,
-    });
-    currToastId.value = successToastId;
-  };
-
   const setErrorToast = (msg: string) => {
     removeCurrToast();
     const errorToastId = toast(msg, {
@@ -32,5 +22,5 @@ export default function useToast() {
     currToastId.value = errorToastId;
   };
 
-  return { removeCurrToast, setSuccessToast, setErrorToast };
+  return { removeCurrToast, setErrorToast };
 }

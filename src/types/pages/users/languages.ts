@@ -1,4 +1,9 @@
-import { Proficiency } from "@/types/backend-interfaces/language/proficiency";
+import { Proficiency } from "@/types/enums";
+
+export interface ILanguagesNamesData {
+  id: number;
+  name: string;
+}
 
 export interface IProfileLanguage {
   name: string;

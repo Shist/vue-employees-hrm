@@ -54,7 +54,7 @@
 import { onMounted, reactive, ref } from "vue";
 import useErrorState from "@/composables/useErrorState";
 import { getAllProjects } from "@/services/projects";
-import { IProjectsTableData } from "@/types/projectsTableUI";
+import { IProjectsTableData } from "@/types/pages/projectsTable";
 import { IProjectsFilterFunction } from "@/types/vuetifyDataTable";
 
 const search = ref("");

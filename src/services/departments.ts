@@ -1,7 +1,7 @@
 import apolloClient from "@/plugins/apolloConfig";
 import getAllDepartmentNamesQuery from "@/graphql/departments/getAllDepartmentNames.query.gql";
 import { getDetailedError } from "@/utils/handleErrors";
-import { IDepartmentNamesData } from "@/types/userProfileUI";
+import { IDepartmentNamesData } from "@/types/pages/users/profile";
 
 export const getAllDepartmentNames = async () => {
   try {

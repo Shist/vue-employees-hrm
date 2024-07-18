@@ -5,7 +5,7 @@
     <div v-else-if="user" class="user-profile__main-content-wrapper">
       <AvatarUpload
         :isOwner="isOwner"
-        :userID="userID"
+        :userId="userId"
         :avatar="user.avatar"
         :userInitials="userInitials"
         @onUpdateUserAvatar="submitUserAvatar"
@@ -13,14 +13,14 @@
       />
       <UserInfo
         :isOwner="isOwner"
-        :userID="userID"
+        :userId="userId"
         :firstName="user.firstName"
         :lastName="user.lastName"
         :email="user.email"
         :isVerified="user.isVerified"
         :createdAt="user.createdAt"
-        :departmentID="user.departmentID"
-        :positionID="user.positionID"
+        :departmentId="user.departmentId"
+        :positionId="user.positionId"
         :departmentNames="departmentNames"
         :positionNames="positionNames"
         @onUpdateUserData="submitUserData"
@@ -43,7 +43,7 @@ import { getAllDepartmentNames } from "@/services/departments";
 import { getAllPositionNames } from "@/services/positions";
 import {
   deleteUserAvatar,
-  getUserProfileByID,
+  getUserProfileById,
   updateUserAvatar,
   updateUserData,
 } from "@/services/users/profile";
@@ -53,22 +53,22 @@ import {
   IUserProfileServerData,
   IDepartmentNamesData,
   IPositionNamesData,
-} from "@/types/userProfileUI";
-import { IUpdateUserInput } from "@/types/backend-interfaces/user";
-import { IUpdateProfileInput } from "@/types/backend-interfaces/user/profile";
-import { IUploadAvatarInput } from "@/types/backend-interfaces/user/avatar";
+  IUploadAvatarInput,
+  IUpdateUserInput,
+  IUpdateProfileInput,
+} from "@/types/pages/users/profile";
 
 const route = useRoute();
 
-const userID = computed<string>(() => {
+const userId = computed<string>(() => {
   // eslint-disable-next-line
-  const [section, userID, tab] = route.fullPath.slice(1).split("/");
-  return userID;
+  const [section, userId, tab] = route.fullPath.slice(1).split("/");
+  return userId;
 });
 
 const authStore = useAuthStore();
 const authStoreUser = storeToRefs(authStore).user;
-const isOwner = computed(() => authStoreUser.value?.id === userID.value);
+const isOwner = computed(() => authStoreUser.value?.id === userId.value);
 
 const { newEnityName } = storeToRefs(useBreadCrumbsStore());
 
@@ -102,7 +102,7 @@ onMounted(() => {
   fetchData();
 });
 
-watch(userID, () => {
+watch(userId, () => {
   fetchData();
 });
 
@@ -114,11 +114,11 @@ function updateUserValue(newUser: IUserProfileServerData) {
     firstName: newUser.profile.first_name,
     lastName: newUser.profile.last_name,
     avatar: newUser.profile.avatar,
-    departmentID: newUser.department ? newUser.department.id : null,
-    positionID: newUser.position ? newUser.position.id : null,
+    departmentId: newUser.department ? newUser.department.id : null,
+    positionId: newUser.position ? newUser.position.id : null,
   };
 
-  if (!authStoreUser.value || authStoreUser.value.id !== userID.value) return;
+  if (!authStoreUser.value || authStoreUser.value.id !== userId.value) return;
 
   authStoreUser.value.firstName = newUser.profile.first_name;
   authStoreUser.value.lastName = newUser.profile.last_name;
@@ -138,7 +138,7 @@ function fetchData() {
   isLoading.value = true;
 
   Promise.all([
-    getUserProfileByID(userID.value),
+    getUserProfileById(userId.value),
     getAllDepartmentNames(),
     getAllPositionNames(),
   ])
@@ -223,7 +223,7 @@ function submitUserAvatar(avatarInputObj: IUploadAvatarInput) {
         user.value.avatar = newAvatarSRC;
       }
 
-      if (authStoreUser.value && authStoreUser.value.id === userID.value) {
+      if (authStoreUser.value && authStoreUser.value.id === userId.value) {
         authStoreUser.value.avatar = newAvatarSRC;
       }
 
@@ -237,18 +237,18 @@ function submitUserAvatar(avatarInputObj: IUploadAvatarInput) {
     });
 }
 
-function submitUserAvatarDeletion(_userID: string) {
+function submitUserAvatarDeletion(_userId: string) {
   if (!isOwner.value) return;
 
   isLoading.value = true;
 
-  deleteUserAvatar(_userID)
+  deleteUserAvatar(_userId)
     .then(() => {
       if (user.value) {
         user.value.avatar = null;
       }
 
-      if (authStoreUser.value && authStoreUser.value.id === userID.value) {
+      if (authStoreUser.value && authStoreUser.value.id === userId.value) {
         authStoreUser.value.avatar = null;
       }
 

@@ -1,18 +1,20 @@
 import apolloClient from "@/plugins/apolloConfig";
-import getCVPreviewDataByIDQuery from "@/graphql/cvs/preview/getCVPreviewDataByID.query.gql";
+import getCvPreviewDataByIdQuery from "@/graphql/cvs/preview/getCvPreviewDataById.query.gql";
 import exportPDFQuery from "@/graphql/cvs/preview/exportPDF.mutation.gql";
-import { checkCvID, getDetailedError } from "@/utils/handleErrors";
-import { ICVPreviewServerData } from "@/types/cvPreviewUI";
-import { IExportPDFInput } from "@/types/backend-interfaces/cv/exportPDFInput";
+import { checkCvId, getDetailedError } from "@/utils/handleErrors";
+import {
+  ICvPreviewServerData,
+  IExportPDFInput,
+} from "@/types/pages/cvs/preview";
 
-export const getCVPreviewDataByID = async (id: string) => {
+export const getCvPreviewDataById = async (id: string) => {
   try {
-    checkCvID(id);
+    checkCvId(id);
 
     const response = (await apolloClient.query({
-      query: getCVPreviewDataByIDQuery,
+      query: getCvPreviewDataByIdQuery,
       variables: { cvId: Number(id) },
-    })) as { data: { cv: ICVPreviewServerData } };
+    })) as { data: { cv: ICvPreviewServerData } };
 
     return response.data.cv;
   } catch (error: unknown) {

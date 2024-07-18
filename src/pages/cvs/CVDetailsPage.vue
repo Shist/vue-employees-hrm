@@ -32,7 +32,7 @@
         v-if="isOwner"
         type="submit"
         class="cv-details__form-submit-btn"
-        @click.prevent="submitCVDetailsUpdate"
+        @click.prevent="submitCvDetailsUpdate"
         :disabled="isUpdateBtnDisabled"
       >
         UPDATE
@@ -42,22 +42,22 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, watch, onMounted } from "vue";
+import { ref, computed, onMounted } from "vue";
 import { useRoute } from "vue-router";
 import { storeToRefs } from "pinia";
 import { useAuthStore } from "@/store/authStore";
 import { useBreadCrumbsStore } from "@/store/breadCrumbs";
 import useErrorState from "@/composables/useErrorState";
-import { getCVDetailsDataByID, updateCV } from "@/services/cvs/details";
-import { IUpdateCVInput } from "@/types/backend-interfaces/cv";
-import { ICVDetailsServerData } from "@/types/cvDetailsUI";
+import { getCvDetailsDataById, updateCv } from "@/services/cvs/details";
+import { IUpdateCvInput } from "@/types/cvsOperations";
+import { ICvDetailsServerData } from "@/types/pages/cvs/details";
 
 const route = useRoute();
 
-const cvID = computed<string>(() => {
+const cvId = computed<string>(() => {
   // eslint-disable-next-line
-  const [section, cvID, tab] = route.fullPath.slice(1).split("/");
-  return cvID;
+  const [section, cvId, tab] = route.fullPath.slice(1).split("/");
+  return cvId;
 });
 
 const {
@@ -75,11 +75,11 @@ const cvDescriptionInitial = ref<string | null>(null);
 const cvName = ref<string | null>(null);
 const cvEducation = ref<string | null>(null);
 const cvDescription = ref<string | null>(null);
-const cvUserID = ref<string | null>(null);
+const cvUserId = ref<string | null>(null);
 
 const authStore = useAuthStore();
 const authStoreUser = storeToRefs(authStore).user;
-const isOwner = computed(() => authStoreUser.value?.id === cvUserID.value);
+const isOwner = computed(() => authStoreUser.value?.id === cvUserId.value);
 
 const { newEnityName } = storeToRefs(useBreadCrumbsStore());
 
@@ -96,11 +96,7 @@ onMounted(() => {
   fetchData();
 });
 
-watch(cvID, () => {
-  fetchData();
-});
-
-function updateCVDetailsValue(cvDetailsData: ICVDetailsServerData) {
+function updateCvDetailsValue(cvDetailsData: ICvDetailsServerData) {
   cvNameInitial.value = cvDetailsData.name;
   cvEducationInitial.value = cvDetailsData.education;
   cvDescriptionInitial.value = cvDetailsData.description;
@@ -110,18 +106,18 @@ function updateCVDetailsValue(cvDetailsData: ICVDetailsServerData) {
   cvDescription.value = cvDescriptionInitial.value;
 
   if (cvDetailsData.user) {
-    cvUserID.value = cvDetailsData.user.id;
+    cvUserId.value = cvDetailsData.user.id;
   }
 }
 
 function fetchData() {
   isLoading.value = true;
 
-  getCVDetailsDataByID(cvID.value)
+  getCvDetailsDataById(cvId.value)
     .then((cvDetailsData) => {
       if (!cvDetailsData) return;
 
-      updateCVDetailsValue(cvDetailsData);
+      updateCvDetailsValue(cvDetailsData);
 
       setErrorValuesToDefault();
     })
@@ -133,11 +129,11 @@ function fetchData() {
     });
 }
 
-function submitCVDetailsUpdate() {
+function submitCvDetailsUpdate() {
   if (!isOwner.value) return;
 
-  const cvInputObj: IUpdateCVInput = {
-    cvId: Number(cvID.value),
+  const cvInputObj: IUpdateCvInput = {
+    cvId: Number(cvId.value),
     name: `${cvName.value}`,
     education: cvEducation.value,
     description: `${cvDescription.value}`,
@@ -145,13 +141,13 @@ function submitCVDetailsUpdate() {
 
   isLoading.value = true;
 
-  updateCV(cvInputObj)
-    .then((freshCVDetails) => {
-      if (!freshCVDetails) return;
+  updateCv(cvInputObj)
+    .then((freshCvDetails) => {
+      if (!freshCvDetails) return;
 
-      updateCVDetailsValue(freshCVDetails);
+      updateCvDetailsValue(freshCvDetails);
 
-      newEnityName.value = freshCVDetails.name;
+      newEnityName.value = freshCvDetails.name;
 
       setErrorValuesToDefault();
     })

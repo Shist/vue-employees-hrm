@@ -28,8 +28,8 @@ import { useRoute } from "vue-router";
 import { storeToRefs } from "pinia";
 import { useAuthStore } from "@/store/authStore";
 import { useBreadCrumbsStore } from "@/store/breadCrumbs";
-import { getUserNameDataByID } from "@/services/users/users";
-import { getCVNameDataByID } from "@/services/cvs/cvs";
+import { getUserNameDataById } from "@/services/users/users";
+import { getCvNameDataById } from "@/services/cvs/cvs";
 import { ROUTES } from "@/constants/router";
 import {
   SECTIONS_NAMES,
@@ -97,7 +97,7 @@ function updateBreadCrumbs() {
             ? userFullName
             : user.value.email;
         } else {
-          getUserNameDataByID(id)
+          getUserNameDataById(id)
             .then((userData) => {
               if (!userData) throw new Error("Empty user data!");
               const userFullName = userData.profile.full_name;
@@ -111,7 +111,7 @@ function updateBreadCrumbs() {
         }
         break;
       case ROUTES.CVS.PATH.slice(1):
-        getCVNameDataByID(id)
+        getCvNameDataById(id)
           .then((cvData) => {
             if (!cvData) throw new Error("Empty CV data!");
             breadcrumbsItems[2].title = cvData.name;

@@ -53,7 +53,7 @@
   <SkillModal
     :isOpen="isModalOpen"
     :oSkillForModal="oSkillForModal"
-    :userID="userID"
+    :userId="userId"
     :skills="leftSkills"
     :skill-categories="skillCategories"
     @onCreateUserSkill="submitUserSkillCreate"
@@ -74,32 +74,32 @@ import { getAllSkills, getSkillCategories } from "@/services/skills";
 import {
   createUserSkill,
   deleteUserSkills,
-  getUserSkillsByID,
+  getUserSkillsById,
   updateUserSkill,
 } from "@/services/users/skills";
 import handleScrollPadding from "@/utils/handleScrollPadding";
-import {
-  IAddOrUpdateProfileSkillInput,
-  IDeleteProfileSkillInput,
-} from "@/types/backend-interfaces/user/profile/skill";
 import {
   ISkill,
   ISkillCategoriesMap,
   ICategorySkill,
   ISkillsData,
-} from "@/types/skillsUI";
+} from "@/types/skillsStructures";
+import {
+  IAddOrUpdateProfileSkillInput,
+  IDeleteProfileSkillInput,
+} from "@/types/pages/users/skills";
 
 const route = useRoute();
 
-const userID = computed<string>(() => {
+const userId = computed<string>(() => {
   // eslint-disable-next-line
-  const [section, userID, tab] = route.fullPath.slice(1).split("/");
-  return userID;
+  const [section, userId, tab] = route.fullPath.slice(1).split("/");
+  return userId;
 });
 
 const authStore = useAuthStore();
 const authStoreUser = storeToRefs(authStore).user;
-const isOwner = computed(() => authStoreUser.value?.id === userID.value);
+const isOwner = computed(() => authStoreUser.value?.id === userId.value);
 
 const {
   isLoading,
@@ -174,10 +174,6 @@ onMounted(() => {
   fetchData();
 });
 
-watch(userID, () => {
-  fetchData();
-});
-
 watch(isModalOpen, (newValue) => {
   handleScrollPadding(newValue);
 });
@@ -196,7 +192,7 @@ function fetchData() {
   isLoading.value = true;
 
   Promise.all([
-    getUserSkillsByID(userID.value),
+    getUserSkillsById(userId.value),
     getAllSkills(),
     getSkillCategories(),
   ])
@@ -309,7 +305,7 @@ function submitUserSkillsDeletion() {
   isLoading.value = true;
 
   const skillsToBeDeleted: IDeleteProfileSkillInput = {
-    userId: Number(userID.value),
+    userId: Number(userId.value),
     name: [...skillsForDeletionNames],
   };
 

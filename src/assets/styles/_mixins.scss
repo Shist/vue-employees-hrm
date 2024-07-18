@@ -14,29 +14,3 @@
   font-size: $font-size;
   line-height: $line-height;
 }
-
-// Default settings of buttons, you only need to choose max-width, font-size and line-height
-@mixin default-btn($max-width, $font-size, $line-height) {
-  max-width: $max-width;
-  width: 100%;
-  font-family: $font-roboto;
-  font-weight: 700;
-  font-size: $font-size;
-  line-height: $line-height;
-  text-align: center;
-  color: var(--color-btn-text);
-  background-color: var(--color-btn-bg);
-  box-shadow: rgba(0, 0, 0, 0.2) 0px 3px 1px -2px,
-    rgba(0, 0, 0, 0.14) 0px 2px 2px 0px, rgba(0, 0, 0, 0.12) 0px 1px 5px 0px;
-  border: none;
-  cursor: pointer;
-  transition: 0.3s;
-  &:hover {
-    background-color: var(--color-btn-bg-hover);
-  }
-  &:disabled {
-    transform: none;
-    filter: grayscale(50%);
-    cursor: default;
-  }
-}

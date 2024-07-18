@@ -2,7 +2,7 @@ import apolloClient from "@/plugins/apolloConfig";
 import getAllSkillsQuery from "@/graphql/skills/getAllSkills.query.gql";
 import getSkillCategoriesQuery from "@/graphql/skills/getSkillCategories.query.gql";
 import { getDetailedError } from "@/utils/handleErrors";
-import { ISkillsData } from "@/types/skillsUI";
+import { ISkillsData } from "@/types/skillsStructures";
 
 export const getAllSkills = async () => {
   try {

@@ -32,7 +32,7 @@
           variant="text"
           color="var(--color-btn-gray-text)"
           class="cv-skills__cancel-deletion-btn"
-          @click="clearCVDeletionSkills"
+          @click="clearCvDeletionSkills"
         >
           Cancel
         </v-btn>
@@ -40,7 +40,7 @@
           variant="text"
           color="var(--color-btn-gray-text)"
           class="cv-skills__deletion-btn"
-          @click="submitCVSkillsDeletion"
+          @click="submitCvSkillsDeletion"
         >
           <span class="cv-skills__deletion-btn-label">Delete</span>
           <span class="cv-skills__deletion-btn-num">
@@ -53,11 +53,11 @@
   <SkillModal
     :isOpen="isModalOpen"
     :oSkillForModal="oSkillForModal"
-    :cvID="cvID"
+    :cvId="cvId"
     :skills="leftSkills"
     :skill-categories="skillCategories"
-    @onCreateCVSkill="submitCVSkillCreate"
-    @onUpdateCVSkill="submitCVSkillUpdate"
+    @onCreateCvSkill="submitCvSkillCreate"
+    @onUpdateCvSkill="submitCvSkillUpdate"
     @closeModal="handleCloseModal"
   />
 </template>
@@ -72,37 +72,37 @@ import SkillsCategory from "@/components/SkillsCategory.vue";
 import useErrorState from "@/composables/useErrorState";
 import { getAllSkills, getSkillCategories } from "@/services/skills";
 import {
-  getCVSkillsByID,
+  getCvSkillsById,
   createCvSkill,
   updateCvSkill,
   deleteCvSkills,
 } from "@/services/cvs/skills";
 import handleScrollPadding from "@/utils/handleScrollPadding";
 import {
-  IAddOrUpdateCvSkillInput,
-  IDeleteCvSkillInput,
-} from "@/types/backend-interfaces/cv/skill";
-import {
   ISkill,
-  ICVSkillsServerData,
+  ICvSkillsServerData,
   ISkillCategoriesMap,
   ICategorySkill,
   ISkillsData,
-} from "@/types/skillsUI";
+} from "@/types/skillsStructures";
+import {
+  IAddOrUpdateCvSkillInput,
+  IDeleteCvSkillInput,
+} from "@/types/pages/cvs/skills";
 
 const route = useRoute();
 
-const cvID = computed<string>(() => {
+const cvId = computed<string>(() => {
   // eslint-disable-next-line
-  const [section, cvID, tab] = route.fullPath.slice(1).split("/");
-  return cvID;
+  const [section, cvId, tab] = route.fullPath.slice(1).split("/");
+  return cvId;
 });
 
-const cvUserID = ref<string | null>(null);
+const cvUserId = ref<string | null>(null);
 
 const authStore = useAuthStore();
 const authStoreUser = storeToRefs(authStore).user;
-const isOwner = computed(() => authStoreUser.value?.id === cvUserID.value);
+const isOwner = computed(() => authStoreUser.value?.id === cvUserId.value);
 
 const {
   isLoading,
@@ -177,15 +177,11 @@ onMounted(() => {
   fetchData();
 });
 
-watch(cvID, () => {
-  fetchData();
-});
-
 watch(isModalOpen, (newValue) => {
   handleScrollPadding(newValue);
 });
 
-function updateCVSkillsValue(cvSkillsData: ICVSkillsServerData) {
+function updateCvSkillsValue(cvSkillsData: ICvSkillsServerData) {
   skillsForDeletionNames.clear();
   aSkillsDeletionState.splice(
     0,
@@ -195,7 +191,7 @@ function updateCVSkillsValue(cvSkillsData: ICVSkillsServerData) {
   cvSkills.value = cvSkillsData.skills;
 
   if (cvSkillsData.user) {
-    cvUserID.value = cvSkillsData.user.id;
+    cvUserId.value = cvSkillsData.user.id;
   }
 }
 
@@ -203,13 +199,13 @@ function fetchData() {
   isLoading.value = true;
 
   Promise.all([
-    getCVSkillsByID(cvID.value),
+    getCvSkillsById(cvId.value),
     getAllSkills(),
     getSkillCategories(),
   ])
     .then(([cvSkillsData, skillsData, skillCategoriesData]) => {
       if (!cvSkillsData || !skillsData || !skillCategoriesData) return;
-      updateCVSkillsValue(cvSkillsData);
+      updateCvSkillsValue(cvSkillsData);
 
       skills.value = skillsData;
 
@@ -248,15 +244,15 @@ function handleOpenEditModal(
   }
 }
 
-function submitCVSkillCreate(skillInputObj: IAddOrUpdateCvSkillInput) {
+function submitCvSkillCreate(skillInputObj: IAddOrUpdateCvSkillInput) {
   if (!isOwner.value) return;
 
   isLoading.value = true;
 
   createCvSkill(skillInputObj)
-    .then((freshCVSkills) => {
-      if (!freshCVSkills) return;
-      updateCVSkillsValue(freshCVSkills);
+    .then((freshCvSkills) => {
+      if (!freshCvSkills) return;
+      updateCvSkillsValue(freshCvSkills);
 
       setErrorValuesToDefault();
     })
@@ -268,15 +264,15 @@ function submitCVSkillCreate(skillInputObj: IAddOrUpdateCvSkillInput) {
     });
 }
 
-function submitCVSkillUpdate(skillInputObj: IAddOrUpdateCvSkillInput) {
+function submitCvSkillUpdate(skillInputObj: IAddOrUpdateCvSkillInput) {
   if (!isOwner.value) return;
 
   isLoading.value = true;
 
   updateCvSkill(skillInputObj)
-    .then((freshCVSkills) => {
-      if (!freshCVSkills) return;
-      updateCVSkillsValue(freshCVSkills);
+    .then((freshCvSkills) => {
+      if (!freshCvSkills) return;
+      updateCvSkillsValue(freshCvSkills);
 
       setErrorValuesToDefault();
     })
@@ -304,26 +300,26 @@ function handleSetCardForDeletion(skillName: string, skillIndex: number) {
   }
 }
 
-function clearCVDeletionSkills() {
+function clearCvDeletionSkills() {
   skillsForDeletionNames.clear();
 
   aSkillsDeletionState.fill(false);
 }
 
-function submitCVSkillsDeletion() {
+function submitCvSkillsDeletion() {
   if (!isOwner.value) return;
 
   isLoading.value = true;
 
   const skillsToBeDeleted: IDeleteCvSkillInput = {
-    cvId: Number(cvID.value),
+    cvId: Number(cvId.value),
     name: [...skillsForDeletionNames],
   };
 
   deleteCvSkills(skillsToBeDeleted)
-    .then((freshCVSkills) => {
-      if (!freshCVSkills) return;
-      updateCVSkillsValue(freshCVSkills);
+    .then((freshCvSkills) => {
+      if (!freshCvSkills) return;
+      updateCvSkillsValue(freshCvSkills);
 
       setErrorValuesToDefault();
     })
@@ -334,7 +330,7 @@ function submitCVSkillsDeletion() {
       isLoading.value = false;
     });
 
-  clearCVDeletionSkills();
+  clearCvDeletionSkills();
 }
 </script>
 

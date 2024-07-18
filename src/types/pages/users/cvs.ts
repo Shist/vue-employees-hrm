@@ -1,4 +1,4 @@
-export interface IUserCVNameData {
+export interface IUserCvNameData {
   id: string;
   name: string;
   description: string;

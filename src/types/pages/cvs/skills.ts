@@ -1,4 +1,4 @@
-import { Mastery } from "@/types/backend-interfaces/skill/mastery";
+import { Mastery } from "@/types/enums";
 
 export interface IAddOrUpdateCvSkillInput {
   cvId: number;

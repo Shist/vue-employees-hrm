@@ -1,12 +1,12 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { IUsersTableData } from "@/types/usersTableUI";
-import { IProjectsTableData } from "@/types/projectsTableUI";
-import { ICvsTableData } from "@/types/cvsTableUI";
-import { IDepartmentsTableData } from "@/types/departmentsTableUI";
-import { IPositionsTableData } from "@/types/positionsTableUI";
-import { ISkillsTableData } from "@/types/skillsTableUI";
-import { ILanguagesTableData } from "@/types/languagesTableUI";
-import { ICVProjectsTableData } from "@/types/cvProjectsUI";
+import { IUsersTableData } from "@/types/pages/users/table";
+import { IProjectsTableData } from "@/types/pages/projectsTable";
+import { ICvsTableData } from "@/types/pages/cvs/table";
+import { IDepartmentsTableData } from "@/types/pages/departmentsTable";
+import { IPositionsTableData } from "@/types/pages/positionsTable";
+import { ISkillsTableData } from "@/types/pages/skillsTable";
+import { ILanguagesTableData } from "@/types/pages/languagesTable";
+import { ICvProjectsTableData } from "@/types/pages/cvs/projects";
 
 type FilterMatch = boolean | number | [number, number] | [number, number][];
 
@@ -25,7 +25,7 @@ export type IUsersFilterFunction = FilterFunction<IUsersTableData>;
 
 export type IProjectsFilterFunction = FilterFunction<IProjectsTableData>;
 
-export type ICVsFilterFunction = FilterFunction<ICvsTableData>;
+export type ICvsFilterFunction = FilterFunction<ICvsTableData>;
 
 export type IDepartmentsFilterFunction = FilterFunction<IDepartmentsTableData>;
 
@@ -35,4 +35,4 @@ export type ISkillsFilterFunction = FilterFunction<ISkillsTableData>;
 
 export type ILanguagesFilterFunction = FilterFunction<ILanguagesTableData>;
 
-export type ICVProjectsFilterFunction = FilterFunction<ICVProjectsTableData>;
+export type ICvProjectsFilterFunction = FilterFunction<ICvProjectsTableData>;

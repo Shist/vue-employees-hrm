@@ -44,17 +44,17 @@
 
 <script setup lang="ts">
 import { computed } from "vue";
-import { IDeleteCVInput } from "@/types/backend-interfaces/cv";
+import { IDeleteCvInput } from "@/types/cvsOperations";
 
 const props = defineProps<{
   isOpen: boolean;
-  cvID: string | null;
+  cvId: string | null;
   cvName: string | null;
 }>();
 
 const emit = defineEmits<{
   (event: "closeModal"): void;
-  (event: "onDeleteUserCV", cvInputObj: IDeleteCVInput): void;
+  (event: "onDeleteUserCv", cvInputObj: IDeleteCvInput): void;
 }>();
 
 const modalState = computed({
@@ -67,13 +67,13 @@ const modalState = computed({
 });
 
 function makeDeleteOperation() {
-  if (!props.cvID) return;
+  if (!props.cvId) return;
 
-  const cvInputObj: IDeleteCVInput = {
-    cvId: Number(props.cvID),
+  const cvInputObj: IDeleteCvInput = {
+    cvId: Number(props.cvId),
   };
 
-  emit("onDeleteUserCV", cvInputObj);
+  emit("onDeleteUserCv", cvInputObj);
 
   emit("closeModal");
 }

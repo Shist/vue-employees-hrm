@@ -48,20 +48,22 @@
 
 <script setup lang="ts">
 import { ref, computed, onUpdated } from "vue";
-import { IProjectsData } from "@/types/cvProjectsUI";
-import { IAddOrUpdateCVProjectInput } from "@/types/backend-interfaces/cv/project";
+import {
+  IProjectsData,
+  IAddOrUpdateCvProjectInput,
+} from "@/types/pages/cvs/projects";
 
 const props = defineProps<{
   isOpen: boolean;
-  cvID: string;
+  cvId: string;
   projects: IProjectsData[] | null;
 }>();
 
 const emit = defineEmits<{
   (event: "closeModal"): void;
   (
-    event: "onCreateCVProject",
-    projectInputObj: IAddOrUpdateCVProjectInput
+    event: "onCreateCvProject",
+    projectInputObj: IAddOrUpdateCvProjectInput
   ): void;
 }>();
 
@@ -93,8 +95,8 @@ onUpdated(() => {
 function makeCreateOperation() {
   if (!selectProject.value) return;
 
-  const projectInputObj: IAddOrUpdateCVProjectInput = {
-    cvId: Number(props.cvID),
+  const projectInputObj: IAddOrUpdateCvProjectInput = {
+    cvId: Number(props.cvId),
     projectId: Number(selectProject.value.id),
     start_date: selectProject.value.startDate,
     end_date: selectProject.value.endDate,
@@ -102,7 +104,7 @@ function makeCreateOperation() {
     responsibilities: [],
   };
 
-  emit("onCreateCVProject", projectInputObj);
+  emit("onCreateCvProject", projectInputObj);
   emit("closeModal");
 }
 
