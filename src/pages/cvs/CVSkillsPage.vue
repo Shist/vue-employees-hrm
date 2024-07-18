@@ -32,7 +32,7 @@
           variant="text"
           color="var(--color-btn-gray-text)"
           class="cv-skills__cancel-deletion-btn"
-          @click="clearCVDeletionSkills"
+          @click="clearCvDeletionSkills"
         >
           Cancel
         </v-btn>
@@ -40,7 +40,7 @@
           variant="text"
           color="var(--color-btn-gray-text)"
           class="cv-skills__deletion-btn"
-          @click="submitCVSkillsDeletion"
+          @click="submitCvSkillsDeletion"
         >
           <span class="cv-skills__deletion-btn-label">Delete</span>
           <span class="cv-skills__deletion-btn-num">
@@ -56,8 +56,8 @@
     :cvId="cvId"
     :skills="leftSkills"
     :skill-categories="skillCategories"
-    @onCreateCVSkill="submitCVSkillCreate"
-    @onUpdateCVSkill="submitCVSkillUpdate"
+    @onCreateCvSkill="submitCvSkillCreate"
+    @onUpdateCvSkill="submitCvSkillUpdate"
     @closeModal="handleCloseModal"
   />
 </template>
@@ -72,7 +72,7 @@ import SkillsCategory from "@/components/SkillsCategory.vue";
 import useErrorState from "@/composables/useErrorState";
 import { getAllSkills, getSkillCategories } from "@/services/skills";
 import {
-  getCVSkillsById,
+  getCvSkillsById,
   createCvSkill,
   updateCvSkill,
   deleteCvSkills,
@@ -84,7 +84,7 @@ import {
 } from "@/types/backend-interfaces/cv/skill";
 import {
   ISkill,
-  ICVSkillsServerData,
+  ICvSkillsServerData,
   ISkillCategoriesMap,
   ICategorySkill,
   ISkillsData,
@@ -185,7 +185,7 @@ watch(isModalOpen, (newValue) => {
   handleScrollPadding(newValue);
 });
 
-function updateCVSkillsValue(cvSkillsData: ICVSkillsServerData) {
+function updateCvSkillsValue(cvSkillsData: ICvSkillsServerData) {
   skillsForDeletionNames.clear();
   aSkillsDeletionState.splice(
     0,
@@ -203,13 +203,13 @@ function fetchData() {
   isLoading.value = true;
 
   Promise.all([
-    getCVSkillsById(cvId.value),
+    getCvSkillsById(cvId.value),
     getAllSkills(),
     getSkillCategories(),
   ])
     .then(([cvSkillsData, skillsData, skillCategoriesData]) => {
       if (!cvSkillsData || !skillsData || !skillCategoriesData) return;
-      updateCVSkillsValue(cvSkillsData);
+      updateCvSkillsValue(cvSkillsData);
 
       skills.value = skillsData;
 
@@ -248,15 +248,15 @@ function handleOpenEditModal(
   }
 }
 
-function submitCVSkillCreate(skillInputObj: IAddOrUpdateCvSkillInput) {
+function submitCvSkillCreate(skillInputObj: IAddOrUpdateCvSkillInput) {
   if (!isOwner.value) return;
 
   isLoading.value = true;
 
   createCvSkill(skillInputObj)
-    .then((freshCVSkills) => {
-      if (!freshCVSkills) return;
-      updateCVSkillsValue(freshCVSkills);
+    .then((freshCvSkills) => {
+      if (!freshCvSkills) return;
+      updateCvSkillsValue(freshCvSkills);
 
       setErrorValuesToDefault();
     })
@@ -268,15 +268,15 @@ function submitCVSkillCreate(skillInputObj: IAddOrUpdateCvSkillInput) {
     });
 }
 
-function submitCVSkillUpdate(skillInputObj: IAddOrUpdateCvSkillInput) {
+function submitCvSkillUpdate(skillInputObj: IAddOrUpdateCvSkillInput) {
   if (!isOwner.value) return;
 
   isLoading.value = true;
 
   updateCvSkill(skillInputObj)
-    .then((freshCVSkills) => {
-      if (!freshCVSkills) return;
-      updateCVSkillsValue(freshCVSkills);
+    .then((freshCvSkills) => {
+      if (!freshCvSkills) return;
+      updateCvSkillsValue(freshCvSkills);
 
       setErrorValuesToDefault();
     })
@@ -304,13 +304,13 @@ function handleSetCardForDeletion(skillName: string, skillIndex: number) {
   }
 }
 
-function clearCVDeletionSkills() {
+function clearCvDeletionSkills() {
   skillsForDeletionNames.clear();
 
   aSkillsDeletionState.fill(false);
 }
 
-function submitCVSkillsDeletion() {
+function submitCvSkillsDeletion() {
   if (!isOwner.value) return;
 
   isLoading.value = true;
@@ -321,9 +321,9 @@ function submitCVSkillsDeletion() {
   };
 
   deleteCvSkills(skillsToBeDeleted)
-    .then((freshCVSkills) => {
-      if (!freshCVSkills) return;
-      updateCVSkillsValue(freshCVSkills);
+    .then((freshCvSkills) => {
+      if (!freshCvSkills) return;
+      updateCvSkillsValue(freshCvSkills);
 
       setErrorValuesToDefault();
     })
@@ -334,7 +334,7 @@ function submitCVSkillsDeletion() {
       isLoading.value = false;
     });
 
-  clearCVDeletionSkills();
+  clearCvDeletionSkills();
 }
 </script>
 

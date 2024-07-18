@@ -32,7 +32,7 @@
         v-if="isOwner"
         type="submit"
         class="cv-details__form-submit-btn"
-        @click.prevent="submitCVDetailsUpdate"
+        @click.prevent="submitCvDetailsUpdate"
         :disabled="isUpdateBtnDisabled"
       >
         UPDATE
@@ -48,9 +48,9 @@ import { storeToRefs } from "pinia";
 import { useAuthStore } from "@/store/authStore";
 import { useBreadCrumbsStore } from "@/store/breadCrumbs";
 import useErrorState from "@/composables/useErrorState";
-import { getCVDetailsDataById, updateCV } from "@/services/cvs/details";
-import { IUpdateCVInput } from "@/types/backend-interfaces/cv";
-import { ICVDetailsServerData } from "@/types/cvDetailsUI";
+import { getCvDetailsDataById, updateCv } from "@/services/cvs/details";
+import { IUpdateCvInput } from "@/types/backend-interfaces/cv";
+import { ICvDetailsServerData } from "@/types/cvDetailsUI";
 
 const route = useRoute();
 
@@ -100,7 +100,7 @@ watch(cvId, () => {
   fetchData();
 });
 
-function updateCVDetailsValue(cvDetailsData: ICVDetailsServerData) {
+function updateCvDetailsValue(cvDetailsData: ICvDetailsServerData) {
   cvNameInitial.value = cvDetailsData.name;
   cvEducationInitial.value = cvDetailsData.education;
   cvDescriptionInitial.value = cvDetailsData.description;
@@ -117,11 +117,11 @@ function updateCVDetailsValue(cvDetailsData: ICVDetailsServerData) {
 function fetchData() {
   isLoading.value = true;
 
-  getCVDetailsDataById(cvId.value)
+  getCvDetailsDataById(cvId.value)
     .then((cvDetailsData) => {
       if (!cvDetailsData) return;
 
-      updateCVDetailsValue(cvDetailsData);
+      updateCvDetailsValue(cvDetailsData);
 
       setErrorValuesToDefault();
     })
@@ -133,10 +133,10 @@ function fetchData() {
     });
 }
 
-function submitCVDetailsUpdate() {
+function submitCvDetailsUpdate() {
   if (!isOwner.value) return;
 
-  const cvInputObj: IUpdateCVInput = {
+  const cvInputObj: IUpdateCvInput = {
     cvId: Number(cvId.value),
     name: `${cvName.value}`,
     education: cvEducation.value,
@@ -145,13 +145,13 @@ function submitCVDetailsUpdate() {
 
   isLoading.value = true;
 
-  updateCV(cvInputObj)
-    .then((freshCVDetails) => {
-      if (!freshCVDetails) return;
+  updateCv(cvInputObj)
+    .then((freshCvDetails) => {
+      if (!freshCvDetails) return;
 
-      updateCVDetailsValue(freshCVDetails);
+      updateCvDetailsValue(freshCvDetails);
 
-      newEnityName.value = freshCVDetails.name;
+      newEnityName.value = freshCvDetails.name;
 
       setErrorValuesToDefault();
     })

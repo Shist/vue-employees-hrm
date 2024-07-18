@@ -62,7 +62,7 @@
 
 <script setup lang="ts">
 import { ref, computed, onUpdated } from "vue";
-import { ICreateCVInput } from "@/types/backend-interfaces/cv";
+import { ICreateCvInput } from "@/types/backend-interfaces/cv";
 
 const props = defineProps<{
   isOpen: boolean;
@@ -71,7 +71,7 @@ const props = defineProps<{
 
 const emit = defineEmits<{
   (event: "closeModal"): void;
-  (event: "onCreateUserCV", cvInputObj: ICreateCVInput): void;
+  (event: "onCreateUserCv", cvInputObj: ICreateCvInput): void;
 }>();
 
 const modalState = computed({
@@ -98,14 +98,14 @@ onUpdated(() => {
 });
 
 function makeCreateOperation() {
-  const cvInputObj: ICreateCVInput = {
+  const cvInputObj: ICreateCvInput = {
     name: `${cvName.value}`,
     education: cvEducation.value,
     description: `${cvDescription.value}`,
     userId: Number(props.userId),
   };
 
-  emit("onCreateUserCV", cvInputObj);
+  emit("onCreateUserCv", cvInputObj);
 
   emit("closeModal");
 }

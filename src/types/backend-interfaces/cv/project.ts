@@ -1,6 +1,6 @@
 import { IProject } from "@/types/backend-interfaces/project";
 
-export interface ICVProject {
+export interface ICvProject {
   id: number;
   project: IProject;
   name: string;
@@ -14,7 +14,7 @@ export interface ICVProject {
   responsibilities: string[];
 }
 
-export interface IAddOrUpdateCVProjectInput {
+export interface IAddOrUpdateCvProjectInput {
   cvId: number;
   projectId: number;
   start_date: string;
@@ -23,7 +23,7 @@ export interface IAddOrUpdateCVProjectInput {
   responsibilities: string[];
 }
 
-export interface IRemoveCVProjectInput {
+export interface IRemoveCvProjectInput {
   cvId: number;
   projectId: number;
 }

@@ -29,7 +29,7 @@ import { storeToRefs } from "pinia";
 import { useAuthStore } from "@/store/authStore";
 import { useBreadCrumbsStore } from "@/store/breadCrumbs";
 import { getUserNameDataById } from "@/services/users/users";
-import { getCVNameDataById } from "@/services/cvs/cvs";
+import { getCvNameDataById } from "@/services/cvs/cvs";
 import { ROUTES } from "@/constants/router";
 import {
   SECTIONS_NAMES,
@@ -111,7 +111,7 @@ function updateBreadCrumbs() {
         }
         break;
       case ROUTES.CVS.PATH.slice(1):
-        getCVNameDataById(id)
+        getCvNameDataById(id)
           .then((cvData) => {
             if (!cvData) throw new Error("Empty CV data!");
             breadcrumbsItems[2].title = cvData.name;

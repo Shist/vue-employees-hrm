@@ -32,7 +32,7 @@
       </div>
       <v-data-table
         :headers="headers"
-        :items="userCVs"
+        :items="userCvs"
         :search="search"
         :class="{ 'user-cvs__data-table': true }"
         hide-details
@@ -47,7 +47,7 @@
               />
             </template>
             <v-list>
-              <v-list-item @click="() => openUserCV(item.id)">
+              <v-list-item @click="() => openUserCv(item.id)">
                 <v-list-item-title class="user-cvs__popup-menu-label">
                   Details
                 </v-list-item-title>
@@ -66,17 +66,17 @@
       </v-data-table>
     </div>
   </div>
-  <CreateCVModal
+  <CreateCvModal
     :isOpen="isCreateModalOpen"
     :userId="userId"
-    @onCreateUserCV="submitUserCVCreate"
+    @onCreateUserCv="submitUserCvCreate"
     @closeModal="handleCloseCreateModal"
   />
-  <DeleteCVModal
+  <DeleteCvModal
     :isOpen="isDeleteModalOpen"
-    :cvId="openedCVId"
-    :cvName="openedCVName"
-    @onDeleteUserCV="submitUserCVDeletion"
+    :cvId="openedCvId"
+    :cvName="openedCvName"
+    @onDeleteUserCv="submitUserCvDeletion"
     @closeModal="handleCloseDeleteModal"
   />
 </template>
@@ -86,15 +86,15 @@ import { ref, reactive, computed, watch, onMounted } from "vue";
 import { useRouter, useRoute } from "vue-router";
 import { storeToRefs } from "pinia";
 import { useAuthStore } from "@/store/authStore";
-import CreateCVModal from "@/components/user/cvs/CreateCVModal.vue";
-import DeleteCVModal from "@/components/user/cvs/DeleteCVModal.vue";
+import CreateCvModal from "@/components/user/cvs/CreateCvModal.vue";
+import DeleteCvModal from "@/components/user/cvs/DeleteCvModal.vue";
 import useErrorState from "@/composables/useErrorState";
-import { getUserCVsNamesById } from "@/services/users/cvs";
-import { createCV, deleteCV } from "@/services/cvs/cvs";
+import { getUserCvsNamesById } from "@/services/users/cvs";
+import { createCv, deleteCv } from "@/services/cvs/cvs";
 import handleScrollPadding from "@/utils/handleScrollPadding";
 import { ROUTES } from "@/constants/router";
-import { IUserCVNameData } from "@/types/userCVsUI";
-import { ICreateCVInput, IDeleteCVInput } from "@/types/backend-interfaces/cv";
+import { IUserCvNameData } from "@/types/userCvsUI";
+import { ICreateCvInput, IDeleteCvInput } from "@/types/backend-interfaces/cv";
 
 const router = useRouter();
 const route = useRoute();
@@ -109,10 +109,10 @@ const authStore = useAuthStore();
 const authStoreUser = storeToRefs(authStore).user;
 const isOwner = computed(() => authStoreUser.value?.id === userId.value);
 
-const openedCVId = ref<string | null>(null);
-const openedCVName = ref<string | null>(null);
+const openedCvId = ref<string | null>(null);
+const openedCvName = ref<string | null>(null);
 
-function openUserCV(cvId: string) {
+function openUserCv(cvId: string) {
   router.push(`${ROUTES.CVS.PATH}/${cvId}`);
 }
 
@@ -132,7 +132,7 @@ const {
   setErrorValues,
 } = useErrorState();
 
-const userCVs = reactive<IUserCVNameData[]>([]);
+const userCvs = reactive<IUserCvNameData[]>([]);
 
 const isCreateModalOpen = ref(false);
 const isDeleteModalOpen = ref(false);
@@ -158,11 +158,11 @@ watch(isDeleteModalOpen, (newValue) => {
 
 async function fetchData() {
   try {
-    const cvsData = await getUserCVsNamesById(userId.value);
+    const cvsData = await getUserCvsNamesById(userId.value);
 
     if (!cvsData) return;
 
-    userCVs.splice(0, userCVs.length, ...cvsData);
+    userCvs.splice(0, userCvs.length, ...cvsData);
 
     setErrorValuesToDefault();
   } catch (error: unknown) {
@@ -170,13 +170,13 @@ async function fetchData() {
   }
 }
 
-async function submitUserCVCreate(cvInputObj: ICreateCVInput) {
+async function submitUserCvCreate(cvInputObj: ICreateCvInput) {
   if (!isOwner.value) return;
 
   isLoading.value = true;
 
   try {
-    await createCV(cvInputObj);
+    await createCv(cvInputObj);
 
     await fetchData();
 
@@ -188,13 +188,13 @@ async function submitUserCVCreate(cvInputObj: ICreateCVInput) {
   }
 }
 
-async function submitUserCVDeletion(cvInputObj: IDeleteCVInput) {
+async function submitUserCvDeletion(cvInputObj: IDeleteCvInput) {
   if (!isOwner.value) return;
 
   isLoading.value = true;
 
   try {
-    await deleteCV(cvInputObj);
+    await deleteCv(cvInputObj);
 
     await fetchData();
 
@@ -219,8 +219,8 @@ function handleCloseCreateModal() {
 function handleOpenDeleteModal(cvId: string, cvName: string) {
   if (!isOwner.value) return;
 
-  openedCVId.value = cvId;
-  openedCVName.value = cvName;
+  openedCvId.value = cvId;
+  openedCvName.value = cvName;
   isDeleteModalOpen.value = true;
 }
 

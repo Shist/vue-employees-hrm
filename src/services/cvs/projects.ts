@@ -1,22 +1,22 @@
 import apolloClient from "@/plugins/apolloConfig";
-import getCVProjectsByIdQuery from "@/graphql/cvs/projects/getCVProjectsById.query.gql";
-import createCVProjectQuery from "@/graphql/cvs/projects/createCVProject.mutation.gql";
-import deleteCVProjectQuery from "@/graphql/cvs/projects/deleteCVProject.mutation.gql";
+import getCvProjectsByIdQuery from "@/graphql/cvs/projects/getCvProjectsById.query.gql";
+import createCvProjectQuery from "@/graphql/cvs/projects/createCvProject.mutation.gql";
+import deleteCvProjectQuery from "@/graphql/cvs/projects/deleteCvProject.mutation.gql";
 import { checkCvId, getDetailedError } from "@/utils/handleErrors";
 import {
-  IAddOrUpdateCVProjectInput,
-  IRemoveCVProjectInput,
+  IAddOrUpdateCvProjectInput,
+  IRemoveCvProjectInput,
 } from "@/types/backend-interfaces/cv/project";
-import { ICVProjectsTableServerData } from "@/types/cvProjectsUI";
+import { ICvProjectsTableServerData } from "@/types/cvProjectsUI";
 
-export const getCVProjectsById = async (id: string) => {
+export const getCvProjectsById = async (id: string) => {
   try {
     checkCvId(id);
 
     const response = (await apolloClient.query({
-      query: getCVProjectsByIdQuery,
+      query: getCvProjectsByIdQuery,
       variables: { cvId: Number(id) },
-    })) as { data: { cv: ICVProjectsTableServerData } };
+    })) as { data: { cv: ICvProjectsTableServerData } };
 
     return response.data.cv;
   } catch (error: unknown) {
@@ -25,13 +25,13 @@ export const getCVProjectsById = async (id: string) => {
 };
 
 export const createCvProject = async (
-  inputProjectObj: IAddOrUpdateCVProjectInput
+  inputProjectObj: IAddOrUpdateCvProjectInput
 ) => {
   try {
     const response = (await apolloClient.mutate({
-      mutation: createCVProjectQuery,
+      mutation: createCvProjectQuery,
       variables: { project: inputProjectObj },
-    })) as { data: { addCvProject: ICVProjectsTableServerData } };
+    })) as { data: { addCvProject: ICvProjectsTableServerData } };
 
     return response.data.addCvProject;
   } catch (error: unknown) {
@@ -40,13 +40,13 @@ export const createCvProject = async (
 };
 
 export const deleteCvProject = async (
-  inputProjectObj: IRemoveCVProjectInput
+  inputProjectObj: IRemoveCvProjectInput
 ) => {
   try {
     const response = (await apolloClient.mutate({
-      mutation: deleteCVProjectQuery,
+      mutation: deleteCvProjectQuery,
       variables: { project: inputProjectObj },
-    })) as { data: { removeCvProject: ICVProjectsTableServerData } };
+    })) as { data: { removeCvProject: ICvProjectsTableServerData } };
 
     return response.data.removeCvProject;
   } catch (error: unknown) {

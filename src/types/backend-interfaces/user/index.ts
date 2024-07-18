@@ -2,7 +2,7 @@ import {
   IProfile,
   ICreateProfileInput,
 } from "@/types/backend-interfaces/user/profile";
-import { ICV } from "@/types/backend-interfaces/cv";
+import { ICv } from "@/types/backend-interfaces/cv";
 import { IDepartment } from "@/types/backend-interfaces/department";
 import { IPosition } from "@/types/backend-interfaces/position";
 import { IAuthInput } from "@/types/backend-interfaces/user/auth";
@@ -18,7 +18,7 @@ export interface IUser {
   email: string;
   is_verified: boolean;
   profile: IProfile;
-  cvs: ICV[] | null;
+  cvs: ICv[] | null;
   department: IDepartment | null;
   department_name: string | null;
   position: IPosition | null;

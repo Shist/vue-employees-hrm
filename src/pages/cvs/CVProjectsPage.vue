@@ -76,7 +76,7 @@
     :isOpen="isCreateModalOpen"
     :cvId="cvId"
     :projects="leftProjectsData"
-    @onCreateCVProject="submitCVProjectAdding"
+    @onCreateCvProject="submitCvProjectAdding"
     @closeModal="handleCloseCreateModal"
   />
   <RemoveProjectModal
@@ -84,7 +84,7 @@
     :cvId="cvId"
     :projectId="addingProjectId"
     :projectName="addingProjectName"
-    @onRemoveCVProject="submitCVProjectRemoving"
+    @onRemoveCvProject="submitCvProjectRemoving"
     @closeModal="handleCloseDeleteModal"
   />
 </template>
@@ -98,22 +98,22 @@ import AddProjectModal from "@/components/cv/projects/AddProjectModal.vue";
 import RemoveProjectModal from "@/components/cv/projects/RemoveProjectModal.vue";
 import useErrorState from "@/composables/useErrorState";
 import {
-  getCVProjectsById,
+  getCvProjectsById,
   createCvProject,
   deleteCvProject,
 } from "@/services/cvs/projects";
 import { getAllProjectsData } from "@/services/projects";
 import handleScrollPadding from "@/utils/handleScrollPadding";
 import {
-  ICVProjectsTableData,
-  ICVProjectsTableServerData,
+  ICvProjectsTableData,
+  ICvProjectsTableServerData,
   IProjectsData,
 } from "@/types/cvProjectsUI";
 import {
-  IAddOrUpdateCVProjectInput,
-  IRemoveCVProjectInput,
+  IAddOrUpdateCvProjectInput,
+  IRemoveCvProjectInput,
 } from "@/types/backend-interfaces/cv/project";
-import { ICVProjectsFilterFunction } from "@/types/vuetifyDataTable";
+import { ICvProjectsFilterFunction } from "@/types/vuetifyDataTable";
 
 const route = useRoute();
 
@@ -151,7 +151,7 @@ const {
   setErrorValues,
 } = useErrorState();
 
-const cvProjects = reactive<ICVProjectsTableData[]>([]);
+const cvProjects = reactive<ICvProjectsTableData[]>([]);
 const allProjectsData = reactive<IProjectsData[]>([]);
 
 const leftProjectsData = computed<IProjectsData[]>(() => {
@@ -185,12 +185,12 @@ watch(isDeleteModalOpen, (newValue) => {
   handleScrollPadding(newValue);
 });
 
-function updateCVProjectsValue(
-  cvProjectsServerData: ICVProjectsTableServerData
+function updateCvProjectsValue(
+  cvProjectsServerData: ICvProjectsTableServerData
 ) {
   if (!cvProjectsServerData.projects || !cvProjectsServerData.user) return;
 
-  const cvProjectsTableData: ICVProjectsTableData[] =
+  const cvProjectsTableData: ICvProjectsTableData[] =
     cvProjectsServerData.projects.map((projectFromServer) => ({
       projectId: `${projectFromServer.project.id}`,
       name: projectFromServer.name,
@@ -208,9 +208,9 @@ function updateCVProjectsValue(
 function fetchData() {
   isLoading.value = true;
 
-  Promise.all([getCVProjectsById(cvId.value), getAllProjectsData()])
+  Promise.all([getCvProjectsById(cvId.value), getAllProjectsData()])
     .then(([cvProjectsServerData, allProjectsServerData]) => {
-      updateCVProjectsValue(cvProjectsServerData);
+      updateCvProjectsValue(cvProjectsServerData);
 
       allProjectsData.splice(
         0,
@@ -233,14 +233,14 @@ function fetchData() {
     });
 }
 
-function submitCVProjectAdding(inputProjectObj: IAddOrUpdateCVProjectInput) {
+function submitCvProjectAdding(inputProjectObj: IAddOrUpdateCvProjectInput) {
   if (!isOwner.value) return;
 
   isLoading.value = true;
 
   createCvProject(inputProjectObj)
-    .then((freshCVProjectsServerData) => {
-      updateCVProjectsValue(freshCVProjectsServerData);
+    .then((freshCvProjectsServerData) => {
+      updateCvProjectsValue(freshCvProjectsServerData);
 
       setErrorValuesToDefault();
     })
@@ -252,14 +252,14 @@ function submitCVProjectAdding(inputProjectObj: IAddOrUpdateCVProjectInput) {
     });
 }
 
-function submitCVProjectRemoving(inputProjectObj: IRemoveCVProjectInput) {
+function submitCvProjectRemoving(inputProjectObj: IRemoveCvProjectInput) {
   if (!isOwner.value) return;
 
   isLoading.value = true;
 
   deleteCvProject(inputProjectObj)
-    .then((freshCVProjectsServerData) => {
-      updateCVProjectsValue(freshCVProjectsServerData);
+    .then((freshCvProjectsServerData) => {
+      updateCvProjectsValue(freshCvProjectsServerData);
 
       setErrorValuesToDefault();
     })
@@ -293,7 +293,7 @@ function handleCloseDeleteModal() {
   isDeleteModalOpen.value = false;
 }
 
-const handleTableFilter: ICVProjectsFilterFunction = (value, query, item) => {
+const handleTableFilter: ICvProjectsFilterFunction = (value, query, item) => {
   if (!item) return false;
   return (
     item.raw.name.toLowerCase().includes(query.toLowerCase()) ||

@@ -84,8 +84,8 @@ const props = defineProps<{
 
 const emit = defineEmits<{
   (event: "closeModal"): void;
-  (event: "onCreateCVSkill", skillInputObj: IAddOrUpdateCvSkillInput): void;
-  (event: "onUpdateCVSkill", skillInputObj: IAddOrUpdateCvSkillInput): void;
+  (event: "onCreateCvSkill", skillInputObj: IAddOrUpdateCvSkillInput): void;
+  (event: "onUpdateCvSkill", skillInputObj: IAddOrUpdateCvSkillInput): void;
 }>();
 
 const modalState = computed({
@@ -151,9 +151,9 @@ function makeCreateOrUpdateOperation() {
   };
 
   if (props.oSkillForModal) {
-    emit("onUpdateCVSkill", skillInputObj);
+    emit("onUpdateCvSkill", skillInputObj);
   } else {
-    emit("onCreateCVSkill", skillInputObj);
+    emit("onCreateCvSkill", skillInputObj);
   }
   emit("closeModal");
 }

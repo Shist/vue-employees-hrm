@@ -1,4 +1,4 @@
-export interface ICVProjectsTableData {
+export interface ICvProjectsTableData {
   projectId: string;
   name: string;
   internalName: string;
@@ -7,7 +7,7 @@ export interface ICVProjectsTableData {
   endDate: string | null;
 }
 
-export interface ICVProject {
+export interface ICvProject {
   project: {
     id: number;
   };
@@ -18,11 +18,11 @@ export interface ICVProject {
   end_date: string | null;
 }
 
-export interface ICVProjectsTableServerData {
+export interface ICvProjectsTableServerData {
   user: {
     id: string;
   } | null;
-  projects: ICVProject[] | null;
+  projects: ICvProject[] | null;
 }
 
 export interface IProjectsData {

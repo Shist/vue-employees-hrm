@@ -1,6 +1,6 @@
 import apolloClient from "@/plugins/apolloConfig";
 import getAllProjectsQuery from "@/graphql/projects/getAllProjects.query.gql";
-import getAllProjectsCVDataQuery from "@/graphql/projects/getAllProjectsCVData.query.gql";
+import getAllProjectsCvDataQuery from "@/graphql/projects/getAllProjectsCvData.query.gql";
 import { getDetailedError } from "@/utils/handleErrors";
 import { IProjectsTableServerData } from "@/types/projectsTableUI";
 import { IProjectsServerData } from "@/types/cvProjectsUI";
@@ -20,7 +20,7 @@ export const getAllProjects = async () => {
 export const getAllProjectsData = async () => {
   try {
     const response = (await apolloClient.query({
-      query: getAllProjectsCVDataQuery,
+      query: getAllProjectsCvDataQuery,
     })) as { data: { projects: IProjectsServerData[] } };
 
     return response.data.projects;

@@ -14,6 +14,6 @@ export interface IUsersNameServerData {
   };
 }
 
-export interface ICVNameData {
+export interface ICvNameData {
   name: string;
 }

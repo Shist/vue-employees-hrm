@@ -1,4 +1,4 @@
-export interface ICVDetailsServerData {
+export interface ICvDetailsServerData {
   id: string;
   name: string;
   education: string | null;

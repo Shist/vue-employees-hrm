@@ -49,10 +49,10 @@
         <div class="cv-preview__cv-description-and-skills-wrapper">
           <div class="cv-preview__cv-description-wrapper">
             <h4 class="cv-preview__cv-description-headline">
-              {{ empCVName }}
+              {{ empCvName }}
             </h4>
             <p class="cv-preview__cv-description-info">
-              {{ empCVDescription }}
+              {{ empCvDescription }}
             </p>
           </div>
           <ul class="cv-preview__skills-wrapper">
@@ -143,12 +143,12 @@ import { ref, reactive, computed, watch, onMounted } from "vue";
 import { useRoute } from "vue-router";
 import useToast from "@/composables/useToast";
 import useErrorState from "@/composables/useErrorState";
-import { getCVPreviewDataById, exportPDF } from "@/services/cvs/preview";
+import { getCvPreviewDataById, exportPDF } from "@/services/cvs/preview";
 import { PDF_DOC_STYLES } from "@/constants/pdfDocStyles";
 import {
-  ICVPreviewLanguage,
-  ICVPreviewSkill,
-  ICVPreviewProject,
+  ICvPreviewLanguage,
+  ICvPreviewSkill,
+  ICvPreviewProject,
 } from "@/types/cvPreviewUI";
 import {
   IPreviewSkillCategoriesMap,
@@ -193,12 +193,12 @@ const empPosition = ref("Position is not specified");
 
 const empEducation = ref("Education is not specified");
 
-const empLanguages = reactive<ICVPreviewLanguage[]>([]);
+const empLanguages = reactive<ICvPreviewLanguage[]>([]);
 
-const empCVName = ref<string | null>(null);
-const empCVDescription = ref<string | null>(null);
+const empCvName = ref<string | null>(null);
+const empCvDescription = ref<string | null>(null);
 
-const empSkills = reactive<ICVPreviewSkill[]>([]);
+const empSkills = reactive<ICvPreviewSkill[]>([]);
 
 const previewSkillCategoriesMap = computed(() => {
   if (!empSkills.length) return null;
@@ -232,7 +232,7 @@ const previewSkillCategoriesMap = computed(() => {
   return resultObj;
 });
 
-const empProjects = reactive<ICVPreviewProject[]>([]);
+const empProjects = reactive<ICvPreviewProject[]>([]);
 
 onMounted(() => {
   fetchData();
@@ -245,7 +245,7 @@ watch(cvId, () => {
 function fetchData() {
   isLoading.value = true;
 
-  getCVPreviewDataById(cvId.value)
+  getCvPreviewDataById(cvId.value)
     .then((cvDetailsData) => {
       if (!cvDetailsData) return;
 
@@ -266,8 +266,8 @@ function fetchData() {
 
       empLanguages.splice(0, empLanguages.length, ...cvDetailsData.languages);
 
-      empCVName.value = cvDetailsData.name;
-      empCVDescription.value = cvDetailsData.description;
+      empCvName.value = cvDetailsData.name;
+      empCvDescription.value = cvDetailsData.description;
 
       empSkills.splice(0, empSkills.length, ...cvDetailsData.skills);
 
@@ -356,7 +356,7 @@ function downloadPDF(base64: string) {
 
   const link = document.createElement("a");
   link.href = url;
-  link.download = empCVName.value ?? "CV";
+  link.download = empCvName.value ?? "CV";
   document.body.appendChild(link);
   link.click();
 

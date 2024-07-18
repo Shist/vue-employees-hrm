@@ -30,7 +30,7 @@ export interface ISkillsData {
   category: string;
 }
 
-export interface ICVSkillsServerData {
+export interface ICvSkillsServerData {
   id: string;
   skills: ISkill[];
   user: {

@@ -1,7 +1,7 @@
 import { Mastery } from "@/types/backend-interfaces/skill/mastery";
 import { Proficiency } from "@/types/backend-interfaces/language/proficiency";
 
-export interface ICVPreviewServerData {
+export interface ICvPreviewServerData {
   id: string;
   name: string;
   education: string | null;
@@ -17,12 +17,12 @@ export interface ICVPreviewServerData {
     };
     position_name: string | null;
   } | null;
-  projects: ICVPreviewProject[];
-  skills: ICVPreviewSkill[];
-  languages: ICVPreviewLanguage[];
+  projects: ICvPreviewProject[];
+  skills: ICvPreviewSkill[];
+  languages: ICvPreviewLanguage[];
 }
 
-export interface ICVPreviewProject {
+export interface ICvPreviewProject {
   name: string;
   start_date: string;
   end_date: string | null;
@@ -30,13 +30,13 @@ export interface ICVPreviewProject {
   responsibilities: string[];
 }
 
-export interface ICVPreviewSkill {
+export interface ICvPreviewSkill {
   name: string;
   category: string | null;
   mastery: Mastery;
 }
 
-export interface ICVPreviewLanguage {
+export interface ICvPreviewLanguage {
   name: string;
   proficiency: Proficiency;
 }

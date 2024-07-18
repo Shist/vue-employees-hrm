@@ -44,7 +44,7 @@
 
 <script setup lang="ts">
 import { computed } from "vue";
-import { IRemoveCVProjectInput } from "@/types/backend-interfaces/cv/project";
+import { IRemoveCvProjectInput } from "@/types/backend-interfaces/cv/project";
 
 const props = defineProps<{
   isOpen: boolean;
@@ -55,7 +55,7 @@ const props = defineProps<{
 
 const emit = defineEmits<{
   (event: "closeModal"): void;
-  (event: "onRemoveCVProject", projectInputObj: IRemoveCVProjectInput): void;
+  (event: "onRemoveCvProject", projectInputObj: IRemoveCvProjectInput): void;
 }>();
 
 const modalState = computed({
@@ -70,12 +70,12 @@ const modalState = computed({
 function makeDeleteOperation() {
   if (!props.cvId) return;
 
-  const projectInputObj: IRemoveCVProjectInput = {
+  const projectInputObj: IRemoveCvProjectInput = {
     cvId: Number(props.cvId),
     projectId: Number(props.projectId),
   };
 
-  emit("onRemoveCVProject", projectInputObj);
+  emit("onRemoveCvProject", projectInputObj);
   emit("closeModal");
 }
 
