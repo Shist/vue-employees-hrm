@@ -1,6 +1,6 @@
 <template>
   <div class="global-container">
-    <AppHeader />
+    <AppHeader v-if="!isLoading" />
     <AppSpinner v-if="isLogging" class="global-container__spinner" />
     <main v-else class="app-main" :style="{ paddingRight: scrollbarWidth }">
       <BreadCrumbs v-if="$route.meta.hasBreadcrumbs" />
@@ -23,18 +23,22 @@ import AppHeader from "@/components/AppHeader.vue";
 import BreadCrumbs from "@/components/BreadCrumbs.vue";
 import AppTabs from "@/components/AppTabs.vue";
 import { getThemeValue } from "@/utils/theme";
+import { useLangStore } from "./store/lang";
 
 const { scrollbarWidth } = storeToRefs(useScrollbarWidth());
 
 const { currTheme } = storeToRefs(useThemeStore());
 
 const authStore = useAuthStore();
+const langStore = useLangStore();
 
 const vuetifyTheme = useTheme();
 
 const { locale } = useI18n({ useScope: "global" });
 
 const isLogging = ref(true);
+
+const isLoading = ref(true);
 
 function setCurrTheme() {
   localStorage.setItem("theme", currTheme.value);
@@ -71,7 +75,11 @@ function onDeviceSettingsUpdate() {
   }
 }
 
-onMounted(() => {
+onMounted(async () => {
+  await langStore.loadLocaleMessages(locale.value).finally(() => {
+    isLoading.value = false;
+  });
+
   const mediaQuery = window.matchMedia("(prefers-color-scheme: dark)");
   mediaQuery.addEventListener("change", onDeviceSettingsUpdate);
 

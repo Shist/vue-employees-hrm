@@ -23,8 +23,6 @@ export const useLangStore = defineStore("lang", () => {
     return nextTick();
   }
 
-  loadLocaleMessages(locale.value);
-
   const currLang = computed(() => {
     if (locale.value === "en") {
       return "English";

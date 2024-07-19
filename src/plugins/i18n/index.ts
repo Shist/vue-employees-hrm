@@ -1,7 +1,4 @@
 import { createI18n } from "vue-i18n";
-import en from "@/plugins/i18n/locales/en.json";
-import de from "@/plugins/i18n/locales/de.json";
-import ru from "@/plugins/i18n/locales/ru.json";
 
 const supportedLocales = process.env.VUE_APP_SUPPORTED_LOCALES.split(",");
 
@@ -24,7 +21,9 @@ const i18n = createI18n({
   fallbackLocale: process.env.VUE_APP_FALLBACK_LOCALE,
   legacy: false,
   globalInjection: true,
-  messages: { en, de, ru },
+  messages: await import(
+    /* webpackChunkName: "[request]" */ `@/plugins/i18n/locales/${getUserLocale()}.json`
+  ),
 });
 
 export default i18n;
