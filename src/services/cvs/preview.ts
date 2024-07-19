@@ -1,7 +1,11 @@
 import apolloClient from "@/plugins/apolloConfig";
 import getCvPreviewDataByIdQuery from "@/graphql/cvs/preview/getCvPreviewDataById.query.gql";
 import exportPDFQuery from "@/graphql/cvs/preview/exportPDF.mutation.gql";
-import { checkCvId, getDetailedError } from "@/utils/handleErrors";
+import {
+  checkCvId,
+  checkAccessToken,
+  getDetailedError,
+} from "@/utils/handleErrors";
 import {
   ICvPreviewServerData,
   IExportPDFInput,
@@ -9,6 +13,8 @@ import {
 
 export const getCvPreviewDataById = async (id: string) => {
   try {
+    await checkAccessToken();
+
     checkCvId(id);
 
     const response = (await apolloClient.query({
@@ -24,6 +30,8 @@ export const getCvPreviewDataById = async (id: string) => {
 
 export const exportPDF = async (exportPDFInput: IExportPDFInput) => {
   try {
+    await checkAccessToken();
+
     const response = (await apolloClient.query({
       query: exportPDFQuery,
       variables: { pdf: exportPDFInput },

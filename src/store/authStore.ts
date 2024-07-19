@@ -27,12 +27,14 @@ export const useAuthStore = defineStore("authStore", () => {
   const wasAuthErrorToastShown = ref(false);
 
   const fetchUserAuthData = async () => {
-    const accessToken = getToken("accessToken");
+    const token = getToken("accessToken") ?? getToken("refreshToken");
 
-    if (!accessToken) return;
+    if (!token) {
+      return;
+    }
 
     try {
-      const tokenData: ITokenData = JSON.parse(atob(accessToken.split(".")[1]));
+      const tokenData: ITokenData = JSON.parse(atob(token.split(".")[1]));
 
       const userData = await getUserAuthDataById(`${tokenData.sub}`);
 

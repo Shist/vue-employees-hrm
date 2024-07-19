@@ -3,7 +3,11 @@ import getCvSkillsByIdQuery from "@/graphql/cvs/skills/getCvSkillsById.query.gql
 import createCvSkillQuery from "@/graphql/cvs/skills/createCvSkill.mutation.gql";
 import updateCvSkillQuery from "@/graphql/cvs/skills/updateCvSkill.mutation.gql";
 import deleteCvSkillsQuery from "@/graphql/cvs/skills/deleteCvSkills.mutation.gql";
-import { checkCvId, getDetailedError } from "@/utils/handleErrors";
+import {
+  checkCvId,
+  checkAccessToken,
+  getDetailedError,
+} from "@/utils/handleErrors";
 import { ICvSkillsServerData } from "@/types/skillsStructures";
 import {
   IAddOrUpdateCvSkillInput,
@@ -12,6 +16,8 @@ import {
 
 export const getCvSkillsById = async (id: string) => {
   try {
+    await checkAccessToken();
+
     checkCvId(id);
 
     const response = (await apolloClient.query({
@@ -29,6 +35,8 @@ export const createCvSkill = async (
   inputSkillObj: IAddOrUpdateCvSkillInput
 ) => {
   try {
+    await checkAccessToken();
+
     const response = (await apolloClient.mutate({
       mutation: createCvSkillQuery,
       variables: { skill: inputSkillObj },
@@ -44,6 +52,8 @@ export const updateCvSkill = async (
   inputSkillObj: IAddOrUpdateCvSkillInput
 ) => {
   try {
+    await checkAccessToken();
+
     const response = (await apolloClient.mutate({
       mutation: updateCvSkillQuery,
       variables: { skill: inputSkillObj },
@@ -57,6 +67,8 @@ export const updateCvSkill = async (
 
 export const deleteCvSkills = async (inputSkillObj: IDeleteCvSkillInput) => {
   try {
+    await checkAccessToken();
+
     const response = (await apolloClient.mutate({
       mutation: deleteCvSkillsQuery,
       variables: { skills: inputSkillObj },

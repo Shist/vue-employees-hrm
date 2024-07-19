@@ -1,6 +1,8 @@
 import { storeToRefs } from "pinia";
 import { useAuthStore } from "@/store/authStore";
 import useToast from "@/composables/useToast";
+import useCookies from "@/composables/useCookies";
+import { updateAccessToken } from "@/services/auth";
 import {
   EMAIL_DUPLICATE_ERROR,
   INVALID_CREDENTIALS,
@@ -21,6 +23,22 @@ export function checkUserId(id: string) {
 export function checkCvId(id: string) {
   if (!Number.isInteger(Number(id)) || BigInt(id) > 2147483647n) {
     throw new Error(NOT_FOUND_CV);
+  }
+}
+
+export async function checkAccessToken() {
+  const { getToken, setToken } = useCookies();
+
+  const accessToken = getToken("accessToken");
+
+  if (!accessToken) {
+    if (!getToken("refreshToken")) {
+      throw new Error("Unauthorized");
+    }
+
+    const newAccessToken = await updateAccessToken();
+
+    setToken("accessToken", `Bearer ${newAccessToken}`);
   }
 }
 

@@ -2,13 +2,19 @@ import apolloClient from "@/plugins/apolloConfig";
 import getAllUsersQuery from "@/graphql/users/getAllUsers.query.gql";
 import getUserAuthDataByIdQuery from "@/graphql/users/getUserAuthDataById.query.gql";
 import getUserFullnameByIdQuery from "@/graphql/users/getUserFullnameById.query.gql";
-import { checkUserId, getDetailedError } from "@/utils/handleErrors";
+import {
+  checkUserId,
+  checkAccessToken,
+  getDetailedError,
+} from "@/utils/handleErrors";
 import { IUsersTableServerData } from "@/types/pages/users/table";
 import { IUsersNameServerData } from "@/types/navigation";
 import { IUserAuthServerData } from "@/types/authData";
 
 export const getAllUsers = async () => {
   try {
+    await checkAccessToken();
+
     const response = (await apolloClient.query({
       query: getAllUsersQuery,
     })) as { data: { users: IUsersTableServerData[] } };
@@ -21,6 +27,8 @@ export const getAllUsers = async () => {
 
 export const getUserAuthDataById = async (id: string) => {
   try {
+    await checkAccessToken();
+
     checkUserId(id);
 
     const response = (await apolloClient.query({
@@ -36,6 +44,8 @@ export const getUserAuthDataById = async (id: string) => {
 
 export const getUserNameDataById = async (id: string) => {
   try {
+    await checkAccessToken();
+
     checkUserId(id);
 
     const response = (await apolloClient.query({

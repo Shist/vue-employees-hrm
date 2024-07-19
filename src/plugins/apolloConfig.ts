@@ -14,10 +14,12 @@ const httpLink = createHttpLink({
 const authLink = setContext((_, { headers }) => {
   const { getToken } = useCookies();
 
+  const accessToken = getToken("accessToken");
+
   return {
     headers: {
       ...headers,
-      authorization: getToken("accessToken"),
+      authorization: accessToken ? accessToken : getToken("refreshToken"),
     },
   };
 });

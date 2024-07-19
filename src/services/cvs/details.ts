@@ -1,12 +1,18 @@
 import apolloClient from "@/plugins/apolloConfig";
 import getCvDetailsByIdQuery from "@/graphql/cvs/details/getCvDetailsById.query.gql";
 import updateCvQuery from "@/graphql/cvs/details/updateCv.mutation.gql";
-import { checkCvId, getDetailedError } from "@/utils/handleErrors";
+import {
+  checkCvId,
+  checkAccessToken,
+  getDetailedError,
+} from "@/utils/handleErrors";
 import { ICvDetailsServerData } from "@/types/pages/cvs/details";
 import { IUpdateCvInput } from "@/types/cvsOperations";
 
 export const getCvDetailsDataById = async (id: string) => {
   try {
+    await checkAccessToken();
+
     checkCvId(id);
 
     const response = (await apolloClient.query({
@@ -22,6 +28,8 @@ export const getCvDetailsDataById = async (id: string) => {
 
 export const updateCv = async (inputCvObj: IUpdateCvInput) => {
   try {
+    await checkAccessToken();
+
     const response = (await apolloClient.mutate({
       mutation: updateCvQuery,
       variables: { cv: inputCvObj },

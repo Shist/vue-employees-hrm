@@ -185,12 +185,13 @@ const router = createRouter({
 router.beforeEach((to, from, next) => {
   const { getToken } = useCookies();
 
-  const accessToken = getToken("accessToken");
+  const areAllTokensExpired =
+    !getToken("accessToken") && !getToken("refreshToken");
 
   if (to.name === ROUTES.NOT_FOUND.NAME) {
     next();
   } else if (to.meta.requiresAuth) {
-    if (!accessToken) {
+    if (areAllTokensExpired) {
       const { setErrorToast } = useToast();
       setErrorToast(UNAUTHORIZED_ERROR);
 
@@ -199,7 +200,7 @@ router.beforeEach((to, from, next) => {
       next();
     }
   } else {
-    accessToken ? next(ROUTES.USERS.PATH) : next();
+    areAllTokensExpired ? next() : next(ROUTES.USERS.PATH);
   }
 });
 
