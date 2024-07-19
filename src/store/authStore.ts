@@ -1,34 +1,42 @@
-import { computed, ref } from "vue";
+import { ref } from "vue";
 import { useRouter } from "vue-router";
 import { defineStore } from "pinia";
+import useCookies from "@/composables/useCookies";
 import useToast from "@/composables/useToast";
 import { login, register } from "@/services/auth";
 import { getUserAuthDataById } from "@/services/users/users";
 import { handleLogout } from "@/utils/handleErrors";
 import { ROUTES } from "@/constants/router";
 import { UNAUTHORIZED_ERROR } from "@/constants/errorMessage";
-import { IUserAuthData, ITokenData } from "@/types/authData";
+import {
+  IAuthData,
+  IAuthServerData,
+  IUserAuthData,
+  ITokenData,
+} from "@/types/authData";
 
 export const useAuthStore = defineStore("authStore", () => {
-  const user = ref<IUserAuthData | null>(null);
-  const token = ref<string | null>(localStorage.getItem("token"));
-
-  const decodedToken = computed<ITokenData | null>(() => {
-    const decodedData = atob(token.value ? token.value.split(".")[1] : "");
-    return decodedData ? JSON.parse(decodedData) : null;
-  });
-
-  const wasAuthErrorToastShown = ref(false);
-
   const router = useRouter();
+
+  const { getToken, setToken, removeToken } = useCookies();
 
   const { setErrorToast } = useToast();
 
+  const user = ref<IUserAuthData | null>(null);
+
+  const wasAuthErrorToastShown = ref(false);
+
   const fetchUserAuthData = async () => {
-    if (!token.value) return;
+    const token = getToken("accessToken") ?? getToken("refreshToken");
+
+    if (!token) {
+      return;
+    }
 
     try {
-      const userData = await getUserAuthDataById(`${decodedToken.value?.sub}`);
+      const tokenData: ITokenData = JSON.parse(atob(token.split(".")[1]));
+
+      const userData = await getUserAuthDataById(`${tokenData.sub}`);
 
       if (!userData) return;
 
@@ -52,34 +60,46 @@ export const useAuthStore = defineStore("authStore", () => {
     }
   };
 
-  const loginUser = async (email: string, password: string) => {
-    const result = await login(email, password);
-    if (result) {
-      user.value = result.user;
-      token.value = result.token;
-    }
+  const setAuthValues = (authServerData: IAuthServerData) => {
+    if (!authServerData) return;
 
-    localStorage.setItem("token", `Bearer ${token.value}`);
+    const authData: IAuthData = {
+      user: {
+        id: authServerData.user.id,
+        email: authServerData.user.email,
+        firstName: authServerData.user.profile.first_name,
+        lastName: authServerData.user.profile.last_name,
+        fullName: authServerData.user.profile.full_name,
+        avatar: authServerData.user.profile.avatar,
+      },
+      accessToken: authServerData.access_token,
+      refreshToken: authServerData.refresh_token,
+    };
+
+    user.value = authData.user;
+
+    setToken("accessToken", `Bearer ${authData.accessToken}`);
+    setToken("refreshToken", `Bearer ${authData.refreshToken}`);
 
     wasAuthErrorToastShown.value = false;
   };
 
+  const loginUser = async (email: string, password: string) => {
+    const authServerData = await login(email, password);
+
+    setAuthValues(authServerData);
+  };
+
   const registerUser = async (email: string, password: string) => {
-    const result = await register(email, password);
-    if (result) {
-      user.value = result.user;
-      token.value = result.token;
-    }
+    const authServerData = await register(email, password);
 
-    localStorage.setItem("token", `Bearer ${token.value}`);
-
-    wasAuthErrorToastShown.value = false;
+    setAuthValues(authServerData);
   };
 
   const logout = () => {
     user.value = null;
-    token.value = null;
-    localStorage.removeItem("token");
+    removeToken("accessToken");
+    removeToken("refreshToken");
     router.push(ROUTES.SIGN_IN.PATH);
   };
 
@@ -89,8 +109,6 @@ export const useAuthStore = defineStore("authStore", () => {
     loginUser,
     logout,
     registerUser,
-    token,
-    decodedToken,
     wasAuthErrorToastShown,
   };
 });

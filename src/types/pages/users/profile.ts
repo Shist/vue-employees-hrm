@@ -1,3 +1,5 @@
+import { UserRole } from "@/types/enums";
+
 export interface IUserProfileData {
   email: string;
   createdAt: number;
@@ -41,11 +43,6 @@ export interface IUploadAvatarInput {
   base64: string;
   size: number;
   type: string;
-}
-
-export enum UserRole {
-  Employee,
-  Admin,
 }
 
 export interface IUpdateUserInput {

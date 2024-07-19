@@ -134,28 +134,26 @@ function updateUserValue(newUser: IUserProfileServerData) {
   }
 }
 
-function fetchData() {
+async function fetchData() {
   isLoading.value = true;
 
-  Promise.all([
-    getUserProfileById(userId.value),
-    getAllDepartmentNames(),
-    getAllPositionNames(),
-  ])
-    .then(([userData, departmentNamesData, positionNamesData]) => {
-      if (!userData || !departmentNamesData || !positionNamesData) return;
-      updateUserValue(userData);
-      departmentNames.value = departmentNamesData;
-      positionNames.value = positionNamesData;
+  try {
+    const userData = await getUserProfileById(userId.value);
+    const departmentNamesData = await getAllDepartmentNames();
+    const positionNamesData = await getAllPositionNames();
 
-      setErrorValuesToDefault();
-    })
-    .catch((error: unknown) => {
-      setErrorValues(error);
-    })
-    .finally(() => {
-      isLoading.value = false;
-    });
+    if (!userData || !departmentNamesData || !positionNamesData) return;
+
+    updateUserValue(userData);
+    departmentNames.value = departmentNamesData;
+    positionNames.value = positionNamesData;
+
+    setErrorValuesToDefault();
+  } catch (error: unknown) {
+    setErrorValues(error);
+  } finally {
+    isLoading.value = false;
+  }
 }
 
 function submitUserData(

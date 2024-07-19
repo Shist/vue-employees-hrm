@@ -12,6 +12,8 @@ export const GRAPHQL_NULL_RETURN_ERROR =
   "Cannot return null for non-nullable field";
 export const NOT_FOUND_USER = "The user with specified ID does not exist";
 export const NOT_FOUND_CV = "The CV with specified ID does not exist";
+export const BAD_INPUT_DATA =
+  "The format of data that you provided is incorrect";
 export const TOO_LARGE_FILE =
   "The file you've attached has too large size (> 0.5 MB)";
 export const INVALID_FILE_TYPE =
