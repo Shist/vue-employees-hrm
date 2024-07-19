@@ -1,8 +1,10 @@
 import { createRouter, createWebHistory, RouteRecordRaw } from "vue-router";
 import pages from "@/router/pages";
 import useCookies from "@/composables/useCookies";
+import useToast from "@/composables/useToast";
 import { ROUTES } from "@/constants/router";
 import { TAB_NAMES } from "@/constants/tabs";
+import { UNAUTHORIZED_ERROR } from "@/constants/errorMessage";
 
 const routes: Array<RouteRecordRaw> = [
   {
@@ -188,7 +190,14 @@ router.beforeEach((to, from, next) => {
   if (to.name === ROUTES.NOT_FOUND.NAME) {
     next();
   } else if (to.meta.requiresAuth) {
-    !accessToken ? next(ROUTES.SIGN_IN.PATH) : next();
+    if (!accessToken) {
+      const { setErrorToast } = useToast();
+      setErrorToast(UNAUTHORIZED_ERROR);
+
+      next(ROUTES.SIGN_IN.PATH);
+    } else {
+      next();
+    }
   } else {
     accessToken ? next(ROUTES.USERS.PATH) : next();
   }
