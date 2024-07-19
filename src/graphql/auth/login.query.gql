@@ -1,4 +1,4 @@
-query LOGIN($auth: AuthInput!) {
+query SIGN_IN($auth: AuthInput!) {
   login(auth: $auth) {
     user {
       id

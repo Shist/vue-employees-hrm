@@ -3,11 +3,7 @@ import getCvNameByIdQuery from "@/graphql/cvs/getCvNameById.query.gql";
 import createCvQuery from "@/graphql/cvs/createCv.mutation.gql";
 import deleteCvQuery from "@/graphql/cvs/deleteCv.mutation.gql";
 import getAllCvsQuery from "@/graphql/cvs/getAllCvs.query.gql";
-import {
-  checkCvId,
-  checkAccessToken,
-  getDetailedError,
-} from "@/utils/handleErrors";
+import { checkCvId, getDetailedError } from "@/utils/handleErrors";
 import { ICvNameData } from "@/types/navigation";
 import { IUserCvNameData } from "@/types/pages/users/cvs";
 import { ICreateCvInput, IDeleteCvInput } from "@/types/cvsOperations";
@@ -15,8 +11,6 @@ import { ICvsTableServerData } from "@/types/pages/cvs/table";
 
 export const getAllCvs = async () => {
   try {
-    await checkAccessToken();
-
     const response = (await apolloClient.query({
       query: getAllCvsQuery,
     })) as { data: { cvs: ICvsTableServerData[] } };
@@ -29,8 +23,6 @@ export const getAllCvs = async () => {
 
 export const getCvNameDataById = async (id: string) => {
   try {
-    await checkAccessToken();
-
     checkCvId(id);
 
     const response = (await apolloClient.query({
@@ -46,8 +38,6 @@ export const getCvNameDataById = async (id: string) => {
 
 export const createCv = async (inputCvObj: ICreateCvInput) => {
   try {
-    await checkAccessToken();
-
     const response = (await apolloClient.mutate({
       mutation: createCvQuery,
       variables: { cv: inputCvObj },
@@ -61,8 +51,6 @@ export const createCv = async (inputCvObj: ICreateCvInput) => {
 
 export const deleteCv = async (inputCvObj: IDeleteCvInput) => {
   try {
-    await checkAccessToken();
-
     await apolloClient.mutate({
       mutation: deleteCvQuery,
       variables: { cv: inputCvObj },

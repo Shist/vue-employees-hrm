@@ -2,11 +2,7 @@ import apolloClient from "@/plugins/apolloConfig";
 import getCvProjectsByIdQuery from "@/graphql/cvs/projects/getCvProjectsById.query.gql";
 import createCvProjectQuery from "@/graphql/cvs/projects/createCvProject.mutation.gql";
 import deleteCvProjectQuery from "@/graphql/cvs/projects/deleteCvProject.mutation.gql";
-import {
-  checkCvId,
-  checkAccessToken,
-  getDetailedError,
-} from "@/utils/handleErrors";
+import { checkCvId, getDetailedError } from "@/utils/handleErrors";
 import {
   ICvProjectsTableServerData,
   IAddOrUpdateCvProjectInput,
@@ -15,8 +11,6 @@ import {
 
 export const getCvProjectsById = async (id: string) => {
   try {
-    await checkAccessToken();
-
     checkCvId(id);
 
     const response = (await apolloClient.query({
@@ -34,8 +28,6 @@ export const createCvProject = async (
   inputProjectObj: IAddOrUpdateCvProjectInput
 ) => {
   try {
-    await checkAccessToken();
-
     const response = (await apolloClient.mutate({
       mutation: createCvProjectQuery,
       variables: { project: inputProjectObj },
@@ -51,8 +43,6 @@ export const deleteCvProject = async (
   inputProjectObj: IRemoveCvProjectInput
 ) => {
   try {
-    await checkAccessToken();
-
     const response = (await apolloClient.mutate({
       mutation: deleteCvProjectQuery,
       variables: { project: inputProjectObj },

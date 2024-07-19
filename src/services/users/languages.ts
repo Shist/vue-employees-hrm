@@ -3,11 +3,7 @@ import getUserLanguagesByIdQuery from "@/graphql/users/languages/getUserLanguage
 import createUserLanguageQuery from "@/graphql/users/languages/createUserLanguage.mutation.gql";
 import updateUserLanguageQuery from "@/graphql/users/languages/updateUserLanguage.mutation.gql";
 import deleteUserLanguagesQuery from "@/graphql/users/languages/deleteUserLanguages.mutation.gql";
-import {
-  checkUserId,
-  checkAccessToken,
-  getDetailedError,
-} from "@/utils/handleErrors";
+import { checkUserId, getDetailedError } from "@/utils/handleErrors";
 import {
   IProfileLanguage,
   IAddOrUpdateProfileLanguageInput,
@@ -16,8 +12,6 @@ import {
 
 export const getUserLanguagesById = async (id: string) => {
   try {
-    await checkAccessToken();
-
     checkUserId(id);
 
     const response = (await apolloClient.query({
@@ -37,8 +31,6 @@ export const createUserLanguage = async (
   inputLanguageObj: IAddOrUpdateProfileLanguageInput
 ) => {
   try {
-    await checkAccessToken();
-
     const response = (await apolloClient.mutate({
       mutation: createUserLanguageQuery,
       variables: { language: inputLanguageObj },
@@ -54,8 +46,6 @@ export const updateUserLanguage = async (
   inputLanguageObj: IAddOrUpdateProfileLanguageInput
 ) => {
   try {
-    await checkAccessToken();
-
     const response = (await apolloClient.mutate({
       mutation: updateUserLanguageQuery,
       variables: { language: inputLanguageObj },
@@ -73,8 +63,6 @@ export const deleteUserLanguages = async (
   inputLanguageObj: IDeleteProfileLanguageInput
 ) => {
   try {
-    await checkAccessToken();
-
     const response = (await apolloClient.mutate({
       mutation: deleteUserLanguagesQuery,
       variables: { languages: inputLanguageObj },

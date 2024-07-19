@@ -6,15 +6,25 @@ import {
 } from "@apollo/client/core";
 import { setContext } from "@apollo/client/link/context";
 import useCookies from "@/composables/useCookies";
+import { refreshAccessToken } from "@/utils/handleErrors";
 
 const httpLink = createHttpLink({
   uri: process.env.VUE_APP_GRAPHQL_URL,
 });
 
-const authLink = setContext((_, { headers }) => {
+const authLink = setContext(async (request, { headers }) => {
   const { getToken } = useCookies();
 
   const accessToken = getToken("accessToken");
+
+  if (
+    !accessToken &&
+    request.operationName !== "UPDATE_TOKEN" &&
+    request.operationName !== "SIGN_IN" &&
+    request.operationName !== "SIGN_UP"
+  ) {
+    await refreshAccessToken();
+  }
 
   return {
     headers: {

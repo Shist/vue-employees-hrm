@@ -3,11 +3,7 @@ import getUserSkillsByIdQuery from "@/graphql/users/skills/getUserSkillsById.que
 import createUserSkillQuery from "@/graphql/users/skills/createUserSkill.mutation.gql";
 import updateUserSkillQuery from "@/graphql/users/skills/updateUserSkill.mutation.gql";
 import deleteUserSkillsQuery from "@/graphql/users/skills/deleteUserSkills.mutation.gql";
-import {
-  checkUserId,
-  checkAccessToken,
-  getDetailedError,
-} from "@/utils/handleErrors";
+import { checkUserId, getDetailedError } from "@/utils/handleErrors";
 import { ISkill } from "@/types/skillsStructures";
 import {
   IAddOrUpdateProfileSkillInput,
@@ -16,8 +12,6 @@ import {
 
 export const getUserSkillsById = async (id: string) => {
   try {
-    await checkAccessToken();
-
     checkUserId(id);
 
     const response = (await apolloClient.query({
@@ -35,8 +29,6 @@ export const createUserSkill = async (
   inputSkillObj: IAddOrUpdateProfileSkillInput
 ) => {
   try {
-    await checkAccessToken();
-
     const response = (await apolloClient.mutate({
       mutation: createUserSkillQuery,
       variables: { skill: inputSkillObj },
@@ -52,8 +44,6 @@ export const updateUserSkill = async (
   inputSkillObj: IAddOrUpdateProfileSkillInput
 ) => {
   try {
-    await checkAccessToken();
-
     const response = (await apolloClient.mutate({
       mutation: updateUserSkillQuery,
       variables: { skill: inputSkillObj },
@@ -69,8 +59,6 @@ export const deleteUserSkills = async (
   inputSkillObj: IDeleteProfileSkillInput
 ) => {
   try {
-    await checkAccessToken();
-
     const response = (await apolloClient.mutate({
       mutation: deleteUserSkillsQuery,
       variables: { skills: inputSkillObj },

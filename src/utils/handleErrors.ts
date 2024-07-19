@@ -26,20 +26,16 @@ export function checkCvId(id: string) {
   }
 }
 
-export async function checkAccessToken() {
+export async function refreshAccessToken() {
   const { getToken, setToken } = useCookies();
 
-  const accessToken = getToken("accessToken");
-
-  if (!accessToken) {
-    if (!getToken("refreshToken")) {
-      throw new Error("Unauthorized");
-    }
-
-    const newAccessToken = await updateAccessToken();
-
-    setToken("accessToken", `Bearer ${newAccessToken}`);
+  if (!getToken("refreshToken")) {
+    throw new Error("Unauthorized");
   }
+
+  const newAccessToken = await updateAccessToken();
+
+  setToken("accessToken", `Bearer ${newAccessToken}`);
 }
 
 export function getDetailedError(error: unknown) {

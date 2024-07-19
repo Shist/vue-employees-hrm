@@ -1,13 +1,11 @@
 import apolloClient from "@/plugins/apolloConfig";
 import getAllSkillsQuery from "@/graphql/skills/getAllSkills.query.gql";
 import getSkillCategoriesQuery from "@/graphql/skills/getSkillCategories.query.gql";
-import { checkAccessToken, getDetailedError } from "@/utils/handleErrors";
+import { getDetailedError } from "@/utils/handleErrors";
 import { ISkillsData } from "@/types/skillsStructures";
 
 export const getAllSkills = async () => {
   try {
-    await checkAccessToken();
-
     const response = (await apolloClient.query({
       query: getAllSkillsQuery,
     })) as { data: { skills: ISkillsData[] } };
@@ -20,8 +18,6 @@ export const getAllSkills = async () => {
 
 export const getSkillCategories = async () => {
   try {
-    await checkAccessToken();
-
     const response = (await apolloClient.query({
       query: getSkillCategoriesQuery,
     })) as { data: { skillCategories: string[] } };

@@ -4,11 +4,7 @@ import updateProfileQuery from "@/graphql/users/profile/updateProfile.mutation.g
 import updateUserQuery from "@/graphql/users/updateUser.mutation.gql";
 import uploadAvatarQuery from "@/graphql/users/profile/uploadAvatar.mutation.gql";
 import deleteAvatarQuery from "@/graphql/users/profile/deleteAvatar.mutation.gql";
-import {
-  checkUserId,
-  checkAccessToken,
-  getDetailedError,
-} from "@/utils/handleErrors";
+import { checkUserId, getDetailedError } from "@/utils/handleErrors";
 import {
   IUserProfileServerData,
   IUploadAvatarInput,
@@ -18,8 +14,6 @@ import {
 
 export const getUserProfileById = async (id: string) => {
   try {
-    await checkAccessToken();
-
     checkUserId(id);
 
     const response = (await apolloClient.query({
@@ -38,8 +32,6 @@ export const updateUserData = async (
   inputProfileObj: IUpdateProfileInput
 ) => {
   try {
-    await checkAccessToken();
-
     await apolloClient.mutate({
       mutation: updateProfileQuery,
       variables: { profile: inputProfileObj },
@@ -58,8 +50,6 @@ export const updateUserData = async (
 
 export const updateUserAvatar = async (inputAvatarObj: IUploadAvatarInput) => {
   try {
-    await checkAccessToken();
-
     const response = (await apolloClient.mutate({
       mutation: uploadAvatarQuery,
       variables: { avatar: inputAvatarObj },
@@ -73,8 +63,6 @@ export const updateUserAvatar = async (inputAvatarObj: IUploadAvatarInput) => {
 
 export const deleteUserAvatar = async (id: string) => {
   try {
-    await checkAccessToken();
-
     await apolloClient.mutate({
       mutation: deleteAvatarQuery,
       variables: { avatar: { userId: Number(id) } },

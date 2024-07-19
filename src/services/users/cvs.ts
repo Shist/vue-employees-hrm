@@ -1,16 +1,10 @@
 import apolloClient from "@/plugins/apolloConfig";
 import getUserCvsNamesByIdQuery from "@/graphql/users/cvs/getUserCvsNamesById.query.gql";
-import {
-  checkUserId,
-  checkAccessToken,
-  getDetailedError,
-} from "@/utils/handleErrors";
+import { checkUserId, getDetailedError } from "@/utils/handleErrors";
 import { IUserCvNameData } from "@/types/pages/users/cvs";
 
 export const getUserCvsNamesById = async (id: string) => {
   try {
-    await checkAccessToken();
-
     checkUserId(id);
 
     const response = (await apolloClient.query({
