@@ -18,6 +18,7 @@ import { storeToRefs } from "pinia";
 import { useAuthStore } from "@/store/authStore";
 import { useScrollbarWidth } from "@/store/scrollbarWidth";
 import { useThemeStore } from "@/store/theme";
+import { useI18n } from "vue-i18n";
 import AppHeader from "@/components/AppHeader.vue";
 import BreadCrumbs from "@/components/BreadCrumbs.vue";
 import AppTabs from "@/components/AppTabs.vue";
@@ -30,6 +31,8 @@ const { currTheme } = storeToRefs(useThemeStore());
 const authStore = useAuthStore();
 
 const vuetifyTheme = useTheme();
+
+const { locale } = useI18n({ useScope: "global" });
 
 const isLogging = ref(true);
 
@@ -53,6 +56,12 @@ function setCurrTheme() {
 }
 
 setCurrTheme();
+
+function setCurrLang() {
+  document.querySelector("html")?.setAttribute("lang", locale.value);
+}
+
+setCurrLang();
 
 watch(currTheme, setCurrTheme);
 

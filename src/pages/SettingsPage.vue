@@ -43,17 +43,8 @@ watch(selectTheme, (newValue) => {
   currTheme.value = newValue;
 });
 
-watch(selectLanguage, (newLocale) => {
-  if (newLocale === "Deutsch") {
-    locale.value = "de";
-    localStorage.setItem("language", locale.value);
-  } else if (newLocale === "Русский") {
-    locale.value = "ru";
-    localStorage.setItem("language", locale.value);
-  } else {
-    locale.value = "en";
-    localStorage.setItem("language", locale.value);
-  }
+watch(selectLanguage, async (newLocale) => {
+  await langStore.changeCurrLanguage(newLocale);
 });
 
 watch(locale, (newValue) => {
