@@ -188,30 +188,28 @@ function updateUserSkillsValue(userSkillsData: ISkill[]) {
   userSkills.value = userSkillsData;
 }
 
-function fetchData() {
+async function fetchData() {
   isLoading.value = true;
 
-  Promise.all([
-    getUserSkillsById(userId.value),
-    getAllSkills(),
-    getSkillCategories(),
-  ])
-    .then(([userSkillsData, skillsData, skillCategoriesData]) => {
-      if (!userSkillsData || !skillsData || !skillCategoriesData) return;
-      updateUserSkillsValue(userSkillsData);
+  try {
+    const userSkillsData = await getUserSkillsById(userId.value);
+    const skillsData = await getAllSkills();
+    const skillCategoriesData = await getSkillCategories();
 
-      skills.value = skillsData;
+    if (!userSkillsData || !skillsData || !skillCategoriesData) return;
 
-      skillCategories.value = skillCategoriesData;
+    updateUserSkillsValue(userSkillsData);
 
-      setErrorValuesToDefault();
-    })
-    .catch((error: unknown) => {
-      setErrorValues(error);
-    })
-    .finally(() => {
-      isLoading.value = false;
-    });
+    skills.value = skillsData;
+
+    skillCategories.value = skillCategoriesData;
+
+    setErrorValuesToDefault();
+  } catch (error: unknown) {
+    setErrorValues(error);
+  } finally {
+    isLoading.value = false;
+  }
 }
 
 function handleOpenCreateModal() {
