@@ -7,6 +7,7 @@ import {
   NO_NETWORK_CONNECTION,
   NOT_FOUND_CV,
   NOT_FOUND_USER,
+  BAD_INPUT_DATA,
   UNAUTHORIZED_ERROR,
   UNEXPECTED_ERROR,
 } from "@/constants/errorMessage";
@@ -40,6 +41,8 @@ export function getDetailedError(error: unknown) {
         return new Error(NOT_FOUND_USER);
       case NOT_FOUND_CV:
         return new Error(NOT_FOUND_CV);
+      case "Bad Request Exception":
+        return new Error(BAD_INPUT_DATA);
       case "Unauthorized":
         return new Error(UNAUTHORIZED_ERROR, { cause: UNAUTHORIZED_ERROR });
     }

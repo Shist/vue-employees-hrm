@@ -1,7 +1,8 @@
 import { createRouter, createWebHistory, RouteRecordRaw } from "vue-router";
+import pages from "@/router/pages";
+import useCookies from "@/composables/useCookies";
 import { ROUTES } from "@/constants/router";
 import { TAB_NAMES } from "@/constants/tabs";
-import pages from "@/router/pages";
 
 const routes: Array<RouteRecordRaw> = [
   {
@@ -180,14 +181,16 @@ const router = createRouter({
 });
 
 router.beforeEach((to, from, next) => {
-  const token = localStorage.getItem("accessToken");
+  const { getToken } = useCookies();
+
+  const accessToken = getToken("accessToken");
 
   if (to.name === ROUTES.NOT_FOUND.NAME) {
     next();
   } else if (to.meta.requiresAuth) {
-    !token ? next(ROUTES.SIGN_IN.PATH) : next();
+    !accessToken ? next(ROUTES.SIGN_IN.PATH) : next();
   } else {
-    token ? next(ROUTES.USERS.PATH) : next();
+    accessToken ? next(ROUTES.USERS.PATH) : next();
   }
 });
 

@@ -1,6 +1,7 @@
-import { computed, ref } from "vue";
+import { ref } from "vue";
 import { useRouter } from "vue-router";
 import { defineStore } from "pinia";
+import useCookies from "@/composables/useCookies";
 import useToast from "@/composables/useToast";
 import { login, register } from "@/services/auth";
 import { getUserAuthDataById } from "@/services/users/users";
@@ -15,29 +16,25 @@ import {
 } from "@/types/authData";
 
 export const useAuthStore = defineStore("authStore", () => {
-  const user = ref<IUserAuthData | null>(null);
-
-  const accessToken = ref<string | null>(localStorage.getItem("accessToken"));
-  const decodedAccessToken = computed<ITokenData | null>(() => {
-    const decodedData = atob(
-      accessToken.value ? accessToken.value.split(".")[1] : ""
-    );
-    return decodedData ? JSON.parse(decodedData) : null;
-  });
-
-  const wasAuthErrorToastShown = ref(false);
-
   const router = useRouter();
+
+  const { getToken, setToken, removeToken } = useCookies();
 
   const { setErrorToast } = useToast();
 
+  const user = ref<IUserAuthData | null>(null);
+
+  const wasAuthErrorToastShown = ref(false);
+
   const fetchUserAuthData = async () => {
-    if (!accessToken.value) return;
+    const accessToken = getToken("accessToken");
+
+    if (!accessToken) return;
 
     try {
-      const userData = await getUserAuthDataById(
-        `${decodedAccessToken.value?.sub}`
-      );
+      const tokenData: ITokenData = JSON.parse(atob(accessToken.split(".")[1]));
+
+      const userData = await getUserAuthDataById(`${tokenData.sub}`);
 
       if (!userData) return;
 
@@ -78,11 +75,9 @@ export const useAuthStore = defineStore("authStore", () => {
     };
 
     user.value = authData.user;
-    accessToken.value = authData.accessToken;
 
-    localStorage.setItem("accessToken", `Bearer ${accessToken.value}`);
-
-    // TODO: set refreshToken to cookies
+    setToken("accessToken", `Bearer ${authData.accessToken}`);
+    setToken("refreshToken", `Bearer ${authData.refreshToken}`);
 
     wasAuthErrorToastShown.value = false;
   };
@@ -101,8 +96,8 @@ export const useAuthStore = defineStore("authStore", () => {
 
   const logout = () => {
     user.value = null;
-    accessToken.value = null;
-    localStorage.removeItem("accessToken");
+    removeToken("accessToken");
+    removeToken("refreshToken");
     router.push(ROUTES.SIGN_IN.PATH);
   };
 

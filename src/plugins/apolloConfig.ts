@@ -5,16 +5,19 @@ import {
   InMemoryCache,
 } from "@apollo/client/core";
 import { setContext } from "@apollo/client/link/context";
+import useCookies from "@/composables/useCookies";
 
 const httpLink = createHttpLink({
   uri: process.env.VUE_APP_GRAPHQL_URL,
 });
 
 const authLink = setContext((_, { headers }) => {
+  const { getToken } = useCookies();
+
   return {
     headers: {
       ...headers,
-      authorization: localStorage.getItem("accessToken"),
+      authorization: getToken("accessToken"),
     },
   };
 });
