@@ -1,12 +1,15 @@
 import { storeToRefs } from "pinia";
 import { useAuthStore } from "@/store/authStore";
 import useToast from "@/composables/useToast";
+import useCookies from "@/composables/useCookies";
+import { updateAccessToken } from "@/services/auth";
 import {
   EMAIL_DUPLICATE_ERROR,
   INVALID_CREDENTIALS,
   NO_NETWORK_CONNECTION,
   NOT_FOUND_CV,
   NOT_FOUND_USER,
+  BAD_INPUT_DATA,
   UNAUTHORIZED_ERROR,
   UNEXPECTED_ERROR,
 } from "@/constants/errorMessage";
@@ -21,6 +24,18 @@ export function checkCvId(id: string) {
   if (!Number.isInteger(Number(id)) || BigInt(id) > 2147483647n) {
     throw new Error(NOT_FOUND_CV);
   }
+}
+
+export async function refreshAccessToken() {
+  const { getToken, setToken } = useCookies();
+
+  if (!getToken("refreshToken")) {
+    throw new Error("Unauthorized");
+  }
+
+  const newAccessToken = await updateAccessToken();
+
+  setToken("accessToken", `Bearer ${newAccessToken}`);
 }
 
 export function getDetailedError(error: unknown) {
@@ -40,6 +55,8 @@ export function getDetailedError(error: unknown) {
         return new Error(NOT_FOUND_USER);
       case NOT_FOUND_CV:
         return new Error(NOT_FOUND_CV);
+      case "Bad Request Exception":
+        return new Error(BAD_INPUT_DATA);
       case "Unauthorized":
         return new Error(UNAUTHORIZED_ERROR, { cause: UNAUTHORIZED_ERROR });
     }

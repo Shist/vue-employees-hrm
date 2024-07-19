@@ -195,30 +195,28 @@ function updateCvSkillsValue(cvSkillsData: ICvSkillsServerData) {
   }
 }
 
-function fetchData() {
+async function fetchData() {
   isLoading.value = true;
 
-  Promise.all([
-    getCvSkillsById(cvId.value),
-    getAllSkills(),
-    getSkillCategories(),
-  ])
-    .then(([cvSkillsData, skillsData, skillCategoriesData]) => {
-      if (!cvSkillsData || !skillsData || !skillCategoriesData) return;
-      updateCvSkillsValue(cvSkillsData);
+  try {
+    const cvSkillsData = await getCvSkillsById(cvId.value);
+    const skillsData = await getAllSkills();
+    const skillCategoriesData = await getSkillCategories();
 
-      skills.value = skillsData;
+    if (!cvSkillsData || !skillsData || !skillCategoriesData) return;
 
-      skillCategories.value = skillCategoriesData;
+    updateCvSkillsValue(cvSkillsData);
 
-      setErrorValuesToDefault();
-    })
-    .catch((error: unknown) => {
-      setErrorValues(error);
-    })
-    .finally(() => {
-      isLoading.value = false;
-    });
+    skills.value = skillsData;
+
+    skillCategories.value = skillCategoriesData;
+
+    setErrorValuesToDefault();
+  } catch (error: unknown) {
+    setErrorValues(error);
+  } finally {
+    isLoading.value = false;
+  }
 }
 
 function handleOpenCreateModal() {

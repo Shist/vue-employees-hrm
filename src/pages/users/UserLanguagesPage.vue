@@ -188,23 +188,25 @@ function updateUserLanguagesValue(userLanguagesData: IProfileLanguage[]) {
   userLanguages.value = userLanguagesData;
 }
 
-function fetchData() {
+async function fetchData() {
   isLoading.value = true;
-  Promise.all([getUserLanguagesById(userId.value), getAllLanguagesNames()])
-    .then(([userLanguagesData, languagesData]) => {
-      if (!userLanguagesData || !languagesData) return;
 
-      updateUserLanguagesValue(userLanguagesData);
+  try {
+    const userLanguagesData = await getUserLanguagesById(userId.value);
+    const languagesData = await getAllLanguagesNames();
 
-      languages.value = languagesData;
-      setErrorValuesToDefault();
-    })
-    .catch((error: unknown) => {
-      setErrorValues(error);
-    })
-    .finally(() => {
-      isLoading.value = false;
-    });
+    if (!userLanguagesData || !languagesData) return;
+
+    updateUserLanguagesValue(userLanguagesData);
+
+    languages.value = languagesData;
+
+    setErrorValuesToDefault();
+  } catch (error: unknown) {
+    setErrorValues(error);
+  } finally {
+    isLoading.value = false;
+  }
 }
 
 function handleOpenCreateModal() {

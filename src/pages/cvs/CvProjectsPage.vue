@@ -199,32 +199,32 @@ function updateCvProjectsValue(
   cvUserId.value = cvProjectsServerData.user.id;
 }
 
-function fetchData() {
+async function fetchData() {
   isLoading.value = true;
 
-  Promise.all([getCvProjectsById(cvId.value), getAllProjectsData()])
-    .then(([cvProjectsServerData, allProjectsServerData]) => {
-      updateCvProjectsValue(cvProjectsServerData);
+  try {
+    const cvProjectsServerData = await getCvProjectsById(cvId.value);
+    const allProjectsServerData = await getAllProjectsData();
 
-      allProjectsData.splice(
-        0,
-        allProjectsData.length,
-        ...allProjectsServerData.map((projectServerData) => ({
-          id: projectServerData.id,
-          name: projectServerData.name,
-          startDate: projectServerData.start_date,
-          endDate: projectServerData.end_date,
-        }))
-      );
+    updateCvProjectsValue(cvProjectsServerData);
 
-      setErrorValuesToDefault();
-    })
-    .catch((error: unknown) => {
-      setErrorValues(error);
-    })
-    .finally(() => {
-      isLoading.value = false;
-    });
+    allProjectsData.splice(
+      0,
+      allProjectsData.length,
+      ...allProjectsServerData.map((projectServerData) => ({
+        id: projectServerData.id,
+        name: projectServerData.name,
+        startDate: projectServerData.start_date,
+        endDate: projectServerData.end_date,
+      }))
+    );
+
+    setErrorValuesToDefault();
+  } catch (error: unknown) {
+    setErrorValues(error);
+  } finally {
+    isLoading.value = false;
+  }
 }
 
 function submitCvProjectAdding(inputProjectObj: IAddOrUpdateCvProjectInput) {
