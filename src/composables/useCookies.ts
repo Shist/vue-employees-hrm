@@ -15,7 +15,7 @@ export default function useCookies() {
     $cookies.set(
       tokenType,
       tokenValue,
-      tokenType === "accessToken" ? "10min" : "7d"
+      tokenType === "accessToken" ? "9min" : "7d"
     );
   }
 

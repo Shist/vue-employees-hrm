@@ -97,7 +97,7 @@ onUnmounted(() => {
 .app-main {
   flex-grow: 1;
   padding: 10px 20px;
-  @media (max-width: $phone-l) {
+  @media (max-width: $tablet-l) {
     padding: 10px;
   }
 }

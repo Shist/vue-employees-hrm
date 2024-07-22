@@ -1,5 +1,9 @@
 <template>
-  <v-breadcrumbs :items="breadcrumbsItems" divider="$next">
+  <v-breadcrumbs
+    :items="breadcrumbsItems"
+    divider="$next"
+    class="app-breadcrumbs"
+  >
     <template v-slot:item="{ item }">
       <v-breadcrumbs-item
         :title="item.title"
@@ -9,7 +13,7 @@
       >
         <v-icon
           v-if="(item as IBreadCrumbsItem).crumbIconName"
-          class="breadcrumbs-user-icon"
+          class="app-breadcrumbs__user-icon"
         >
           {{ `mdi-${(item as IBreadCrumbsItem).crumbIconName}` }}
         </v-icon>
@@ -145,7 +149,11 @@ function updateEntityName() {
 </script>
 
 <style lang="scss" scopped>
-.v-breadcrumbs-item > .v-breadcrumbs-item--link > .breadcrumbs-user-icon {
+.app-breadcrumbs {
+  flex-wrap: wrap;
+}
+
+.v-breadcrumbs-item > .v-breadcrumbs-item--link > .app-breadcrumbs__user-icon {
   min-width: 24px;
   min-height: 24px;
   &::before {
@@ -158,7 +166,6 @@ function updateEntityName() {
   color: var(--color-active-text);
   display: flex;
   align-items: center;
-  column-gap: 8px;
   i {
     display: inline;
     text-decoration: none;
@@ -168,6 +175,9 @@ function updateEntityName() {
     overflow: hidden;
     text-overflow: ellipsis;
     text-wrap: nowrap;
+    @media (max-width: $laptop-s) {
+      max-width: 190px;
+    }
   }
 }
 </style>
