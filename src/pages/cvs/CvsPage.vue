@@ -1,8 +1,7 @@
 <template>
   <div class="cvs-page">
-    <AppSpinner v-if="isLoading" class="cvs-page__spinner" />
     <AppErrorSection
-      v-else-if="isError"
+      v-if="isError"
       :errorMessage="errorMessage"
       class="cvs-page__error-wrapper"
     />
@@ -25,43 +24,46 @@
           elevation="0"
           class="cvs-page__button text-red-darken-4"
           @click="handleOpenCreateModal"
+          :loading="isLoading"
         >
           Create CV
         </v-btn>
       </div>
-      <v-data-table
-        :headers="headers"
-        :items="cvs"
-        :search="search"
-        :custom-filter="handleTableFilter"
-        item-key="id"
-        class="cvs-page__data-table"
-        hide-details
-      >
-        <template v-slot:[`item.options`]="{ item }">
-          <v-menu>
-            <template v-slot:activator="{ props }">
-              <v-btn
-                icon="mdi-dots-vertical"
-                v-bind="props"
-                class="cvs-page__popup-menu-btn"
-              />
-            </template>
-            <v-list>
-              <v-list-item
-                v-for="cvItem in cvMenuItems"
-                :key="cvItem.title"
-                v-on:click="cvItem.click(item.id, item.name)"
-                :disabled="checkOwner(cvItem.title, item.userId)"
-              >
-                <v-list-item-title class="cvs-page__popup-menu-label">
-                  {{ cvItem.title }}
-                </v-list-item-title>
-              </v-list-item>
-            </v-list>
-          </v-menu>
-        </template>
-      </v-data-table>
+      <v-skeleton-loader type="table" :loading="isLoading">
+        <v-data-table
+          :headers="headers"
+          :items="cvs"
+          :search="search"
+          :custom-filter="handleTableFilter"
+          item-key="id"
+          class="cvs-page__data-table"
+          hide-details
+        >
+          <template v-slot:[`item.options`]="{ item }">
+            <v-menu>
+              <template v-slot:activator="{ props }">
+                <v-btn
+                  icon="mdi-dots-vertical"
+                  v-bind="props"
+                  class="cvs-page__popup-menu-btn"
+                />
+              </template>
+              <v-list>
+                <v-list-item
+                  v-for="cvItem in cvMenuItems"
+                  :key="cvItem.title"
+                  v-on:click="cvItem.click(item.id, item.name)"
+                  :disabled="checkOwner(cvItem.title, item.userId)"
+                >
+                  <v-list-item-title class="cvs-page__popup-menu-label">
+                    {{ cvItem.title }}
+                  </v-list-item-title>
+                </v-list-item>
+              </v-list>
+            </v-menu>
+          </template>
+        </v-data-table>
+      </v-skeleton-loader>
     </div>
   </div>
   <CreateCvModal
@@ -238,9 +240,6 @@ const handleTableFilter: ICvsFilterFunction = (value, query, item) => {
   display: flex;
   flex-direction: column;
   align-items: center;
-  &__spinner {
-    margin-top: 64px;
-  }
   &__error-wrapper {
     padding-top: 64px;
   }

@@ -1,4 +1,4 @@
 export interface IPositionsTableData {
-  id: number;
+  id: string;
   name: string;
 }

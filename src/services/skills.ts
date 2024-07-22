@@ -1,6 +1,5 @@
 import apolloClient from "@/plugins/apolloConfig";
 import getAllSkillsQuery from "@/graphql/skills/getAllSkills.query.gql";
-import getSkillCategoriesQuery from "@/graphql/skills/getSkillCategories.query.gql";
 import { getDetailedError } from "@/utils/handleErrors";
 import { ISkillsData } from "@/types/skillsStructures";
 
@@ -11,18 +10,6 @@ export const getAllSkills = async () => {
     })) as { data: { skills: ISkillsData[] } };
 
     return response.data.skills;
-  } catch (error: unknown) {
-    throw getDetailedError(error);
-  }
-};
-
-export const getSkillCategories = async () => {
-  try {
-    const response = (await apolloClient.query({
-      query: getSkillCategoriesQuery,
-    })) as { data: { skillCategories: string[] } };
-
-    return response.data.skillCategories;
   } catch (error: unknown) {
     throw getDetailedError(error);
   }

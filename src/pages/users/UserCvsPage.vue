@@ -1,8 +1,7 @@
 <template>
   <div class="user-cvs">
-    <AppSpinner v-if="isLoading" class="user-cvs__spinner" />
     <AppErrorSection
-      v-else-if="isError"
+      v-if="isError"
       :errorMessage="errorMessage"
       class="user-cvs__error-wrapper"
     />
@@ -26,44 +25,47 @@
           elevation="0"
           class="user-cvs__button text-red-darken-4"
           @click="handleOpenCreateModal"
+          :loading="isLoading"
         >
           Create CV
         </v-btn>
       </div>
-      <v-data-table
-        :headers="headers"
-        :items="userCvs"
-        :search="search"
-        :class="{ 'user-cvs__data-table': true }"
-        hide-details
-      >
-        <template v-slot:[`item.options`]="{ item }">
-          <v-menu>
-            <template v-slot:activator="{ props }">
-              <v-btn
-                icon="mdi-dots-vertical"
-                v-bind="props"
-                class="user-cvs__popup-menu-btn"
-              />
-            </template>
-            <v-list>
-              <v-list-item @click="() => openUserCv(item.id)">
-                <v-list-item-title class="user-cvs__popup-menu-label">
-                  Details
-                </v-list-item-title>
-              </v-list-item>
-              <v-list-item
-                @click="() => handleOpenDeleteModal(item.id, item.name)"
-                :disabled="!isOwner"
-              >
-                <v-list-item-title class="user-cvs__popup-menu-label">
-                  Delete CV
-                </v-list-item-title>
-              </v-list-item>
-            </v-list>
-          </v-menu>
-        </template>
-      </v-data-table>
+      <v-skeleton-loader type="table" :loading="isLoading">
+        <v-data-table
+          :headers="headers"
+          :items="userCvs"
+          :search="search"
+          :class="{ 'user-cvs__data-table': true }"
+          hide-details
+        >
+          <template v-slot:[`item.options`]="{ item }">
+            <v-menu>
+              <template v-slot:activator="{ props }">
+                <v-btn
+                  icon="mdi-dots-vertical"
+                  v-bind="props"
+                  class="user-cvs__popup-menu-btn"
+                />
+              </template>
+              <v-list>
+                <v-list-item @click="() => openUserCv(item.id)">
+                  <v-list-item-title class="user-cvs__popup-menu-label">
+                    Details
+                  </v-list-item-title>
+                </v-list-item>
+                <v-list-item
+                  @click="() => handleOpenDeleteModal(item.id, item.name)"
+                  :disabled="!isOwner"
+                >
+                  <v-list-item-title class="user-cvs__popup-menu-label">
+                    Delete CV
+                  </v-list-item-title>
+                </v-list-item>
+              </v-list>
+            </v-menu>
+          </template>
+        </v-data-table>
+      </v-skeleton-loader>
     </div>
   </div>
   <CreateCvModal
@@ -228,9 +230,6 @@ function handleCloseDeleteModal() {
   display: flex;
   flex-direction: column;
   align-items: center;
-  &__spinner {
-    margin-top: 64px;
-  }
   &__error-wrapper {
     padding-top: 64px;
   }

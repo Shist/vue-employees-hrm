@@ -12,9 +12,11 @@ mutation UPDATE_USER($user: UpdateUserInput!) {
     }
     department {
       id
+      name
     }
     position {
       id
+      name
     }
   }
 }

@@ -8,7 +8,9 @@ export interface IUserProfileData {
   lastName: string | null;
   avatar: string | null;
   departmentId: string | null;
+  departmentName: string | null;
   positionId: string | null;
+  positionName: string | null;
 }
 
 export interface IUserProfileServerData {
@@ -22,19 +24,21 @@ export interface IUserProfileServerData {
   };
   department: {
     id: string;
+    name: string;
   } | null;
   position: {
     id: string;
+    name: string;
   } | null;
 }
 
 export interface IDepartmentNamesData {
-  id: number;
+  id: string;
   name: string;
 }
 
 export interface IPositionNamesData {
-  id: number;
+  id: string;
   name: string;
 }
 
@@ -58,3 +62,5 @@ export interface IUpdateProfileInput {
   first_name: string | null;
   last_name: string | null;
 }
+
+export type ISelectFieldData = { title: string; value: string | null };

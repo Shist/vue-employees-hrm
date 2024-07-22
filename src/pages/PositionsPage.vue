@@ -1,8 +1,7 @@
 <template>
   <div class="positions-page">
-    <AppSpinner v-if="isLoading" class="positions-page__spinner" />
     <AppErrorSection
-      v-else-if="isError"
+      v-if="isError"
       :errorMessage="errorMessage"
       class="positions-page__error-wrapper"
     />
@@ -16,38 +15,40 @@
         placeholder="Search"
         class="positions-page__text-field-wrapper"
       />
-      <v-data-table
-        :headers="headers"
-        :items="positions"
-        :search="search"
-        :custom-filter="handleTableFilter"
-        item-key="id"
-        class="positions-page__data-table"
-        hide-details
-      >
-        <template v-slot:[`item.options`]>
-          <v-menu>
-            <template v-slot:activator="{ props }">
-              <v-btn
-                icon="mdi-dots-vertical"
-                v-bind="props"
-                class="positions-page__popup-menu-btn"
-              ></v-btn>
-            </template>
-            <v-list>
-              <v-list-item
-                v-for="positionItem in positionMenuItems"
-                :key="positionItem"
-                disabled
-              >
-                <v-list-item-title class="positions-page__popup-menu-label">
-                  {{ positionItem }}
-                </v-list-item-title>
-              </v-list-item>
-            </v-list>
-          </v-menu>
-        </template>
-      </v-data-table>
+      <v-skeleton-loader type="table" :loading="isLoading">
+        <v-data-table
+          :headers="headers"
+          :items="positions"
+          :search="search"
+          :custom-filter="handleTableFilter"
+          item-key="id"
+          class="positions-page__data-table"
+          hide-details
+        >
+          <template v-slot:[`item.options`]>
+            <v-menu>
+              <template v-slot:activator="{ props }">
+                <v-btn
+                  icon="mdi-dots-vertical"
+                  v-bind="props"
+                  class="positions-page__popup-menu-btn"
+                ></v-btn>
+              </template>
+              <v-list>
+                <v-list-item
+                  v-for="positionItem in positionMenuItems"
+                  :key="positionItem"
+                  disabled
+                >
+                  <v-list-item-title class="positions-page__popup-menu-label">
+                    {{ positionItem }}
+                  </v-list-item-title>
+                </v-list-item>
+              </v-list>
+            </v-menu>
+          </template>
+        </v-data-table>
+      </v-skeleton-loader>
     </div>
   </div>
 </template>
@@ -105,9 +106,6 @@ const handleTableFilter: IPositionsFilterFunction = (value, query, item) => {
   display: flex;
   flex-direction: column;
   align-items: center;
-  &__spinner {
-    margin-top: 64px;
-  }
   &__error-wrapper {
     padding-top: 64px;
   }

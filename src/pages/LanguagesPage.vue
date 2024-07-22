@@ -1,8 +1,7 @@
 <template>
   <div class="languages-page">
-    <AppSpinner v-if="isLoading" class="languages-page__spinner" />
     <AppErrorSection
-      v-else-if="isError"
+      v-if="isError"
       :errorMessage="errorMessage"
       class="languages-page__error-wrapper"
     />
@@ -16,38 +15,40 @@
         placeholder="Search"
         class="languages-page__text-field-wrapper"
       />
-      <v-data-table
-        :headers="headers"
-        :items="languages"
-        :search="search"
-        :custom-filter="handleTableFilter"
-        item-key="id"
-        class="languages-page__data-table"
-        hide-details
-      >
-        <template v-slot:[`item.options`]>
-          <v-menu>
-            <template v-slot:activator="{ props }">
-              <v-btn
-                icon="mdi-dots-vertical"
-                v-bind="props"
-                class="languages-page__popup-menu-btn"
-              ></v-btn>
-            </template>
-            <v-list>
-              <v-list-item
-                v-for="languagetItem in languageMenuItems"
-                :key="languagetItem"
-                disabled
-              >
-                <v-list-item-title class="languages-page__popup-menu-label">
-                  {{ languagetItem }}
-                </v-list-item-title>
-              </v-list-item>
-            </v-list>
-          </v-menu>
-        </template>
-      </v-data-table>
+      <v-skeleton-loader type="table" :loading="isLoading">
+        <v-data-table
+          :headers="headers"
+          :items="languages"
+          :search="search"
+          :custom-filter="handleTableFilter"
+          item-key="id"
+          class="languages-page__data-table"
+          hide-details
+        >
+          <template v-slot:[`item.options`]>
+            <v-menu>
+              <template v-slot:activator="{ props }">
+                <v-btn
+                  icon="mdi-dots-vertical"
+                  v-bind="props"
+                  class="languages-page__popup-menu-btn"
+                ></v-btn>
+              </template>
+              <v-list>
+                <v-list-item
+                  v-for="languagetItem in languageMenuItems"
+                  :key="languagetItem"
+                  disabled
+                >
+                  <v-list-item-title class="languages-page__popup-menu-label">
+                    {{ languagetItem }}
+                  </v-list-item-title>
+                </v-list-item>
+              </v-list>
+            </v-menu>
+          </template>
+        </v-data-table>
+      </v-skeleton-loader>
     </div>
   </div>
 </template>
@@ -116,9 +117,6 @@ const handleTableFilter: ILanguagesFilterFunction = (value, query, item) => {
   display: flex;
   flex-direction: column;
   align-items: center;
-  &__spinner {
-    margin-top: 64px;
-  }
   &__error-wrapper {
     padding-top: 64px;
   }
