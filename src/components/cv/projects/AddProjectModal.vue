@@ -20,6 +20,8 @@
             label="Project"
             variant="outlined"
             class="add-project-modal__text-field-wrapper"
+            :loading="areAllProjectsLoading"
+            :disabled="areAllProjectsLoading || isAllProjectsError"
             hide-details
           />
         </v-card-item>
@@ -49,6 +51,7 @@
 <script setup lang="ts">
 import { ref, computed, onUpdated } from "vue";
 import {
+  ICvProjectsTableData,
   IProjectsData,
   IAddOrUpdateCvProjectInput,
 } from "@/types/pages/cvs/projects";
@@ -56,8 +59,25 @@ import {
 const props = defineProps<{
   isOpen: boolean;
   cvId: string;
-  projects: IProjectsData[] | null;
+  cvProjects: ICvProjectsTableData[] | null;
+  allProjects: IProjectsData[] | null;
+  areAllProjectsLoading: boolean;
+  isAllProjectsError: boolean;
 }>();
+
+const leftCvProjects = computed<IProjectsData[]>(() => {
+  if (!props.cvProjects || !props.allProjects) {
+    return [];
+  }
+
+  const cvProjectsSet = new Set(
+    props.cvProjects.map((cvProject) => cvProject.name)
+  );
+
+  return props.allProjects.filter(
+    (project) => !cvProjectsSet.has(project.name)
+  );
+});
 
 const emit = defineEmits<{
   (event: "closeModal"): void;
@@ -81,8 +101,7 @@ const selectProject = ref<IProjectsData | null>(null);
 const isConfirmBtnDisabled = computed(() => !selectProject.value);
 
 const aProjectsItems = computed(() => {
-  if (!props.projects) return [];
-  return props.projects.map((project) => ({
+  return leftCvProjects.value.map((project) => ({
     title: project.name,
     value: project,
   }));

@@ -1,9 +1,9 @@
 <template>
   <div class="cv-projects">
-    <AppSpinner v-if="isLoading" class="cv-projects__spinner" />
+    <AppSpinner v-if="areCvProjectsLoading" class="cv-projects__spinner" />
     <AppErrorSection
-      v-else-if="isError"
-      :errorMessage="errorMessage"
+      v-else-if="isCvProjectsError"
+      :errorMessage="cvProjectsErrorMessage"
       class="cv-projects__error-wrapper"
     />
     <div v-else class="cv-projects__main-content-wrapper">
@@ -75,7 +75,10 @@
   <AddProjectModal
     :isOpen="isCreateModalOpen"
     :cvId="cvId"
-    :projects="leftProjectsData"
+    :cvProjects="cvProjects"
+    :allProjects="allProjects"
+    :areAllProjectsLoading="areAllProjectsLoading"
+    :isAllProjectsError="isAllProjectsError"
     @onCreateCvProject="submitCvProjectAdding"
     @closeModal="handleCloseCreateModal"
   />
@@ -96,6 +99,7 @@ import { storeToRefs } from "pinia";
 import { useAuthStore } from "@/store/authStore";
 import AddProjectModal from "@/components/cv/projects/AddProjectModal.vue";
 import RemoveProjectModal from "@/components/cv/projects/RemoveProjectModal.vue";
+import useToast from "@/composables/useToast";
 import useErrorState from "@/composables/useErrorState";
 import {
   getCvProjectsById,
@@ -104,6 +108,7 @@ import {
 } from "@/services/cvs/projects";
 import { getAllProjectsData } from "@/services/projects";
 import handleScrollPadding from "@/utils/handleScrollPadding";
+import { FAILED_TO_LOAD_PROJECTS } from "@/constants/errorMessage";
 import {
   ICvProjectsTableData,
   ICvProjectsTableServerData,
@@ -141,28 +146,25 @@ const headers = [
   { key: "options", sortable: false },
 ];
 
+const { setErrorToast } = useToast();
+
 const {
-  isLoading,
-  isError,
-  errorMessage,
-  setErrorValuesToDefault,
-  setErrorValues,
+  isLoading: areCvProjectsLoading,
+  isError: isCvProjectsError,
+  errorMessage: cvProjectsErrorMessage,
+  setErrorValuesToDefault: setCvProjectsErrorValuesToDefault,
+  setErrorValues: setCvProjectsErrorValues,
+} = useErrorState();
+
+const {
+  isLoading: areAllProjectsLoading,
+  isError: isAllProjectsError,
+  setErrorValuesToDefault: setAllProjectsErrorValuesToDefault,
+  setErrorValues: setAllProjectsErrorValues,
 } = useErrorState();
 
 const cvProjects = reactive<ICvProjectsTableData[]>([]);
-const allProjectsData = reactive<IProjectsData[]>([]);
-
-const leftProjectsData = computed<IProjectsData[]>(() => {
-  if (!allProjectsData.length) {
-    return [];
-  }
-
-  const cvProjectsSet = new Set(cvProjects.map((cvProject) => cvProject.name));
-
-  return allProjectsData.filter(
-    (cvProject) => !cvProjectsSet.has(cvProject.name)
-  );
-});
+const allProjects = reactive<IProjectsData[]>([]);
 
 const isCreateModalOpen = ref(false);
 const isDeleteModalOpen = ref(false);
@@ -199,18 +201,31 @@ function updateCvProjectsValue(
   cvUserId.value = cvProjectsServerData.user.id;
 }
 
-async function fetchData() {
-  isLoading.value = true;
+async function fetchCvProjects() {
+  areCvProjectsLoading.value = true;
 
   try {
     const cvProjectsServerData = await getCvProjectsById(cvId.value);
-    const allProjectsServerData = await getAllProjectsData();
 
     updateCvProjectsValue(cvProjectsServerData);
 
-    allProjectsData.splice(
+    setCvProjectsErrorValuesToDefault();
+  } catch (error: unknown) {
+    setCvProjectsErrorValues(error);
+  } finally {
+    areCvProjectsLoading.value = false;
+  }
+}
+
+async function fetchAllProjects() {
+  areAllProjectsLoading.value = true;
+
+  try {
+    const allProjectsServerData = await getAllProjectsData();
+
+    allProjects.splice(
       0,
-      allProjectsData.length,
+      allProjects.length,
       ...allProjectsServerData.map((projectServerData) => ({
         id: projectServerData.id,
         name: projectServerData.name,
@@ -219,49 +234,56 @@ async function fetchData() {
       }))
     );
 
-    setErrorValuesToDefault();
+    setAllProjectsErrorValuesToDefault();
   } catch (error: unknown) {
-    setErrorValues(error);
+    setAllProjectsErrorValues(error);
+
+    setErrorToast(FAILED_TO_LOAD_PROJECTS);
   } finally {
-    isLoading.value = false;
+    areAllProjectsLoading.value = false;
   }
+}
+
+async function fetchData() {
+  await fetchCvProjects();
+  await fetchAllProjects();
 }
 
 function submitCvProjectAdding(inputProjectObj: IAddOrUpdateCvProjectInput) {
   if (!isOwner.value) return;
 
-  isLoading.value = true;
+  areCvProjectsLoading.value = true;
 
   createCvProject(inputProjectObj)
     .then((freshCvProjectsServerData) => {
       updateCvProjectsValue(freshCvProjectsServerData);
 
-      setErrorValuesToDefault();
+      setCvProjectsErrorValuesToDefault();
     })
     .catch((error: unknown) => {
-      setErrorValues(error);
+      setCvProjectsErrorValues(error);
     })
     .finally(() => {
-      isLoading.value = false;
+      areCvProjectsLoading.value = false;
     });
 }
 
 function submitCvProjectRemoving(inputProjectObj: IRemoveCvProjectInput) {
   if (!isOwner.value) return;
 
-  isLoading.value = true;
+  areCvProjectsLoading.value = true;
 
   deleteCvProject(inputProjectObj)
     .then((freshCvProjectsServerData) => {
       updateCvProjectsValue(freshCvProjectsServerData);
 
-      setErrorValuesToDefault();
+      setCvProjectsErrorValuesToDefault();
     })
     .catch((error: unknown) => {
-      setErrorValues(error);
+      setCvProjectsErrorValues(error);
     })
     .finally(() => {
-      isLoading.value = false;
+      areCvProjectsLoading.value = false;
     });
 }
 

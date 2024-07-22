@@ -27,3 +27,4 @@ export const FAILED_TO_LOAD_POSITIONS =
 export const FAILED_TO_LOAD_SKILLS = "Failed to load all available skills";
 export const FAILED_TO_LOAD_LANGUAGES =
   "Failed to load all available languages";
+export const FAILED_TO_LOAD_PROJECTS = "Failed to load all available projects";
