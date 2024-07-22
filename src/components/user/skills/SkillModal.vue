@@ -126,8 +126,11 @@ const isConfirmBtnDisabled = computed(
 );
 
 function getCategoryBySkill(skillName: string) {
-  if (!props.allSkills) return null;
-  return props.allSkills.find((skill) => skill.name === skillName)?.category;
+  if (!props.allSkills) {
+    return props.oSkillForModal?.category;
+  } else {
+    return props.allSkills.find((skill) => skill.name === skillName)?.category;
+  }
 }
 
 const aSkillsItems = computed(() => {
