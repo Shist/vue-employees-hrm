@@ -217,7 +217,7 @@ async function fetchCvProjects() {
   }
 }
 
-async function fetchAllProjects() {
+async function fetchAllProjectsCvData() {
   areAllProjectsLoading.value = true;
 
   try {
@@ -246,7 +246,7 @@ async function fetchAllProjects() {
 
 async function fetchData() {
   await fetchCvProjects();
-  await fetchAllProjects();
+  await fetchAllProjectsCvData();
 }
 
 function submitCvProjectAdding(inputProjectObj: IAddOrUpdateCvProjectInput) {

@@ -209,7 +209,7 @@ async function fetchUserLanguages() {
   }
 }
 
-async function fetchAllLanguages() {
+async function fetchAllLanguagesNames() {
   areAllLangsLoading.value = true;
 
   try {
@@ -231,7 +231,7 @@ async function fetchAllLanguages() {
 
 async function fetchData() {
   await fetchUserLanguages();
-  await fetchAllLanguages();
+  await fetchAllLanguagesNames();
 }
 
 function handleOpenCreateModal() {
