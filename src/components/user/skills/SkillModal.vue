@@ -23,8 +23,11 @@
             label="Skill"
             variant="outlined"
             class="skill-modal__text-field-wrapper"
+            :loading="areAllSkillsLoading"
+            :disabled="
+              !!oSkillForModal || areAllSkillsLoading || isAllSkillsError
+            "
             hide-details
-            :disabled="!!oSkillForModal"
           />
           <v-select
             v-model="selectCategory"
@@ -32,8 +35,8 @@
             label="Category"
             variant="outlined"
             class="skill-modal__text-field-wrapper"
-            hide-details
             disabled
+            hide-details
           />
           <v-select
             v-model="selectSkillMastery"
@@ -41,8 +44,8 @@
             label="Skill mastery"
             variant="outlined"
             class="skill-modal__text-field-wrapper"
-            hide-details
             :disabled="!selectSkill"
+            hide-details
           />
         </v-card-item>
         <v-card-actions>
@@ -78,9 +81,21 @@ const props = defineProps<{
   isOpen: boolean;
   oSkillForModal: ISkill | null;
   userId: string;
-  skills: ISkillsData[] | null;
-  skillCategories: string[] | null;
+  userSkills: ISkill[] | null;
+  allSkills: ISkillsData[] | null;
+  areAllSkillsLoading: boolean;
+  isAllSkillsError: boolean;
 }>();
+
+const leftUserSkills = computed<ISkillsData[]>(() => {
+  if (!props.userSkills || !props.allSkills) {
+    return [];
+  }
+
+  const userSkillsSet = new Set(props.userSkills.map((skill) => skill.name));
+
+  return props.allSkills.filter((skill) => !userSkillsSet.has(skill.name));
+});
 
 const emit = defineEmits<{
   (event: "closeModal"): void;
@@ -111,18 +126,21 @@ const isConfirmBtnDisabled = computed(
 );
 
 function getCategoryBySkill(skillName: string) {
-  if (!props.skills) return null;
-  return props.skills.find((skill) => skill.name === skillName)?.category;
+  if (!props.allSkills) {
+    return props.oSkillForModal?.category;
+  } else {
+    return props.allSkills.find((skill) => skill.name === skillName)?.category;
+  }
 }
 
 const aSkillsItems = computed(() => {
-  if (!props.skills) return [];
-  return props.skills.map((skill) => skill.name);
+  return leftUserSkills.value.map((skill) => skill.name);
 });
 
 const aSkillCategoriesItems = computed(() => {
-  if (!props.skillCategories) return [];
-  return props.skillCategories;
+  if (!props.allSkills) return [];
+  const categoriesSet = new Set(props.allSkills.map((skill) => skill.category));
+  return [...categoriesSet];
 });
 
 const aSkillMasteries = [

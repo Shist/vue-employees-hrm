@@ -15,7 +15,7 @@ const httpLink = createHttpLink({
 const authLink = setContext(async (request, { headers }) => {
   const { getToken } = useCookies();
 
-  const accessToken = getToken("accessToken");
+  let accessToken = getToken("accessToken");
 
   if (
     !accessToken &&
@@ -24,6 +24,8 @@ const authLink = setContext(async (request, { headers }) => {
     request.operationName !== "SIGN_UP"
   ) {
     await refreshAccessToken();
+
+    accessToken = getToken("accessToken");
   }
 
   return {

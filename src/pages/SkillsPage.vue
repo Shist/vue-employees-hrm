@@ -1,8 +1,7 @@
 <template>
   <div class="skills-page">
-    <AppSpinner v-if="isLoading" class="skills-page__spinner" />
     <AppErrorSection
-      v-else-if="isError"
+      v-if="isError"
       :errorMessage="errorMessage"
       class="skills-page__error-wrapper"
     />
@@ -16,38 +15,40 @@
         placeholder="Search"
         class="skills-page__text-field-wrapper"
       />
-      <v-data-table
-        :headers="headers"
-        :items="skills"
-        :search="search"
-        :custom-filter="handleTableFilter"
-        item-key="id"
-        class="skills-page__data-table"
-        hide-details
-      >
-        <template v-slot:[`item.options`]>
-          <v-menu>
-            <template v-slot:activator="{ props }">
-              <v-btn
-                icon="mdi-dots-vertical"
-                v-bind="props"
-                class="skills-page__popup-menu-btn"
-              ></v-btn>
-            </template>
-            <v-list>
-              <v-list-item
-                v-for="skillItem in skillMenuItems"
-                :key="skillItem"
-                disabled
-              >
-                <v-list-item-title class="skills-page__popup-menu-label">
-                  {{ skillItem }}
-                </v-list-item-title>
-              </v-list-item>
-            </v-list>
-          </v-menu>
-        </template>
-      </v-data-table>
+      <v-skeleton-loader type="table" :loading="isLoading">
+        <v-data-table
+          :headers="headers"
+          :items="skills"
+          :search="search"
+          :custom-filter="handleTableFilter"
+          item-key="id"
+          class="skills-page__data-table"
+          hide-details
+        >
+          <template v-slot:[`item.options`]>
+            <v-menu>
+              <template v-slot:activator="{ props }">
+                <v-btn
+                  icon="mdi-dots-vertical"
+                  v-bind="props"
+                  class="skills-page__popup-menu-btn"
+                ></v-btn>
+              </template>
+              <v-list>
+                <v-list-item
+                  v-for="skillItem in skillMenuItems"
+                  :key="skillItem"
+                  disabled
+                >
+                  <v-list-item-title class="skills-page__popup-menu-label">
+                    {{ skillItem }}
+                  </v-list-item-title>
+                </v-list-item>
+              </v-list>
+            </v-menu>
+          </template>
+        </v-data-table>
+      </v-skeleton-loader>
     </div>
   </div>
 </template>
@@ -106,9 +107,6 @@ const handleTableFilter: ISkillsFilterFunction = (value, query, item) => {
   display: flex;
   flex-direction: column;
   align-items: center;
-  &__spinner {
-    margin-top: 64px;
-  }
   &__error-wrapper {
     padding-top: 64px;
   }

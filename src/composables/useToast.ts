@@ -13,7 +13,6 @@ export default function useToast() {
   };
 
   const setErrorToast = (msg: string) => {
-    removeCurrToast();
     const errorToastId = toast(msg, {
       type: "error",
       position: toast.POSITION.BOTTOM_CENTER,
