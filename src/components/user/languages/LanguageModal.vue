@@ -23,8 +23,11 @@
             label="Language"
             variant="outlined"
             class="language-modal__text-field-wrapper"
+            :loading="areAllLangsLoading"
+            :disabled="
+              !!oLanguageForModal || areAllLangsLoading || isAllLangsError
+            "
             hide-details
-            :disabled="!!oLanguageForModal"
           />
           <v-select
             v-model="selectLanguageProficiency"
@@ -32,8 +35,8 @@
             label="Language proficiency"
             variant="outlined"
             class="language-modal__text-field-wrapper"
-            hide-details
             :disabled="!selectLanguage"
+            hide-details
           />
         </v-card-item>
         <v-card-actions>
@@ -72,8 +75,25 @@ const props = defineProps<{
   isOpen: boolean;
   oLanguageForModal: IProfileLanguage | null;
   userId: string;
-  languages: ILanguagesNamesData[] | null;
+  userLanguages: IProfileLanguage[] | null;
+  allLanguages: ILanguagesNamesData[] | null;
+  areAllLangsLoading: boolean;
+  isAllLangsError: boolean;
 }>();
+
+const leftUserLanguages = computed<ILanguagesNamesData[]>(() => {
+  if (!props.userLanguages || !props.allLanguages) {
+    return [];
+  }
+
+  const userLanguagesSet = new Set(
+    props.userLanguages.map((language) => language.name)
+  );
+
+  return props.allLanguages.filter(
+    (language) => !userLanguagesSet.has(language.name)
+  );
+});
 
 const emit = defineEmits<{
   (event: "closeModal"): void;
@@ -104,8 +124,7 @@ const isConfirmBtnDisabled = computed(
 );
 
 const aLanguagesItems = computed(() => {
-  if (!props.languages) return [];
-  return props.languages.map((languages) => languages.name);
+  return leftUserLanguages.value.map((language) => language.name);
 });
 
 const aLanguageProficiencies = ["A1", "A2", "B1", "B2", "C1", "C2", "Native"];

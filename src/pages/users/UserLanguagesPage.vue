@@ -1,7 +1,10 @@
 <template>
   <div class="user-languages">
-    <AppSpinner v-if="isLoading" />
-    <AppErrorSection v-else-if="isError" :errorMessage="errorMessage" />
+    <AppSpinner v-if="areUserLangsLoading" />
+    <AppErrorSection
+      v-else-if="isUserLangsError"
+      :errorMessage="userLangsErrorMessage"
+    />
     <div v-else class="user-languages__main-content-wrapper">
       <v-btn
         v-if="isOwner"
@@ -89,7 +92,10 @@
     :isOpen="isModalOpen"
     :oLanguageForModal="oLanguageForModal"
     :userId="userId"
-    :languages="leftLanguages"
+    :userLanguages="userLanguages"
+    :allLanguages="allLanguages"
+    :areAllLangsLoading="areAllLangsLoading"
+    :isAllLangsError="isAllLangsError"
     @onCreateUserLanguage="submitUserLanguageCreate"
     @onUpdateUserLanguage="submitUserLanguageUpdate"
     @closeModal="handleCloseModal"
@@ -102,6 +108,7 @@ import { useRoute } from "vue-router";
 import { storeToRefs } from "pinia";
 import { useAuthStore } from "@/store/authStore";
 import LanguageModal from "@/components/user/languages/LanguageModal.vue";
+import useToast from "@/composables/useToast";
 import useErrorState from "@/composables/useErrorState";
 import {
   createUserLanguage,
@@ -111,6 +118,7 @@ import {
 } from "@/services/users/languages";
 import { getAllLanguagesNames } from "@/services/languages";
 import handleScrollPadding from "@/utils/handleScrollPadding";
+import { FAILED_TO_LOAD_LANGUAGES } from "@/constants/errorMessage";
 import { Proficiency } from "@/types/enums";
 import {
   ILanguagesNamesData,
@@ -131,30 +139,25 @@ const authStore = useAuthStore();
 const authStoreUser = storeToRefs(authStore).user;
 const isOwner = computed(() => authStoreUser.value?.id === userId.value);
 
+const { setErrorToast } = useToast();
+
 const {
-  isLoading,
-  isError,
-  errorMessage,
-  setErrorValuesToDefault,
-  setErrorValues,
+  isLoading: areUserLangsLoading,
+  isError: isUserLangsError,
+  errorMessage: userLangsErrorMessage,
+  setErrorValuesToDefault: setUserLangsErrorValuesToDefault,
+  setErrorValues: setUserLangsErrorValues,
+} = useErrorState();
+
+const {
+  isLoading: areAllLangsLoading,
+  isError: isAllLangsError,
+  setErrorValuesToDefault: setAllLangsErrorValuesToDefault,
+  setErrorValues: setAllLangsErrorValues,
 } = useErrorState();
 
 const userLanguages = ref<IProfileLanguage[] | null>(null);
-const languages = ref<ILanguagesNamesData[] | null>(null);
-
-const leftLanguages = computed<ILanguagesNamesData[]>(() => {
-  if (!userLanguages.value || !languages.value) {
-    return [];
-  }
-
-  const userLanguagesSet = new Set(
-    userLanguages.value.map((language) => language.name)
-  );
-
-  return languages.value.filter(
-    (language) => !userLanguagesSet.has(language.name)
-  );
-});
+const allLanguages = ref<ILanguagesNamesData[] | null>(null);
 
 const oLanguageForModal = ref<IProfileLanguage | null>(null);
 const isModalOpen = ref(false);
@@ -188,25 +191,47 @@ function updateUserLanguagesValue(userLanguagesData: IProfileLanguage[]) {
   userLanguages.value = userLanguagesData;
 }
 
-async function fetchData() {
-  isLoading.value = true;
+async function fetchUserLanguages() {
+  areUserLangsLoading.value = true;
 
   try {
     const userLanguagesData = await getUserLanguagesById(userId.value);
-    const languagesData = await getAllLanguagesNames();
 
-    if (!userLanguagesData || !languagesData) return;
+    if (!userLanguagesData) return;
 
     updateUserLanguagesValue(userLanguagesData);
 
-    languages.value = languagesData;
-
-    setErrorValuesToDefault();
+    setUserLangsErrorValuesToDefault();
   } catch (error: unknown) {
-    setErrorValues(error);
+    setUserLangsErrorValues(error);
   } finally {
-    isLoading.value = false;
+    areUserLangsLoading.value = false;
   }
+}
+
+async function fetchAllLanguages() {
+  areAllLangsLoading.value = true;
+
+  try {
+    const languagesData = await getAllLanguagesNames();
+
+    if (!languagesData) return;
+
+    allLanguages.value = languagesData;
+
+    setAllLangsErrorValuesToDefault();
+  } catch (error: unknown) {
+    setAllLangsErrorValues(error);
+
+    setErrorToast(FAILED_TO_LOAD_LANGUAGES);
+  } finally {
+    areAllLangsLoading.value = false;
+  }
+}
+
+async function fetchData() {
+  await fetchUserLanguages();
+  await fetchAllLanguages();
 }
 
 function handleOpenCreateModal() {
@@ -236,20 +261,20 @@ function submitUserLanguageCreate(
 ) {
   if (!isOwner.value) return;
 
-  isLoading.value = true;
+  areUserLangsLoading.value = true;
 
   createUserLanguage(languageInputObj)
     .then((freshUserLanguages) => {
       if (!freshUserLanguages) return;
       updateUserLanguagesValue(freshUserLanguages);
 
-      setErrorValuesToDefault();
+      setUserLangsErrorValuesToDefault();
     })
     .catch((error: unknown) => {
-      setErrorValues(error);
+      setUserLangsErrorValues(error);
     })
     .finally(() => {
-      isLoading.value = false;
+      areUserLangsLoading.value = false;
     });
 }
 
@@ -258,20 +283,20 @@ function submitUserLanguageUpdate(
 ) {
   if (!isOwner.value) return;
 
-  isLoading.value = true;
+  areUserLangsLoading.value = true;
 
   updateUserLanguage(languageInputObj)
     .then((freshUserLanguages) => {
       if (!freshUserLanguages) return;
       updateUserLanguagesValue(freshUserLanguages);
 
-      setErrorValuesToDefault();
+      setUserLangsErrorValuesToDefault();
     })
     .catch((error: unknown) => {
-      setErrorValues(error);
+      setUserLangsErrorValues(error);
     })
     .finally(() => {
-      isLoading.value = false;
+      areUserLangsLoading.value = false;
     });
 }
 
@@ -300,7 +325,7 @@ function clearUserDeletionLanguages() {
 function submitUserLanguagesDeletion() {
   if (!isOwner.value) return;
 
-  isLoading.value = true;
+  areUserLangsLoading.value = true;
 
   const languagesToBeDeleted: IDeleteProfileLanguageInput = {
     userId: Number(userId.value),
@@ -312,13 +337,13 @@ function submitUserLanguagesDeletion() {
       if (!freshUserLanguages) return;
       updateUserLanguagesValue(freshUserLanguages);
 
-      setErrorValuesToDefault();
+      setUserLangsErrorValuesToDefault();
     })
     .catch((error: unknown) => {
-      setErrorValues(error);
+      setUserLangsErrorValues(error);
     })
     .finally(() => {
-      isLoading.value = false;
+      areUserLangsLoading.value = false;
     });
 
   clearUserDeletionLanguages();
