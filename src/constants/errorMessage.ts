@@ -20,3 +20,5 @@ export const INVALID_FILE_TYPE =
   "The file you've attached has unacceptable type";
 export const REQUIRED_FIELD = "Field is required";
 export const UNAUTHORIZED_ERROR = "Unauthorized";
+export const FAILED_TO_FETCH_DEPARMENTS = "Failed to fetch departments list";
+export const FAILED_TO_FETCH_POSITIONS = "Failed to fetch positions list";

@@ -1,7 +1,7 @@
 <template>
   <div class="user-profile">
-    <AppSpinner v-if="isLoading" />
-    <AppErrorSection v-else-if="isError" :errorMessage="errorMessage" />
+    <AppSpinner v-if="isUserLoading" />
+    <AppErrorSection v-else-if="isUserError" :errorMessage="userErrorMessage" />
     <div v-else-if="user" class="user-profile__main-content-wrapper">
       <AvatarUpload
         :isOwner="isOwner"
@@ -14,15 +14,13 @@
       <UserInfo
         :isOwner="isOwner"
         :userId="userId"
-        :firstName="user.firstName"
-        :lastName="user.lastName"
-        :email="user.email"
-        :isVerified="user.isVerified"
-        :createdAt="user.createdAt"
-        :departmentId="user.departmentId"
-        :positionId="user.positionId"
+        :userData="user"
         :departmentNames="departmentNames"
+        :areDepartmentsLoading="areDepartmentsLoading"
+        :isDepartmentsError="isDepartmentsError"
         :positionNames="positionNames"
+        :arePositionsLoading="arePositionsLoading"
+        :isPositionsError="isPositionsError"
         @onUpdateUserData="submitUserData"
       />
     </div>
@@ -47,7 +45,12 @@ import {
   updateUserAvatar,
   updateUserData,
 } from "@/services/users/profile";
-import { TOO_LARGE_FILE, INVALID_FILE_TYPE } from "@/constants/errorMessage";
+import {
+  TOO_LARGE_FILE,
+  INVALID_FILE_TYPE,
+  FAILED_TO_FETCH_DEPARMENTS,
+  FAILED_TO_FETCH_POSITIONS,
+} from "@/constants/errorMessage";
 import {
   IUserProfileData,
   IUserProfileServerData,
@@ -73,11 +76,25 @@ const isOwner = computed(() => authStoreUser.value?.id === userId.value);
 const { newEnityName } = storeToRefs(useBreadCrumbsStore());
 
 const {
-  isLoading,
-  isError,
-  errorMessage,
-  setErrorValuesToDefault,
-  setErrorValues,
+  isLoading: isUserLoading,
+  isError: isUserError,
+  errorMessage: userErrorMessage,
+  setErrorValuesToDefault: setUserErrorValuesToDefault,
+  setErrorValues: setUserErrorValues,
+} = useErrorState();
+
+const {
+  isLoading: areDepartmentsLoading,
+  isError: isDepartmentsError,
+  setErrorValuesToDefault: setDepartmentsErrorValuesToDefault,
+  setErrorValues: setDepartmentsErrorValues,
+} = useErrorState();
+
+const {
+  isLoading: arePositionsLoading,
+  isError: isPositionsError,
+  setErrorValuesToDefault: setPositionsErrorValuesToDefault,
+  setErrorValues: setPositionsErrorValues,
 } = useErrorState();
 
 const user = ref<IUserProfileData | null>(null);
@@ -115,7 +132,9 @@ function updateUserValue(newUser: IUserProfileServerData) {
     lastName: newUser.profile.last_name,
     avatar: newUser.profile.avatar,
     departmentId: newUser.department ? newUser.department.id : null,
+    departmentName: newUser.department ? newUser.department.name : null,
     positionId: newUser.position ? newUser.position.id : null,
+    positionName: newUser.position ? newUser.position.name : null,
   };
 
   if (!authStoreUser.value || authStoreUser.value.id !== userId.value) return;
@@ -134,26 +153,65 @@ function updateUserValue(newUser: IUserProfileServerData) {
   }
 }
 
-async function fetchData() {
-  isLoading.value = true;
-
+async function fetchUserData() {
+  isUserLoading.value = true;
   try {
     const userData = await getUserProfileById(userId.value);
-    const departmentNamesData = await getAllDepartmentNames();
-    const positionNamesData = await getAllPositionNames();
 
-    if (!userData || !departmentNamesData || !positionNamesData) return;
+    if (!userData) return;
 
     updateUserValue(userData);
+
+    setUserErrorValuesToDefault();
+  } catch (error) {
+    setUserErrorValues(error);
+  } finally {
+    isUserLoading.value = false;
+  }
+}
+
+async function fetchDepartmentsNames() {
+  areDepartmentsLoading.value = true;
+  try {
+    const departmentNamesData = await getAllDepartmentNames();
+
+    if (!departmentNamesData) return;
+
     departmentNames.value = departmentNamesData;
+
+    setDepartmentsErrorValuesToDefault();
+  } catch (error) {
+    setDepartmentsErrorValues(error);
+
+    setErrorToast(FAILED_TO_FETCH_DEPARMENTS);
+  } finally {
+    areDepartmentsLoading.value = false;
+  }
+}
+
+async function fetchPositionsNames() {
+  arePositionsLoading.value = true;
+  try {
+    const positionNamesData = await getAllPositionNames();
+
+    if (!positionNamesData) return;
+
     positionNames.value = positionNamesData;
 
-    setErrorValuesToDefault();
-  } catch (error: unknown) {
-    setErrorValues(error);
+    setPositionsErrorValuesToDefault();
+  } catch (error) {
+    setPositionsErrorValues(error);
+
+    setErrorToast(FAILED_TO_FETCH_POSITIONS);
   } finally {
-    isLoading.value = false;
+    arePositionsLoading.value = false;
   }
+}
+
+async function fetchData() {
+  await fetchUserData();
+  await fetchDepartmentsNames();
+  await fetchPositionsNames();
 }
 
 function submitUserData(
@@ -162,7 +220,7 @@ function submitUserData(
 ) {
   if (!isOwner.value) return;
 
-  isLoading.value = true;
+  isUserLoading.value = true;
 
   updateUserData(userInputObj, profileInputObj)
     .then((freshUserData) => {
@@ -184,13 +242,13 @@ function submitUserData(
         newEnityName.value = email;
       }
 
-      setErrorValuesToDefault();
+      setUserErrorValuesToDefault();
     })
     .catch((error: unknown) => {
-      setErrorValues(error);
+      setUserErrorValues(error);
     })
     .finally(() => {
-      isLoading.value = false;
+      isUserLoading.value = false;
     });
 }
 
@@ -211,7 +269,7 @@ function submitUserAvatar(avatarInputObj: IUploadAvatarInput) {
     return;
   }
 
-  isLoading.value = true;
+  isUserLoading.value = true;
 
   updateUserAvatar(avatarInputObj)
     .then((newAvatarSRC) => {
@@ -225,20 +283,20 @@ function submitUserAvatar(avatarInputObj: IUploadAvatarInput) {
         authStoreUser.value.avatar = newAvatarSRC;
       }
 
-      setErrorValuesToDefault();
+      setUserErrorValuesToDefault();
     })
     .catch((error: unknown) => {
-      setErrorValues(error);
+      setUserErrorValues(error);
     })
     .finally(() => {
-      isLoading.value = false;
+      isUserLoading.value = false;
     });
 }
 
 function submitUserAvatarDeletion(_userId: string) {
   if (!isOwner.value) return;
 
-  isLoading.value = true;
+  isUserLoading.value = true;
 
   deleteUserAvatar(_userId)
     .then(() => {
@@ -250,13 +308,13 @@ function submitUserAvatarDeletion(_userId: string) {
         authStoreUser.value.avatar = null;
       }
 
-      setErrorValuesToDefault();
+      setUserErrorValuesToDefault();
     })
     .catch((error: unknown) => {
-      setErrorValues(error);
+      setUserErrorValues(error);
     })
     .finally(() => {
-      isLoading.value = false;
+      isUserLoading.value = false;
     });
 }
 </script>

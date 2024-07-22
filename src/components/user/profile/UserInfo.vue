@@ -5,8 +5,11 @@
         {{ computedFullName }}
       </h3>
       <div class="user-info__mail-caption-wrapper">
-        <span class="user-info__mail-caption">{{ email }}</span>
-        <v-icon v-if="isVerified" class="user-info__mail-verified-icon">
+        <span class="user-info__mail-caption">{{ userData?.email }}</span>
+        <v-icon
+          v-if="userData?.isVerified"
+          class="user-info__mail-verified-icon"
+        >
           mdi-check-decagram
         </v-icon>
       </div>
@@ -37,7 +40,8 @@
         label="Department"
         variant="outlined"
         class="user-info__text-field-wrapper"
-        :readonly="!isOwner"
+        :loading="areDepartmentsLoading"
+        :readonly="!isOwner || areDepartmentsLoading || isDepartmentsError"
         hide-details
       />
       <v-select
@@ -46,7 +50,8 @@
         label="Position"
         variant="outlined"
         class="user-info__text-field-wrapper"
-        :readonly="!isOwner"
+        :loading="arePositionsLoading"
+        :readonly="!isOwner || arePositionsLoading || isPositionsError"
         hide-details
       />
       <v-btn
@@ -65,24 +70,24 @@
 <script setup lang="ts">
 import { ref, computed, watchEffect } from "vue";
 import {
+  IUserProfileData,
   IDepartmentNamesData,
   IPositionNamesData,
   IUpdateUserInput,
   IUpdateProfileInput,
+  ISelectFieldData,
 } from "@/types/pages/users/profile";
 
 const props = defineProps<{
   isOwner: boolean;
   userId: string;
-  email: string;
-  createdAt: number;
-  isVerified: boolean;
-  firstName: string | null;
-  lastName: string | null;
-  departmentId: string | null;
-  positionId: string | null;
+  userData: IUserProfileData | null;
   departmentNames: IDepartmentNamesData[] | null;
+  areDepartmentsLoading: boolean;
+  isDepartmentsError: boolean;
   positionNames: IPositionNamesData[] | null;
+  arePositionsLoading: boolean;
+  isPositionsError: boolean;
 }>();
 
 const emit = defineEmits<{
@@ -94,21 +99,22 @@ const emit = defineEmits<{
 }>();
 
 const computedFullName = computed(() => {
-  if (!props.firstName && !props.lastName) {
+  if (!props.userData?.firstName && !props.userData?.lastName) {
     return "";
   } else {
-    if (props.firstName && props.lastName) {
-      return `${props.firstName} ${props.lastName}`;
-    } else if (props.firstName) {
-      return props.firstName;
+    if (props.userData.firstName && props.userData.lastName) {
+      return `${props.userData.firstName} ${props.userData.lastName}`;
+    } else if (props.userData.firstName) {
+      return props.userData.firstName;
     } else {
-      return props.lastName;
+      return props.userData.lastName;
     }
   }
 });
 
 const computedCreationDate = computed(() => {
-  const targetDate = new Date(props.createdAt)
+  if (!props.userData) return "";
+  const targetDate = new Date(props.userData.createdAt)
     .toLocaleDateString("en-US", {
       weekday: "short",
       month: "short",
@@ -119,42 +125,75 @@ const computedCreationDate = computed(() => {
   return `A member since ${targetDate}`;
 });
 
-const firstName = ref(props.firstName);
+const firstName = ref(props.userData?.firstName);
 
-const lastName = ref(props.lastName);
+const lastName = ref(props.userData?.lastName);
 
 const prepareSelectItems = (
   objects: IDepartmentNamesData[] | IPositionNamesData[] | null,
   defaultItemText: string
 ) => {
-  return computed(() => [
+  return [
     { title: defaultItemText, value: null },
     ...(objects?.map((obj) => ({ title: obj.name, value: obj.id })) || []),
-  ]);
+  ];
 };
 
-const departmentId = ref(props.departmentId);
-const departmentsItems = prepareSelectItems(
-  props.departmentNames,
-  "No department"
-);
+const departmentId = ref(props.userData?.departmentId);
+let departmentsItems: ISelectFieldData[] = [];
+watchEffect(() => {
+  if (departmentsItems.length > 1) return;
+  departmentsItems = [
+    {
+      title: props.userData ? `${props.userData.departmentName}` : "",
+      value: props.userData ? props.userData.departmentId : null,
+    },
+  ];
+});
+watchEffect(() => {
+  const fetchedDepartments = prepareSelectItems(
+    props.departmentNames,
+    "No department"
+  );
+  if (fetchedDepartments.length > 1) {
+    departmentsItems = fetchedDepartments;
+  }
+});
 
-const positionId = ref(props.positionId);
-const positionsItems = prepareSelectItems(props.positionNames, "No position");
+const positionId = ref(props.userData?.positionId);
+let positionsItems: ISelectFieldData[] = [];
+watchEffect(() => {
+  if (positionsItems.length > 1) return;
+  positionsItems = [
+    {
+      title: props.userData ? `${props.userData.positionName}` : "",
+      value: props.userData ? props.userData.positionId : null,
+    },
+  ];
+});
+watchEffect(() => {
+  const fetchedPositions = prepareSelectItems(
+    props.positionNames,
+    "No position"
+  );
+  if (fetchedPositions.length > 1) {
+    positionsItems = fetchedPositions;
+  }
+});
 
 watchEffect(() => {
-  firstName.value = props.firstName;
-  lastName.value = props.lastName;
-  departmentId.value = props.departmentId;
-  positionId.value = props.positionId;
+  firstName.value = props.userData?.firstName;
+  lastName.value = props.userData?.lastName;
+  departmentId.value = props.userData?.departmentId;
+  positionId.value = props.userData?.positionId;
 });
 
 const isSubmitBtnDisabled = computed(
   () =>
-    firstName.value === props.firstName &&
-    lastName.value === props.lastName &&
-    departmentId.value === props.departmentId &&
-    positionId.value === props.positionId
+    firstName.value === props.userData?.firstName &&
+    lastName.value === props.userData?.lastName &&
+    departmentId.value === props.userData?.departmentId &&
+    positionId.value === props.userData?.positionId
 );
 
 function onUpdateBtnClicked() {
@@ -165,8 +204,8 @@ function onUpdateBtnClicked() {
   };
   const profileInputObj: IUpdateProfileInput = {
     userId: Number(props.userId),
-    first_name: firstName.value,
-    last_name: lastName.value,
+    first_name: firstName.value !== undefined ? firstName.value : null,
+    last_name: lastName.value !== undefined ? lastName.value : null,
   };
 
   emit("onUpdateUserData", userInputObj, profileInputObj);
