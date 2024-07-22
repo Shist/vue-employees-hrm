@@ -48,8 +48,8 @@ import {
 import {
   TOO_LARGE_FILE,
   INVALID_FILE_TYPE,
-  FAILED_TO_FETCH_DEPARMENTS,
-  FAILED_TO_FETCH_POSITIONS,
+  FAILED_TO_LOAD_DEPARMENTS,
+  FAILED_TO_LOAD_POSITIONS,
 } from "@/constants/errorMessage";
 import {
   IUserProfileData,
@@ -183,7 +183,7 @@ async function fetchDepartmentsNames() {
   } catch (error) {
     setDepartmentsErrorValues(error);
 
-    setErrorToast(FAILED_TO_FETCH_DEPARMENTS);
+    setErrorToast(FAILED_TO_LOAD_DEPARMENTS);
   } finally {
     areDepartmentsLoading.value = false;
   }
@@ -202,7 +202,7 @@ async function fetchPositionsNames() {
   } catch (error) {
     setPositionsErrorValues(error);
 
-    setErrorToast(FAILED_TO_FETCH_POSITIONS);
+    setErrorToast(FAILED_TO_LOAD_POSITIONS);
   } finally {
     arePositionsLoading.value = false;
   }

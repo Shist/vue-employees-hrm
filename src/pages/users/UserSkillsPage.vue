@@ -1,7 +1,10 @@
 <template>
   <div class="user-skills">
-    <AppSpinner v-if="isLoading" />
-    <AppErrorSection v-else-if="isError" :errorMessage="errorMessage" />
+    <AppSpinner v-if="areUserSkillsLoading" />
+    <AppErrorSection
+      v-else-if="isUserSkillsError"
+      :errorMessage="userSkillsErrorMessage"
+    />
     <div v-else class="user-skills__main-content-wrapper">
       <v-btn
         v-if="isOwner"
@@ -54,8 +57,10 @@
     :isOpen="isModalOpen"
     :oSkillForModal="oSkillForModal"
     :userId="userId"
-    :skills="leftSkills"
-    :skill-categories="skillCategories"
+    :userSkills="userSkills"
+    :allSkills="allSkills"
+    :areAllSkillsLoading="areAllSkillsLoading"
+    :isAllSkillsError="isAllSkillsError"
     @onCreateUserSkill="submitUserSkillCreate"
     @onUpdateUserSkill="submitUserSkillUpdate"
     @closeModal="handleCloseModal"
@@ -69,8 +74,9 @@ import { storeToRefs } from "pinia";
 import { useAuthStore } from "@/store/authStore";
 import SkillModal from "@/components/user/skills/SkillModal.vue";
 import SkillsCategory from "@/components/SkillsCategory.vue";
+import useToast from "@/composables/useToast";
 import useErrorState from "@/composables/useErrorState";
-import { getAllSkills, getSkillCategories } from "@/services/skills";
+import { getAllSkills } from "@/services/skills";
 import {
   createUserSkill,
   deleteUserSkills,
@@ -78,6 +84,7 @@ import {
   updateUserSkill,
 } from "@/services/users/skills";
 import handleScrollPadding from "@/utils/handleScrollPadding";
+import { FAILED_TO_LOAD_SKILLS } from "@/constants/errorMessage";
 import {
   ISkill,
   ISkillCategoriesMap,
@@ -101,27 +108,25 @@ const authStore = useAuthStore();
 const authStoreUser = storeToRefs(authStore).user;
 const isOwner = computed(() => authStoreUser.value?.id === userId.value);
 
+const { setErrorToast } = useToast();
+
 const {
-  isLoading,
-  isError,
-  errorMessage,
-  setErrorValuesToDefault,
-  setErrorValues,
+  isLoading: areUserSkillsLoading,
+  isError: isUserSkillsError,
+  errorMessage: userSkillsErrorMessage,
+  setErrorValuesToDefault: setUserSkillsErrorValuesToDefault,
+  setErrorValues: setUserSkillsErrorValues,
+} = useErrorState();
+
+const {
+  isLoading: areAllSkillsLoading,
+  isError: isAllSkillsError,
+  setErrorValuesToDefault: setAllSkillsErrorValuesToDefault,
+  setErrorValues: setAllSkillsErrorValues,
 } = useErrorState();
 
 const userSkills = ref<ISkill[] | null>(null);
-const skills = ref<ISkillsData[] | null>(null);
-const skillCategories = ref<string[] | null>(null);
-
-const leftSkills = computed<ISkillsData[]>(() => {
-  if (!userSkills.value || !skills.value) {
-    return [];
-  }
-
-  const userSkillsSet = new Set(userSkills.value.map((skill) => skill.name));
-
-  return skills.value.filter((skill) => !userSkillsSet.has(skill.name));
-});
+const allSkills = ref<ISkillsData[] | null>(null);
 
 const oSkillForModal = ref<ISkill | null>(null);
 const isModalOpen = ref(false);
@@ -188,28 +193,47 @@ function updateUserSkillsValue(userSkillsData: ISkill[]) {
   userSkills.value = userSkillsData;
 }
 
-async function fetchData() {
-  isLoading.value = true;
+async function fetchUserSkills() {
+  areUserSkillsLoading.value = true;
 
   try {
     const userSkillsData = await getUserSkillsById(userId.value);
-    const skillsData = await getAllSkills();
-    const skillCategoriesData = await getSkillCategories();
 
-    if (!userSkillsData || !skillsData || !skillCategoriesData) return;
+    if (!userSkillsData) return;
 
     updateUserSkillsValue(userSkillsData);
 
-    skills.value = skillsData;
-
-    skillCategories.value = skillCategoriesData;
-
-    setErrorValuesToDefault();
+    setUserSkillsErrorValuesToDefault();
   } catch (error: unknown) {
-    setErrorValues(error);
+    setUserSkillsErrorValues(error);
   } finally {
-    isLoading.value = false;
+    areUserSkillsLoading.value = false;
   }
+}
+
+async function fetchAllSkills() {
+  areAllSkillsLoading.value = true;
+
+  try {
+    const skillsData = await getAllSkills();
+
+    if (!skillsData) return;
+
+    allSkills.value = skillsData;
+
+    setAllSkillsErrorValuesToDefault();
+  } catch (error: unknown) {
+    setAllSkillsErrorValues(error);
+
+    setErrorToast(FAILED_TO_LOAD_SKILLS);
+  } finally {
+    areAllSkillsLoading.value = false;
+  }
+}
+
+async function fetchData() {
+  await fetchUserSkills();
+  await fetchAllSkills();
 }
 
 function handleOpenCreateModal() {
@@ -238,40 +262,40 @@ function handleOpenEditModal(
 function submitUserSkillCreate(skillInputObj: IAddOrUpdateProfileSkillInput) {
   if (!isOwner.value) return;
 
-  isLoading.value = true;
+  areUserSkillsLoading.value = true;
 
   createUserSkill(skillInputObj)
     .then((freshUserSkills) => {
       if (!freshUserSkills) return;
       updateUserSkillsValue(freshUserSkills);
 
-      setErrorValuesToDefault();
+      setUserSkillsErrorValuesToDefault();
     })
     .catch((error: unknown) => {
-      setErrorValues(error);
+      setUserSkillsErrorValues(error);
     })
     .finally(() => {
-      isLoading.value = false;
+      areUserSkillsLoading.value = false;
     });
 }
 
 function submitUserSkillUpdate(skillInputObj: IAddOrUpdateProfileSkillInput) {
   if (!isOwner.value) return;
 
-  isLoading.value = true;
+  areUserSkillsLoading.value = true;
 
   updateUserSkill(skillInputObj)
     .then((freshUserSkills) => {
       if (!freshUserSkills) return;
       updateUserSkillsValue(freshUserSkills);
 
-      setErrorValuesToDefault();
+      setUserSkillsErrorValuesToDefault();
     })
     .catch((error: unknown) => {
-      setErrorValues(error);
+      setUserSkillsErrorValues(error);
     })
     .finally(() => {
-      isLoading.value = false;
+      areUserSkillsLoading.value = false;
     });
 }
 
@@ -300,7 +324,7 @@ function clearUserDeletionSkills() {
 function submitUserSkillsDeletion() {
   if (!isOwner.value) return;
 
-  isLoading.value = true;
+  areUserSkillsLoading.value = true;
 
   const skillsToBeDeleted: IDeleteProfileSkillInput = {
     userId: Number(userId.value),
@@ -312,13 +336,13 @@ function submitUserSkillsDeletion() {
       if (!freshUserSkills) return;
       updateUserSkillsValue(freshUserSkills);
 
-      setErrorValuesToDefault();
+      setUserSkillsErrorValuesToDefault();
     })
     .catch((error: unknown) => {
-      setErrorValues(error);
+      setUserSkillsErrorValues(error);
     })
     .finally(() => {
-      isLoading.value = false;
+      areUserSkillsLoading.value = false;
     });
 
   clearUserDeletionSkills();
