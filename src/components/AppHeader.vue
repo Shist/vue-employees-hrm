@@ -136,7 +136,7 @@
           :to="ROUTES.USERS.PATH"
         >
           <v-icon size="x-large" class="mr-8 ml-4">mdi-home-outline</v-icon>
-          Home
+          {{ $t("navigation.Home") }}
         </v-btn>
         <v-divider />
         <v-list class="pa-0">
@@ -159,7 +159,7 @@
               ]"
             >
               <v-icon size="x-large" class="mr-8 ml-4">{{ item.icon }}</v-icon>
-              {{ item.title }}
+              {{ $t(`navigation.${item.title}`) }}
             </v-btn>
           </v-list-item>
         </v-list>

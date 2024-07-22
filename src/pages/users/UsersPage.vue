@@ -62,15 +62,17 @@
 </template>
 
 <script setup lang="ts">
-import { ref, reactive, onMounted } from "vue";
+import { ref, reactive, onMounted, computed } from "vue";
 import { useRouter } from "vue-router";
 import useErrorState from "@/composables/useErrorState";
 import { getAllUsers } from "@/services/users/users";
 import { ROUTES } from "@/constants/router";
 import { IUsersTableData } from "@/types/pages/users/table";
 import { IUsersFilterFunction } from "@/types/vuetifyDataTable";
+import { useI18n } from "vue-i18n";
 
 const router = useRouter();
+const { t } = useI18n({ useScope: "global" });
 
 function openUserProfile(userId: number) {
   router.push(`${ROUTES.USERS.PATH}/${userId}`);
@@ -80,21 +82,29 @@ const search = ref("");
 
 const users = reactive<IUsersTableData[]>([]);
 
-const headers = [
-  { key: "avatar", sortable: false },
-  { key: "firstName", title: "First Name" },
-  { key: "lastName", title: "Last Name" },
-  { key: "email", title: "Email" },
-  { key: "departmentName", title: "Department" },
-  { key: "positionName", title: "Position" },
-  { key: "options", sortable: false },
-];
+const headers = computed(() => {
+  return [
+    { key: "avatar", sortable: false },
+    { key: "firstName", title: t(`usersPage.firstName`) },
+    { key: "lastName", title: t(`usersPage.lastName`) },
+    { key: "email", title: t(`usersPage.email`) },
+    { key: "departmentName", title: t(`usersPage.departmentName`) },
+    { key: "positionName", title: t(`usersPage.positionName`) },
+    { key: "options", sortable: false },
+  ];
+});
 
-const projectMenuItems = [
-  { title: "Profile", click: openUserProfile, disabled: false },
-  { title: "Update user", disabled: true },
-  { title: "Delete user", disabled: true },
-];
+const projectMenuItems = computed(() => {
+  return [
+    {
+      title: t(`usersPage.profile`),
+      click: openUserProfile,
+      disabled: false,
+    },
+    { title: t(`usersPage.updateUser`), disabled: true },
+    { title: t(`usersPage.deleteUser`), disabled: true },
+  ];
+});
 
 const {
   isLoading,

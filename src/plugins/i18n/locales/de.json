@@ -19,5 +19,25 @@
     "email": "Email",
     "password": "Passwort",
     "search": "Suchen"
+  },
+  "navigation": {
+    "Home": "Startseite",
+    "Employees": "Mitarbeiter",
+    "Projects": "Projekte",
+    "CVs": "Lebensläufe",
+    "Departments": "Abteilungen",
+    "Positions": "Positionen",
+    "Skills": "Fähigkeiten",
+    "Languages": "Sprachen"
+  },
+  "usersPage": {
+    "firstName": "Vorname",
+    "lastName": "Nachname",
+    "email": "Email",
+    "departmentName": "Abteilung",
+    "positionName": "Position",
+    "profile": "Profil",
+    "updateUser": "Profil aktualisieren",
+    "deleteUser": "Profil löschen"
   }
 }

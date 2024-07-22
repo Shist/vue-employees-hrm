@@ -16,10 +16,32 @@ export const useLangStore = defineStore("lang", () => {
     } else {
       locale = "en";
     }
-    if (!availableLocales.includes(locale)) {
-      const messages = await import(`@/plugins/i18n/locales/${locale}.json`);
-      setLocaleMessage(locale, messages.default);
+
+    try {
+      if (!availableLocales.includes(locale)) {
+        const messages = await import(
+          /* webpackChunkName: "[request]" */ `@/plugins/i18n/locales/${locale}.json`
+        );
+        setLocaleMessage(locale, messages.default);
+      }
+    } catch (error: unknown) {
+      console.error("Error loading messages");
     }
+
+    return nextTick();
+  }
+
+  async function loadInitialLocale(newLocale: string) {
+    try {
+      const messages = await import(
+        /* webpackChunkName: "[request]" */ `@/plugins/i18n/locales/${newLocale}.json`
+      );
+
+      setLocaleMessage(newLocale, messages.default);
+    } catch (error: unknown) {
+      console.error("Error loading messages");
+    }
+
     return nextTick();
   }
 
@@ -48,5 +70,10 @@ export const useLangStore = defineStore("lang", () => {
     document.querySelector("html")?.setAttribute("lang", locale.value);
   };
 
-  return { currLang, changeCurrLanguage, loadLocaleMessages };
+  return {
+    currLang,
+    changeCurrLanguage,
+    loadLocaleMessages,
+    loadInitialLocale,
+  };
 });

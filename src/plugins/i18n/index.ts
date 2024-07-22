@@ -21,9 +21,6 @@ const i18n = createI18n({
   fallbackLocale: process.env.VUE_APP_FALLBACK_LOCALE,
   legacy: false,
   globalInjection: true,
-  messages: await import(
-    /* webpackChunkName: "[request]" */ `@/plugins/i18n/locales/${getUserLocale()}.json`
-  ),
 });
 
 export default i18n;

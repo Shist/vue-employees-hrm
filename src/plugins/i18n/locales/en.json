@@ -19,5 +19,25 @@
     "email": "Email",
     "password": "Password",
     "search": "Search"
+  },
+  "navigation": {
+    "Home": "Home",
+    "Employees": "Employees",
+    "Projects": "Projects",
+    "CVs": "CVs",
+    "Departments": "Departments",
+    "Positions": "Positions",
+    "Skills": "Skills",
+    "Languages": "Languages"
+  },
+  "usersPage": {
+    "firstName": "First Name",
+    "lastName": "Last Name",
+    "email": "Email",
+    "departmentName": "Department",
+    "positionName": "Position",
+    "profile": "Profile",
+    "updateUser": "Update user",
+    "deleteUser": "Delete user"
   }
 }

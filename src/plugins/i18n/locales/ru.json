@@ -19,5 +19,25 @@
     "email": "Почта",
     "password": "Пароль",
     "search": "Поиск"
+  },
+  "navigation": {
+    "Home": "Главная",
+    "Employees": "Сотрудники",
+    "Projects": "Проекты",
+    "CVs": "Резюме",
+    "Departments": "Отделы",
+    "Positions": "Должности",
+    "Skills": "Навыки",
+    "Languages": "Языки"
+  },
+  "usersPage": {
+    "firstName": "Имя",
+    "lastName": "Фамилия",
+    "email": "Почта",
+    "departmentName": "Отдел",
+    "positionName": "Должность",
+    "profile": "Профиль",
+    "updateUser": "Обновить профиль",
+    "deleteUser": "Удалить профиль"
   }
 }

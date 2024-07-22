@@ -1,6 +1,6 @@
 <template>
-  <div class="global-container">
-    <AppHeader v-if="!isLoading" />
+  <div class="global-container" v-if="!isLoading">
+    <AppHeader />
     <AppSpinner v-if="isLogging" class="global-container__spinner" />
     <main v-else class="app-main" :style="{ paddingRight: scrollbarWidth }">
       <BreadCrumbs v-if="$route.meta.hasBreadcrumbs" />
@@ -14,16 +14,16 @@
 import { watch, onMounted, onUnmounted, ref } from "vue";
 import { useTheme } from "vuetify";
 import { updateGlobalOptions } from "vue3-toastify";
+import { useI18n } from "vue-i18n";
 import { storeToRefs } from "pinia";
 import { useAuthStore } from "@/store/authStore";
 import { useScrollbarWidth } from "@/store/scrollbarWidth";
 import { useThemeStore } from "@/store/theme";
-import { useI18n } from "vue-i18n";
+import { useLangStore } from "./store/lang";
 import AppHeader from "@/components/AppHeader.vue";
 import BreadCrumbs from "@/components/BreadCrumbs.vue";
 import AppTabs from "@/components/AppTabs.vue";
 import { getThemeValue } from "@/utils/theme";
-import { useLangStore } from "./store/lang";
 
 const { scrollbarWidth } = storeToRefs(useScrollbarWidth());
 
@@ -76,7 +76,7 @@ function onDeviceSettingsUpdate() {
 }
 
 onMounted(async () => {
-  await langStore.loadLocaleMessages(locale.value).finally(() => {
+  await langStore.loadInitialLocale(locale.value).finally(() => {
     isLoading.value = false;
   });
 
