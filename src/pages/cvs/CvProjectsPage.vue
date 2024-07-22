@@ -1,8 +1,7 @@
 <template>
   <div class="cv-projects">
-    <AppSpinner v-if="areCvProjectsLoading" class="cv-projects__spinner" />
     <AppErrorSection
-      v-else-if="isCvProjectsError"
+      v-if="isCvProjectsError"
       :errorMessage="cvProjectsErrorMessage"
       class="cv-projects__error-wrapper"
     />
@@ -26,50 +25,55 @@
           elevation="0"
           class="cv-projects__button text-red-darken-4"
           @click="handleOpenCreateModal"
+          :loading="areCvProjectsLoading"
         >
           Add project to CV
         </v-btn>
       </div>
-      <v-data-table
-        :headers="headers"
-        :items="cvProjects"
-        :search="search"
-        :custom-filter="handleTableFilter"
-        class="cv-projects__data-table"
-        hide-details
-      >
-        <template v-slot:[`item.options`]="{ item }">
-          <v-menu>
-            <template v-slot:activator="{ props }">
-              <v-btn
-                icon="mdi-dots-vertical"
-                v-bind="props"
-                class="cv-projects__popup-menu-btn"
-              />
-            </template>
-            <v-list>
-              <v-list-item disabled>
-                <v-list-item-title class="cv-projects__popup-menu-label">
-                  Project
-                </v-list-item-title>
-              </v-list-item>
-              <v-list-item disabled>
-                <v-list-item-title class="cv-projects__popup-menu-label">
-                  Update project
-                </v-list-item-title>
-              </v-list-item>
-              <v-list-item
-                @click="() => handleOpenDeleteModal(item.projectId, item.name)"
-                :disabled="!isOwner"
-              >
-                <v-list-item-title class="cv-projects__popup-menu-label">
-                  Remove project
-                </v-list-item-title>
-              </v-list-item>
-            </v-list>
-          </v-menu>
-        </template>
-      </v-data-table>
+      <v-skeleton-loader type="table" :loading="areCvProjectsLoading">
+        <v-data-table
+          :headers="headers"
+          :items="cvProjects"
+          :search="search"
+          :custom-filter="handleTableFilter"
+          class="cv-projects__data-table"
+          hide-details
+        >
+          <template v-slot:[`item.options`]="{ item }">
+            <v-menu>
+              <template v-slot:activator="{ props }">
+                <v-btn
+                  icon="mdi-dots-vertical"
+                  v-bind="props"
+                  class="cv-projects__popup-menu-btn"
+                />
+              </template>
+              <v-list>
+                <v-list-item disabled>
+                  <v-list-item-title class="cv-projects__popup-menu-label">
+                    Project
+                  </v-list-item-title>
+                </v-list-item>
+                <v-list-item disabled>
+                  <v-list-item-title class="cv-projects__popup-menu-label">
+                    Update project
+                  </v-list-item-title>
+                </v-list-item>
+                <v-list-item
+                  @click="
+                    () => handleOpenDeleteModal(item.projectId, item.name)
+                  "
+                  :disabled="!isOwner"
+                >
+                  <v-list-item-title class="cv-projects__popup-menu-label">
+                    Remove project
+                  </v-list-item-title>
+                </v-list-item>
+              </v-list>
+            </v-menu>
+          </template>
+        </v-data-table>
+      </v-skeleton-loader>
     </div>
   </div>
   <AddProjectModal
@@ -323,9 +327,6 @@ const handleTableFilter: ICvProjectsFilterFunction = (value, query, item) => {
   display: flex;
   flex-direction: column;
   align-items: center;
-  &__spinner {
-    margin-top: 64px;
-  }
   &__error-wrapper {
     padding-top: 64px;
   }

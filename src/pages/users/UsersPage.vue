@@ -1,8 +1,7 @@
 <template>
   <div class="main-page">
-    <AppSpinner v-if="isLoading" class="main-page__spinner" />
     <AppErrorSection
-      v-else-if="isError"
+      v-if="isError"
       :errorMessage="errorMessage"
       class="main-page__error-wrapper"
     />
@@ -16,47 +15,49 @@
         placeholder="Search"
         class="main-page__text-field-wrapper"
       />
-      <v-data-table
-        :headers="headers"
-        :items="users"
-        :search="search"
-        class="main-page__data-table"
-        :custom-filter="handleTableFilter"
-        hide-details
-      >
-        <template v-slot:[`item.avatar`]="{ item }">
-          <v-avatar color="var(--color-wrapper-bg)" size="default">
-            <v-img
-              :src="item.avatar ?? undefined"
-              alt="Avatar"
-              class="main-page__table-img-avatar"
-            />
-          </v-avatar>
-        </template>
-        <template v-slot:[`item.options`]="{ item }">
-          <v-menu>
-            <template v-slot:activator="{ props }">
-              <v-btn
-                icon="mdi-dots-vertical"
-                v-bind="props"
-                class="main-page__popup-menu-btn"
-              ></v-btn>
-            </template>
-            <v-list>
-              <v-list-item
-                v-for="menuItem in projectMenuItems"
-                :key="menuItem.title"
-                v-on:click="menuItem.click ? menuItem.click(item.id) : null"
-                :disabled="menuItem.disabled"
-              >
-                <v-list-item-title class="main-page__popup-menu-label">
-                  {{ menuItem.title }}
-                </v-list-item-title>
-              </v-list-item>
-            </v-list>
-          </v-menu>
-        </template>
-      </v-data-table>
+      <v-skeleton-loader type="table" :loading="isLoading">
+        <v-data-table
+          :headers="headers"
+          :items="users"
+          :search="search"
+          class="main-page__data-table"
+          :custom-filter="handleTableFilter"
+          hide-details
+        >
+          <template v-slot:[`item.avatar`]="{ item }">
+            <v-avatar color="var(--color-wrapper-bg)" size="default">
+              <v-img
+                :src="item.avatar ?? undefined"
+                alt="Avatar"
+                class="main-page__table-img-avatar"
+              />
+            </v-avatar>
+          </template>
+          <template v-slot:[`item.options`]="{ item }">
+            <v-menu>
+              <template v-slot:activator="{ props }">
+                <v-btn
+                  icon="mdi-dots-vertical"
+                  v-bind="props"
+                  class="main-page__popup-menu-btn"
+                ></v-btn>
+              </template>
+              <v-list>
+                <v-list-item
+                  v-for="menuItem in projectMenuItems"
+                  :key="menuItem.title"
+                  v-on:click="menuItem.click ? menuItem.click(item.id) : null"
+                  :disabled="menuItem.disabled"
+                >
+                  <v-list-item-title class="main-page__popup-menu-label">
+                    {{ menuItem.title }}
+                  </v-list-item-title>
+                </v-list-item>
+              </v-list>
+            </v-menu>
+          </template>
+        </v-data-table>
+      </v-skeleton-loader>
     </div>
   </div>
 </template>
@@ -149,9 +150,6 @@ const handleTableFilter: IUsersFilterFunction = (value, query, item) => {
   display: flex;
   flex-direction: column;
   align-items: center;
-  &__spinner {
-    margin-top: 64px;
-  }
   &__error-wrapper {
     padding-top: 64px;
   }

@@ -1,8 +1,7 @@
 <template>
   <div class="projects-page">
-    <AppSpinner v-if="isLoading" class="projects-page__spinner" />
     <AppErrorSection
-      v-else-if="isError"
+      v-if="isError"
       :errorMessage="errorMessage"
       class="projects-page__error-wrapper"
     />
@@ -16,36 +15,38 @@
         placeholder="Search"
         class="projects-page__text-field-wrapper"
       />
-      <v-data-table
-        :headers="headers"
-        :items="projects"
-        :search="search"
-        class="projects-page__data-table"
-        :custom-filter="handleTableFilter"
-      >
-        <template v-slot:[`item.options`]>
-          <v-menu>
-            <template v-slot:activator="{ props }">
-              <v-btn
-                icon="mdi-dots-vertical"
-                v-bind="props"
-                class="projects-page__popup-menu-btn"
-              ></v-btn>
-            </template>
-            <v-list>
-              <v-list-item
-                v-for="projectItem in projectMenuItems"
-                :key="projectItem"
-                disabled
-              >
-                <v-list-item-title class="projects-page__popup-menu-label">
-                  {{ projectItem }}
-                </v-list-item-title>
-              </v-list-item>
-            </v-list>
-          </v-menu>
-        </template>
-      </v-data-table>
+      <v-skeleton-loader type="table" :loading="isLoading">
+        <v-data-table
+          :headers="headers"
+          :items="projects"
+          :search="search"
+          class="projects-page__data-table"
+          :custom-filter="handleTableFilter"
+        >
+          <template v-slot:[`item.options`]>
+            <v-menu>
+              <template v-slot:activator="{ props }">
+                <v-btn
+                  icon="mdi-dots-vertical"
+                  v-bind="props"
+                  class="projects-page__popup-menu-btn"
+                ></v-btn>
+              </template>
+              <v-list>
+                <v-list-item
+                  v-for="projectItem in projectMenuItems"
+                  :key="projectItem"
+                  disabled
+                >
+                  <v-list-item-title class="projects-page__popup-menu-label">
+                    {{ projectItem }}
+                  </v-list-item-title>
+                </v-list-item>
+              </v-list>
+            </v-menu>
+          </template>
+        </v-data-table>
+      </v-skeleton-loader>
     </div>
   </div>
 </template>
@@ -124,9 +125,6 @@ const handleTableFilter: IProjectsFilterFunction = (value, query, item) => {
   display: flex;
   flex-direction: column;
   align-items: center;
-  &__spinner {
-    margin-top: 64px;
-  }
   &__error-wrapper {
     padding-top: 64px;
   }
