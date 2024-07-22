@@ -160,6 +160,9 @@ const handleTableFilter: IUsersFilterFunction = (value, query, item) => {
     .main-page__text-field-wrapper {
       margin-left: 33px;
       max-width: 320px;
+      @media (max-width: $phone-l) {
+        margin-inline: 10px;
+      }
     }
     .main-page__data-table {
       background-color: var(--color-wrapper-bg);
