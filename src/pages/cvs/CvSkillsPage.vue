@@ -1,7 +1,10 @@
 <template>
   <div class="cv-skills">
-    <AppSpinner v-if="isLoading" />
-    <AppErrorSection v-else-if="isError" :errorMessage="errorMessage" />
+    <AppSpinner v-if="areCvSkillsLoading" />
+    <AppErrorSection
+      v-else-if="isCvSkillsError"
+      :errorMessage="cvSkillsErrorMessage"
+    />
     <div v-else class="cv-skills__main-content-wrapper">
       <v-btn
         v-if="isOwner"
@@ -54,8 +57,10 @@
     :isOpen="isModalOpen"
     :oSkillForModal="oSkillForModal"
     :cvId="cvId"
-    :skills="leftSkills"
-    :skill-categories="skillCategories"
+    :cvSkills="cvSkills"
+    :allSkills="allSkills"
+    :areAllSkillsLoading="areAllSkillsLoading"
+    :isAllSkillsError="isAllSkillsError"
     @onCreateCvSkill="submitCvSkillCreate"
     @onUpdateCvSkill="submitCvSkillUpdate"
     @closeModal="handleCloseModal"
@@ -69,8 +74,9 @@ import { storeToRefs } from "pinia";
 import { useAuthStore } from "@/store/authStore";
 import SkillModal from "@/components/cv/skills/SkillModal.vue";
 import SkillsCategory from "@/components/SkillsCategory.vue";
+import useToast from "@/composables/useToast";
 import useErrorState from "@/composables/useErrorState";
-import { getAllSkills, getSkillCategories } from "@/services/skills";
+import { getAllSkills } from "@/services/skills";
 import {
   getCvSkillsById,
   createCvSkill,
@@ -78,6 +84,7 @@ import {
   deleteCvSkills,
 } from "@/services/cvs/skills";
 import handleScrollPadding from "@/utils/handleScrollPadding";
+import { FAILED_TO_LOAD_SKILLS } from "@/constants/errorMessage";
 import {
   ISkill,
   ICvSkillsServerData,
@@ -104,27 +111,25 @@ const authStore = useAuthStore();
 const authStoreUser = storeToRefs(authStore).user;
 const isOwner = computed(() => authStoreUser.value?.id === cvUserId.value);
 
+const { setErrorToast } = useToast();
+
 const {
-  isLoading,
-  isError,
-  errorMessage,
-  setErrorValuesToDefault,
-  setErrorValues,
+  isLoading: areCvSkillsLoading,
+  isError: isCvSkillsError,
+  errorMessage: cvSkillsErrorMessage,
+  setErrorValuesToDefault: setCvSkillsErrorValuesToDefault,
+  setErrorValues: setCvSkillsErrorValues,
+} = useErrorState();
+
+const {
+  isLoading: areAllSkillsLoading,
+  isError: isAllSkillsError,
+  setErrorValuesToDefault: setAllSkillsErrorValuesToDefault,
+  setErrorValues: setAllSkillsErrorValues,
 } = useErrorState();
 
 const cvSkills = ref<ISkill[] | null>(null);
-const skills = ref<ISkillsData[] | null>(null);
-const skillCategories = ref<string[] | null>(null);
-
-const leftSkills = computed<ISkillsData[]>(() => {
-  if (!cvSkills.value || !skills.value) {
-    return [];
-  }
-
-  const cvSkillsSet = new Set(cvSkills.value.map((skill) => skill.name));
-
-  return skills.value.filter((skill) => !cvSkillsSet.has(skill.name));
-});
+const allSkills = ref<ISkillsData[] | null>(null);
 
 const oSkillForModal = ref<ISkill | null>(null);
 const isModalOpen = ref(false);
@@ -195,28 +200,47 @@ function updateCvSkillsValue(cvSkillsData: ICvSkillsServerData) {
   }
 }
 
-async function fetchData() {
-  isLoading.value = true;
+async function fetchCvSkills() {
+  areCvSkillsLoading.value = true;
 
   try {
     const cvSkillsData = await getCvSkillsById(cvId.value);
-    const skillsData = await getAllSkills();
-    const skillCategoriesData = await getSkillCategories();
 
-    if (!cvSkillsData || !skillsData || !skillCategoriesData) return;
+    if (!cvSkillsData) return;
 
     updateCvSkillsValue(cvSkillsData);
 
-    skills.value = skillsData;
-
-    skillCategories.value = skillCategoriesData;
-
-    setErrorValuesToDefault();
+    setCvSkillsErrorValuesToDefault();
   } catch (error: unknown) {
-    setErrorValues(error);
+    setCvSkillsErrorValues(error);
   } finally {
-    isLoading.value = false;
+    areCvSkillsLoading.value = false;
   }
+}
+
+async function fetchAllSkills() {
+  areAllSkillsLoading.value = true;
+
+  try {
+    const skillsData = await getAllSkills();
+
+    if (!skillsData) return;
+
+    allSkills.value = skillsData;
+
+    setAllSkillsErrorValuesToDefault();
+  } catch (error: unknown) {
+    setAllSkillsErrorValues(error);
+
+    setErrorToast(FAILED_TO_LOAD_SKILLS);
+  } finally {
+    areAllSkillsLoading.value = false;
+  }
+}
+
+async function fetchData() {
+  await fetchCvSkills();
+  await fetchAllSkills();
 }
 
 function handleOpenCreateModal() {
@@ -245,40 +269,40 @@ function handleOpenEditModal(
 function submitCvSkillCreate(skillInputObj: IAddOrUpdateCvSkillInput) {
   if (!isOwner.value) return;
 
-  isLoading.value = true;
+  areCvSkillsLoading.value = true;
 
   createCvSkill(skillInputObj)
     .then((freshCvSkills) => {
       if (!freshCvSkills) return;
       updateCvSkillsValue(freshCvSkills);
 
-      setErrorValuesToDefault();
+      setCvSkillsErrorValuesToDefault();
     })
     .catch((error: unknown) => {
-      setErrorValues(error);
+      setCvSkillsErrorValues(error);
     })
     .finally(() => {
-      isLoading.value = false;
+      areCvSkillsLoading.value = false;
     });
 }
 
 function submitCvSkillUpdate(skillInputObj: IAddOrUpdateCvSkillInput) {
   if (!isOwner.value) return;
 
-  isLoading.value = true;
+  areCvSkillsLoading.value = true;
 
   updateCvSkill(skillInputObj)
     .then((freshCvSkills) => {
       if (!freshCvSkills) return;
       updateCvSkillsValue(freshCvSkills);
 
-      setErrorValuesToDefault();
+      setCvSkillsErrorValuesToDefault();
     })
     .catch((error: unknown) => {
-      setErrorValues(error);
+      setCvSkillsErrorValues(error);
     })
     .finally(() => {
-      isLoading.value = false;
+      areCvSkillsLoading.value = false;
     });
 }
 
@@ -307,7 +331,7 @@ function clearCvDeletionSkills() {
 function submitCvSkillsDeletion() {
   if (!isOwner.value) return;
 
-  isLoading.value = true;
+  areCvSkillsLoading.value = true;
 
   const skillsToBeDeleted: IDeleteCvSkillInput = {
     cvId: Number(cvId.value),
@@ -319,13 +343,13 @@ function submitCvSkillsDeletion() {
       if (!freshCvSkills) return;
       updateCvSkillsValue(freshCvSkills);
 
-      setErrorValuesToDefault();
+      setCvSkillsErrorValuesToDefault();
     })
     .catch((error: unknown) => {
-      setErrorValues(error);
+      setCvSkillsErrorValues(error);
     })
     .finally(() => {
-      isLoading.value = false;
+      areCvSkillsLoading.value = false;
     });
 
   clearCvDeletionSkills();

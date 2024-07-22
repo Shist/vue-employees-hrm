@@ -1,3 +1,0 @@
-query GET_SKILL_CATEGORIES {
-  skillCategories
-}
