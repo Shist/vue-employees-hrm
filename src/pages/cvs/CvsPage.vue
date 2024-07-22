@@ -13,7 +13,7 @@
           variant="outlined"
           density="compact"
           single-line
-          placeholder="Search"
+          :placeholder="$t('placeholder.search')"
           class="cvs-page__text-field-wrapper"
           hide-details
         />
@@ -26,7 +26,7 @@
           @click="handleOpenCreateModal"
           :loading="isLoading"
         >
-          Create CV
+          {{ $t("cvsPage.createButton") }}
         </v-btn>
       </div>
       <v-skeleton-loader type="table" :loading="isLoading">
@@ -35,7 +35,7 @@
           :items="cvs"
           :search="search"
           :custom-filter="handleTableFilter"
-          item-key="id"
+          :items-per-page-text="$t('table.paginationTitle')"
           class="cvs-page__data-table"
           hide-details
         >
@@ -82,10 +82,11 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted, reactive, ref, watch } from "vue";
+import { computed, onMounted, reactive, ref, watch } from "vue";
 import { useRouter } from "vue-router";
 import { storeToRefs } from "pinia";
 import { useAuthStore } from "@/store/authStore";
+import { useI18n } from "vue-i18n";
 import CreateCvModal from "@/components/user/cvs/CreateCvModal.vue";
 import DeleteCvModal from "@/components/user/cvs/DeleteCvModal.vue";
 import useErrorState from "@/composables/useErrorState";
@@ -97,6 +98,7 @@ import { ICvsTableData } from "@/types/pages/cvs/table";
 import { ICvsFilterFunction } from "@/types/vuetifyDataTable";
 
 const router = useRouter();
+const { t } = useI18n({ useScope: "global" });
 
 const authStore = useAuthStore();
 const authStoreUser = storeToRefs(authStore).user;
@@ -111,17 +113,21 @@ const isDeleteModalOpen = ref(false);
 
 const cvs = reactive<ICvsTableData[]>([]);
 
-const headers = [
-  { key: "name", title: "Name" },
-  { key: "description", title: "Description", sortable: false },
-  { key: "email", title: "Employee" },
-  { key: "options", sortable: false },
-];
+const headers = computed(() => {
+  return [
+    { key: "name", title: t(`cvsPage.name`) },
+    { key: "description", title: t(`cvsPage.description`), sortable: false },
+    { key: "email", title: t(`cvsPage.email`) },
+    { key: "options", sortable: false },
+  ];
+});
 
-const cvMenuItems = [
-  { title: "Details", click: openCvDetails },
-  { title: "Delete CV", click: handleOpenDeleteModal },
-];
+const cvMenuItems = computed(() => {
+  return [
+    { title: t(`cvsPage.details`), click: openCvDetails },
+    { title: t(`cvsPage.deleteCv`), click: handleOpenDeleteModal },
+  ];
+});
 
 const {
   isLoading,

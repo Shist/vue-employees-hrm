@@ -30,6 +30,9 @@
     "Skills": "Навыки",
     "Languages": "Языки"
   },
+  "table": {
+    "paginationTitle": "Элементов на странице:"
+  },
   "usersPage": {
     "firstName": "Имя",
     "lastName": "Фамилия",
@@ -39,5 +42,24 @@
     "profile": "Профиль",
     "updateUser": "Обновить профиль",
     "deleteUser": "Удалить профиль"
+  },
+  "projectsPage": {
+    "name": "Имя",
+    "internalName": "Внутреннее имя",
+    "domain": "Домен",
+    "startDate": "Дата начала",
+    "endDate": "Дата окончания",
+    "teamSize": "Размер Команды",
+    "project": "Детали проекта",
+    "updateProject": "Обновить проект",
+    "deleteProject": "Удалить проект"
+  },
+  "cvsPage": {
+    "createButton": "cоздать резюме",
+    "name": "Имя",
+    "description": "Описание",
+    "email": "Сотрудник",
+    "details": "Подробности",
+    "deleteCv": "Удалить резюме"
   }
 }

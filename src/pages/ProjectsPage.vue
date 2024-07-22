@@ -12,7 +12,7 @@
         variant="outlined"
         single-line
         density="compact"
-        placeholder="Search"
+        :placeholder="$t('placeholder.search')"
         class="projects-page__text-field-wrapper"
       />
       <v-skeleton-loader type="table" :loading="isLoading">
@@ -22,6 +22,7 @@
           :search="search"
           class="projects-page__data-table"
           :custom-filter="handleTableFilter"
+          :items-per-page-text="$t('table.paginationTitle')"
         >
           <template v-slot:[`item.options`]>
             <v-menu>
@@ -52,27 +53,38 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted, reactive, ref } from "vue";
+import { computed, onMounted, reactive, ref } from "vue";
+import { useI18n } from "vue-i18n";
 import useErrorState from "@/composables/useErrorState";
 import { getAllProjects } from "@/services/projects";
 import { IProjectsTableData } from "@/types/pages/projectsTable";
 import { IProjectsFilterFunction } from "@/types/vuetifyDataTable";
 
+const { t } = useI18n({ useScope: "global" });
+
 const search = ref("");
 
 const projects = reactive<IProjectsTableData[]>([]);
 
-const headers = [
-  { key: "name", title: "Name" },
-  { key: "internalName", title: "Internal Name" },
-  { key: "domain", title: "Domain" },
-  { key: "startDate", title: "Start Date" },
-  { key: "endDate", title: "End Date" },
-  { key: "teamSize", title: "Team Size" },
-  { key: "options", sortable: false },
-];
+const headers = computed(() => {
+  return [
+    { key: "name", title: t(`projectsPage.name`) },
+    { key: "internalName", title: t(`projectsPage.internalName`) },
+    { key: "domain", title: t(`projectsPage.domain`) },
+    { key: "startDate", title: t(`projectsPage.startDate`) },
+    { key: "endDate", title: t(`projectsPage.endDate`) },
+    { key: "teamSize", title: t(`projectsPage.teamSize`) },
+    { key: "options", sortable: false },
+  ];
+});
 
-const projectMenuItems = ["Project", "Update project", "Delete project"];
+const projectMenuItems = computed(() => {
+  return [
+    t(`projectsPage.project`),
+    t(`projectsPage.updateProject`),
+    t(`projectsPage.deleteProject`),
+  ];
+});
 
 const {
   isLoading,

@@ -20,8 +20,9 @@
           :headers="headers"
           :items="users"
           :search="search"
-          class="main-page__data-table"
           :custom-filter="handleTableFilter"
+          :items-per-page-text="$t('table.paginationTitle')"
+          class="main-page__data-table"
           hide-details
         >
           <template v-slot:[`item.avatar`]="{ item }">
@@ -65,12 +66,12 @@
 <script setup lang="ts">
 import { ref, reactive, onMounted, computed } from "vue";
 import { useRouter } from "vue-router";
+import { useI18n } from "vue-i18n";
 import useErrorState from "@/composables/useErrorState";
 import { getAllUsers } from "@/services/users/users";
 import { ROUTES } from "@/constants/router";
 import { IUsersTableData } from "@/types/pages/users/table";
 import { IUsersFilterFunction } from "@/types/vuetifyDataTable";
-import { useI18n } from "vue-i18n";
 
 const router = useRouter();
 const { t } = useI18n({ useScope: "global" });
@@ -102,8 +103,8 @@ const projectMenuItems = computed(() => {
       click: openUserProfile,
       disabled: false,
     },
-    { title: t(`usersPage.updateUser`), disabled: true },
-    { title: t(`usersPage.deleteUser`), disabled: true },
+    { title: t("usersPage.updateUser"), disabled: true },
+    { title: t("usersPage.deleteUser"), disabled: true },
   ];
 });
 

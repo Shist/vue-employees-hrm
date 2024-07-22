@@ -30,6 +30,9 @@
     "Skills": "Skills",
     "Languages": "Languages"
   },
+  "table": {
+    "paginationTitle": "Items per page:"
+  },
   "usersPage": {
     "firstName": "First Name",
     "lastName": "Last Name",
@@ -39,5 +42,24 @@
     "profile": "Profile",
     "updateUser": "Update user",
     "deleteUser": "Delete user"
+  },
+  "projectsPage": {
+    "name": "Name",
+    "internalName": "Internal Name",
+    "domain": "Domain",
+    "startDate": "Start Date",
+    "endDate": "End Date",
+    "teamSize": "Team Size",
+    "project": "Project",
+    "updateProject": "Update project",
+    "deleteProject": "Delete project"
+  },
+  "cvsPage": {
+    "createButton": "create cv",
+    "name": "Name",
+    "description": "Description",
+    "email": "Employee",
+    "details": "Details",
+    "deleteCv": "Delete CV"
   }
 }
