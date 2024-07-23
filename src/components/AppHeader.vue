@@ -43,7 +43,7 @@
           variant="plain"
           :items="languages"
           v-model="language"
-          class="toolbar__select-lang"
+          class="toolbar__select-lang text-white"
           hide-details
         >
           <template v-slot:prepend-inner>
