@@ -9,6 +9,7 @@ import toastifyConfig from "@/plugins/toastifyConfig";
 import router from "@/router";
 import { createPinia } from "pinia";
 import appComponents from "@/components/UI";
+import appDirectives from "@/directives";
 
 const app = createApp({
   setup() {
@@ -22,6 +23,10 @@ appComponents.forEach((component) => {
   if (component.__name) {
     app.component(component.__name, component);
   }
+});
+
+Object.keys(appDirectives).forEach((name) => {
+  app.directive(name, appDirectives[name]);
 });
 
 app

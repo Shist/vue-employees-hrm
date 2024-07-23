@@ -45,8 +45,16 @@
                 )
             "
             @contextmenu.prevent="
+              (e: PointerEvent) =>
+                handleSetCardForDeletion(userLanguage.name, userLanguageIndex, e.pointerType === 'touch')
+            "
+            v-long-press="
               () =>
-                handleSetCardForDeletion(userLanguage.name, userLanguageIndex)
+                handleSetCardForDeletion(
+                  userLanguage.name,
+                  userLanguageIndex,
+                  false
+                )
             "
           >
             <v-card-item class="user-languages__language-card-content">
@@ -304,8 +312,12 @@ function handleCloseModal() {
   isModalOpen.value = false;
 }
 
-function handleSetCardForDeletion(languageName: string, languageIndex: number) {
-  if (!isOwner.value) return;
+function handleSetCardForDeletion(
+  languageName: string,
+  languageIndex: number,
+  isContextMenuTouch: boolean
+) {
+  if (!isOwner.value || isContextMenuTouch) return;
 
   if (languagesForDeletionNames.has(languageName)) {
     languagesForDeletionNames.delete(languageName);

@@ -25,10 +25,19 @@
               )
           "
           @contextmenu.prevent="
+            (e: PointerEvent) =>
+              handleSetCardForDeletion(
+                categorySkill.name,
+                categorySkill.skillIndex,
+                e.pointerType === 'touch'
+              )
+          "
+          v-long-press="
             () =>
               handleSetCardForDeletion(
                 categorySkill.name,
-                categorySkill.skillIndex
+                categorySkill.skillIndex,
+                false
               )
           "
         >
@@ -64,7 +73,12 @@ const emit = defineEmits<{
     skillName: string,
     skillIndex: number
   ): void;
-  (event: "setCardForDeletion", skillName: string, skillIndex: number): void;
+  (
+    event: "setCardForDeletion",
+    skillName: string,
+    skillIndex: number,
+    isTouchType: boolean
+  ): void;
 }>();
 
 const skillsMasteries = reactive(
@@ -94,8 +108,12 @@ function handleOpenEditModal(
   emit("openEditModal", skillForModal, skillName, skillIndex);
 }
 
-function handleSetCardForDeletion(skillName: string, skillIndex: number) {
-  emit("setCardForDeletion", skillName, skillIndex);
+function handleSetCardForDeletion(
+  skillName: string,
+  skillIndex: number,
+  isContextMenuTouch: boolean
+) {
+  emit("setCardForDeletion", skillName, skillIndex, isContextMenuTouch);
 }
 
 function getColorByValue(value: number) {

@@ -303,8 +303,12 @@ function handleCloseModal() {
   isModalOpen.value = false;
 }
 
-function handleSetCardForDeletion(skillName: string, skillIndex: number) {
-  if (!isOwner.value) return;
+function handleSetCardForDeletion(
+  skillName: string,
+  skillIndex: number,
+  isContextMenuTouch: boolean
+) {
+  if (!isOwner.value || isContextMenuTouch) return;
 
   if (skillsForDeletionNames.has(skillName)) {
     skillsForDeletionNames.delete(skillName);
