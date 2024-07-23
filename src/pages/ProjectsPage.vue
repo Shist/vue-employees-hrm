@@ -22,6 +22,9 @@
           :search="search"
           class="projects-page__data-table"
           :custom-filter="handleTableFilter"
+          :mobile="null"
+          :mobile-breakpoint="1050"
+          hide-details
         >
           <template v-slot:[`item.options`]>
             <v-menu>
@@ -133,6 +136,9 @@ const handleTableFilter: IProjectsFilterFunction = (value, query, item) => {
     .projects-page__text-field-wrapper {
       margin-left: 33px;
       max-width: 320px;
+      @media (max-width: $phone-l) {
+        margin-inline: 10px;
+      }
     }
     .projects-page__data-table {
       background-color: var(--color-wrapper-bg);
@@ -179,5 +185,22 @@ const handleTableFilter: IProjectsFilterFunction = (value, query, item) => {
 }
 :deep(.v-table > .v-table__wrapper > table > tbody > tr > td) {
   padding: 12px 16px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+}
+:deep(.v-table > .v-table__wrapper > table > tbody > tr > td:nth-child(1)),
+:deep(.v-table > .v-table__wrapper > table > tbody > tr > td:nth-child(2)),
+:deep(.v-table > .v-table__wrapper > table > tbody > tr > td:nth-child(3)) {
+  max-width: 200px;
+  @media (max-width: 1050px) {
+    max-width: none;
+  }
+}
+:deep(.v-table > .v-table__wrapper > table > tbody > tr > td)
+  > .v-data-table__td-value {
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
 }
 </style>

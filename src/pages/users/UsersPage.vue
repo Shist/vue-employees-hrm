@@ -226,11 +226,7 @@ const handleTableFilter: IUsersFilterFunction = (value, query, item) => {
     max-width: none;
   }
 }
-:deep(.v-table > .v-table__wrapper > table > tbody > tr > td:nth-child(2))
-  > .v-data-table__td-value,
-:deep(.v-table > .v-table__wrapper > table > tbody > tr > td:nth-child(3))
-  > .v-data-table__td-value,
-:deep(.v-table > .v-table__wrapper > table > tbody > tr > td:nth-child(4))
+:deep(.v-table > .v-table__wrapper > table > tbody > tr > td)
   > .v-data-table__td-value {
   text-overflow: ellipsis;
   white-space: nowrap;
