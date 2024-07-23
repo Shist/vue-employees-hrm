@@ -14,6 +14,7 @@
         single-line
         :placeholder="$t('placeholder.search')"
         class="positions-page__text-field-wrapper"
+        hide-details
       />
       <v-skeleton-loader type="table" :loading="isLoading">
         <v-data-table
@@ -120,7 +121,16 @@ const handleTableFilter: IPositionsFilterFunction = (value, query, item) => {
     align-self: stretch;
     .positions-page__text-field-wrapper {
       margin-left: 33px;
+      margin-bottom: 22px;
       max-width: 320px;
+      @media (max-width: $tablet-l) {
+        margin-bottom: 10px;
+      }
+      @media (max-width: $phone-l) {
+        margin-inline: 10px;
+        margin-bottom: 5px;
+        max-width: 100%;
+      }
     }
     .positions-page__data-table {
       background-color: var(--color-wrapper-bg);
@@ -169,9 +179,12 @@ const handleTableFilter: IPositionsFilterFunction = (value, query, item) => {
 }
 :deep(.v-table > .v-table__wrapper > table > tbody > tr > td) {
   padding: 12px 16px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
 }
-:deep(.v-table > .v-table__wrapper > table > thead > tr > th:last-child) {
-  width: 80px;
+:deep(.v-table > .v-table__wrapper > table > tbody > tr > td:first-child) {
+  max-width: 200px;
 }
 :deep(.v-table > .v-table__wrapper > table > tbody > tr > td:last-child) {
   width: 80px;

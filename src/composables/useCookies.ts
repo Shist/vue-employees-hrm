@@ -1,4 +1,5 @@
 import VueCookies from "vue-cookies";
+import { ITokenData } from "@/types/authData";
 
 export default function useCookies() {
   // eslint-disable-next-line
@@ -12,11 +13,11 @@ export default function useCookies() {
     tokenType: "accessToken" | "refreshToken",
     tokenValue: string
   ) {
-    $cookies.set(
-      tokenType,
-      tokenValue,
-      tokenType === "accessToken" ? "9min" : "7d"
-    );
+    const tokenData: ITokenData = JSON.parse(atob(tokenValue.split(".")[1]));
+
+    const expirationDate = new Date(tokenData.exp * 1000);
+
+    $cookies.set(tokenType, `Bearer ${tokenValue}`, expirationDate);
   }
 
   function removeToken(tokenType: "accessToken" | "refreshToken") {

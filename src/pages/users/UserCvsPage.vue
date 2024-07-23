@@ -36,6 +36,8 @@
           :items="userCvs"
           :search="search"
           :class="{ 'user-cvs__data-table': true }"
+          :mobile="null"
+          :mobile-breakpoint="750"
           hide-details
         >
           <template v-slot:[`item.options`]="{ item }">
@@ -236,14 +238,32 @@ function handleCloseDeleteModal() {
   &__main-content-wrapper {
     padding: 32px 24px;
     align-self: stretch;
+    @media (max-width: $tablet-l) {
+      padding: 20px 10px;
+    }
     .user-cvs__search-create-controls-wrapper {
       margin-bottom: 22px;
       padding-inline: 20px;
       display: flex;
       justify-content: space-between;
       align-items: center;
+      gap: 15px;
+      @media (max-width: $tablet-l) {
+        margin-bottom: 10px;
+      }
+      @media (max-width: $tablet-s) {
+        padding-inline: 10px;
+      }
+      @media (max-width: $phone-l) {
+        margin-bottom: 5px;
+        flex-direction: column;
+        align-items: stretch;
+      }
       .user-cvs__text-field-wrapper {
         max-width: 320px;
+        @media (max-width: $phone-l) {
+          max-width: 100%;
+        }
       }
       .user-cvs__button {
         border: 1px solid var(--color-text-red);
@@ -301,16 +321,28 @@ function handleCloseDeleteModal() {
   white-space: nowrap;
   overflow: hidden;
 }
-:deep(.v-table > .v-table__wrapper > table > tbody > tr > td:first-child) {
+:deep(.v-table > .v-table__wrapper > table > tbody > tr > td:nth-child(1)) {
   max-width: 200px;
+  @media (max-width: 749px) {
+    max-width: none;
+  }
 }
 :deep(.v-table > .v-table__wrapper > table > tbody > tr > td:nth-child(2)) {
   max-width: 400px;
-}
-:deep(.v-table > .v-table__wrapper > table > thead > tr > th:last-child) {
-  width: 80px;
+  @media (max-width: 749px) {
+    max-width: none;
+  }
 }
 :deep(.v-table > .v-table__wrapper > table > tbody > tr > td:last-child) {
   width: 80px;
+  @media (max-width: 749px) {
+    width: 100%;
+  }
+}
+:deep(.v-table > .v-table__wrapper > table > tbody > tr > td)
+  > .v-data-table__td-value {
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
 }
 </style>

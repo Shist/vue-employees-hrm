@@ -14,6 +14,7 @@
         single-line
         :placeholder="$t('placeholder.search')"
         class="main-page__text-field-wrapper"
+        hide-details
       />
       <v-skeleton-loader type="table" :loading="isLoading">
         <v-data-table
@@ -22,6 +23,8 @@
           :search="search"
           :custom-filter="handleTableFilter"
           :items-per-page-text="$t('table.paginationTitle')"
+          :mobile="null"
+          :mobile-breakpoint="900"
           class="main-page__data-table"
           hide-details
         >
@@ -168,7 +171,16 @@ const handleTableFilter: IUsersFilterFunction = (value, query, item) => {
     align-self: stretch;
     .main-page__text-field-wrapper {
       margin-left: 33px;
+      margin-bottom: 22px;
       max-width: 320px;
+      @media (max-width: $tablet-l) {
+        margin-bottom: 10px;
+      }
+      @media (max-width: $phone-l) {
+        margin-inline: 10px;
+        margin-bottom: 5px;
+        max-width: 100%;
+      }
     }
     .main-page__data-table {
       background-color: var(--color-wrapper-bg);
@@ -220,5 +232,28 @@ const handleTableFilter: IUsersFilterFunction = (value, query, item) => {
 }
 :deep(.v-table > .v-table__wrapper > table > tbody > tr > td) {
   padding: 12px 16px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+}
+:deep(.v-table > .v-table__wrapper > table > tbody > tr > td:nth-child(2)),
+:deep(.v-table > .v-table__wrapper > table > tbody > tr > td:nth-child(3)),
+:deep(.v-table > .v-table__wrapper > table > tbody > tr > td:nth-child(4)) {
+  max-width: 200px;
+  @media (max-width: 899px) {
+    max-width: none;
+  }
+}
+:deep(.v-table > .v-table__wrapper > table > tbody > tr > td:last-child) {
+  width: 80px;
+  @media (max-width: 899px) {
+    width: 100%;
+  }
+}
+:deep(.v-table > .v-table__wrapper > table > tbody > tr > td)
+  > .v-data-table__td-value {
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
 }
 </style>

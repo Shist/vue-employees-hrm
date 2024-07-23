@@ -3,6 +3,7 @@
     v-if="$route.meta.hasTabs === TAB_NAMES.USER"
     v-model="userTabs"
     color="var(--color-active-text)"
+    show-arrows
   >
     <v-tab
       :value="ROUTES.USER_PROFILE.NAME"
@@ -37,6 +38,7 @@
     v-if="$route.meta.hasTabs === TAB_NAMES.CV"
     v-model="cvsTabs"
     color="var(--color-active-text)"
+    show-arrows
   >
     <v-tab
       :value="ROUTES.CV_DETAILS.NAME"
@@ -138,7 +140,9 @@ function openCvInfoRoute(routePath: string) {
 
 <style lang="scss" scopped>
 .v-btn.app-tab {
-  max-width: 150px;
-  width: 100%;
+  width: 150px;
+  @media (max-width: $phone-l) {
+    width: 120px;
+  }
 }
 </style>

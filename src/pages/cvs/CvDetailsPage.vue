@@ -168,6 +168,9 @@ function submitCvDetailsUpdate() {
   display: flex;
   flex-direction: column;
   align-items: center;
+  @media (max-width: $tablet-l) {
+    padding: 20px 10px;
+  }
   &__main-content-wrapper {
     position: relative;
     margin: 0 auto;

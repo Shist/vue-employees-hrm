@@ -39,14 +39,20 @@
           color="var(--color-text-red)"
         />
         <v-spacer />
-        <v-icon style="color: #767676">mdi-web</v-icon>
-        <div class="toolbar__language text-white">
-          <v-select :items="languages" v-model="language">
-            <template v-slot:item="{ props, item }">
-              <v-list-item v-bind="props" :title="item.value" />
-            </template>
-          </v-select>
-        </div>
+        <v-select
+          variant="plain"
+          :items="languages"
+          v-model="language"
+          class="toolbar__select-lang text-white"
+          hide-details
+        >
+          <template v-slot:prepend-inner>
+            <v-icon style="color: #767676; margin-right: 5px">mdi-web</v-icon>
+          </template>
+          <template v-slot:item="{ props, item }">
+            <v-list-item v-bind="props" :title="item.value" />
+          </template>
+        </v-select>
         <p v-if="user?.email" class="toolbar__email text-white">
           {{ userHeaderName }}
         </p>
@@ -75,7 +81,7 @@
           <v-card>
             <v-card-text
               v-if="user"
-              class="d-flex flex-lg-column flex-sm-wrap align-start"
+              class="d-flex flex-lg-column flex-wrap align-start"
             >
               <v-btn
                 v-for="item in profileMenu"
@@ -308,10 +314,19 @@ watch(locale, (newValue) => {
   color: var(--color-header-text);
   &__wrapper {
     padding: 0 20px;
+    @media (max-width: $phone-l) {
+      padding: 0;
+    }
   }
-  &__language {
-    height: 24px;
-    margin: 0 48px 33px 0;
+  &__select-lang {
+    margin-right: 20px;
+    max-width: 85px;
+    @media (max-width: $phone-l) {
+      margin-right: 10px;
+    }
+    @media (max-width: $phone-m) {
+      margin-right: 5px;
+    }
   }
   &__language > .v-select > .v-input__control > .v-field > .v-field__overlay {
     background-color: var(--color-header-bg);
@@ -329,10 +344,26 @@ watch(locale, (newValue) => {
   }
   &__email {
     margin-right: 16px;
+    max-width: 150px;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+    @media (max-width: $phone-l) {
+      max-width: 120px;
+      font-size: 14px;
+    }
   }
   &__name {
     font-size: 20px;
     color: var(--color-header-bg);
+    max-width: 150px;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+    @media (max-width: $phone-l) {
+      max-width: 120px;
+      font-size: 14px;
+    }
   }
   &__navigation-close {
     height: 64px;
@@ -347,5 +378,17 @@ watch(locale, (newValue) => {
 }
 .toolbar > .v-layout > .v-navigation-drawer__scrim {
   opacity: 0.5;
+}
+.toolbar__select-lang > .v-input__control > .v-field > .v-field__prepend-inner,
+.toolbar__select-lang > .v-input__control > .v-field > .v-field__append-inner {
+  padding-block: 20px;
+}
+.toolbar__select-lang
+  > .v-input__control
+  > .v-field
+  > .v-field__field
+  > .v-field__input {
+  padding: 20px 0;
+  justify-content: flex-end;
 }
 </style>

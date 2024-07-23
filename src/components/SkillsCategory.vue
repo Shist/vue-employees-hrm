@@ -27,10 +27,19 @@
               )
           "
           @contextmenu.prevent="
+            (e: PointerEvent) =>
+              handleSetCardForDeletion(
+                categorySkill.name,
+                categorySkill.skillIndex,
+                e.pointerType === 'touch'
+              )
+          "
+          v-long-press="
             () =>
               handleSetCardForDeletion(
                 categorySkill.name,
-                categorySkill.skillIndex
+                categorySkill.skillIndex,
+                false
               )
           "
         >
@@ -66,7 +75,12 @@ const emit = defineEmits<{
     skillName: string,
     skillIndex: number
   ): void;
-  (event: "setCardForDeletion", skillName: string, skillIndex: number): void;
+  (
+    event: "setCardForDeletion",
+    skillName: string,
+    skillIndex: number,
+    isTouchType: boolean
+  ): void;
 }>();
 
 const skillsMasteries = reactive(
@@ -96,8 +110,12 @@ function handleOpenEditModal(
   emit("openEditModal", skillForModal, skillName, skillIndex);
 }
 
-function handleSetCardForDeletion(skillName: string, skillIndex: number) {
-  emit("setCardForDeletion", skillName, skillIndex);
+function handleSetCardForDeletion(
+  skillName: string,
+  skillIndex: number,
+  isContextMenuTouch: boolean
+) {
+  emit("setCardForDeletion", skillName, skillIndex, isContextMenuTouch);
 }
 
 function getColorByValue(value: number) {
@@ -122,6 +140,9 @@ function getColorByValue(value: number) {
   display: flex;
   flex-direction: column;
   row-gap: 16px;
+  @media (max-width: $phone-l) {
+    gap: 10px;
+  }
   &__category-headline {
     @include default-text(18px, 24px);
     color: var(--color-text);
@@ -130,6 +151,12 @@ function getColorByValue(value: number) {
     display: grid;
     grid-template-columns: 1fr 1fr 1fr;
     gap: 5px;
+    @media (max-width: $tablet-l) {
+      grid-template-columns: 1fr 1fr;
+    }
+    @media (max-width: $phone-l) {
+      grid-template-columns: 1fr;
+    }
     .skills-wrapper__skill-card {
       border-radius: 0;
       border: 2px solid var(--color-wrapper-bg);
@@ -150,5 +177,17 @@ function getColorByValue(value: number) {
   grid-template-columns: 0.5fr 1fr;
   align-items: center;
   gap: 16px;
+  @media (max-width: $phone-l) {
+    gap: 10px;
+  }
+}
+:deep(
+    .skills-wrapper__skill-card
+      .v-card-item__content
+      .skills-wrapper__skill-label
+  ) {
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
 }
 </style>

@@ -222,13 +222,28 @@ function onUpdateBtnClicked() {
   display: flex;
   flex-direction: column;
   row-gap: 60px;
+  @media (max-width: $tablet-s) {
+    padding-block: 0 12px;
+    row-gap: 30px;
+  }
   &__info-captions-wrapper {
     display: flex;
     flex-direction: column;
     row-gap: 2px;
+    @media (max-width: $tablet-s) {
+      align-items: center;
+    }
     .user-info__name-caption {
       @include default-text(26px, 32px);
       color: var(--color-text);
+      @media (max-width: $phone-l) {
+        font-size: 24px;
+        line-height: 30px;
+      }
+      @media (max-width: $phone-m) {
+        font-size: 22px;
+        line-height: 28px;
+      }
     }
     .user-info__mail-caption-wrapper {
       display: flex;
@@ -237,6 +252,14 @@ function onUpdateBtnClicked() {
       .user-info__mail-caption {
         @include default-text(18px, 24px);
         color: var(--color-text);
+        @media (max-width: $phone-l) {
+          font-size: 16px;
+          line-height: 22px;
+        }
+        @media (max-width: $phone-m) {
+          font-size: 14px;
+          line-height: 20px;
+        }
       }
       .user-info__mail-verified-icon {
         width: 24px;
@@ -247,6 +270,14 @@ function onUpdateBtnClicked() {
     .user-info__date-caption {
       @include default-text(18px, 24px);
       color: var(--color-text);
+      @media (max-width: $phone-l) {
+        font-size: 16px;
+        line-height: 22px;
+      }
+      @media (max-width: $phone-m) {
+        font-size: 14px;
+        line-height: 20px;
+      }
     }
   }
   &__info-inputs-form {

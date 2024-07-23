@@ -37,6 +37,8 @@
           :search="search"
           :custom-filter="handleTableFilter"
           class="cv-projects__data-table"
+          :mobile="null"
+          :mobile-breakpoint="1000"
           hide-details
         >
           <template v-slot:[`item.options`]="{ item }">
@@ -333,14 +335,32 @@ const handleTableFilter: ICvProjectsFilterFunction = (value, query, item) => {
   &__main-content-wrapper {
     padding: 32px 24px;
     align-self: stretch;
+    @media (max-width: $tablet-l) {
+      padding: 20px 10px;
+    }
     .cv-projects__search-create-controls-wrapper {
       margin-bottom: 22px;
       padding-inline: 20px;
       display: flex;
       justify-content: space-between;
       align-items: center;
+      gap: 15px;
+      @media (max-width: $tablet-l) {
+        margin-bottom: 10px;
+      }
+      @media (max-width: $tablet-s) {
+        padding-inline: 10px;
+      }
+      @media (max-width: $phone-l) {
+        margin-bottom: 5px;
+        flex-direction: column;
+        align-items: stretch;
+      }
       .cv-projects__text-field-wrapper {
         max-width: 320px;
+        @media (max-width: $phone-l) {
+          max-width: 100%;
+        }
       }
       .cv-projects__button {
         border: 1px solid var(--color-text-red);
@@ -398,11 +418,28 @@ const handleTableFilter: ICvProjectsFilterFunction = (value, query, item) => {
 }
 :deep(.v-table > .v-table__wrapper > table > tbody > tr > td) {
   padding: 12px 16px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
 }
-:deep(.v-table > .v-table__wrapper > table > thead > tr > th:last-child) {
-  width: 80px;
+:deep(.v-table > .v-table__wrapper > table > tbody > tr > td:nth-child(1)),
+:deep(.v-table > .v-table__wrapper > table > tbody > tr > td:nth-child(2)),
+:deep(.v-table > .v-table__wrapper > table > tbody > tr > td:nth-child(3)) {
+  max-width: 200px;
+  @media (max-width: 999px) {
+    max-width: none;
+  }
 }
 :deep(.v-table > .v-table__wrapper > table > tbody > tr > td:last-child) {
   width: 80px;
+  @media (max-width: 999px) {
+    width: 100%;
+  }
+}
+:deep(.v-table > .v-table__wrapper > table > tbody > tr > td)
+  > .v-data-table__td-value {
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
 }
 </style>
