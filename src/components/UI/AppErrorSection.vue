@@ -44,6 +44,11 @@ const isNotFoundError = computed(
   &__message {
     @include default-text(26px, 32px);
     color: var(--color-text);
+    text-align: center;
+    @media (max-width: $phone-l) {
+      font-size: 22px;
+      line-height: 28px;
+    }
   }
   &__back-to-main-btn {
     color: var(--color-btn-text);
@@ -56,6 +61,11 @@ const isNotFoundError = computed(
   &__try-to-reload-label {
     @include default-text(20px, 26px);
     color: var(--color-text);
+    text-align: center;
+    @media (max-width: $phone-l) {
+      font-size: 18px;
+      line-height: 24px;
+    }
   }
 }
 </style>

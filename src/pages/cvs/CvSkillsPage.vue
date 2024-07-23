@@ -401,6 +401,10 @@ function submitCvSkillsDeletion() {
       @include default-text(28px, 32px);
       color: var(--color-gray-label-text);
       text-align: center;
+      @media (max-width: $phone-l) {
+        font-size: 24px;
+        line-height: 28px;
+      }
     }
     .cv-skills__delete-btns-wrapper {
       padding-block: 32px;
