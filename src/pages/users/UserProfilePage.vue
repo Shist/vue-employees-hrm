@@ -327,6 +327,12 @@ function submitUserAvatarDeletion(_userId: string) {
   display: flex;
   flex-direction: column;
   align-items: center;
+  @media (max-width: $tablet-l) {
+    padding: 32px 12px;
+  }
+  @media (max-width: $phone-l) {
+    padding: 16px 10px;
+  }
   &__spinner-wrapper {
     width: 100%;
   }

@@ -130,8 +130,10 @@ function avatarDrop(e: DragEvent) {
   display: flex;
   justify-content: center;
   align-items: center;
-  gap: 30px;
-  flex-wrap: wrap;
+  gap: 15px;
+  @media (max-width: $tablet-s) {
+    flex-direction: column;
+  }
   &_avatar-only {
     justify-content: flex-start;
   }
@@ -175,15 +177,36 @@ function avatarDrop(e: DragEvent) {
         width: 35px;
         height: 35px;
         font-size: 35px;
+        @media (max-width: $phone-l) {
+          width: 25px;
+          height: 25px;
+          font-size: 25px;
+        }
       }
       .avatar-upload__upload-avatar-headline {
         @include default-headline(24px, 30px);
         color: var(--color-text);
+        @media (max-width: $phone-l) {
+          font-size: 18px;
+          line-height: 24px;
+        }
+        @media (max-width: $phone-m) {
+          font-size: 14px;
+          line-height: 20px;
+        }
       }
     }
     .avatar-upload__upload-avatar-formats-label {
       @include default-headline(16px, 20px);
       color: var(--color-gray-label-text);
+      @media (max-width: $phone-l) {
+        font-size: 14px;
+        line-height: 18px;
+      }
+      @media (max-width: $phone-m) {
+        font-size: 12px;
+        line-height: 18px;
+      }
     }
   }
 }
