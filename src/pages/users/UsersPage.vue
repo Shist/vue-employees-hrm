@@ -162,6 +162,7 @@ const handleTableFilter: IUsersFilterFunction = (value, query, item) => {
       max-width: 320px;
       @media (max-width: $phone-l) {
         margin-inline: 10px;
+        max-width: 100%;
       }
     }
     .main-page__data-table {
@@ -224,6 +225,12 @@ const handleTableFilter: IUsersFilterFunction = (value, query, item) => {
   max-width: 200px;
   @media (max-width: 899px) {
     max-width: none;
+  }
+}
+:deep(.v-table > .v-table__wrapper > table > tbody > tr > td:last-child) {
+  width: 80px;
+  @media (max-width: 899px) {
+    width: 100%;
   }
 }
 :deep(.v-table > .v-table__wrapper > table > tbody > tr > td)

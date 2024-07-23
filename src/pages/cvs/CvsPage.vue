@@ -324,6 +324,12 @@ const handleTableFilter: ICvsFilterFunction = (value, query, item) => {
     max-width: none;
   }
 }
+:deep(.v-table > .v-table__wrapper > table > tbody > tr > td:last-child) {
+  width: 80px;
+  @media (max-width: 749px) {
+    width: 100%;
+  }
+}
 :deep(.v-table > .v-table__wrapper > table > tbody > tr > td)
   > .v-data-table__td-value {
   text-overflow: ellipsis;

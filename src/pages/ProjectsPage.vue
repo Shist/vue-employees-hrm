@@ -138,6 +138,7 @@ const handleTableFilter: IProjectsFilterFunction = (value, query, item) => {
       max-width: 320px;
       @media (max-width: $phone-l) {
         margin-inline: 10px;
+        max-width: 100%;
       }
     }
     .projects-page__data-table {
@@ -195,6 +196,12 @@ const handleTableFilter: IProjectsFilterFunction = (value, query, item) => {
   max-width: 200px;
   @media (max-width: 1049px) {
     max-width: none;
+  }
+}
+:deep(.v-table > .v-table__wrapper > table > tbody > tr > td:last-child) {
+  width: 80px;
+  @media (max-width: 1049px) {
+    width: 100%;
   }
 }
 :deep(.v-table > .v-table__wrapper > table > tbody > tr > td)
