@@ -81,7 +81,7 @@
           <v-card>
             <v-card-text
               v-if="user"
-              class="d-flex flex-lg-column flex-sm-wrap align-start"
+              class="d-flex flex-lg-column flex-wrap align-start"
             >
               <v-btn
                 v-for="item in profileMenu"
