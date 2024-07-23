@@ -12,7 +12,7 @@
         variant="outlined"
         density="compact"
         single-line
-        placeholder="Search"
+        :placeholder="$t('placeholder.search')"
         class="positions-page__text-field-wrapper"
       />
       <v-skeleton-loader type="table" :loading="isLoading">
@@ -21,7 +21,7 @@
           :items="positions"
           :search="search"
           :custom-filter="handleTableFilter"
-          item-key="id"
+          :items-per-page-text="$t('table.paginationTitle')"
           class="positions-page__data-table"
           hide-details
         >
@@ -54,22 +54,29 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted, reactive, ref } from "vue";
+import { computed, onMounted, reactive, ref } from "vue";
+import { useI18n } from "vue-i18n";
 import useErrorState from "@/composables/useErrorState";
 import { getAllPositionNames } from "@/services/positions";
 import { IPositionsTableData } from "@/types/pages/positionsTable";
 import { IPositionsFilterFunction } from "@/types/vuetifyDataTable";
 
+const { t } = useI18n({ useScope: "global" });
+
 const search = ref("");
 
 const positions = reactive<IPositionsTableData[]>([]);
 
-const headers = [
-  { key: "name", title: "Name" },
-  { key: "options", sortable: false },
-];
+const headers = computed(() => {
+  return [
+    { key: "name", title: t(`positionsPage.name`) },
+    { key: "options", sortable: false },
+  ];
+});
 
-const positionMenuItems = ["Update Position", "Delete Position"];
+const positionMenuItems = computed(() => {
+  return [t(`positionsPage.updatePosition`), t(`positionsPage.deletePosition`)];
+});
 
 const {
   isLoading,

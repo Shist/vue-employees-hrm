@@ -20,9 +20,9 @@
           :headers="headers"
           :items="projects"
           :search="search"
-          class="projects-page__data-table"
           :custom-filter="handleTableFilter"
           :items-per-page-text="$t('table.paginationTitle')"
+          class="projects-page__data-table"
         >
           <template v-slot:[`item.options`]>
             <v-menu>

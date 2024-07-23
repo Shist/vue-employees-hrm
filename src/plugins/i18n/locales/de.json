@@ -1,7 +1,10 @@
 {
   "appHeader": {
     "btnLogin": "einloggen",
-    "btnSignup": "anmelden"
+    "btnSignup": "anmelden",
+    "btnLogout": "ausloggen",
+    "btnProfile": "profil",
+    "btnSettings": "einstellungen"
   },
   "signIn": {
     "title": "Willkommen zurück",
@@ -19,6 +22,13 @@
     "email": "Email",
     "password": "Passwort",
     "search": "Suchen"
+  },
+  "label": {
+    "name": "Name",
+    "education": "Ausbildung",
+    "description": "Beschreibung",
+    "theme": "Aussehen",
+    "language": "Sprache"
   },
   "navigation": {
     "Home": "Startseite",
@@ -60,6 +70,33 @@
     "description": "Beschreibung",
     "email": "Mitarbeiter",
     "details": "Einzelheiten",
-    "deleteCv": "Lebenslauf löschen"
+    "deleteCv": "Lebenslauf löschen",
+    "createModalTitle": "Lebenslauf erstellen",
+    "createModalButton": "Erstellen",
+    "cancelModalButton": "Stornieren",
+    "deleteModalTitle": "Lebenslauf löschen",
+    "deleteModalText": "Sind Sie sicher, dass Sie CV {CV} löschen möchten?"
+  },
+  "departmentsPage": {
+    "name": "Name",
+    "updateDepartment": "Abteilung aktualiziren",
+    "deleteDepartment": "Abteilung löschen"
+  },
+  "positionsPage": {
+    "name": "Name",
+    "updatePosition": "Position aktualisieren",
+    "deletePosition": "Position löschen"
+  },
+  "skillsPage": {
+    "name": "Name",
+    "category": "Kategorie",
+    "updateSkill": "Fertigkeit aktualisieren",
+    "deleteSkill": "Fertigkeit löschen"
+  },
+  "languagesPage": {
+    "name": "Name",
+    "nativeName": "Einheimischer Name",
+    "updateLanguage": "Sprache aktualisieren",
+    "deleteLanguage": "Sprache löschen"
   }
 }

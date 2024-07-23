@@ -1,7 +1,10 @@
 {
   "appHeader": {
     "btnLogin": "login",
-    "btnSignup": "signup"
+    "btnSignup": "signup",
+    "btnLogout": "logout",
+    "btnProfile": "profile",
+    "btnSettings": "settings"
   },
   "signIn": {
     "title": "Welcome Back",
@@ -19,6 +22,13 @@
     "email": "Email",
     "password": "Password",
     "search": "Search"
+  },
+  "label": {
+    "name": "Name",
+    "education": "Education",
+    "description": "Description",
+    "theme": "Appearance",
+    "language": "Language"
   },
   "navigation": {
     "Home": "Home",
@@ -60,6 +70,33 @@
     "description": "Description",
     "email": "Employee",
     "details": "Details",
-    "deleteCv": "Delete CV"
+    "deleteCv": "Delete CV",
+    "createModalTitle": "Create CV",
+    "createModalButton": "Create",
+    "cancelModalButton": "Cancel",
+    "deleteModalTitle": "Delete CV",
+    "deleteModalText": "Are you sure you want to delete CV {CV} ?"
+  },
+  "departmentsPage": {
+    "name": "Name",
+    "updateDepartment": "Update department",
+    "deleteDepartment": "Delete department"
+  },
+  "positionsPage": {
+    "name": "Name",
+    "updatePosition": "Update position",
+    "deletePosition": "Delete position"
+  },
+  "skillsPage": {
+    "name": "Name",
+    "category": "Category",
+    "updateSkill": "Update skill",
+    "deleteSkill": "Delete skill"
+  },
+  "languagesPage": {
+    "name": "Name",
+    "nativeName": "Native Name",
+    "updateLanguage": "Update language",
+    "deleteLanguage": "Delete language"
   }
 }

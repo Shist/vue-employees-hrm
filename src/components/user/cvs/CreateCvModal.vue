@@ -7,7 +7,10 @@
       scrim="var(--color-modal-overlay)"
       opacity="100%"
     >
-      <v-card title="Create CV" class="create-cv-modal__card-wrapper">
+      <v-card
+        :title="$t('cvsPage.createModalTitle')"
+        class="create-cv-modal__card-wrapper"
+      >
         <v-btn
           icon="mdi-close"
           class="create-cv-modal__cross-btn"
@@ -16,21 +19,21 @@
         <v-card-item class="create-cv-modal__text-fields-container">
           <v-text-field
             v-model="cvName"
-            label="Name"
+            :label="$t('label.name')"
             variant="outlined"
             class="create-cv-modal__text-field-wrapper"
             hide-details
           />
           <v-text-field
             v-model="cvEducation"
-            label="Education"
+            :label="$t('label.education')"
             variant="outlined"
             class="create-cv-modal__text-field-wrapper"
             hide-details
           />
           <v-textarea
             v-model="cvDescription"
-            label="Description"
+            :label="$t('label.description')"
             variant="outlined"
             class="create-cv-modal__text-field-wrapper"
             no-resize
@@ -43,7 +46,7 @@
             @click="closeModal"
             class="create-cv-modal__btn-cancel"
           >
-            Cancel
+            {{ $t("cvsPage.cancelModalButton") }}
           </v-btn>
           <v-btn
             type="submit"
@@ -52,7 +55,7 @@
             class="create-cv-modal__btn-confirm"
             :disabled="isConfirmBtnDisabled"
           >
-            Create
+            {{ $t("cvsPage.createModalButton") }}
           </v-btn>
         </v-card-actions>
       </v-card>

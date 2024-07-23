@@ -85,7 +85,7 @@
                 class="mb-1 pl-2"
                 router
                 :to="
-                  item.title === 'Profile'
+                  item.title === $t(`appHeader.btnProfile`)
                     ? `${item.link}/${user.id}`
                     : item.link
                 "
@@ -99,7 +99,7 @@
                 variant="text"
                 class="pl-2"
               >
-                Logout
+                {{ $t("appHeader.btnLogout") }}
               </v-btn>
             </v-card-text>
           </v-card>
@@ -190,7 +190,7 @@ const user = storeToRefs(authStore).user;
 const langStore = useLangStore();
 const currLang = storeToRefs(langStore).currLang;
 
-const { locale } = useI18n({ useScope: "global" });
+const { t, locale } = useI18n({ useScope: "global" });
 
 const { scrollbarWidth } = storeToRefs(useScrollbarWidth());
 
@@ -200,10 +200,20 @@ const languages = ref([
   { title: "RU", value: "Русский" },
 ]);
 
-const profileMenu = [
-  { title: "Profile", link: ROUTES.USERS.PATH, icon: "mdi-account-circle" },
-  { title: "Settings", link: ROUTES.SETTINGS.PATH, icon: "mdi-cog" },
-];
+const profileMenu = computed(() => {
+  return [
+    {
+      title: t(`appHeader.btnProfile`),
+      link: ROUTES.USERS.PATH,
+      icon: "mdi-account-circle",
+    },
+    {
+      title: t(`appHeader.btnSettings`),
+      link: ROUTES.SETTINGS.PATH,
+      icon: "mdi-cog",
+    },
+  ];
+});
 
 const language = ref<string>(currLang.value);
 

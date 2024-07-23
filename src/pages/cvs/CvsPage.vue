@@ -97,8 +97,8 @@ import { ICreateCvInput, IDeleteCvInput } from "@/types/cvsOperations";
 import { ICvsTableData } from "@/types/pages/cvs/table";
 import { ICvsFilterFunction } from "@/types/vuetifyDataTable";
 
-const router = useRouter();
 const { t } = useI18n({ useScope: "global" });
+const router = useRouter();
 
 const authStore = useAuthStore();
 const authStoreUser = storeToRefs(authStore).user;

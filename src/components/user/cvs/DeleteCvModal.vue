@@ -7,7 +7,10 @@
       scrim="var(--color-modal-overlay)"
       opacity="100%"
     >
-      <v-card title="Delete CV" class="delete-cv-modal__card-wrapper">
+      <v-card
+        :title="$t('cvsPage.deleteModalTitle')"
+        class="delete-cv-modal__card-wrapper"
+      >
         <v-btn
           icon="mdi-close"
           class="delete-cv-modal__cross-btn"
@@ -15,9 +18,7 @@
         ></v-btn>
         <v-card-item class="delete-cv-modal__message-wrapper">
           <span>
-            Are you sure you want to delete CV
-            <b>{{ cvName }}</b>
-            ?
+            {{ $t("cvsPage.deleteModalText", { CV: cvName }) }}
           </span>
         </v-card-item>
         <v-card-actions>
@@ -26,7 +27,7 @@
             @click="closeModal"
             class="delete-cv-modal__btn-cancel"
           >
-            Cancel
+            {{ $t("cvsPage.cancelModalButton") }}
           </v-btn>
           <v-btn
             type="submit"
@@ -34,7 +35,7 @@
             @click="makeDeleteOperation"
             class="delete-cv-modal__btn-confirm"
           >
-            Confirm
+            {{ $t("cvsPage.createModalButton") }}
           </v-btn>
         </v-card-actions>
       </v-card>

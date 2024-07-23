@@ -12,7 +12,7 @@
         variant="outlined"
         density="compact"
         single-line
-        placeholder="Search"
+        :placeholder="$t('placeholder.search')"
         class="languages-page__text-field-wrapper"
       />
       <v-skeleton-loader type="table" :loading="isLoading">
@@ -21,7 +21,7 @@
           :items="languages"
           :search="search"
           :custom-filter="handleTableFilter"
-          item-key="id"
+          :items-per-page-text="$t('table.paginationTitle')"
           class="languages-page__data-table"
           hide-details
         >
@@ -54,24 +54,35 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted, reactive, ref } from "vue";
+import { computed, onMounted, reactive, ref } from "vue";
+import { useI18n } from "vue-i18n";
 import useErrorState from "@/composables/useErrorState";
 import { getAllLanguages } from "@/services/languages";
 import { ILanguagesTableData } from "@/types/pages/languagesTable";
 import { ILanguagesFilterFunction } from "@/types/vuetifyDataTable";
 
+const { t } = useI18n({ useScope: "global" });
+
 const search = ref("");
 
 const languages = reactive<ILanguagesTableData[]>([]);
 
-const headers = [
-  { key: "name", title: "Name" },
-  { key: "nativeName", title: "Native Name", sortable: false },
-  { key: "iso2", title: "ISO2", sortable: false },
-  { key: "options", sortable: false },
-];
+const headers = computed(() => {
+  return [
+    { key: "name", title: t(`languagesPage.name`) },
+    {
+      key: "nativeName",
+      title: t(`languagesPage.nativeName`),
+      sortable: false,
+    },
+    { key: "iso2", title: "ISO2", sortable: false },
+    { key: "options", sortable: false },
+  ];
+});
 
-const languageMenuItems = ["Update Language", "Delete Language"];
+const languageMenuItems = computed(() => {
+  return [t(`languagesPage.updateLanguage`), t(`languagesPage.deleteLanguage`)];
+});
 
 const {
   isLoading,

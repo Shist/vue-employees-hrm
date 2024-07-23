@@ -1,7 +1,10 @@
 {
   "appHeader": {
     "btnLogin": "войти",
-    "btnSignup": "создать"
+    "btnSignup": "создать",
+    "btnLogout": "выйти",
+    "btnProfile": "профиль",
+    "btnSettings": "настройки"
   },
   "signIn": {
     "title": "С Возвращением",
@@ -19,6 +22,13 @@
     "email": "Почта",
     "password": "Пароль",
     "search": "Поиск"
+  },
+  "label": {
+    "name": "Имя",
+    "education": "Образование",
+    "description": "Описание",
+    "theme": "Внешний вид",
+    "language": "Язык"
   },
   "navigation": {
     "Home": "Главная",
@@ -60,6 +70,33 @@
     "description": "Описание",
     "email": "Сотрудник",
     "details": "Подробности",
-    "deleteCv": "Удалить резюме"
+    "deleteCv": "Удалить резюме",
+    "createModalTitle": "Cоздать резюме",
+    "createModalButton": "Создать",
+    "cancelModalButton": "Отмена",
+    "deleteModalTitle": "Удалить резюме",
+    "deleteModalText": "Вы уверены, что хотите удалить резюме {CV} ?"
+  },
+  "departmentsPage": {
+    "name": "Имя",
+    "updateDepartment": "Обновить отдел",
+    "deleteDepartment": "Удалить отдел"
+  },
+  "positionsPage": {
+    "name": "Имя",
+    "updatePosition": "Обновить должность",
+    "deletePosition": "Удалить должность"
+  },
+  "skillsPage": {
+    "name": "Имя",
+    "category": "Категория",
+    "updateSkill": "Обновить навык",
+    "deleteSkill": "Удалить навык"
+  },
+  "languagesPage": {
+    "name": "Имя",
+    "nativeName": "Родное Имя",
+    "updateLanguage": "Обновить язык",
+    "deleteLanguage": "Удалить язык"
   }
 }

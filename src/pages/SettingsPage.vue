@@ -3,7 +3,7 @@
     <v-select
       v-model="selectTheme"
       :items="themeItems"
-      label="Appearance"
+      :label="$t('label.theme')"
       variant="outlined"
       class="settings-page__text-field-wrapper"
       hide-details
@@ -11,7 +11,7 @@
     <v-select
       v-model="selectLanguage"
       :items="languageItems"
-      label="Language"
+      :label="$t('label.language')"
       variant="outlined"
       class="settings-page__text-field-wrapper"
       hide-details

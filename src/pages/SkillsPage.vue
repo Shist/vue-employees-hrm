@@ -12,7 +12,7 @@
         variant="outlined"
         density="compact"
         single-line
-        placeholder="Search"
+        :placeholder="$t('placeholder.search')"
         class="skills-page__text-field-wrapper"
       />
       <v-skeleton-loader type="table" :loading="isLoading">
@@ -21,7 +21,7 @@
           :items="skills"
           :search="search"
           :custom-filter="handleTableFilter"
-          item-key="id"
+          :items-per-page-text="$t('table.paginationTitle')"
           class="skills-page__data-table"
           hide-details
         >
@@ -54,23 +54,30 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted, reactive, ref } from "vue";
+import { computed, onMounted, reactive, ref } from "vue";
+import { useI18n } from "vue-i18n";
 import useErrorState from "@/composables/useErrorState";
 import { getAllSkills } from "@/services/skills";
 import { ISkillsTableData } from "@/types/pages/skillsTable";
 import { ISkillsFilterFunction } from "@/types/vuetifyDataTable";
 
+const { t } = useI18n({ useScope: "global" });
+
 const search = ref("");
 
 const skills = reactive<ISkillsTableData[]>([]);
 
-const headers = [
-  { key: "name", title: "Name" },
-  { key: "category", title: "Category" },
-  { key: "options", sortable: false },
-];
+const headers = computed(() => {
+  return [
+    { key: "name", title: t(`skillsPage.name`) },
+    { key: "category", title: t(`skillsPage.category`) },
+    { key: "options", sortable: false },
+  ];
+});
 
-const skillMenuItems = ["Update Skill", "Delete Skill"];
+const skillMenuItems = computed(() => {
+  return [t(`skillsPage.updateSkill`), t(`skillsPage.deleteSkill`)];
+});
 
 const {
   isLoading,
