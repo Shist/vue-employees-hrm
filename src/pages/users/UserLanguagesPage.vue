@@ -379,6 +379,12 @@ function getClassByProficiency(value: Proficiency) {
   display: flex;
   flex-direction: column;
   align-items: center;
+  @media (max-width: $tablet-l) {
+    padding: 32px 12px 92px;
+  }
+  @media (max-width: $phone-l) {
+    padding: 16px 10px 84px;
+  }
   &__main-content-wrapper {
     margin: 0 auto;
     max-width: 850px;
@@ -386,6 +392,12 @@ function getClassByProficiency(value: Proficiency) {
     display: flex;
     flex-direction: column;
     row-gap: 32px;
+    @media (max-width: $tablet-l) {
+      row-gap: 20px;
+    }
+    @media (max-width: $phone-l) {
+      row-gap: 15px;
+    }
     .user-languages__add-btn {
       font-size: 18px;
       line-height: 28px;
@@ -404,6 +416,12 @@ function getClassByProficiency(value: Proficiency) {
       display: grid;
       grid-template-columns: 1fr 1fr 1fr;
       gap: 5px;
+      @media (max-width: $tablet-l) {
+        grid-template-columns: 1fr 1fr;
+      }
+      @media (max-width: $phone-l) {
+        grid-template-columns: 1fr;
+      }
       .user-languages__language-card {
         border-radius: 0;
         border: 2px solid var(--color-wrapper-bg);
@@ -427,6 +445,12 @@ function getClassByProficiency(value: Proficiency) {
       display: flex;
       justify-content: space-between;
       align-items: center;
+      @media (max-width: $tablet-l) {
+        padding-block: 28px;
+      }
+      @media (max-width: $phone-l) {
+        padding-block: 24px;
+      }
       background: linear-gradient(
         rgba(255, 255, 255, 0) 0%,
         rgb(var(--color-wrapper-bg-rgb)) 40%
@@ -488,5 +512,17 @@ function getClassByProficiency(value: Proficiency) {
   grid-template-columns: 0.5fr 1fr;
   align-items: center;
   gap: 16px;
+  @media (max-width: $phone-l) {
+    gap: 10px;
+  }
+}
+:deep(
+    .user-languages__language-card
+      .v-card-item__content
+      .user-languages__language-label
+  ) {
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
 }
 </style>

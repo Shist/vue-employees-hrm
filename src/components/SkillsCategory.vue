@@ -158,7 +158,6 @@ function getColorByValue(value: number) {
   align-items: center;
   gap: 16px;
   @media (max-width: $phone-l) {
-    grid-template-columns: 1fr 1fr;
     gap: 10px;
   }
 }
