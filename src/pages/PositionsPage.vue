@@ -14,6 +14,7 @@
         single-line
         placeholder="Search"
         class="positions-page__text-field-wrapper"
+        hide-details
       />
       <v-skeleton-loader type="table" :loading="isLoading">
         <v-data-table
@@ -113,9 +114,11 @@ const handleTableFilter: IPositionsFilterFunction = (value, query, item) => {
     align-self: stretch;
     .positions-page__text-field-wrapper {
       margin-left: 33px;
+      margin-bottom: 22px;
       max-width: 320px;
       @media (max-width: $phone-l) {
         margin-inline: 10px;
+        margin-bottom: 0;
         max-width: 100%;
       }
     }

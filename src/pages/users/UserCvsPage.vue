@@ -252,6 +252,7 @@ function handleCloseDeleteModal() {
         padding-inline: 10px;
       }
       @media (max-width: $phone-l) {
+        margin-bottom: 0;
         flex-direction: column;
         align-items: stretch;
       }
