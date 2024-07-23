@@ -396,15 +396,23 @@ function submitUserSkillsDeletion() {
       margin: 0 auto;
       position: fixed;
       bottom: 0;
-      max-width: 800px;
+      left: 0;
+      right: 0;
+      max-width: 810px;
       width: 100%;
       display: flex;
       justify-content: space-between;
       align-items: center;
+      column-gap: 10px;
+      @media (max-width: $laptop-m) {
+        max-width: none;
+        padding-inline: 70px;
+      }
       @media (max-width: $tablet-l) {
         padding-block: 28px;
       }
       @media (max-width: $phone-l) {
+        padding-inline: 30px;
         padding-block: 24px;
       }
       background: linear-gradient(
