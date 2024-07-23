@@ -20,7 +20,6 @@ export default function useCookies() {
   }
 
   function removeToken(tokenType: "accessToken" | "refreshToken") {
-    console.warn(`Removing ${tokenType}: ${$cookies.get(tokenType)}`);
     $cookies.remove(tokenType);
   }
 
