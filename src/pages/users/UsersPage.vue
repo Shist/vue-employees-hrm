@@ -222,7 +222,7 @@ const handleTableFilter: IUsersFilterFunction = (value, query, item) => {
 :deep(.v-table > .v-table__wrapper > table > tbody > tr > td:nth-child(3)),
 :deep(.v-table > .v-table__wrapper > table > tbody > tr > td:nth-child(4)) {
   max-width: 200px;
-  @media (max-width: 900px) {
+  @media (max-width: 899px) {
     max-width: none;
   }
 }
