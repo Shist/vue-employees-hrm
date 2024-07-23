@@ -14,6 +14,7 @@
         single-line
         placeholder="Search"
         class="languages-page__text-field-wrapper"
+        hide-details
       />
       <v-skeleton-loader type="table" :loading="isLoading">
         <v-data-table
@@ -23,6 +24,8 @@
           :custom-filter="handleTableFilter"
           item-key="id"
           class="languages-page__data-table"
+          :mobile="null"
+          :mobile-breakpoint="600"
           hide-details
         >
           <template v-slot:[`item.options`]>
@@ -124,7 +127,16 @@ const handleTableFilter: ILanguagesFilterFunction = (value, query, item) => {
     align-self: stretch;
     .languages-page__text-field-wrapper {
       margin-left: 33px;
+      margin-bottom: 22px;
       max-width: 320px;
+      @media (max-width: $tablet-l) {
+        margin-bottom: 10px;
+      }
+      @media (max-width: $phone-l) {
+        margin-inline: 10px;
+        margin-bottom: 5px;
+        max-width: 100%;
+      }
     }
     .languages-page__data-table {
       background-color: var(--color-wrapper-bg);
@@ -173,17 +185,22 @@ const handleTableFilter: ILanguagesFilterFunction = (value, query, item) => {
 }
 :deep(.v-table > .v-table__wrapper > table > tbody > tr > td) {
   padding: 12px 16px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
 }
-:deep(.v-table > .v-table__wrapper > table > thead > tr > th:nth-child(3)) {
-  width: 400px;
-}
+:deep(.v-table > .v-table__wrapper > table > tbody > tr > td:nth-child(1)),
+:deep(.v-table > .v-table__wrapper > table > tbody > tr > td:nth-child(2)),
 :deep(.v-table > .v-table__wrapper > table > tbody > tr > td:nth-child(3)) {
-  width: 400px;
-}
-:deep(.v-table > .v-table__wrapper > table > thead > tr > th:last-child) {
-  width: 80px;
+  max-width: 150px;
+  @media (max-width: 599px) {
+    max-width: none;
+  }
 }
 :deep(.v-table > .v-table__wrapper > table > tbody > tr > td:last-child) {
   width: 80px;
+  @media (max-width: 599px) {
+    width: 100%;
+  }
 }
 </style>

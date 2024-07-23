@@ -78,8 +78,8 @@ export const useAuthStore = defineStore("authStore", () => {
 
     user.value = authData.user;
 
-    setToken("accessToken", `Bearer ${authData.accessToken}`);
-    setToken("refreshToken", `Bearer ${authData.refreshToken}`);
+    setToken("accessToken", authData.accessToken);
+    setToken("refreshToken", authData.refreshToken);
 
     wasAuthErrorToastShown.value = false;
   };

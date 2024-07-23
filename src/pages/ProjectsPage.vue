@@ -14,6 +14,7 @@
         density="compact"
         placeholder="Search"
         class="projects-page__text-field-wrapper"
+        hide-details
       />
       <v-skeleton-loader type="table" :loading="isLoading">
         <v-data-table
@@ -22,6 +23,9 @@
           :search="search"
           class="projects-page__data-table"
           :custom-filter="handleTableFilter"
+          :mobile="null"
+          :mobile-breakpoint="1050"
+          hide-details
         >
           <template v-slot:[`item.options`]>
             <v-menu>
@@ -132,7 +136,16 @@ const handleTableFilter: IProjectsFilterFunction = (value, query, item) => {
     align-self: stretch;
     .projects-page__text-field-wrapper {
       margin-left: 33px;
+      margin-bottom: 22px;
       max-width: 320px;
+      @media (max-width: $tablet-l) {
+        margin-bottom: 10px;
+      }
+      @media (max-width: $phone-l) {
+        margin-inline: 10px;
+        margin-bottom: 5px;
+        max-width: 100%;
+      }
     }
     .projects-page__data-table {
       background-color: var(--color-wrapper-bg);
@@ -179,5 +192,28 @@ const handleTableFilter: IProjectsFilterFunction = (value, query, item) => {
 }
 :deep(.v-table > .v-table__wrapper > table > tbody > tr > td) {
   padding: 12px 16px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+}
+:deep(.v-table > .v-table__wrapper > table > tbody > tr > td:nth-child(1)),
+:deep(.v-table > .v-table__wrapper > table > tbody > tr > td:nth-child(2)),
+:deep(.v-table > .v-table__wrapper > table > tbody > tr > td:nth-child(3)) {
+  max-width: 200px;
+  @media (max-width: 1049px) {
+    max-width: none;
+  }
+}
+:deep(.v-table > .v-table__wrapper > table > tbody > tr > td:last-child) {
+  width: 80px;
+  @media (max-width: 1049px) {
+    width: 100%;
+  }
+}
+:deep(.v-table > .v-table__wrapper > table > tbody > tr > td)
+  > .v-data-table__td-value {
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
 }
 </style>

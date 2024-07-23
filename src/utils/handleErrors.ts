@@ -35,7 +35,7 @@ export async function refreshAccessToken() {
 
   const newAccessToken = await updateAccessToken();
 
-  setToken("accessToken", `Bearer ${newAccessToken}`);
+  setToken("accessToken", newAccessToken);
 }
 
 export function getDetailedError(error: unknown) {

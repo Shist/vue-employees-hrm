@@ -310,8 +310,12 @@ function handleCloseModal() {
   isModalOpen.value = false;
 }
 
-function handleSetCardForDeletion(skillName: string, skillIndex: number) {
-  if (!isOwner.value) return;
+function handleSetCardForDeletion(
+  skillName: string,
+  skillIndex: number,
+  isContextMenuTouch: boolean
+) {
+  if (!isOwner.value || isContextMenuTouch) return;
 
   if (skillsForDeletionNames.has(skillName)) {
     skillsForDeletionNames.delete(skillName);
@@ -364,6 +368,12 @@ function submitCvSkillsDeletion() {
   display: flex;
   flex-direction: column;
   align-items: center;
+  @media (max-width: $tablet-l) {
+    padding: 32px 12px 92px;
+  }
+  @media (max-width: $phone-l) {
+    padding: 16px 10px 84px;
+  }
   &__main-content-wrapper {
     position: relative;
     margin: 0 auto;
@@ -372,6 +382,12 @@ function submitCvSkillsDeletion() {
     display: flex;
     flex-direction: column;
     row-gap: 32px;
+    @media (max-width: $tablet-l) {
+      row-gap: 20px;
+    }
+    @media (max-width: $phone-l) {
+      row-gap: 15px;
+    }
     .cv-skills__add-btn {
       font-size: 18px;
       line-height: 28px;
@@ -385,17 +401,35 @@ function submitCvSkillsDeletion() {
       @include default-text(28px, 32px);
       color: var(--color-gray-label-text);
       text-align: center;
+      @media (max-width: $phone-l) {
+        font-size: 24px;
+        line-height: 28px;
+      }
     }
     .cv-skills__delete-btns-wrapper {
       padding-block: 32px;
       margin: 0 auto;
       position: fixed;
       bottom: 0;
-      max-width: 800px;
+      left: 0;
+      right: 0;
+      max-width: 810px;
       width: 100%;
       display: flex;
       justify-content: space-between;
       align-items: center;
+      column-gap: 10px;
+      @media (max-width: $laptop-m) {
+        max-width: none;
+        padding-inline: 70px;
+      }
+      @media (max-width: $tablet-l) {
+        padding-block: 28px;
+      }
+      @media (max-width: $phone-l) {
+        padding-inline: 30px;
+        padding-block: 24px;
+      }
       background: linear-gradient(
         rgba(255, 255, 255, 0) 0%,
         rgb(var(--color-wrapper-bg-rgb)) 40%
