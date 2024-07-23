@@ -38,11 +38,11 @@
           mdi-tray-arrow-up
         </v-icon>
         <h3 class="avatar-upload__upload-avatar-headline">
-          Upload avatar image
+          {{ $t("userProfilePage.avatarHeadline") }}
         </h3>
       </div>
       <h4 class="avatar-upload__upload-avatar-formats-label">
-        png, jpg or gif no more than 0.5MB
+        {{ $t("userProfilePage.avatarFormats") }}
       </h4>
     </label>
   </div>

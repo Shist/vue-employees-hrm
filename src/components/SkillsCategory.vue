@@ -1,6 +1,8 @@
 <template>
   <div class="skills-wrapper">
-    <h3 class="skills-wrapper__category-headline">{{ category }}</h3>
+    <h3 class="skills-wrapper__category-headline">
+      {{ $t(`userSkillsPage.skillCategories.${category}`) }}
+    </h3>
     <div class="skills-wrapper__category-wrapper">
       <div
         v-for="(categorySkill, categorySkillIndex) in categorySkills"

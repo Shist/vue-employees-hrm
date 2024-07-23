@@ -1,4 +1,29 @@
 {
+  "placeholder": {
+    "email": "Почта",
+    "password": "Пароль",
+    "search": "Поиск"
+  },
+  "label": {
+    "name": "Имя",
+    "education": "Образование",
+    "description": "Описание",
+    "theme": "Внешний вид",
+    "language": "Язык",
+    "firstName": "Имя",
+    "lastName": "Фамилия",
+    "department": "Отдел",
+    "position": "Должность",
+    "skill": "Навык",
+    "category": "Категория",
+    "skillMastery": "Уровень владения"
+  },
+  "button": {
+    "createButton": "cоздать",
+    "cancelButton": "отмена",
+    "confirmButton": "подтвердить",
+    "deleteButton": "удалить"
+  },
   "appHeader": {
     "btnLogin": "войти",
     "btnSignup": "создать",
@@ -17,18 +42,6 @@
     "subtitleText": "Привет! Создайте аккаунт, чтобы продолжить.",
     "buttonText": "создать аккаунт",
     "linkText": "у меня есть аккаунт"
-  },
-  "placeholder": {
-    "email": "Почта",
-    "password": "Пароль",
-    "search": "Поиск"
-  },
-  "label": {
-    "name": "Имя",
-    "education": "Образование",
-    "description": "Описание",
-    "theme": "Внешний вид",
-    "language": "Язык"
   },
   "navigation": {
     "Home": "Главная",
@@ -72,8 +85,6 @@
     "details": "Подробности",
     "deleteCv": "Удалить резюме",
     "createModalTitle": "Cоздать резюме",
-    "createModalButton": "Создать",
-    "cancelModalButton": "Отмена",
     "deleteModalTitle": "Удалить резюме",
     "deleteModalText": "Вы уверены, что хотите удалить резюме {CV} ?"
   },
@@ -98,5 +109,34 @@
     "nativeName": "Родное Имя",
     "updateLanguage": "Обновить язык",
     "deleteLanguage": "Удалить язык"
+  },
+  "userProfilePage": {
+    "avatarHeadline": "Загрузите изображение аватара",
+    "avatarFormats": "png, jpg or gif не больше 0.5МБ",
+    "userDateCaption": "Аккаунт был создан {targetDate}",
+    "btnUpdate": "обновить",
+    "noDepartment": "Отдел не выбран",
+    "noPosition": "Должность не выбрана"
+  },
+  "userSkillsPage": {
+    "btnAdd": "Добавить Навык",
+    "noSkillsMsg": "Квалификации сотрудника пока что не указаны",
+    "addModalTitle": "Добавить навык",
+    "updateModalTitle": "Обновить навык",
+    "skillMasteries": {
+      "Novice": "Новичок",
+      "Advanced": "Продвинутый",
+      "Competent": "Компетентный",
+      "Proficient": "Опытный",
+      "Expert": "Эксперт"
+    },
+    "noCategoriesMsg": "Нет доступных навыков",
+    "skillCategories": {
+      "Programming languages": "Языки программирования",
+      "Programming technologies": "Технологии разработки",
+      "Source control systems": "Системы контроля версий",
+      "Other skills": "Другое",
+      "Database management system": "Система управления базами данных"
+    }
   }
 }

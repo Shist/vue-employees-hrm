@@ -1,4 +1,29 @@
 {
+  "placeholder": {
+    "email": "Email",
+    "password": "Passwort",
+    "search": "Suchen"
+  },
+  "label": {
+    "name": "Name",
+    "education": "Ausbildung",
+    "description": "Beschreibung",
+    "theme": "Aussehen",
+    "language": "Sprache",
+    "firstName": "Vorname",
+    "lastName": "Nachname",
+    "department": "Abteilung",
+    "position": "Position",
+    "skill": "Fähigkeit",
+    "category": "Kategorie",
+    "skillMastery": "Fertigkeitsbeherrschung"
+  },
+  "button": {
+    "createButton": "erstellen",
+    "cancelButton": "stornieren",
+    "confirmButton": "bestätigen",
+    "deleteButton": "delete"
+  },
   "appHeader": {
     "btnLogin": "einloggen",
     "btnSignup": "anmelden",
@@ -17,18 +42,6 @@
     "subtitleText": "Willkommen! Melden Sie sich an, um fortzufahren.",
     "buttonText": "registrieren",
     "linkText": "ich habe ein konto"
-  },
-  "placeholder": {
-    "email": "Email",
-    "password": "Passwort",
-    "search": "Suchen"
-  },
-  "label": {
-    "name": "Name",
-    "education": "Ausbildung",
-    "description": "Beschreibung",
-    "theme": "Aussehen",
-    "language": "Sprache"
   },
   "navigation": {
     "Home": "Startseite",
@@ -72,8 +85,6 @@
     "details": "Einzelheiten",
     "deleteCv": "Lebenslauf löschen",
     "createModalTitle": "Lebenslauf erstellen",
-    "createModalButton": "Erstellen",
-    "cancelModalButton": "Stornieren",
     "deleteModalTitle": "Lebenslauf löschen",
     "deleteModalText": "Sind Sie sicher, dass Sie CV {CV} löschen möchten?"
   },
@@ -98,5 +109,34 @@
     "nativeName": "Einheimischer Name",
     "updateLanguage": "Sprache aktualisieren",
     "deleteLanguage": "Sprache löschen"
+  },
+  "userProfilePage": {
+    "avatarHeadline": "Avatarbild hochladen",
+    "avatarFormats": "png, jpg oder gif nicht größer als 0,5 MB",
+    "userDateCaption": "Seitdem Mitglied {targetDate}",
+    "btnUpdate": "aktualisieren",
+    "noDepartment": "Keine Abteilung",
+    "noPosition": "Keine Position"
+  },
+  "userSkillsPage": {
+    "btnAdd": "Fertigkeit hinzufügen",
+    "noSkillsMsg": "Noch keine Mitarbeiterfähigkeiten angegeben",
+    "addModalTitle": "Fertigkeit hinzufügen",
+    "updateModalTitle": "Fertigkeit aktualisieren",
+    "skillMasteries": {
+      "Novice": "Anfänger",
+      "Advanced": "Fortschrittlich",
+      "Competent": "Kompetent",
+      "Proficient": "Erfahren",
+      "Expert": "Experte"
+    },
+    "noCategoriesMsg": "Keine Fähigkeiten verfügbar",
+    "skillCategories": {
+      "Programming languages": "Programmiersprachen",
+      "Programming technologies": "Programmiertechnologien",
+      "Source control systems": "Quellcodeverwaltungssysteme",
+      "Other skills": "Andere",
+      "Database management system": "Datenbankverwaltungssystem"
+    }
   }
 }

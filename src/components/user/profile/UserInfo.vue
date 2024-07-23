@@ -20,7 +20,7 @@
     <form class="user-info__info-inputs-form">
       <v-text-field
         v-model="firstName"
-        label="First Name"
+        :label="$t('label.firstName')"
         variant="outlined"
         class="user-info__text-field-wrapper"
         :readonly="!isOwner"
@@ -28,7 +28,7 @@
       />
       <v-text-field
         v-model="lastName"
-        label="Last Name"
+        :label="$t('label.lastName')"
         variant="outlined"
         class="user-info__text-field-wrapper"
         :readonly="!isOwner"
@@ -37,7 +37,7 @@
       <v-select
         v-model="departmentId"
         :items="departmentsItems"
-        label="Department"
+        :label="$t('label.department')"
         variant="outlined"
         class="user-info__text-field-wrapper"
         :loading="areDepartmentsLoading"
@@ -47,7 +47,7 @@
       <v-select
         v-model="positionId"
         :items="positionsItems"
-        label="Position"
+        :label="$t('label.position')"
         variant="outlined"
         class="user-info__text-field-wrapper"
         :loading="arePositionsLoading"
@@ -61,7 +61,7 @@
         @click.prevent="onUpdateBtnClicked"
         :disabled="isSubmitBtnDisabled"
       >
-        UPDATE
+        {{ $t("userProfilePage.btnUpdate") }}
       </v-btn>
     </form>
   </div>
@@ -69,6 +69,7 @@
 
 <script setup lang="ts">
 import { ref, computed, watchEffect } from "vue";
+import { useI18n } from "vue-i18n";
 import {
   IUserProfileData,
   IDepartmentNamesData,
@@ -77,6 +78,8 @@ import {
   IUpdateProfileInput,
   ISelectFieldData,
 } from "@/types/pages/users/profile";
+
+const { t, locale } = useI18n({ useScope: "global" });
 
 const props = defineProps<{
   isOwner: boolean;
@@ -114,15 +117,16 @@ const computedFullName = computed(() => {
 
 const computedCreationDate = computed(() => {
   if (!props.userData) return "";
+
   const targetDate = new Date(props.userData.createdAt)
-    .toLocaleDateString("en-US", {
+    .toLocaleDateString(locale.value === "ru" ? "ru-RU" : "en-US", {
       weekday: "short",
       month: "short",
       day: "numeric",
       year: "numeric",
     })
     .replace(/,/g, "");
-  return `A member since ${targetDate}`;
+  return t("userProfilePage.userDateCaption", { targetDate: targetDate });
 });
 
 const firstName = ref(props.userData?.firstName);
@@ -153,7 +157,7 @@ watchEffect(() => {
 watchEffect(() => {
   const fetchedDepartments = prepareSelectItems(
     props.departmentNames,
-    "No department"
+    t("userProfilePage.noDepartment")
   );
   if (fetchedDepartments.length > 1) {
     departmentsItems = fetchedDepartments;
@@ -174,7 +178,7 @@ watchEffect(() => {
 watchEffect(() => {
   const fetchedPositions = prepareSelectItems(
     props.positionNames,
-    "No position"
+    t("userProfilePage.noPosition")
   );
   if (fetchedPositions.length > 1) {
     positionsItems = fetchedPositions;

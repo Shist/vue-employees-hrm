@@ -27,7 +27,7 @@
             @click="closeModal"
             class="delete-cv-modal__btn-cancel"
           >
-            {{ $t("cvsPage.cancelModalButton") }}
+            {{ $t("button.cancelButton") }}
           </v-btn>
           <v-btn
             type="submit"
@@ -35,7 +35,7 @@
             @click="makeDeleteOperation"
             class="delete-cv-modal__btn-confirm"
           >
-            {{ $t("cvsPage.createModalButton") }}
+            {{ $t("button.confirmButton") }}
           </v-btn>
         </v-card-actions>
       </v-card>

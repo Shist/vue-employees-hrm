@@ -46,7 +46,7 @@
             @click="closeModal"
             class="create-cv-modal__btn-cancel"
           >
-            {{ $t("cvsPage.cancelModalButton") }}
+            {{ $t("button.cancelButton") }}
           </v-btn>
           <v-btn
             type="submit"
@@ -55,7 +55,7 @@
             class="create-cv-modal__btn-confirm"
             :disabled="isConfirmBtnDisabled"
           >
-            {{ $t("cvsPage.createModalButton") }}
+            {{ $t("button.createButton") }}
           </v-btn>
         </v-card-actions>
       </v-card>

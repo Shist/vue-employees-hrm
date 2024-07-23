@@ -1,4 +1,29 @@
 {
+  "placeholder": {
+    "email": "Email",
+    "password": "Password",
+    "search": "Search"
+  },
+  "label": {
+    "name": "Name",
+    "education": "Education",
+    "description": "Description",
+    "theme": "Appearance",
+    "language": "Language",
+    "firstName": "First Name",
+    "lastName": "Last Name",
+    "department": "Department",
+    "position": "Position",
+    "skill": "Skill",
+    "category": "Category",
+    "skillMastery": "Skill mastery"
+  },
+  "button": {
+    "createButton": "create",
+    "cancelButton": "cancel",
+    "confirmButton": "confirm",
+    "deleteButton": "delete"
+  },
   "appHeader": {
     "btnLogin": "login",
     "btnSignup": "signup",
@@ -17,18 +42,6 @@
     "subtitleText": "Welcome! Sign up to continue.",
     "buttonText": "sign up",
     "linkText": "i have an account"
-  },
-  "placeholder": {
-    "email": "Email",
-    "password": "Password",
-    "search": "Search"
-  },
-  "label": {
-    "name": "Name",
-    "education": "Education",
-    "description": "Description",
-    "theme": "Appearance",
-    "language": "Language"
   },
   "navigation": {
     "Home": "Home",
@@ -72,8 +85,6 @@
     "details": "Details",
     "deleteCv": "Delete CV",
     "createModalTitle": "Create CV",
-    "createModalButton": "Create",
-    "cancelModalButton": "Cancel",
     "deleteModalTitle": "Delete CV",
     "deleteModalText": "Are you sure you want to delete CV {CV} ?"
   },
@@ -98,5 +109,34 @@
     "nativeName": "Native Name",
     "updateLanguage": "Update language",
     "deleteLanguage": "Delete language"
+  },
+  "userProfilePage": {
+    "avatarHeadline": "Upload avatar image",
+    "avatarFormats": "png, jpg or gif no more than 0.5MB",
+    "userDateCaption": "A member since {targetDate}",
+    "btnUpdate": "update",
+    "noDepartment": "No department",
+    "noPosition": "No position"
+  },
+  "userSkillsPage": {
+    "btnAdd": "Add skill",
+    "noSkillsMsg": "No employee skills specified yet",
+    "addModalTitle": "Add skill",
+    "updateModalTitle": "Update skill",
+    "skillMasteries": {
+      "Novice": "Novice",
+      "Advanced": "Advanced",
+      "Competent": "Competent",
+      "Proficient": "Proficient",
+      "Expert": "Expert"
+    },
+    "noCategoriesMsg": "No skills available",
+    "skillCategories": {
+      "Programming languages": "Programming languages",
+      "Programming technologies": "Programming technologies",
+      "Source control systems": "Source control systems",
+      "Other skills": "Other",
+      "Database management system": "Database management system"
+    }
   }
 }
