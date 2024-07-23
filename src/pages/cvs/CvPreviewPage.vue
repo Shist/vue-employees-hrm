@@ -367,26 +367,51 @@ function downloadPDF(base64: string) {
   display: flex;
   flex-direction: column;
   align-items: center;
+  @media (max-width: $tablet-l) {
+    padding: 20px 10px;
+  }
   &__main-content-wrapper {
     width: 100%;
     display: flex;
     flex-direction: column;
     row-gap: 30px;
     color: var(--color-text);
+    @media (max-width: $tablet-l) {
+      row-gap: 15px;
+    }
     .cv-preview__title-and-btn-wrapper {
       display: flex;
       justify-content: space-between;
       column-gap: 50px;
+      @media (max-width: $tablet-l) {
+        column-gap: 25px;
+      }
       .cv-preview__title-wrapper {
         display: flex;
         flex-direction: column;
         row-gap: 5px;
         .cv-preview__title {
           @include default-text(36px, 40px);
+          @media (max-width: $tablet-l) {
+            font-size: 32px;
+            line-height: 36px;
+          }
+          @media (max-width: $phone-l) {
+            font-size: 28px;
+            line-height: 32px;
+          }
         }
         .cv-preview__position {
           @include default-text(17px, 22px);
           text-transform: uppercase;
+          @media (max-width: $tablet-l) {
+            font-size: 14px;
+            line-height: 19px;
+          }
+          @media (max-width: $phone-l) {
+            font-size: 12px;
+            line-height: 17px;
+          }
         }
       }
       .cv-preview__export-pdf-btn {
@@ -397,6 +422,9 @@ function downloadPDF(base64: string) {
     .cv-preview__cv-main-info-wrapper {
       display: flex;
       column-gap: 30px;
+      @media (max-width: $tablet-l) {
+        column-gap: 15px;
+      }
       .cv-preview__education-and-langauges-wrapper {
         padding-block: 15px;
         padding-right: 10px;
@@ -405,23 +433,55 @@ function downloadPDF(base64: string) {
         flex-direction: column;
         row-gap: 20px;
         border-right: 1px solid var(--color-text-red);
+        @media (max-width: $tablet-l) {
+          row-gap: 10px;
+          min-width: 120px;
+          width: 120px;
+        }
         .cv-preview__education-wrapper {
           display: flex;
           flex-direction: column;
           row-gap: 10px;
           .cv-preview__education-headline {
             @include default-headline(16px, 20px);
+            @media (max-width: $tablet-l) {
+              font-size: 14px;
+              line-height: 18px;
+            }
+            @media (max-width: $phone-l) {
+              font-size: 12px;
+              line-height: 16px;
+            }
           }
           .cv-preview__education-info {
             @include default-text(16px, 20px);
+            @media (max-width: $tablet-l) {
+              font-size: 14px;
+              line-height: 18px;
+            }
+            @media (max-width: $phone-l) {
+              font-size: 12px;
+              line-height: 16px;
+            }
           }
         }
         .cv-preview__languages-section-wrapper {
           display: flex;
           flex-direction: column;
           row-gap: 10px;
+          @media (max-width: $tablet-l) {
+            row-gap: 5px;
+          }
           .cv-preview__languages-headline {
             @include default-headline(16px, 20px);
+            @media (max-width: $tablet-l) {
+              font-size: 14px;
+              line-height: 18px;
+            }
+            @media (max-width: $phone-l) {
+              font-size: 12px;
+              line-height: 16px;
+            }
           }
           .cv-preview__languages-wrapper {
             display: flex;
@@ -429,6 +489,14 @@ function downloadPDF(base64: string) {
             row-gap: 5px;
             .cv-preview__language-info {
               @include default-text(16px, 20px);
+              @media (max-width: $tablet-l) {
+                font-size: 14px;
+                line-height: 18px;
+              }
+              @media (max-width: $phone-l) {
+                font-size: 12px;
+                line-height: 16px;
+              }
             }
           }
         }
@@ -438,34 +506,86 @@ function downloadPDF(base64: string) {
         display: flex;
         flex-direction: column;
         row-gap: 20px;
+        @media (max-width: $tablet-l) {
+          row-gap: 10px;
+        }
         .cv-preview__cv-description-wrapper {
           display: flex;
           flex-direction: column;
           row-gap: 10px;
+          @media (max-width: $tablet-l) {
+            row-gap: 5px;
+          }
           .cv-preview__cv-description-headline {
             @include default-headline(16px, 22px);
+            @media (max-width: $tablet-l) {
+              font-size: 14px;
+              line-height: 20px;
+            }
+            @media (max-width: $phone-l) {
+              font-size: 12px;
+              line-height: 18px;
+            }
           }
           .cv-preview__cv-description-info {
             @include default-text(16px, 22px);
+            @media (max-width: $tablet-l) {
+              font-size: 14px;
+              line-height: 20px;
+            }
+            @media (max-width: $phone-l) {
+              font-size: 12px;
+              line-height: 18px;
+            }
           }
         }
         .cv-preview__skills-wrapper {
           display: flex;
           flex-direction: column;
           row-gap: 20px;
+          @media (max-width: $tablet-l) {
+            row-gap: 10px;
+          }
           .cv-preview__skill-category {
             display: flex;
             flex-direction: column;
             row-gap: 10px;
+            @media (max-width: $tablet-l) {
+              row-gap: 5px;
+            }
             .cv-preview__skill-category-headline {
               @include default-headline(16px, 22px);
+              @media (max-width: $tablet-l) {
+                font-size: 14px;
+                line-height: 20px;
+              }
+              @media (max-width: $phone-l) {
+                font-size: 12px;
+                line-height: 18px;
+              }
             }
             .cv-preview__skill-category-skills {
               @include default-text(16px, 22px);
+              @media (max-width: $tablet-l) {
+                font-size: 14px;
+                line-height: 20px;
+              }
+              @media (max-width: $phone-l) {
+                font-size: 12px;
+                line-height: 18px;
+              }
             }
           }
           .cv-preview__no-skills-label {
             @include default-text(16px, 22px);
+            @media (max-width: $tablet-l) {
+              font-size: 14px;
+              line-height: 20px;
+            }
+            @media (max-width: $phone-l) {
+              font-size: 12px;
+              line-height: 18px;
+            }
           }
         }
       }
@@ -474,8 +594,19 @@ function downloadPDF(base64: string) {
       display: flex;
       flex-direction: column;
       row-gap: 25px;
+      @media (max-width: $tablet-l) {
+        row-gap: 15px;
+      }
       .cv-preview__projects-headline {
         @include default-text(34px, 38px);
+        @media (max-width: $tablet-l) {
+          font-size: 30px;
+          line-height: 34px;
+        }
+        @media (max-width: $phone-l) {
+          font-size: 26px;
+          line-height: 30px;
+        }
       }
       .cv-preview__projects-list-wrapper {
         display: flex;
@@ -484,15 +615,30 @@ function downloadPDF(base64: string) {
         .cv-preview__project-info-wrapper {
           display: flex;
           column-gap: 30px;
+          @media (max-width: $tablet-l) {
+            column-gap: 15px;
+          }
           .cv-preview__project-name-wrapper {
             padding-block: 15px;
             padding-right: 10px;
             min-width: 300px;
             border-right: 1px solid var(--color-text-red);
+            @media (max-width: $tablet-l) {
+              min-width: 120px;
+              width: 120px;
+            }
             .cv-preview__project-name-headline {
               @include default-headline(16px, 20px);
               color: var(--color-text-red);
               text-transform: uppercase;
+              @media (max-width: $tablet-l) {
+                font-size: 14px;
+                line-height: 20px;
+              }
+              @media (max-width: $phone-l) {
+                font-size: 12px;
+                line-height: 18px;
+              }
             }
           }
           .cv-preview__project-info-sections-wrapper {
@@ -500,18 +646,48 @@ function downloadPDF(base64: string) {
             display: flex;
             flex-direction: column;
             row-gap: 20px;
+            @media (max-width: $tablet-l) {
+              row-gap: 10px;
+            }
             .cv-preview__project-info-section-wrapper {
               display: flex;
               flex-direction: column;
               row-gap: 10px;
+              @media (max-width: $tablet-l) {
+                row-gap: 5px;
+              }
               .cv-preview__project-info-section-title {
                 @include default-headline(16px, 22px);
+                @media (max-width: $tablet-l) {
+                  font-size: 14px;
+                  line-height: 20px;
+                }
+                @media (max-width: $phone-l) {
+                  font-size: 12px;
+                  line-height: 18px;
+                }
               }
               .cv-preview__project-info-section-label {
                 @include default-text(16px, 22px);
+                @media (max-width: $tablet-l) {
+                  font-size: 14px;
+                  line-height: 20px;
+                }
+                @media (max-width: $phone-l) {
+                  font-size: 12px;
+                  line-height: 18px;
+                }
               }
               .cv-preview__no-projects-label {
                 @include default-text(16px, 22px);
+                @media (max-width: $tablet-l) {
+                  font-size: 14px;
+                  line-height: 20px;
+                }
+                @media (max-width: $phone-l) {
+                  font-size: 12px;
+                  line-height: 18px;
+                }
               }
             }
           }
