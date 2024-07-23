@@ -368,6 +368,12 @@ function submitCvSkillsDeletion() {
   display: flex;
   flex-direction: column;
   align-items: center;
+  @media (max-width: $tablet-l) {
+    padding: 32px 12px 92px;
+  }
+  @media (max-width: $phone-l) {
+    padding: 16px 10px 84px;
+  }
   &__main-content-wrapper {
     position: relative;
     margin: 0 auto;
@@ -376,6 +382,12 @@ function submitCvSkillsDeletion() {
     display: flex;
     flex-direction: column;
     row-gap: 32px;
+    @media (max-width: $tablet-l) {
+      row-gap: 20px;
+    }
+    @media (max-width: $phone-l) {
+      row-gap: 15px;
+    }
     .cv-skills__add-btn {
       font-size: 18px;
       line-height: 28px;
