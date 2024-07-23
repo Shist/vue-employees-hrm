@@ -357,6 +357,12 @@ function submitUserSkillsDeletion() {
   display: flex;
   flex-direction: column;
   align-items: center;
+  @media (max-width: $tablet-l) {
+    padding: 32px 12px 92px;
+  }
+  @media (max-width: $phone-l) {
+    padding: 16px 10px 84px;
+  }
   &__main-content-wrapper {
     position: relative;
     margin: 0 auto;
@@ -365,6 +371,12 @@ function submitUserSkillsDeletion() {
     display: flex;
     flex-direction: column;
     row-gap: 32px;
+    @media (max-width: $tablet-l) {
+      row-gap: 20px;
+    }
+    @media (max-width: $phone-l) {
+      row-gap: 15px;
+    }
     .user-skills__add-btn {
       font-size: 18px;
       line-height: 28px;
@@ -389,6 +401,12 @@ function submitUserSkillsDeletion() {
       display: flex;
       justify-content: space-between;
       align-items: center;
+      @media (max-width: $tablet-l) {
+        padding-block: 28px;
+      }
+      @media (max-width: $phone-l) {
+        padding-block: 24px;
+      }
       background: linear-gradient(
         rgba(255, 255, 255, 0) 0%,
         rgb(var(--color-wrapper-bg-rgb)) 40%
