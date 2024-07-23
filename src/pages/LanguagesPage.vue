@@ -134,7 +134,7 @@ const handleTableFilter: ILanguagesFilterFunction = (value, query, item) => {
       }
       @media (max-width: $phone-l) {
         margin-inline: 10px;
-        margin-bottom: 0;
+        margin-bottom: 5px;
         max-width: 100%;
       }
     }

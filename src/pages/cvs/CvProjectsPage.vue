@@ -352,7 +352,7 @@ const handleTableFilter: ICvProjectsFilterFunction = (value, query, item) => {
         padding-inline: 10px;
       }
       @media (max-width: $phone-l) {
-        margin-bottom: 0;
+        margin-bottom: 5px;
         flex-direction: column;
         align-items: stretch;
       }
