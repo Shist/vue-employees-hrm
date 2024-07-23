@@ -254,6 +254,9 @@ const handleTableFilter: ICvsFilterFunction = (value, query, item) => {
       justify-content: space-between;
       align-items: center;
       gap: 15px;
+      @media (max-width: $tablet-l) {
+        margin-bottom: 10px;
+      }
       @media (max-width: $tablet-s) {
         padding: 0 10px;
       }

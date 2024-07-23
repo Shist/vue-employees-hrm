@@ -119,6 +119,9 @@ const handleTableFilter: ISkillsFilterFunction = (value, query, item) => {
       margin-left: 33px;
       margin-bottom: 22px;
       max-width: 320px;
+      @media (max-width: $tablet-l) {
+        margin-bottom: 10px;
+      }
       @media (max-width: $phone-l) {
         margin-inline: 10px;
         margin-bottom: 0;
