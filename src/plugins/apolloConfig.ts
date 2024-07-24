@@ -22,7 +22,7 @@ const authLink = setContext(async (request, { headers }) => {
     ? JSON.parse(atob(accessToken.split(".")[1]))
     : null;
 
-  const isAccessTokenValid =
+  let isAccessTokenValid =
     accessTokenData && new Date(accessTokenData.exp * 1000) > new Date();
 
   const isAuthRequiredRequest = ![
@@ -35,12 +35,16 @@ const authLink = setContext(async (request, { headers }) => {
     await refreshAccessToken();
 
     accessToken = getToken("accessToken");
+
+    isAccessTokenValid = true;
   }
 
   return {
     headers: {
       ...headers,
-      authorization: accessToken ? accessToken : getToken("refreshToken"),
+      authorization: isAccessTokenValid
+        ? accessToken
+        : getToken("refreshToken"),
     },
   };
 });
