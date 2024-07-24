@@ -18,18 +18,19 @@ const authLink = setContext(async (request, { headers }) => {
 
   let accessToken = getToken("accessToken");
 
-  const tokenData: ITokenData | null = accessToken
-    ? JSON.parse(atob(accessToken.split(".")[1]))
-    : null;
+  const isAccessTokenValid =
+    accessToken &&
+    new Date(
+      (JSON.parse(atob(accessToken.split(".")[1])) as ITokenData).exp * 1000
+    ) > new Date();
 
-  const isTokenValid = tokenData && new Date(tokenData.exp * 1000) > new Date();
   const isAuthRequiredRequest = ![
     "UPDATE_TOKEN",
     "SIGN_IN",
     "SIGN_UP",
   ].includes(`${request.operationName}`);
 
-  if (!isTokenValid && isAuthRequiredRequest) {
+  if (!isAccessTokenValid && isAuthRequiredRequest) {
     await refreshAccessToken();
 
     accessToken = getToken("accessToken");
