@@ -6,7 +6,16 @@ export default function useCookies() {
   const $cookies = (globalThis as any).$cookies as typeof VueCookies.VueCookies;
 
   function getToken(tokenType: "accessToken" | "refreshToken") {
-    return $cookies.get(tokenType);
+    const token: string | null = $cookies.get(tokenType);
+
+    const tokenData: ITokenData | null = token
+      ? JSON.parse(atob(token.split(".")[1]))
+      : null;
+
+    const isTokenValid =
+      tokenData && new Date(tokenData.exp * 1000) > new Date();
+
+    return isTokenValid ? token : null;
   }
 
   function setToken(
