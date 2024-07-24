@@ -15,7 +15,7 @@ export default function useCookies() {
   ) {
     const tokenData: ITokenData = JSON.parse(atob(tokenValue.split(".")[1]));
 
-    const expirationDate = new Date(tokenData.exp * 1000);
+    const expirationDate = new Date(tokenData.exp * 1000 - 5000);
 
     $cookies.set(tokenType, `Bearer ${tokenValue}`, expirationDate);
   }
