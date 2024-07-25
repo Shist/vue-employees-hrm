@@ -20,10 +20,8 @@ const app = createApp({
   render: () => h(App),
 });
 
-appComponents.forEach((component) => {
-  if (component.__name) {
-    app.component(component.__name, component);
-  }
+Object.keys(appComponents).forEach((name) => {
+  app.component(name, appComponents[name]);
 });
 
 Object.keys(appDirectives).forEach((name) => {

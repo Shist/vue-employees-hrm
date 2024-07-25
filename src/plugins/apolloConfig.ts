@@ -7,7 +7,6 @@ import {
 import { setContext } from "@apollo/client/link/context";
 import useCookies from "@/composables/useCookies";
 import { refreshAccessToken } from "@/utils/handleErrors";
-import { ITokenData } from "@/types/authData";
 
 const httpLink = createHttpLink({
   uri: process.env.VUE_APP_GRAPHQL_URL,
@@ -18,18 +17,13 @@ const authLink = setContext(async (request, { headers }) => {
 
   let accessToken = getToken("accessToken");
 
-  const tokenData: ITokenData | null = accessToken
-    ? JSON.parse(atob(accessToken.split(".")[1]))
-    : null;
-
-  const isTokenValid = tokenData && new Date(tokenData.exp * 1000) > new Date();
   const isAuthRequiredRequest = ![
     "UPDATE_TOKEN",
     "SIGN_IN",
     "SIGN_UP",
   ].includes(`${request.operationName}`);
 
-  if (!isTokenValid && isAuthRequiredRequest) {
+  if (!accessToken && isAuthRequiredRequest) {
     await refreshAccessToken();
 
     accessToken = getToken("accessToken");
