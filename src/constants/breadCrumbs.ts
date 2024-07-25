@@ -1,7 +1,6 @@
 import { ROUTES } from "@/constants/router";
 
 export const SECTIONS_NAMES = {
-  HOME: "Home",
   [ROUTES.SETTINGS.PATH.slice(1)]: "Settings",
   [ROUTES.USERS.PATH.slice(1)]: "Employees",
   [ROUTES.PROJECTS.PATH.slice(1)]: "Projects",

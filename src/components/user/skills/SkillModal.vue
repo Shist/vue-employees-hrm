@@ -25,13 +25,13 @@
             v-model="selectSkill"
             :items="aSkillsItems"
             :label="$t('label.skill')"
-            variant="outlined"
-            class="skill-modal__text-field-wrapper"
             :loading="areAllSkillsLoading"
             :no-data-text="$t('userSkillsPage.noCategoriesMsg')"
             :disabled="
               !!oSkillForModal || areAllSkillsLoading || isAllSkillsError
             "
+            variant="outlined"
+            class="skill-modal__text-field-wrapper"
             hide-details
           />
           <v-select

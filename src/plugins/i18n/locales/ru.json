@@ -16,7 +16,8 @@
     "position": "Должность",
     "skill": "Навык",
     "category": "Категория",
-    "skillMastery": "Уровень владения"
+    "skillMastery": "Уровень владения",
+    "languageProficiency": "Владение языком"
   },
   "button": {
     "createButton": "cоздать",
@@ -53,6 +54,31 @@
     "Skills": "Навыки",
     "Languages": "Языки"
   },
+  "appTabs": {
+    "profile": "Профиль",
+    "skills": "Навыки",
+    "languages": "Языки",
+    "cvs": "Резюме",
+    "details": "Подробности",
+    "projects": "Проекты",
+    "preview": "Просмотр"
+  },
+  "breadcrumbs": {
+    "home": "Главная",
+    "loading": "Загрузка...",
+    "error": "❌ Ошибка загрузки",
+    "Settings": "Настройки",
+    "Employees": "Сотрудники",
+    "Projects": "Проекты",
+    "CVs": "Резюме",
+    "Departments": "Отделы",
+    "Positions": "Должности",
+    "Skills": "Навыки",
+    "Languages": "Языки",
+    "Profile": "Профиль",
+    "Details": "Подробности",
+    "Preview": "Просмотр"
+  },
   "table": {
     "paginationTitle": "Элементов на странице:"
   },
@@ -64,7 +90,8 @@
     "positionName": "Должность",
     "profile": "Профиль",
     "updateUser": "Обновить профиль",
-    "deleteUser": "Удалить профиль"
+    "deleteUser": "Удалить профиль",
+    "noUsers": "Нет доступных пользователей"
   },
   "projectsPage": {
     "name": "Имя",
@@ -86,7 +113,8 @@
     "deleteCv": "Удалить резюме",
     "createModalTitle": "Cоздать резюме",
     "deleteModalTitle": "Удалить резюме",
-    "deleteModalText": "Вы уверены, что хотите удалить резюме {CV} ?"
+    "deleteModalText": "Вы уверены, что хотите удалить резюме {CV} ?",
+    "noCvs": "Нет доступных резюме"
   },
   "departmentsPage": {
     "name": "Имя",
@@ -119,7 +147,7 @@
     "noPosition": "Должность не выбрана"
   },
   "userSkillsPage": {
-    "btnAdd": "Добавить Навык",
+    "btnAdd": "Добавить навык",
     "noSkillsMsg": "Квалификации сотрудника пока что не указаны",
     "addModalTitle": "Добавить навык",
     "updateModalTitle": "Обновить навык",
@@ -138,5 +166,21 @@
       "Other skills": "Другое",
       "Database management system": "Система управления базами данных"
     }
+  },
+  "userLanguagesPage": {
+    "btnAdd": "Добавить язык",
+    "noLanguagesMsg": "Языки сотрудника пока что не указаны",
+    "addModalTitle": "Добавить язык",
+    "updateModalTitle": "Обновить язык",
+    "languageProficiencyNative": {
+      "A1": "A1",
+      "A2": "A2",
+      "B1": "B1",
+      "B2": "B2",
+      "C1": "C1",
+      "C2": "C2",
+      "Native": "Родной"
+    },
+    "noLanguagesData": "Нет доступных языков"
   }
 }

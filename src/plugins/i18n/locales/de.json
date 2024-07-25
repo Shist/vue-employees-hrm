@@ -16,7 +16,8 @@
     "position": "Position",
     "skill": "Fähigkeit",
     "category": "Kategorie",
-    "skillMastery": "Fertigkeitsbeherrschung"
+    "skillMastery": "Fertigkeitsbeherrschung",
+    "languageProficiency": "Sprachkompetenz"
   },
   "button": {
     "createButton": "erstellen",
@@ -53,6 +54,31 @@
     "Skills": "Fähigkeiten",
     "Languages": "Sprachen"
   },
+  "appTabs": {
+    "profile": "Profil",
+    "skills": "Fähigkeiten",
+    "languages": "Sprachen",
+    "cvs": "Lebensläufe",
+    "details": "Einzelheiten",
+    "projects": "Projekte",
+    "preview": "Vorschau"
+  },
+  "breadcrumbs": {
+    "home": "Startseite",
+    "loading": "Laden...",
+    "error": "❌ Ladefehler",
+    "Settings": "Einstellungen",
+    "Employees": "Mitarbeiter",
+    "Projects": "Projekte",
+    "CVs": "Lebensläufe",
+    "Departments": "Abteilungen",
+    "Positions": "Positionen",
+    "Skills": "Fähigkeiten",
+    "Languages": "Sprachen",
+    "Profile": "Profil",
+    "Details": "Einzelheiten",
+    "Preview": "Vorschau"
+  },
   "table": {
     "paginationTitle": "Elemente pro Seite:"
   },
@@ -64,7 +90,8 @@
     "positionName": "Position",
     "profile": "Profil",
     "updateUser": "Profil aktualisieren",
-    "deleteUser": "Profil löschen"
+    "deleteUser": "Profil löschen",
+    "noUsers": "Keine Benutzer verfügbar"
   },
   "projectsPage": {
     "name": "Name",
@@ -86,7 +113,8 @@
     "deleteCv": "Lebenslauf löschen",
     "createModalTitle": "Lebenslauf erstellen",
     "deleteModalTitle": "Lebenslauf löschen",
-    "deleteModalText": "Sind Sie sicher, dass Sie CV {CV} löschen möchten?"
+    "deleteModalText": "Sind Sie sicher, dass Sie CV {CV} löschen möchten?",
+    "noCvs": "Keine Lebensläufe verfügbar"
   },
   "departmentsPage": {
     "name": "Name",
@@ -138,5 +166,21 @@
       "Other skills": "Andere",
       "Database management system": "Datenbankverwaltungssystem"
     }
+  },
+  "userLanguagesPage": {
+    "btnAdd": "Sprache hinzufügen",
+    "noLanguagesMsg": "Noch keine Mitarbeitersprachen angegeben",
+    "addModalTitle": "Sprache hinzufügen",
+    "updateModalTitle": "Sprache aktualisieren",
+    "languageProficiencyNative": {
+      "A1": "A1",
+      "A2": "A2",
+      "B1": "B1",
+      "B2": "B2",
+      "C1": "C1",
+      "C2": "C2",
+      "Native": "Muttersprache"
+    },
+    "noLanguagesData": "Keine Sprachen verfügbar"
   }
 }

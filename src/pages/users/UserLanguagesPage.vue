@@ -14,13 +14,13 @@
         @click="handleOpenCreateModal"
       >
         <v-icon class="user-languages__add-icon">mdi-plus</v-icon>
-        <span>Add language</span>
+        <span>{{ $t("userLanguagesPage.btnAdd") }}</span>
       </v-btn>
       <span
         v-if="!userLanguages?.length"
         class="user-languages__no-languages-label"
       >
-        No employee languages specified yet
+        {{ $t("userLanguagesPage.noLanguagesMsg") }}
       </span>
       <div class="user-languages__languages-wrapper">
         <div
@@ -61,7 +61,11 @@
               <span
                 class="user-languages__language-proficiency"
                 :class="getClassByProficiency(userLanguage.proficiency)"
-                >{{ userLanguage.proficiency }}</span
+                >{{
+                  $t(
+                    `userLanguagesPage.languageProficiencyNative.${userLanguage.proficiency}`
+                  )
+                }}</span
               >
               <span class="user-languages__language-label">{{
                 userLanguage.name
@@ -80,7 +84,7 @@
           class="user-languages__cancel-deletion-btn"
           @click="clearUserDeletionLanguages"
         >
-          Cancel
+          {{ $t("button.cancelButton") }}
         </v-btn>
         <v-btn
           variant="text"
@@ -88,7 +92,9 @@
           class="user-languages__deletion-btn"
           @click="submitUserLanguagesDeletion"
         >
-          <span class="user-languages__deletion-btn-label">Delete</span>
+          <span class="user-languages__deletion-btn-label">{{
+            $t("button.deleteButton")
+          }}</span>
           <span class="user-languages__deletion-btn-num">
             {{ languagesForDeletionAmount }}
           </span>

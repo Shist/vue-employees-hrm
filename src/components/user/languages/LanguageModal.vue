@@ -8,7 +8,11 @@
       opacity="100%"
     >
       <v-card
-        :title="!oLanguageForModal ? 'Add language' : 'Update language'"
+        :title="
+          !oLanguageForModal
+            ? $t('userLanguagesPage.addModalTitle')
+            : $t('userLanguagesPage.updateModalTitle')
+        "
         class="language-modal__card-wrapper"
       >
         <v-btn
@@ -20,19 +24,20 @@
           <v-select
             v-model="selectLanguage"
             :items="aLanguagesItems"
-            label="Language"
-            variant="outlined"
-            class="language-modal__text-field-wrapper"
+            :label="$t('label.language')"
             :loading="areAllLangsLoading"
             :disabled="
               !!oLanguageForModal || areAllLangsLoading || isAllLangsError
             "
+            :no-data-text="$t('userLanguagesPage.noLanguagesData')"
+            variant="outlined"
+            class="language-modal__text-field-wrapper"
             hide-details
           />
           <v-select
             v-model="selectLanguageProficiency"
             :items="aLanguageProficiencies"
-            label="Language proficiency"
+            :label="$t('label.languageProficiency')"
             variant="outlined"
             class="language-modal__text-field-wrapper"
             :disabled="!selectLanguage"
@@ -45,7 +50,7 @@
             @click="closeModal"
             class="language-modal__btn-cancel"
           >
-            Cancel
+            {{ $t("button.cancelButton") }}
           </v-btn>
           <v-btn
             type="submit"
@@ -54,7 +59,7 @@
             class="language-modal__btn-confirm"
             :disabled="isConfirmBtnDisabled"
           >
-            Confirm
+            {{ $t("button.confirmButton") }}
           </v-btn>
         </v-card-actions>
       </v-card>
@@ -64,12 +69,15 @@
 
 <script setup lang="ts">
 import { ref, computed, onUpdated } from "vue";
+import { useI18n } from "vue-i18n";
 import { Proficiency } from "@/types/enums";
 import {
   ILanguagesNamesData,
   IProfileLanguage,
   IAddOrUpdateProfileLanguageInput,
 } from "@/types/pages/users/languages";
+
+const { t } = useI18n({ useScope: "global" });
 
 const props = defineProps<{
   isOpen: boolean;
@@ -127,7 +135,20 @@ const aLanguagesItems = computed(() => {
   return leftUserLanguages.value.map((language) => language.name);
 });
 
-const aLanguageProficiencies = ["A1", "A2", "B1", "B2", "C1", "C2", "Native"];
+const aLanguageProficiencies = computed(() => {
+  return [
+    "A1",
+    "A2",
+    "B1",
+    "B2",
+    "C1",
+    "C2",
+    {
+      title: t("userLanguagesPage.languageProficiencyNative.Native"),
+      value: "Native",
+    },
+  ];
+});
 
 const selectLanguage = ref<string | null>(null);
 const selectLanguageProficiency = ref<Proficiency>(Proficiency.A1);

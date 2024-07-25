@@ -10,28 +10,28 @@
       @click="() => openUserInfoRoute(ROUTES.USER_PROFILE.PATH)"
       class="app-tab"
     >
-      Profile
+      {{ $t("appTabs.profile") }}
     </v-tab>
     <v-tab
       :value="ROUTES.USER_SKILLS.NAME"
       @click="() => openUserInfoRoute(ROUTES.USER_SKILLS.PATH)"
       class="app-tab"
     >
-      Skills
+      {{ $t("appTabs.skills") }}
     </v-tab>
     <v-tab
       :value="ROUTES.USER_LANGUAGES.NAME"
       @click="() => openUserInfoRoute(ROUTES.USER_LANGUAGES.PATH)"
       class="app-tab"
     >
-      Languages
+      {{ $t("appTabs.languages") }}
     </v-tab>
     <v-tab
       :value="ROUTES.USER_CVS.NAME"
       @click="() => openUserInfoRoute(ROUTES.USER_CVS.PATH)"
       class="app-tab"
     >
-      CVs
+      {{ $t("appTabs.cvs") }}
     </v-tab>
   </v-tabs>
   <v-tabs
@@ -45,28 +45,28 @@
       @click="() => openCvInfoRoute(ROUTES.CV_DETAILS.PATH)"
       class="app-tab"
     >
-      Details
+      {{ $t("appTabs.details") }}
     </v-tab>
     <v-tab
       :value="ROUTES.CV_SKILLS.NAME"
       @click="() => openCvInfoRoute(ROUTES.CV_SKILLS.PATH)"
       class="app-tab"
     >
-      Skills
+      {{ $t("appTabs.skills") }}
     </v-tab>
     <v-tab
       :value="ROUTES.CV_PROJECTS.NAME"
       @click="() => openCvInfoRoute(ROUTES.CV_PROJECTS.PATH)"
       class="app-tab"
     >
-      Projects
+      {{ $t("appTabs.projects") }}
     </v-tab>
     <v-tab
       :value="ROUTES.CV_PREVIEW.NAME"
       @click="() => openCvInfoRoute(ROUTES.CV_PREVIEW.PATH)"
       class="app-tab"
     >
-      Preview
+      {{ $t("appTabs.preview") }}
     </v-tab>
   </v-tabs>
 </template>

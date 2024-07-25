@@ -36,9 +36,10 @@
           :search="search"
           :custom-filter="handleTableFilter"
           :items-per-page-text="$t('table.paginationTitle')"
-          class="cvs-page__data-table"
+          :no-data-text="$t('cvsPage.noCvs')"
           :mobile="null"
           :mobile-breakpoint="750"
+          class="cvs-page__data-table"
           hide-details
         >
           <template v-slot:[`item.options`]="{ item }">
@@ -100,6 +101,7 @@ import { ICvsTableData } from "@/types/pages/cvs/table";
 import { ICvsFilterFunction } from "@/types/vuetifyDataTable";
 
 const { t } = useI18n({ useScope: "global" });
+
 const router = useRouter();
 
 const authStore = useAuthStore();
@@ -176,7 +178,7 @@ async function fetchData() {
 }
 
 function checkOwner(cvItemTitle: string, cvUserId: number | null) {
-  if (cvItemTitle === "Details") return false;
+  if (cvItemTitle === t("cvsPage.details")) return false;
   return Number(authStoreUser.value?.id) !== Number(cvUserId);
 }
 

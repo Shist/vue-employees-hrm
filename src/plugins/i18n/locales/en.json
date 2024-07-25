@@ -16,7 +16,8 @@
     "position": "Position",
     "skill": "Skill",
     "category": "Category",
-    "skillMastery": "Skill mastery"
+    "skillMastery": "Skill mastery",
+    "languageProficiency": "Language proficiency"
   },
   "button": {
     "createButton": "create",
@@ -53,6 +54,31 @@
     "Skills": "Skills",
     "Languages": "Languages"
   },
+  "appTabs": {
+    "profile": "Profile",
+    "skills": "Skills",
+    "languages": "Languages",
+    "cvs": "CVs",
+    "details": "Details",
+    "projects": "Projects",
+    "preview": "Preview"
+  },
+  "breadcrumbs": {
+    "home": "Home",
+    "loading": "Loading...",
+    "error": "❌ Loading Error",
+    "Settings": "Settings",
+    "Employees": "Employees",
+    "Projects": "Projects",
+    "CVs": "CVs",
+    "Departments": "Departments",
+    "Positions": "Positions",
+    "Skills": "Skills",
+    "Languages": "Languages",
+    "Profile": "Profile",
+    "Details": "Details",
+    "Preview": "Preview"
+  },
   "table": {
     "paginationTitle": "Items per page:"
   },
@@ -64,7 +90,8 @@
     "positionName": "Position",
     "profile": "Profile",
     "updateUser": "Update user",
-    "deleteUser": "Delete user"
+    "deleteUser": "Delete user",
+    "noUsers": "No users available"
   },
   "projectsPage": {
     "name": "Name",
@@ -86,7 +113,8 @@
     "deleteCv": "Delete CV",
     "createModalTitle": "Create CV",
     "deleteModalTitle": "Delete CV",
-    "deleteModalText": "Are you sure you want to delete CV {CV} ?"
+    "deleteModalText": "Are you sure you want to delete CV {CV} ?",
+    "noCvs": "No CVs available"
   },
   "departmentsPage": {
     "name": "Name",
@@ -138,5 +166,21 @@
       "Other skills": "Other",
       "Database management system": "Database management system"
     }
+  },
+  "userLanguagesPage": {
+    "btnAdd": "Add language",
+    "noLanguagesMsg": "No employee languages specified yet",
+    "addModalTitle": "Add language",
+    "updateModalTitle": "Update language",
+    "languageProficiencyNative": {
+      "A1": "A1",
+      "A2": "A2",
+      "B1": "B1",
+      "B2": "B2",
+      "C1": "C1",
+      "C2": "C2",
+      "Native": "Native"
+    },
+    "noLanguagesData": "No languages available"
   }
 }
