@@ -21,6 +21,7 @@
 
 <script setup lang="ts">
 import { ref, watch } from "vue";
+import { useLocale } from "vuetify";
 import { storeToRefs } from "pinia";
 import { useThemeStore } from "@/store/theme";
 
@@ -29,11 +30,21 @@ const { currTheme } = storeToRefs(useThemeStore());
 const selectTheme = ref(currTheme.value);
 const themeItems = ["Light", "Dark", "Device settings"];
 
-const selectLanguage = ref("English");
-const languageItems = ["English", "Deutsch", "Русский"];
-
 watch(selectTheme, (newValue) => {
   currTheme.value = newValue;
+});
+
+const { current } = useLocale();
+
+const selectLanguage = ref("English");
+const languageItems = [
+  { title: "English", value: "en" },
+  { title: "Deutsch", value: "de" },
+  { title: "Русский", value: "ru" },
+];
+
+watch(selectLanguage, (newValue) => {
+  current.value = newValue;
 });
 </script>
 
