@@ -37,6 +37,7 @@ const selectTheme = ref(currTheme.value);
 const themeItems = ["Light", "Dark", "Device settings"];
 
 const selectLanguage = ref(currLang.value);
+
 const languageItems = ["English", "Deutsch", "Русский"];
 
 watch(selectTheme, (newValue) => {

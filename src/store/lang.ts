@@ -1,11 +1,14 @@
 import { computed, nextTick } from "vue";
 import { defineStore } from "pinia";
+import { useLocale } from "vuetify";
 import { useI18n } from "vue-i18n";
 
 export const useLangStore = defineStore("lang", () => {
   const { locale, availableLocales, setLocaleMessage } = useI18n({
     useScope: "global",
   });
+
+  const { current: vuetifyCurrentLocale } = useLocale();
 
   async function loadLocaleMessages(newLocale: string) {
     let locale;
@@ -59,12 +62,15 @@ export const useLangStore = defineStore("lang", () => {
     await loadLocaleMessages(newLocale);
     if (newLocale === "Deutsch") {
       locale.value = "de";
+      vuetifyCurrentLocale.value = "de";
       localStorage.setItem("language", locale.value);
     } else if (newLocale === "Русский") {
       locale.value = "ru";
+      vuetifyCurrentLocale.value = "ru";
       localStorage.setItem("language", locale.value);
     } else {
       locale.value = "en";
+      vuetifyCurrentLocale.value = "en";
       localStorage.setItem("language", locale.value);
     }
     document.querySelector("html")?.setAttribute("lang", locale.value);
