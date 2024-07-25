@@ -19,29 +19,38 @@
           @click="handleExportPDF"
           :loading="isExportBtnBusy"
         >
-          Export PDF
+          {{ $t("cvsPreviewPage.btnExport") }}
         </v-btn>
       </div>
       <div class="cv-preview__cv-main-info-wrapper">
         <div class="cv-preview__education-and-langauges-wrapper">
           <div class="cv-preview__education-wrapper">
-            <h4 class="cv-preview__education-headline">Education</h4>
+            <h4 class="cv-preview__education-headline">
+              {{ $t("cvsPreviewPage.education") }}
+            </h4>
             <span class="cv-preview__education-info">
               {{ empEducation }}
             </span>
           </div>
           <div class="cv-preview__languages-section-wrapper">
-            <h4 class="cv-preview__languages-headline">Language proficiency</h4>
+            <h4 class="cv-preview__languages-headline">
+              {{ $t("cvsPreviewPage.languageProficiency") }}
+            </h4>
             <ul class="cv-preview__languages-wrapper">
               <li
                 v-for="language in empLanguages"
                 :key="language.name"
                 class="cv-preview__language-info"
               >
-                {{ language.name }} — {{ language.proficiency }}
+                {{ language.name }} —
+                {{
+                  $t(
+                    `userLanguagesPage.languageProficiency.${language.proficiency}`
+                  )
+                }}
               </li>
               <li v-if="!empLanguages.length" class="cv-preview__language-info">
-                No languages specified
+                {{ $t("cvsPreviewPage.noLanguagesMsg") }}
               </li>
             </ul>
           </div>
@@ -62,20 +71,22 @@
               class="cv-preview__skill-category"
             >
               <h4 class="cv-preview__skill-category-headline">
-                {{ sCategory }}
+                {{ $t(`userSkillsPage.skillCategories.${sCategory}`) }}
               </h4>
               <span class="cv-preview__skill-category-skills">
                 {{ aSkillNames.join(", ") }}
               </span>
             </li>
             <li v-if="!empSkills.length" class="cv-preview__no-skills-label">
-              No skills specified
+              {{ $t("cvsPreviewPage.noSkillsMsg") }}
             </li>
           </ul>
         </div>
       </div>
       <div class="cv-preview__emp-projects-wrapper">
-        <h2 class="cv-preview__projects-headline">Projects</h2>
+        <h2 class="cv-preview__projects-headline">
+          {{ $t("cvsPreviewPage.projects") }}
+        </h2>
         <ul class="cv-preview__projects-list-wrapper">
           <li
             v-for="project in empProjects"
@@ -90,7 +101,7 @@
             <div class="cv-preview__project-info-sections-wrapper">
               <div class="cv-preview__project-info-section-wrapper">
                 <h4 class="cv-preview__project-info-section-title">
-                  Project roles
+                  {{ $t("cvsPreviewPage.projectRoles") }}
                 </h4>
                 <span
                   v-if="project.roles.length"
@@ -99,12 +110,12 @@
                   {{ project.roles.join(", ") }}
                 </span>
                 <span v-else class="cv-preview__project-info-section-label">
-                  No roles specified for this project
+                  {{ $t("cvsPreviewPage.noProjectRolesMsg") }}
                 </span>
               </div>
               <div class="cv-preview__project-info-section-wrapper">
                 <h4 class="cv-preview__project-info-section-title">
-                  Responsibilities & achievements
+                  {{ $t("cvsPreviewPage.responsibilitiesAndAchievements") }}
                 </h4>
                 <span
                   v-if="project.responsibilities.length"
@@ -113,11 +124,13 @@
                   {{ project.responsibilities.join(", ") }}
                 </span>
                 <span v-else class="cv-preview__project-info-section-label">
-                  No responsibilities or achievements specified for this project
+                  {{ $t("cvsPreviewPage.noResponsibilitiesAndAchievements") }}
                 </span>
               </div>
               <div class="cv-preview__project-info-section-wrapper">
-                <h4 class="cv-preview__project-info-section-title">Period</h4>
+                <h4 class="cv-preview__project-info-section-title">
+                  {{ $t("cvsPreviewPage.period") }}
+                </h4>
                 <span class="cv-preview__project-info-section-label">
                   {{ new Date(project.start_date).toLocaleDateString() }} —
                   {{
@@ -130,7 +143,7 @@
             </div>
           </li>
           <li v-if="!empProjects.length" class="cv-preview__no-projects-label">
-            No projects specified
+            {{ $t("cvsPreviewPage.noProjectsMsg") }}
           </li>
         </ul>
       </div>
@@ -139,8 +152,9 @@
 </template>
 
 <script setup lang="ts">
-import { ref, reactive, computed, onMounted } from "vue";
+import { ref, reactive, computed, onMounted, watch } from "vue";
 import { useRoute } from "vue-router";
+import { useI18n } from "vue-i18n";
 import useToast from "@/composables/useToast";
 import useErrorState from "@/composables/useErrorState";
 import { getCvPreviewDataById, exportPDF } from "@/services/cvs/preview";
@@ -153,6 +167,8 @@ import {
   IPreviewSkillCategoriesMap,
 } from "@/types/pages/cvs/preview";
 import { ICategorySkillData } from "@/types/skillsStructures";
+
+const { t, locale } = useI18n({ useScope: "global" });
 
 const cvDocumentContent = ref<HTMLDivElement>();
 const isExportBtnBusy = ref(false);
@@ -187,9 +203,9 @@ const cvTitle = computed(() => {
   return empEmail.value;
 });
 
-const empPosition = ref("Position is not specified");
+const empPosition = ref(t("cvsPreviewPage.noPositionMsg"));
 
-const empEducation = ref("Education is not specified");
+const empEducation = ref(t("cvsPreviewPage.noEducationMsg"));
 
 const empLanguages = reactive<ICvPreviewLanguage[]>([]);
 
@@ -233,6 +249,12 @@ const previewSkillCategoriesMap = computed(() => {
 const empProjects = reactive<ICvPreviewProject[]>([]);
 
 onMounted(() => {
+  fetchData();
+});
+
+watch(locale, () => {
+  empEducation.value = t("cvsPreviewPage.noEducationMsg");
+  empPosition.value = t("cvsPreviewPage.noPositionMsg");
   fetchData();
 });
 

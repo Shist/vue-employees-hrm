@@ -7,7 +7,10 @@
       scrim="var(--color-modal-overlay)"
       opacity="100%"
     >
-      <v-card title="Remove project" class="remove-project-modal__card-wrapper">
+      <v-card
+        :title="$t('cvsProjectsPage.removeProjectModalTitle')"
+        class="remove-project-modal__card-wrapper"
+      >
         <v-btn
           icon="mdi-close"
           class="remove-project-modal__cross-btn"
@@ -15,9 +18,11 @@
         ></v-btn>
         <v-card-item class="remove-project-modal__message-wrapper">
           <span>
-            Are you sure you want to remove project
-            <b>{{ projectName }}</b>
-            from CV?
+            {{
+              $t("cvsProjectsPage.removeProjectModalText", {
+                projectName: projectName,
+              })
+            }}
           </span>
         </v-card-item>
         <v-card-actions>
@@ -26,7 +31,7 @@
             @click="closeModal"
             class="remove-project-modal__btn-cancel"
           >
-            Cancel
+            {{ $t("button.cancelButton") }}
           </v-btn>
           <v-btn
             type="submit"
@@ -34,7 +39,7 @@
             @click="makeDeleteOperation"
             class="remove-project-modal__btn-confirm"
           >
-            Confirm
+            {{ $t("button.confirmButton") }}
           </v-btn>
         </v-card-actions>
       </v-card>

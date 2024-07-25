@@ -87,7 +87,7 @@ const projectMenuItems = computed(() => {
   return [
     t(`projectsPage.project`),
     t(`projectsPage.updateProject`),
-    t(`projectsPage.deleteProject`),
+    t(`projectsPage.removeProject`),
   ];
 });
 

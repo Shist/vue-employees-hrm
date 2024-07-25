@@ -17,7 +17,8 @@
     "skill": "Skill",
     "category": "Category",
     "skillMastery": "Skill mastery",
-    "languageProficiency": "Language proficiency"
+    "languageProficiency": "Language proficiency",
+    "project": "Project"
   },
   "button": {
     "createButton": "create",
@@ -103,7 +104,7 @@
     "teamSize": "Team Size",
     "project": "Project",
     "updateProject": "Update project",
-    "deleteProject": "Delete project",
+    "removeProject": "Remove project",
     "noProjects": "No projects available"
   },
   "cvsPage": {
@@ -174,7 +175,7 @@
     "noLanguagesMsg": "No employee languages specified yet",
     "addModalTitle": "Add language",
     "updateModalTitle": "Update language",
-    "languageProficiencyNative": {
+    "languageProficiency": {
       "A1": "A1",
       "A2": "A2",
       "B1": "B1",
@@ -186,6 +187,25 @@
     "noLanguagesData": "No languages available"
   },
   "cvsProjectsPage": {
-    "btnAdd": "Add project to CV"
+    "btnAdd": "Add project to CV",
+    "addProjectModalTitle": "Add project to CV",
+    "removeProjectModalTitle": "Remove project",
+    "removeProjectModalText": "Are you sure you want to remove project {projectName} from CV?"
+  },
+  "cvsPreviewPage": {
+    "btnExport": "Export PDF",
+    "education": "Education",
+    "noEducationMsg": "Education is not specified",
+    "noPositionMsg": "Position is not specified",
+    "languageProficiency": "Language proficiency",
+    "noLanguagesMsg": "No languages specified",
+    "noSkillsMsg": "No skills specified",
+    "projects": "Projects",
+    "noProjectsMsg": "No projects specified",
+    "projectRoles": "Project roles",
+    "noProjectRolesMsg": "No roles specified for this project",
+    "responsibilitiesAndAchievements": "Responsibilities & achievements",
+    "noResponsibilitiesAndAchievements": "No responsibilities or achievements specified for this project",
+    "period": "Period"
   }
 }

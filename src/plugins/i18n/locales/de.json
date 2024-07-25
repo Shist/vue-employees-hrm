@@ -17,7 +17,8 @@
     "skill": "Fähigkeit",
     "category": "Kategorie",
     "skillMastery": "Fertigkeitsbeherrschung",
-    "languageProficiency": "Sprachkompetenz"
+    "languageProficiency": "Sprachkompetenz",
+    "project": "Projekte"
   },
   "button": {
     "createButton": "erstellen",
@@ -103,7 +104,7 @@
     "teamSize": "Teamgröße",
     "project": "Projekt",
     "updateProject": "Projekt aktualisieren",
-    "deleteProject": "Projekt löschen",
+    "removeProject": "Projekt löschen",
     "noProjects": "Keine Projekte verfügbar"
   },
   "cvsPage": {
@@ -174,7 +175,7 @@
     "noLanguagesMsg": "Noch keine Mitarbeitersprachen angegeben",
     "addModalTitle": "Sprache hinzufügen",
     "updateModalTitle": "Sprache aktualisieren",
-    "languageProficiencyNative": {
+    "languageProficiency": {
       "A1": "A1",
       "A2": "A2",
       "B1": "B1",
@@ -186,6 +187,25 @@
     "noLanguagesData": "Keine Sprachen verfügbar"
   },
   "cvsProjectsPage": {
-    "btnAdd": "Projekt hinzufügen"
+    "btnAdd": "Projekt hinzufügen",
+    "addProjectModalTitle": "Projekt hinzufügen",
+    "removeProjectModalTitle": "Projekt löschen",
+    "removeProjectModalText": "Sind Sie sicher, dass Sie das Projekt {projectName} löschen möchten?"
+  },
+  "cvsPreviewPage": {
+    "btnExport": "PDF exportieren",
+    "education": "Ausbildung",
+    "noEducationMsg": "Ausbildung ist nicht angegeben",
+    "noPositionMsg": "Die Position ist nicht angegeben",
+    "languageProficiency": "Sprachkompetenz",
+    "noLanguagesMsg": "Noch keine Mitarbeitersprachen angegeben",
+    "noSkillsMsg": "Noch keine Mitarbeiterfähigkeiten angegeben",
+    "projects": "Projekte",
+    "noProjectsMsg": "Keine Projekte angegeben",
+    "projectRoles": "Projektrollen",
+    "noProjectRolesMsg": "Für dieses Projekt sind keine Rollen angegeben",
+    "responsibilitiesAndAchievements": "Verantwortlichkeiten und Erfolge",
+    "noResponsibilitiesAndAchievements": "Für dieses Projekt sind keine Verantwortlichkeiten oder Erfolge angegeben",
+    "period": "Zeitraum"
   }
 }

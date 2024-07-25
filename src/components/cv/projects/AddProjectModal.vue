@@ -7,7 +7,10 @@
       scrim="var(--color-modal-overlay)"
       opacity="100%"
     >
-      <v-card title="Add project to CV" class="add-project-modal__card-wrapper">
+      <v-card
+        :title="$t('cvsProjectsPage.addProjectModalTitle')"
+        class="add-project-modal__card-wrapper"
+      >
         <v-btn
           icon="mdi-close"
           class="add-project-modal__cross-btn"
@@ -17,7 +20,7 @@
           <v-select
             v-model="selectProject"
             :items="aProjectsItems"
-            label="Project"
+            :label="$t('label.project')"
             variant="outlined"
             class="add-project-modal__text-field-wrapper"
             :loading="areAllProjectsLoading"
@@ -31,7 +34,7 @@
             @click="closeModal"
             class="add-project-modal__btn-cancel"
           >
-            Cancel
+            {{ $t("button.cancelButton") }}
           </v-btn>
           <v-btn
             type="submit"
@@ -40,7 +43,7 @@
             class="add-project-modal__btn-confirm"
             :disabled="isConfirmBtnDisabled"
           >
-            Confirm
+            {{ $t("button.confirmButton") }}
           </v-btn>
         </v-card-actions>
       </v-card>

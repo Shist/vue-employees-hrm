@@ -63,7 +63,7 @@
                 :class="getClassByProficiency(userLanguage.proficiency)"
                 >{{
                   $t(
-                    `userLanguagesPage.languageProficiencyNative.${userLanguage.proficiency}`
+                    `userLanguagesPage.languageProficiency.${userLanguage.proficiency}`
                   )
                 }}</span
               >

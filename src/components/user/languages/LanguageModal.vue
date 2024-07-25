@@ -144,7 +144,7 @@ const aLanguageProficiencies = computed(() => {
     "C1",
     "C2",
     {
-      title: t("userLanguagesPage.languageProficiencyNative.Native"),
+      title: t("userLanguagesPage.languageProficiency.Native"),
       value: "Native",
     },
   ];

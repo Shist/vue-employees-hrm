@@ -17,7 +17,8 @@
     "skill": "Навык",
     "category": "Категория",
     "skillMastery": "Уровень владения",
-    "languageProficiency": "Владение языком"
+    "languageProficiency": "Владение языком",
+    "project": "Проект"
   },
   "button": {
     "createButton": "cоздать",
@@ -103,7 +104,7 @@
     "teamSize": "Размер Команды",
     "project": "Детали проекта",
     "updateProject": "Обновить проект",
-    "deleteProject": "Удалить проект",
+    "removeProject": "Удалить проект",
     "noProjects": "Нет доступных проектов"
   },
   "cvsPage": {
@@ -174,7 +175,7 @@
     "noLanguagesMsg": "Языки сотрудника пока что не указаны",
     "addModalTitle": "Добавить язык",
     "updateModalTitle": "Обновить язык",
-    "languageProficiencyNative": {
+    "languageProficiency": {
       "A1": "A1",
       "A2": "A2",
       "B1": "B1",
@@ -186,6 +187,25 @@
     "noLanguagesData": "Нет доступных языков"
   },
   "cvsProjectsPage": {
-    "btnAdd": "Добавить проект"
+    "btnAdd": "Добавить проект",
+    "addProjectModalTitle": "Добавить проект",
+    "removeProjectModalTitle": "Удалить проект",
+    "removeProjectModalText": "Вы уверены, что хотите удалить проект {projectName}?"
+  },
+  "cvsPreviewPage": {
+    "btnExport": "Экспорт PDF",
+    "education": "Образование",
+    "noEducationMsg": "Образование сотрудника не указано",
+    "noPositionMsg": "Должность сотрудника не указана",
+    "languageProficiency": "Владение языком",
+    "noLanguagesMsg": "Языки сотрудника пока что не указаны",
+    "noSkillsMsg": "Навыки сотрудника пока что не указаны",
+    "projects": "Проекты",
+    "noProjectsMsg": "Проекты сотрудника пока что не указаны",
+    "projectRoles": "Должность на проекте",
+    "noProjectRolesMsg": "Должность сотрудника на проекте пока что не указана",
+    "responsibilitiesAndAchievements": "Обязанности и достижения",
+    "noResponsibilitiesAndAchievements": "Обязанности и достижения сотрудника на проекте пока что не указаны",
+    "period": "Период"
   }
 }
