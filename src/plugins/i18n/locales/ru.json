@@ -23,7 +23,8 @@
     "createButton": "cоздать",
     "cancelButton": "отмена",
     "confirmButton": "подтвердить",
-    "deleteButton": "удалить"
+    "deleteButton": "удалить",
+    "updateButton": "обновить"
   },
   "appHeader": {
     "btnLogin": "войти",
@@ -102,7 +103,8 @@
     "teamSize": "Размер Команды",
     "project": "Детали проекта",
     "updateProject": "Обновить проект",
-    "deleteProject": "Удалить проект"
+    "deleteProject": "Удалить проект",
+    "noProjects": "Нет доступных проектов"
   },
   "cvsPage": {
     "createButton": "cоздать резюме",
@@ -182,5 +184,8 @@
       "Native": "Родной"
     },
     "noLanguagesData": "Нет доступных языков"
+  },
+  "cvsProjectsPage": {
+    "btnAdd": "Добавить проект"
   }
 }

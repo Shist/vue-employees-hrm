@@ -25,6 +25,7 @@
           :items-per-page-text="$t('table.paginationTitle')"
           :mobile="null"
           :mobile-breakpoint="1050"
+          :no-data-text="$t('projectsPage.noProjects')"
           class="projects-page__data-table"
           hide-details
         >

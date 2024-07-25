@@ -23,7 +23,8 @@
     "createButton": "create",
     "cancelButton": "cancel",
     "confirmButton": "confirm",
-    "deleteButton": "delete"
+    "deleteButton": "delete",
+    "updateButton": "update"
   },
   "appHeader": {
     "btnLogin": "login",
@@ -102,7 +103,8 @@
     "teamSize": "Team Size",
     "project": "Project",
     "updateProject": "Update project",
-    "deleteProject": "Delete project"
+    "deleteProject": "Delete project",
+    "noProjects": "No projects available"
   },
   "cvsPage": {
     "createButton": "create cv",
@@ -182,5 +184,8 @@
       "Native": "Native"
     },
     "noLanguagesData": "No languages available"
+  },
+  "cvsProjectsPage": {
+    "btnAdd": "Add project to CV"
   }
 }

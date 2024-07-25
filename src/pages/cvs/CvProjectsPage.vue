@@ -9,7 +9,7 @@
       <div class="cv-projects__search-create-controls-wrapper">
         <v-text-field
           v-model="search"
-          label="Search"
+          :placeholder="$t('placeholder.search')"
           prepend-inner-icon="mdi-magnify"
           variant="outlined"
           density="compact"
@@ -27,7 +27,7 @@
           @click="handleOpenCreateModal"
           :loading="areCvProjectsLoading"
         >
-          Add project to CV
+          {{ $t("cvsProjectsPage.btnAdd") }}
         </v-btn>
       </div>
       <v-skeleton-loader type="table" :loading="areCvProjectsLoading">
@@ -39,6 +39,7 @@
           class="cv-projects__data-table"
           :mobile="null"
           :mobile-breakpoint="1000"
+          :no-data-text="$t('projectsPage.noProjects')"
           hide-details
         >
           <template v-slot:[`item.options`]="{ item }">

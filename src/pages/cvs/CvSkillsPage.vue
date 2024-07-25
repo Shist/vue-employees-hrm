@@ -14,10 +14,10 @@
         @click="handleOpenCreateModal"
       >
         <v-icon class="cv-skills__add-icon">mdi-plus</v-icon>
-        <span>Add skill</span>
+        <span>{{ $t("userSkillsPage.btnAdd") }}</span>
       </v-btn>
       <span v-if="!cvSkills?.length" class="cv-skills__no-skills-label">
-        No CV skills specified yet
+        {{ $t("userSkillsPage.noSkillsMsg") }}
       </span>
       <SkillsCategory
         v-for="(aSkills, sCategory) in skillCategoriesMap"
@@ -37,7 +37,7 @@
           class="cv-skills__cancel-deletion-btn"
           @click="clearCvDeletionSkills"
         >
-          Cancel
+          {{ $t("button.cancelButton") }}
         </v-btn>
         <v-btn
           variant="text"
@@ -45,7 +45,9 @@
           class="cv-skills__deletion-btn"
           @click="submitCvSkillsDeletion"
         >
-          <span class="cv-skills__deletion-btn-label">Delete</span>
+          <span class="cv-skills__deletion-btn-label">{{
+            $t("button.deleteButton")
+          }}</span>
           <span class="cv-skills__deletion-btn-num">
             {{ skillsForDeletionAmount }}
           </span>

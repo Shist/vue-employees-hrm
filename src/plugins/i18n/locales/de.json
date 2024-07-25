@@ -23,7 +23,8 @@
     "createButton": "erstellen",
     "cancelButton": "stornieren",
     "confirmButton": "bestätigen",
-    "deleteButton": "delete"
+    "deleteButton": "delete",
+    "updateButton": "aktualisieren"
   },
   "appHeader": {
     "btnLogin": "einloggen",
@@ -102,7 +103,8 @@
     "teamSize": "Teamgröße",
     "project": "Projekt",
     "updateProject": "Projekt aktualisieren",
-    "deleteProject": "Projekt löschen"
+    "deleteProject": "Projekt löschen",
+    "noProjects": "Keine Projekte verfügbar"
   },
   "cvsPage": {
     "createButton": "lebenslauf erstellen",
@@ -182,5 +184,8 @@
       "Native": "Muttersprache"
     },
     "noLanguagesData": "Keine Sprachen verfügbar"
+  },
+  "cvsProjectsPage": {
+    "btnAdd": "Projekt hinzufügen"
   }
 }

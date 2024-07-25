@@ -8,7 +8,11 @@
       opacity="100%"
     >
       <v-card
-        :title="!oSkillForModal ? 'Add skill' : 'Update skill'"
+        :title="
+          !oSkillForModal
+            ? $t('userSkillsPage.addModalTitle')
+            : $t('userSkillsPage.updateModalTitle')
+        "
         class="skill-modal__card-wrapper"
       >
         <v-btn
@@ -20,32 +24,33 @@
           <v-select
             v-model="selectSkill"
             :items="aSkillsItems"
-            label="Skill"
+            :label="$t('label.skill')"
+            :loading="areAllSkillsLoading"
+            :no-data-text="$t('userSkillsPage.noCategoriesMsg')"
             variant="outlined"
             class="skill-modal__text-field-wrapper"
-            :loading="areAllSkillsLoading"
+            hide-details
             :disabled="
               !!oSkillForModal || areAllSkillsLoading || isAllSkillsError
             "
-            hide-details
           />
           <v-select
             v-model="selectCategory"
             :items="aSkillCategoriesItems"
-            label="Category"
+            :label="$t('label.category')"
             variant="outlined"
             class="skill-modal__text-field-wrapper"
-            disabled
             hide-details
+            disabled
           />
           <v-select
             v-model="selectSkillMastery"
             :items="aSkillMasteries"
-            label="Skill mastery"
+            :label="$t('label.skillMastery')"
             variant="outlined"
             class="skill-modal__text-field-wrapper"
-            :disabled="!selectSkill"
             hide-details
+            :disabled="!selectSkill"
           />
         </v-card-item>
         <v-card-actions>
@@ -54,7 +59,7 @@
             @click="closeModal"
             class="skill-modal__btn-cancel"
           >
-            Cancel
+            {{ $t("button.cancelButton") }}
           </v-btn>
           <v-btn
             type="submit"
@@ -63,7 +68,7 @@
             class="skill-modal__btn-confirm"
             :disabled="isConfirmBtnDisabled"
           >
-            Confirm
+            {{ $t("button.confirmButton") }}
           </v-btn>
         </v-card-actions>
       </v-card>
@@ -73,9 +78,13 @@
 
 <script setup lang="ts">
 import { ref, computed, watch, onUpdated } from "vue";
+import { useI18n } from "vue-i18n";
 import { Mastery } from "@/types/enums";
 import { ISkill, ISkillsData } from "@/types/skillsStructures";
 import { IAddOrUpdateCvSkillInput } from "@/types/pages/cvs/skills";
+import handleCategoryNames from "@/utils/handleCategoryName";
+
+const { t } = useI18n({ useScope: "global" });
 
 const props = defineProps<{
   isOpen: boolean;
@@ -137,17 +146,24 @@ const aSkillCategoriesItems = computed(() => {
   return [...categoriesSet];
 });
 
-const aSkillMasteries = [
-  "Novice",
-  "Advanced",
-  "Competent",
-  "Proficient",
-  "Expert",
-];
+const aSkillMasteries = computed(() => {
+  return [
+    { title: t("userSkillsPage.skillMasteries.Novice"), value: "Novice" },
+    { title: t("userSkillsPage.skillMasteries.Advanced"), value: "Advanced" },
+    { title: t("userSkillsPage.skillMasteries.Competent"), value: "Competent" },
+    {
+      title: t("userSkillsPage.skillMasteries.Proficient"),
+      value: "Proficient",
+    },
+    { title: t("userSkillsPage.skillMasteries.Expert"), value: "Expert" },
+  ];
+});
 
 const selectSkill = ref<string | null>(null);
 const selectCategory = ref<string | null>(null);
-const selectSkillMastery = ref<Mastery>(Mastery.Novice);
+const selectSkillMastery = ref<Mastery | string>(
+  t(`userSkillsPage.skillMasteries.${Mastery.Novice}`)
+);
 
 onUpdated(() => {
   selectSkill.value = props.oSkillForModal?.name || null;
@@ -157,14 +173,18 @@ onUpdated(() => {
 
 watch(selectSkill, () => {
   const skillCategory = getCategoryBySkill(`${selectSkill.value}`);
-  selectCategory.value = skillCategory ? skillCategory : null;
+  selectCategory.value = skillCategory
+    ? t(`userSkillsPage.skillCategories.${skillCategory}`)
+    : null;
 });
 
 function makeCreateOrUpdateOperation() {
+  const translatedCategory = handleCategoryNames(selectCategory.value);
+
   const skillInputObj: IAddOrUpdateCvSkillInput = {
     cvId: Number(props.cvId),
     name: `${selectSkill.value}`,
-    category: selectCategory.value,
+    category: translatedCategory,
     mastery: selectSkillMastery.value,
   };
 

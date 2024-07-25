@@ -27,12 +27,12 @@
             :label="$t('label.skill')"
             :loading="areAllSkillsLoading"
             :no-data-text="$t('userSkillsPage.noCategoriesMsg')"
-            :disabled="
-              !!oSkillForModal || areAllSkillsLoading || isAllSkillsError
-            "
             variant="outlined"
             class="skill-modal__text-field-wrapper"
             hide-details
+            :disabled="
+              !!oSkillForModal || areAllSkillsLoading || isAllSkillsError
+            "
           />
           <v-select
             v-model="selectCategory"
@@ -40,8 +40,8 @@
             :label="$t('label.category')"
             variant="outlined"
             class="skill-modal__text-field-wrapper"
-            disabled
             hide-details
+            disabled
           />
           <v-select
             v-model="selectSkillMastery"
@@ -49,8 +49,8 @@
             :label="$t('label.skillMastery')"
             variant="outlined"
             class="skill-modal__text-field-wrapper"
-            :disabled="!selectSkill"
             hide-details
+            :disabled="!selectSkill"
           />
         </v-card-item>
         <v-card-actions>
@@ -185,12 +185,12 @@ watch(selectSkill, () => {
 });
 
 function makeCreateOrUpdateOperation() {
-  const correctCategory = handleCategoryNames(selectCategory.value);
+  const translatedCategory = handleCategoryNames(selectCategory.value);
 
   const skillInputObj: IAddOrUpdateProfileSkillInput = {
     userId: Number(props.userId),
     name: `${selectSkill.value}`,
-    category: correctCategory,
+    category: translatedCategory,
     mastery: selectSkillMastery.value,
   };
 
