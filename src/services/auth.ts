@@ -43,6 +43,6 @@ export const updateAccessToken = async () => {
 
     return response.data.updateToken.access_token;
   } catch (error: unknown) {
-    throw new Error("Unauthorized");
+    throw getDetailedError(error);
   }
 };
