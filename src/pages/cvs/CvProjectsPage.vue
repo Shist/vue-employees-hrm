@@ -36,7 +36,6 @@
           :items="cvProjects"
           :search="search"
           :custom-filter="handleTableFilter"
-          :items-per-page-text="$t('table.paginationTitle')"
           :mobile="null"
           :mobile-breakpoint="1000"
           :no-data-text="$t('projectsPage.noProjects')"

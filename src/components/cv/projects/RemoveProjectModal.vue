@@ -105,7 +105,7 @@ function closeModal() {
     }
     .remove-project-modal__btn-cancel {
       padding: 6px;
-      max-width: 100px;
+      max-width: 150px;
       width: 100%;
       color: var(--color-btn-gray-text);
       background-color: var(--color-wrapper-bg);
@@ -118,7 +118,7 @@ function closeModal() {
     }
     .remove-project-modal__btn-confirm {
       padding: 6px;
-      max-width: 100px;
+      max-width: 150px;
       width: 100%;
       color: var(--color-btn-text);
       background-color: var(--color-btn-bg);

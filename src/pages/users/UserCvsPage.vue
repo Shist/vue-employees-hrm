@@ -36,7 +36,6 @@
           :items="userCvs"
           :search="search"
           :class="{ 'user-cvs__data-table': true }"
-          :items-per-page-text="$t('table.paginationTitle')"
           :no-data-text="$t('cvsPage.noCvs')"
           :mobile="null"
           :mobile-breakpoint="750"

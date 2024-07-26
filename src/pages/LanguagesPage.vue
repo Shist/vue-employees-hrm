@@ -22,7 +22,6 @@
           :items="languages"
           :search="search"
           :custom-filter="handleTableFilter"
-          :items-per-page-text="$t('table.paginationTitle')"
           :mobile="null"
           :mobile-breakpoint="600"
           :no-data-text="$t('languagesPage.noLanguages')"

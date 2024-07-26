@@ -431,7 +431,7 @@ function submitUserSkillsDeletion() {
       );
       .user-skills__cancel-deletion-btn {
         padding: 6px;
-        max-width: 100px;
+        max-width: 150px;
         width: 100%;
         color: var(--color-btn-gray-text);
         background-color: var(--color-wrapper-bg);
@@ -444,7 +444,7 @@ function submitUserSkillsDeletion() {
       }
       .user-skills__deletion-btn {
         padding: 6px;
-        max-width: 120px;
+        max-width: 150px;
         width: 100%;
         background-color: var(--color-btn-bg);
         border-radius: 0;

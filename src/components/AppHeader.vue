@@ -62,7 +62,7 @@
           width="130px"
           color="var(--color-header-bg)"
         />
-        <v-menu max-width="150px" rounded>
+        <v-menu max-width="200px" rounded>
           <template v-slot:activator="{ props }">
             <v-btn icon v-bind="props">
               <v-avatar color="var(--color-text-red)" size="default">
@@ -79,16 +79,13 @@
             </v-btn>
           </template>
           <v-card>
-            <v-card-text
-              v-if="user"
-              class="d-flex flex-lg-column flex-wrap align-start"
-            >
+            <v-card-text v-if="user" class="d-flex flex-column align-start">
               <v-btn
                 v-for="item in profileMenu"
                 :key="item.title"
                 :prepend-icon="item.icon"
                 variant="text"
-                class="mb-1 pl-2"
+                class="mb-1 pl-2 w-100 justify-start"
                 router
                 :to="
                   item.title === $t(`appHeader.btnProfile`)
@@ -98,12 +95,12 @@
               >
                 {{ item.title }}
               </v-btn>
-              <v-divider class="my-3" />
+              <v-divider class="my-2 grey-lighten-1 w-100" />
               <v-btn
                 @click="handleLogout"
                 prepend-icon="mdi-logout"
                 variant="text"
-                class="pl-2"
+                class="pl-2 w-100 justify-start"
               >
                 {{ $t("appHeader.btnLogout") }}
               </v-btn>

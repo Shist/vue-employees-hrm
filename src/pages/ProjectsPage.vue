@@ -22,9 +22,8 @@
           :items="projects"
           :search="search"
           :custom-filter="handleTableFilter"
-          :items-per-page-text="$t('table.paginationTitle')"
           :mobile="null"
-          :mobile-breakpoint="1050"
+          :mobile-breakpoint="1070"
           :no-data-text="$t('projectsPage.noProjects')"
           class="projects-page__data-table"
           hide-details

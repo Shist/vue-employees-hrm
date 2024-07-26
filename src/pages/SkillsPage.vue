@@ -22,7 +22,6 @@
           :items="skills"
           :search="search"
           :custom-filter="handleTableFilter"
-          :items-per-page-text="$t('table.paginationTitle')"
           :mobile="null"
           :mobile-breakpoint="550"
           :no-data-text="$t('skillsPage.noSkills')"

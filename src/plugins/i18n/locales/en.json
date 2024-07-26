@@ -81,9 +81,6 @@
     "Details": "Details",
     "Preview": "Preview"
   },
-  "table": {
-    "paginationTitle": "Items per page:"
-  },
   "theme": {
     "Light": "Light",
     "Dark": "Dark",

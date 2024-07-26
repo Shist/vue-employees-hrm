@@ -22,7 +22,6 @@
           :items="users"
           :search="search"
           :custom-filter="handleTableFilter"
-          :items-per-page-text="$t('table.paginationTitle')"
           :no-data-text="$t('usersPage.noUsers')"
           :mobile="null"
           :mobile-breakpoint="900"

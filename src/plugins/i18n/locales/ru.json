@@ -81,9 +81,6 @@
     "Details": "Подробности",
     "Preview": "Просмотр"
   },
-  "table": {
-    "paginationTitle": "Элементов на странице:"
-  },
   "theme": {
     "Light": "Светлая",
     "Dark": "Тёмная",
