@@ -34,82 +34,84 @@
         color="var(--color-header-bg)"
         :style="{ paddingRight: scrollbarWidth }"
       >
-        <v-app-bar-nav-icon
-          @click="handleNavigationShow"
-          color="var(--color-text-red)"
-        />
-        <v-spacer />
-        <v-select
-          variant="plain"
-          :items="languages"
-          v-model="language"
-          class="toolbar__select-lang text-white"
-          hide-details
-        >
-          <template v-slot:prepend-inner>
-            <v-icon style="color: #767676; margin-right: 5px">mdi-web</v-icon>
-          </template>
-          <template v-slot:item="{ props, item }">
-            <v-list-item v-bind="props" :title="item.raw.value" />
-          </template>
-        </v-select>
-        <p v-if="user?.email" class="toolbar__email text-white">
-          {{ userHeaderName }}
-        </p>
-        <v-skeleton-loader
-          v-else
-          type="text"
-          width="130px"
-          color="var(--color-header-bg)"
-        />
-        <v-menu max-width="150px" rounded>
-          <template v-slot:activator="{ props }">
-            <v-btn icon v-bind="props">
-              <v-avatar color="var(--color-text-red)" size="default">
-                <v-img
-                  v-if="user?.avatar"
-                  alt="Avatar"
-                  :src="user.avatar || undefined"
-                />
-                <p v-else-if="user?.email" class="toolbar__name">
-                  {{ userInitials }}
-                </p>
-                <v-skeleton-loader v-else type="avatar" />
-              </v-avatar>
-            </v-btn>
-          </template>
-          <v-card>
-            <v-card-text
-              v-if="user"
-              class="d-flex flex-lg-column flex-wrap align-start"
-            >
-              <v-btn
-                v-for="item in profileMenu"
-                :key="item.title"
-                :prepend-icon="item.icon"
-                variant="text"
-                class="mb-1 pl-2"
-                router
-                :to="
-                  item.title === 'Profile'
-                    ? `${item.link}/${user.id}`
-                    : item.link
-                "
-              >
-                {{ item.title }}
+        <div class="toolbar__content-wrapper">
+          <v-app-bar-nav-icon
+            @click="handleNavigationShow"
+            color="var(--color-text-red)"
+          />
+          <v-spacer />
+          <v-select
+            variant="plain"
+            :items="languages"
+            v-model="language"
+            class="toolbar__select-lang text-white"
+            hide-details
+          >
+            <template v-slot:prepend-inner>
+              <v-icon style="color: #767676; margin-right: 5px">mdi-web</v-icon>
+            </template>
+            <template v-slot:item="{ props, item }">
+              <v-list-item v-bind="props" :title="item.raw.value" />
+            </template>
+          </v-select>
+          <p v-if="user?.email" class="toolbar__email text-white">
+            {{ userHeaderName }}
+          </p>
+          <v-skeleton-loader
+            v-else
+            type="text"
+            width="130px"
+            color="var(--color-header-bg)"
+          />
+          <v-menu max-width="150px" rounded>
+            <template v-slot:activator="{ props }">
+              <v-btn icon v-bind="props">
+                <v-avatar color="var(--color-text-red)" size="default">
+                  <v-img
+                    v-if="user?.avatar"
+                    alt="Avatar"
+                    :src="user.avatar || undefined"
+                  />
+                  <p v-else-if="user?.email" class="toolbar__name">
+                    {{ userInitials }}
+                  </p>
+                  <v-skeleton-loader v-else type="avatar" />
+                </v-avatar>
               </v-btn>
-              <v-divider class="my-3" />
-              <v-btn
-                @click="handleLogout"
-                prepend-icon="mdi-logout"
-                variant="text"
-                class="pl-2"
+            </template>
+            <v-card>
+              <v-card-text
+                v-if="user"
+                class="d-flex flex-lg-column flex-wrap align-start"
               >
-                Logout
-              </v-btn>
-            </v-card-text>
-          </v-card>
-        </v-menu>
+                <v-btn
+                  v-for="item in profileMenu"
+                  :key="item.title"
+                  :prepend-icon="item.icon"
+                  variant="text"
+                  class="mb-1 pl-2"
+                  router
+                  :to="
+                    item.title === 'Profile'
+                      ? `${item.link}/${user.id}`
+                      : item.link
+                  "
+                >
+                  {{ item.title }}
+                </v-btn>
+                <v-divider class="my-3" />
+                <v-btn
+                  @click="handleLogout"
+                  prepend-icon="mdi-logout"
+                  variant="text"
+                  class="pl-2"
+                >
+                  Logout
+                </v-btn>
+              </v-card-text>
+            </v-card>
+          </v-menu>
+        </div>
       </v-toolbar>
       <v-navigation-drawer
         v-model="drawer"
@@ -286,9 +288,17 @@ watch(drawer, (newValue) => {
 .toolbar {
   color: var(--color-header-text);
   &__wrapper {
-    padding: 0 20px;
-    @media (max-width: $phone-l) {
-      padding: 0;
+    .toolbar__content-wrapper {
+      padding: 0 20px;
+      align-items: center;
+      display: flex;
+      flex: 0 0 auto;
+      position: relative;
+      transition: inherit;
+      width: 100%;
+      @media (max-width: $phone-l) {
+        padding: 0;
+      }
     }
   }
   &__select-lang {

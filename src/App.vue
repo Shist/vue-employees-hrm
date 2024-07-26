@@ -3,9 +3,11 @@
     <AppHeader />
     <AppSpinner v-if="isLogging" class="global-container__spinner" />
     <main v-else class="app-main" :style="{ paddingRight: scrollbarWidth }">
-      <BreadCrumbs v-if="$route.meta.hasBreadcrumbs" />
-      <AppTabs v-if="$route.meta.hasTabs" />
-      <router-view />
+      <div class="app-main__content-wrapper">
+        <BreadCrumbs v-if="$route.meta.hasBreadcrumbs" />
+        <AppTabs v-if="$route.meta.hasTabs" />
+        <router-view />
+      </div>
     </main>
   </div>
 </template>
@@ -96,9 +98,11 @@ onUnmounted(() => {
 
 .app-main {
   flex-grow: 1;
-  padding: 10px 20px;
-  @media (max-width: $tablet-l) {
-    padding: 10px;
+  &__content-wrapper {
+    padding: 10px 20px;
+    @media (max-width: $tablet-l) {
+      padding: 10px;
+    }
   }
 }
 </style>

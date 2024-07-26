@@ -5,9 +5,7 @@ export default function handleScrollPadding(isNeedToBeHidden: boolean) {
   const { scrollbarWidth } = storeToRefs(useScrollbarWidth());
 
   if (document.body.offsetHeight > window.innerHeight) {
-    scrollbarWidth.value = `${
-      20 + window.innerWidth - document.body.offsetWidth
-    }px`;
+    scrollbarWidth.value = `${window.innerWidth - document.body.offsetWidth}px`;
   }
 
   if (isNeedToBeHidden) {
