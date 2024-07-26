@@ -23,6 +23,7 @@
           :search="search"
           :custom-filter="handleTableFilter"
           :items-per-page-text="$t('table.paginationTitle')"
+          :no-data-text="$t('positionsPage.noPositions')"
           class="positions-page__data-table"
           hide-details
         >

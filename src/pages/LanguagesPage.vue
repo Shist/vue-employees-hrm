@@ -23,9 +23,10 @@
           :search="search"
           :custom-filter="handleTableFilter"
           :items-per-page-text="$t('table.paginationTitle')"
-          class="languages-page__data-table"
           :mobile="null"
           :mobile-breakpoint="600"
+          :no-data-text="$t('languagesPage.noLanguages')"
+          class="languages-page__data-table"
           hide-details
         >
           <template v-slot:[`item.options`]>

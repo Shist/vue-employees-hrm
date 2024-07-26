@@ -84,6 +84,11 @@
   "table": {
     "paginationTitle": "Elemente pro Seite:"
   },
+  "theme": {
+    "Light": "Licht",
+    "Dark": "Dunkel",
+    "Device settings": "Geräteeinstellungen"
+  },
   "usersPage": {
     "firstName": "Vorname",
     "lastName": "Nachname",
@@ -93,7 +98,7 @@
     "profile": "Profil",
     "updateUser": "Profil aktualisieren",
     "deleteUser": "Profil löschen",
-    "noUsers": "Keine Benutzer verfügbar"
+    "noUsers": "Keine Mitarbeiter verfügbar"
   },
   "projectsPage": {
     "name": "Name",
@@ -122,24 +127,28 @@
   "departmentsPage": {
     "name": "Name",
     "updateDepartment": "Abteilung aktualiziren",
-    "deleteDepartment": "Abteilung löschen"
+    "deleteDepartment": "Abteilung löschen",
+    "noDepartments": "Keine Abteilungen verfügbar"
   },
   "positionsPage": {
     "name": "Name",
     "updatePosition": "Position aktualisieren",
-    "deletePosition": "Position löschen"
+    "deletePosition": "Position löschen",
+    "noPositions": "Keine Stellen verfügbar"
   },
   "skillsPage": {
     "name": "Name",
     "category": "Kategorie",
     "updateSkill": "Fertigkeit aktualisieren",
-    "deleteSkill": "Fertigkeit löschen"
+    "deleteSkill": "Fertigkeit löschen",
+    "noSkills": "Keine Fähigkeiten verfügbar"
   },
   "languagesPage": {
     "name": "Name",
     "nativeName": "Einheimischer Name",
     "updateLanguage": "Sprache aktualisieren",
-    "deleteLanguage": "Sprache löschen"
+    "deleteLanguage": "Sprache löschen",
+    "noLanguages": "Keine Sprachen verfügbar"
   },
   "userProfilePage": {
     "avatarHeadline": "Avatarbild hochladen",

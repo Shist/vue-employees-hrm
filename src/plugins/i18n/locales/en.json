@@ -84,6 +84,11 @@
   "table": {
     "paginationTitle": "Items per page:"
   },
+  "theme": {
+    "Light": "Light",
+    "Dark": "Dark",
+    "Device settings": "Device settings"
+  },
   "usersPage": {
     "firstName": "First Name",
     "lastName": "Last Name",
@@ -93,7 +98,7 @@
     "profile": "Profile",
     "updateUser": "Update user",
     "deleteUser": "Delete user",
-    "noUsers": "No users available"
+    "noUsers": "No employees available"
   },
   "projectsPage": {
     "name": "Name",
@@ -122,24 +127,28 @@
   "departmentsPage": {
     "name": "Name",
     "updateDepartment": "Update department",
-    "deleteDepartment": "Delete department"
+    "deleteDepartment": "Delete department",
+    "noDepartments": "No departments available"
   },
   "positionsPage": {
     "name": "Name",
     "updatePosition": "Update position",
-    "deletePosition": "Delete position"
+    "deletePosition": "Delete position",
+    "noPositions": "No positions available"
   },
   "skillsPage": {
     "name": "Name",
     "category": "Category",
     "updateSkill": "Update skill",
-    "deleteSkill": "Delete skill"
+    "deleteSkill": "Delete skill",
+    "noSkills": "No skills available"
   },
   "languagesPage": {
     "name": "Name",
     "nativeName": "Native Name",
     "updateLanguage": "Update language",
-    "deleteLanguage": "Delete language"
+    "deleteLanguage": "Delete language",
+    "noLanguages": "No languages available"
   },
   "userProfilePage": {
     "avatarHeadline": "Upload avatar image",

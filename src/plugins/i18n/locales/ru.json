@@ -84,6 +84,11 @@
   "table": {
     "paginationTitle": "Элементов на странице:"
   },
+  "theme": {
+    "Light": "Светлая",
+    "Dark": "Тёмная",
+    "Device settings": "Настройки устройства"
+  },
   "usersPage": {
     "firstName": "Имя",
     "lastName": "Фамилия",
@@ -93,7 +98,7 @@
     "profile": "Профиль",
     "updateUser": "Обновить профиль",
     "deleteUser": "Удалить профиль",
-    "noUsers": "Нет доступных пользователей"
+    "noUsers": "Нет доступных сотрудников"
   },
   "projectsPage": {
     "name": "Имя",
@@ -122,24 +127,28 @@
   "departmentsPage": {
     "name": "Имя",
     "updateDepartment": "Обновить отдел",
-    "deleteDepartment": "Удалить отдел"
+    "deleteDepartment": "Удалить отдел",
+    "noDepartments": "Нет доступных отделов"
   },
   "positionsPage": {
     "name": "Имя",
     "updatePosition": "Обновить должность",
-    "deletePosition": "Удалить должность"
+    "deletePosition": "Удалить должность",
+    "noPositions": "Нет доступных должностей"
   },
   "skillsPage": {
     "name": "Имя",
     "category": "Категория",
     "updateSkill": "Обновить навык",
-    "deleteSkill": "Удалить навык"
+    "deleteSkill": "Удалить навык",
+    "noSkills": "Нет доступных навыков"
   },
   "languagesPage": {
     "name": "Имя",
     "nativeName": "Родное Имя",
     "updateLanguage": "Обновить язык",
-    "deleteLanguage": "Удалить язык"
+    "deleteLanguage": "Удалить язык",
+    "noLanguages": "Нет доступных языков"
   },
   "userProfilePage": {
     "avatarHeadline": "Загрузите изображение аватара",
@@ -151,7 +160,7 @@
   },
   "userSkillsPage": {
     "btnAdd": "Добавить навык",
-    "noSkillsMsg": "Квалификации сотрудника пока что не указаны",
+    "noSkillsMsg": "Квалификации сотрудника не указаны",
     "addModalTitle": "Добавить навык",
     "updateModalTitle": "Обновить навык",
     "skillMasteries": {
@@ -172,7 +181,7 @@
   },
   "userLanguagesPage": {
     "btnAdd": "Добавить язык",
-    "noLanguagesMsg": "Языки сотрудника пока что не указаны",
+    "noLanguagesMsg": "Языки сотрудника не указаны",
     "addModalTitle": "Добавить язык",
     "updateModalTitle": "Обновить язык",
     "languageProficiency": {
@@ -198,14 +207,14 @@
     "noEducationMsg": "Образование сотрудника не указано",
     "noPositionMsg": "Должность сотрудника не указана",
     "languageProficiency": "Владение языком",
-    "noLanguagesMsg": "Языки сотрудника пока что не указаны",
-    "noSkillsMsg": "Навыки сотрудника пока что не указаны",
+    "noLanguagesMsg": "Языки сотрудника не указаны",
+    "noSkillsMsg": "Навыки сотрудника не указаны",
     "projects": "Проекты",
-    "noProjectsMsg": "Проекты сотрудника пока что не указаны",
+    "noProjectsMsg": "Проекты сотрудника не указаны",
     "projectRoles": "Должность на проекте",
-    "noProjectRolesMsg": "Должность сотрудника на проекте пока что не указана",
+    "noProjectRolesMsg": "Должность сотрудника на проекте не указана",
     "responsibilitiesAndAchievements": "Обязанности и достижения",
-    "noResponsibilitiesAndAchievements": "Обязанности и достижения сотрудника на проекте пока что не указаны",
+    "noResponsibilitiesAndAchievements": "Обязанности и достижения сотрудника на проекте не указаны",
     "period": "Период"
   }
 }

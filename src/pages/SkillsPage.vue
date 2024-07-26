@@ -23,9 +23,10 @@
           :search="search"
           :custom-filter="handleTableFilter"
           :items-per-page-text="$t('table.paginationTitle')"
-          class="skills-page__data-table"
           :mobile="null"
           :mobile-breakpoint="550"
+          :no-data-text="$t('skillsPage.noSkills')"
+          class="skills-page__data-table"
           hide-details
         >
           <template v-slot:[`item.options`]>

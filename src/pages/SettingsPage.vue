@@ -20,7 +20,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, watch } from "vue";
+import { computed, ref, watch } from "vue";
 import { storeToRefs } from "pinia";
 import { useI18n } from "vue-i18n";
 import { useThemeStore } from "@/store/theme";
@@ -31,10 +31,17 @@ const { currTheme } = storeToRefs(useThemeStore());
 const langStore = useLangStore();
 const currLang = storeToRefs(langStore).currLang;
 
-const { locale } = useI18n({ useScope: "global" });
+const { t, locale } = useI18n({ useScope: "global" });
 
 const selectTheme = ref(currTheme.value);
-const themeItems = ["Light", "Dark", "Device settings"];
+
+const themeItems = computed(() => {
+  return [
+    { title: t("theme.Light"), value: "Light" },
+    { title: t("theme.Dark"), value: "Dark" },
+    { title: t("theme.Device settings"), value: "Device settings" },
+  ];
+});
 
 const selectLanguage = ref(currLang.value);
 

@@ -10,7 +10,9 @@
       <div class="cv-preview__title-and-btn-wrapper">
         <div class="cv-preview__title-wrapper">
           <h2 class="cv-preview__title">{{ cvTitle }}</h2>
-          <span class="cv-preview__position">{{ empPosition }}</span>
+          <span class="cv-preview__position">{{
+            empPosition ?? $t("cvsPreviewPage.noPositionMsg")
+          }}</span>
         </div>
         <v-btn
           color="var(--color-wrapper-bg)"
@@ -29,7 +31,7 @@
               {{ $t("cvsPreviewPage.education") }}
             </h4>
             <span class="cv-preview__education-info">
-              {{ empEducation }}
+              {{ empEducation ?? t("cvsPreviewPage.noEducationMsg") }}
             </span>
           </div>
           <div class="cv-preview__languages-section-wrapper">
@@ -152,7 +154,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, reactive, computed, onMounted, watch } from "vue";
+import { ref, reactive, computed, onMounted } from "vue";
 import { useRoute } from "vue-router";
 import { useI18n } from "vue-i18n";
 import useToast from "@/composables/useToast";
@@ -168,7 +170,7 @@ import {
 } from "@/types/pages/cvs/preview";
 import { ICategorySkillData } from "@/types/skillsStructures";
 
-const { t, locale } = useI18n({ useScope: "global" });
+const { t } = useI18n({ useScope: "global" });
 
 const cvDocumentContent = ref<HTMLDivElement>();
 const isExportBtnBusy = ref(false);
@@ -203,9 +205,9 @@ const cvTitle = computed(() => {
   return empEmail.value;
 });
 
-const empPosition = ref(t("cvsPreviewPage.noPositionMsg"));
+const empPosition = ref<null | string>(null);
 
-const empEducation = ref(t("cvsPreviewPage.noEducationMsg"));
+const empEducation = ref<null | string>(null);
 
 const empLanguages = reactive<ICvPreviewLanguage[]>([]);
 
@@ -249,12 +251,6 @@ const previewSkillCategoriesMap = computed(() => {
 const empProjects = reactive<ICvPreviewProject[]>([]);
 
 onMounted(() => {
-  fetchData();
-});
-
-watch(locale, () => {
-  empEducation.value = t("cvsPreviewPage.noEducationMsg");
-  empPosition.value = t("cvsPreviewPage.noPositionMsg");
   fetchData();
 });
 
