@@ -128,13 +128,13 @@ function updateTabs() {
 function openUserInfoRoute(routePath: string) {
   if (routePath) routePath = `/${routePath}`;
   const currentUserId = router.currentRoute.value.params.userId;
-  router.replace(`${ROUTES.USERS.PATH}/${currentUserId}${routePath}`);
+  router.push(`${ROUTES.USERS.PATH}/${currentUserId}${routePath}`);
 }
 
 function openCvInfoRoute(routePath: string) {
   if (routePath) routePath = `/${routePath}`;
   const currentCvId = router.currentRoute.value.params.cvId;
-  router.replace(`${ROUTES.CVS.PATH}/${currentCvId}${routePath}`);
+  router.push(`${ROUTES.CVS.PATH}/${currentCvId}${routePath}`);
 }
 </script>
 
