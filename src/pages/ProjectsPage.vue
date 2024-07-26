@@ -212,13 +212,13 @@ const handleTableFilter: IProjectsFilterFunction = (value, query, item) => {
 :deep(.v-table > .v-table__wrapper > table > tbody > tr > td:nth-child(2)),
 :deep(.v-table > .v-table__wrapper > table > tbody > tr > td:nth-child(3)) {
   max-width: 200px;
-  @media (max-width: 1049px) {
+  @media (max-width: 1069px) {
     max-width: none;
   }
 }
 :deep(.v-table > .v-table__wrapper > table > tbody > tr > td:last-child) {
   width: 80px;
-  @media (max-width: 1049px) {
+  @media (max-width: 1069px) {
     width: 100%;
   }
 }

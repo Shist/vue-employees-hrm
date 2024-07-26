@@ -115,6 +115,9 @@ function closeModal() {
         background-color: rgba(var(--color-btn-gray-text-rgb), 0.08);
         border: 1px solid var(--color-btn-gray-text);
       }
+      @media (max-width: $phone-l) {
+        max-width: 100px;
+      }
     }
     .remove-project-modal__btn-confirm {
       padding: 6px;
@@ -131,6 +134,9 @@ function closeModal() {
       &:disabled {
         filter: grayscale(50%);
       }
+      @media (max-width: $phone-l) {
+        max-width: 100px;
+      }
     }
   }
 }
@@ -143,5 +149,15 @@ function closeModal() {
 }
 :deep(.v-overlay-container .v-overlay .v-overlay__scrim) {
   display: none;
+}
+:deep(.remove-project-modal__btn-cancel .v-btn__content) {
+  @media (max-width: $phone-l) {
+    font-size: 10px;
+  }
+}
+:deep(.remove-project-modal__btn-confirm .v-btn__content) {
+  @media (max-width: $phone-l) {
+    font-size: 10px;
+  }
 }
 </style>

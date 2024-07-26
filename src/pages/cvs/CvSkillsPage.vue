@@ -448,6 +448,9 @@ function submitCvSkillsDeletion() {
           background-color: rgba(var(--color-btn-gray-text-rgb), 0.08);
           border: 1px solid var(--color-btn-gray-text);
         }
+        @media (max-width: $phone-l) {
+          max-width: 100px;
+        }
       }
       .cv-skills__deletion-btn {
         padding: 6px;
@@ -466,6 +469,9 @@ function submitCvSkillsDeletion() {
         }
         .cv-skills__deletion-btn-label {
           color: var(--color-btn-text);
+          @media (max-width: $phone-l) {
+            font-size: 9px;
+          }
         }
         .cv-skills__deletion-btn-num {
           display: flex;
@@ -477,6 +483,9 @@ function submitCvSkillsDeletion() {
           background-color: var(--color-btn-text);
           color: var(--color-btn-bg);
         }
+        @media (max-width: $phone-l) {
+          max-width: 100px;
+        }
       }
     }
   }
@@ -487,5 +496,13 @@ function submitCvSkillsDeletion() {
 }
 :deep(.cv-skills__deletion-btn .v-btn__content) {
   column-gap: 12px;
+  @media (max-width: $phone-l) {
+    column-gap: 8px;
+  }
+}
+:deep(.cv-skills__cancel-deletion-btn .v-btn__content) {
+  @media (max-width: $phone-l) {
+    font-size: 9px;
+  }
 }
 </style>

@@ -497,6 +497,9 @@ function getClassByProficiency(value: Proficiency) {
           background-color: rgba(var(--color-btn-gray-text-rgb), 0.08);
           border: 1px solid var(--color-btn-gray-text);
         }
+        @media (max-width: $phone-l) {
+          max-width: 100px;
+        }
       }
       .user-languages__deletion-btn {
         padding: 6px;
@@ -515,6 +518,9 @@ function getClassByProficiency(value: Proficiency) {
         }
         .user-languages__deletion-btn-label {
           color: var(--color-btn-text);
+          @media (max-width: $phone-l) {
+            font-size: 9px;
+          }
         }
         .user-languages__deletion-btn-num {
           display: flex;
@@ -526,6 +532,9 @@ function getClassByProficiency(value: Proficiency) {
           background-color: var(--color-btn-text);
           color: var(--color-btn-bg);
         }
+        @media (max-width: $phone-l) {
+          max-width: 100px;
+        }
       }
     }
   }
@@ -536,6 +545,9 @@ function getClassByProficiency(value: Proficiency) {
 }
 :deep(.user-languages__deletion-btn .v-btn__content) {
   column-gap: 12px;
+  @media (max-width: $phone-l) {
+    column-gap: 8px;
+  }
 }
 :deep(.user-languages__language-card .v-card-item__content) {
   display: grid;
@@ -554,5 +566,10 @@ function getClassByProficiency(value: Proficiency) {
   text-overflow: ellipsis;
   white-space: nowrap;
   overflow: hidden;
+}
+:deep(.user-languages__cancel-deletion-btn .v-btn__content) {
+  @media (max-width: $phone-l) {
+    font-size: 9px;
+  }
 }
 </style>

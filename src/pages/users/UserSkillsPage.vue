@@ -441,6 +441,9 @@ function submitUserSkillsDeletion() {
           background-color: rgba(var(--color-btn-gray-text-rgb), 0.08);
           border: 1px solid var(--color-btn-gray-text);
         }
+        @media (max-width: $phone-l) {
+          max-width: 100px;
+        }
       }
       .user-skills__deletion-btn {
         padding: 6px;
@@ -459,6 +462,9 @@ function submitUserSkillsDeletion() {
         }
         .user-skills__deletion-btn-label {
           color: var(--color-btn-text);
+          @media (max-width: $phone-l) {
+            font-size: 9px;
+          }
         }
         .user-skills__deletion-btn-num {
           display: flex;
@@ -470,6 +476,9 @@ function submitUserSkillsDeletion() {
           background-color: var(--color-btn-text);
           color: var(--color-btn-bg);
         }
+        @media (max-width: $phone-l) {
+          max-width: 100px;
+        }
       }
     }
   }
@@ -480,5 +489,13 @@ function submitUserSkillsDeletion() {
 }
 :deep(.user-skills__deletion-btn .v-btn__content) {
   column-gap: 12px;
+  @media (max-width: $phone-l) {
+    column-gap: 8px;
+  }
+}
+:deep(.user-skills__cancel-deletion-btn .v-btn__content) {
+  @media (max-width: $phone-l) {
+    font-size: 9px;
+  }
 }
 </style>
