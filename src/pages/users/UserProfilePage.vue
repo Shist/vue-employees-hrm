@@ -46,8 +46,6 @@ import {
   updateUserData,
 } from "@/services/users/profile";
 import {
-  TOO_LARGE_FILE,
-  INVALID_FILE_TYPE,
   FAILED_TO_LOAD_DEPARMENTS,
   FAILED_TO_LOAD_POSITIONS,
 } from "@/constants/errorMessage";
@@ -254,20 +252,6 @@ function submitUserData(
 
 function submitUserAvatar(avatarInputObj: IUploadAvatarInput) {
   if (!isOwner.value) return;
-
-  if (
-    avatarInputObj.type !== "image/png" &&
-    avatarInputObj.type !== "image/jpeg" &&
-    avatarInputObj.type !== "image/gif"
-  ) {
-    setErrorToast(INVALID_FILE_TYPE);
-    return;
-  }
-
-  if (avatarInputObj.size > 524288) {
-    setErrorToast(TOO_LARGE_FILE);
-    return;
-  }
 
   isUserLoading.value = true;
 

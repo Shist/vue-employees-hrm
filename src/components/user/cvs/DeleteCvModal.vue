@@ -12,7 +12,7 @@
           icon="mdi-close"
           class="delete-cv-modal__cross-btn"
           @click.prevent="closeModal"
-        ></v-btn>
+        />
         <v-card-item class="delete-cv-modal__message-wrapper">
           <span>
             Are you sure you want to delete CV

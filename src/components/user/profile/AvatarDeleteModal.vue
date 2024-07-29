@@ -12,7 +12,7 @@
           icon="mdi-close"
           class="delete-avatar-modal__cross-btn"
           @click.prevent="closeModal"
-        ></v-btn>
+        />
         <v-card-item class="delete-avatar-modal__message-wrapper">
           <span> Are you sure you want to delete avatar? </span>
         </v-card-item>
@@ -46,8 +46,8 @@ const props = defineProps<{
 }>();
 
 const emit = defineEmits<{
+  (event: "confirmDeleteUserAvatar"): void;
   (event: "closeModal"): void;
-  (event: "onDeleteUserAvatar"): void;
 }>();
 
 const modalState = computed({
@@ -60,9 +60,7 @@ const modalState = computed({
 });
 
 function makeDeleteOperation() {
-  emit("onDeleteUserAvatar");
-
-  emit("closeModal");
+  emit("confirmDeleteUserAvatar");
 }
 
 function closeModal() {
