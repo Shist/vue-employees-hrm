@@ -15,7 +15,7 @@
         v-if="avatar && isOwner"
         icon="mdi-close"
         class="avatar-upload__avatar-cross-btn"
-        @click.prevent="avatarRemove"
+        @click.prevent="handleOpenDeleteModal"
       ></v-btn>
     </div>
     <label
@@ -46,9 +46,17 @@
       </h4>
     </label>
   </div>
+  <AvatarDeleteModal
+    :isOpen="isDeleteModalOpen"
+    @onDeleteUserAvatar="submitUserAvatarDeletion"
+    @closeModal="handleCloseDeleteModal"
+  />
 </template>
 
 <script setup lang="ts">
+import { ref, watch } from "vue";
+import AvatarDeleteModal from "@/components/user/profile/AvatarDeleteModal.vue";
+import handleScrollPadding from "@/utils/handleScrollPadding";
 import fileToBase64 from "@/utils/fileToBase64";
 import { IUploadAvatarInput } from "@/types/pages/users/profile";
 
@@ -64,9 +72,11 @@ const emit = defineEmits<{
   (event: "onDeleteUserAvatar", userId: string): void;
 }>();
 
-function avatarRemove() {
-  emit("onDeleteUserAvatar", props.userId);
-}
+const isDeleteModalOpen = ref(false);
+
+watch(isDeleteModalOpen, (newValue) => {
+  handleScrollPadding(newValue);
+});
 
 async function uploadAvatar(file: File) {
   const fileBase64 = await fileToBase64(file);
@@ -121,6 +131,20 @@ function avatarDrop(e: DragEvent) {
 
   const file = e.dataTransfer.files[0];
   uploadAvatar(file);
+}
+
+function handleOpenDeleteModal() {
+  if (!props.isOwner) return;
+
+  isDeleteModalOpen.value = true;
+}
+
+async function submitUserAvatarDeletion() {
+  emit("onDeleteUserAvatar", props.userId);
+}
+
+function handleCloseDeleteModal() {
+  isDeleteModalOpen.value = false;
 }
 </script>
 
