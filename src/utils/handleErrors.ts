@@ -4,15 +4,11 @@ import useToast from "@/composables/useToast";
 import useCookies from "@/composables/useCookies";
 import { updateAccessToken } from "@/services/auth";
 import {
-  EMAIL_DUPLICATE_ERROR,
-  INVALID_CREDENTIALS,
-  NO_NETWORK_CONNECTION,
   NOT_FOUND_CV,
   NOT_FOUND_USER,
-  BAD_INPUT_DATA,
   UNAUTHORIZED_ERROR,
-  UNEXPECTED_ERROR,
 } from "@/constants/errorMessage";
+import { handleUnauthorizedMessage } from "@/utils/handleNoLangMessage";
 
 export function checkUserId(id: string) {
   if (!Number.isInteger(Number(id)) || BigInt(id) > 2147483647n) {
@@ -42,27 +38,35 @@ export function getDetailedError(error: unknown) {
   if (error instanceof Error) {
     switch (error.message) {
       case "Invalid credentials":
-        return new Error(INVALID_CREDENTIALS);
+        return new Error("INVALID_CREDENTIALS");
       case "Failed to fetch":
-        return new Error(NO_NETWORK_CONNECTION);
-      case 'duplicate key value violates unique constraint "UQ_e12875dfb3b1d92d7d7c5377e22"':
-        return new Error(EMAIL_DUPLICATE_ERROR);
+        return new Error("NO_NETWORK_CONNECTION");
+      case "User already exists":
+        return new Error("EMAIL_DUPLICATE_ERROR");
       case "Cannot return null for non-nullable field Query.user.":
-        return new Error(NOT_FOUND_USER);
+        return new Error("NOT_FOUND_USER");
       case "Cannot return null for non-nullable field Query.cv.":
-        return new Error(NOT_FOUND_CV);
+        return new Error("NOT_FOUND_CV");
       case NOT_FOUND_USER:
-        return new Error(NOT_FOUND_USER);
+        return new Error("NOT_FOUND_USER");
       case NOT_FOUND_CV:
-        return new Error(NOT_FOUND_CV);
+        return new Error("NOT_FOUND_CV");
       case "Bad Request Exception":
-        return new Error(BAD_INPUT_DATA);
+        return new Error("BAD_INPUT_DATA");
       case "Unauthorized":
-        return new Error(UNAUTHORIZED_ERROR, { cause: UNAUTHORIZED_ERROR });
+        return new Error("UNAUTHORIZED_ERROR", { cause: UNAUTHORIZED_ERROR });
+    }
+
+    if (error.message.startsWith("Loading chunk en")) {
+      return new Error("LANG_EN_LOADING_ERROR");
+    } else if (error.message.startsWith("Loading chunk de")) {
+      return new Error("LANG_DE_LOADING_ERROR");
+    } else if (error.message.startsWith("Loading chunk ru")) {
+      return new Error("LANG_RU_LOADING_ERROR");
     }
   }
 
-  return new Error(UNEXPECTED_ERROR);
+  return new Error("UNEXPECTED_ERROR");
 }
 
 export function handleLogout() {
@@ -71,8 +75,10 @@ export function handleLogout() {
 
   if (authStore.wasAuthErrorToastShown) return;
 
+  const toastMessage = handleUnauthorizedMessage();
+
   const { setErrorToast } = useToast();
-  setErrorToast(UNAUTHORIZED_ERROR);
+  setErrorToast(toastMessage);
 
   authStore.logout();
 

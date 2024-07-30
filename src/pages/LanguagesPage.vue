@@ -2,7 +2,7 @@
   <div class="languages-page">
     <AppErrorSection
       v-if="isError"
-      :errorMessage="errorMessage"
+      :errorMessageKey="errorMessageKey"
       class="languages-page__error-wrapper"
     />
     <div v-else class="languages-page__main-content-wrapper">
@@ -90,7 +90,7 @@ const languageMenuItems = computed(() => {
 const {
   isLoading,
   isError,
-  errorMessage,
+  errorMessageKey,
   setErrorValuesToDefault,
   setErrorValues,
 } = useErrorState();

@@ -2,7 +2,7 @@
   <div class="positions-page">
     <AppErrorSection
       v-if="isError"
-      :errorMessage="errorMessage"
+      :errorMessageKey="errorMessageKey"
       class="positions-page__error-wrapper"
     />
     <div v-else class="positions-page__main-content-wrapper">
@@ -82,7 +82,7 @@ const positionMenuItems = computed(() => {
 const {
   isLoading,
   isError,
-  errorMessage,
+  errorMessageKey,
   setErrorValuesToDefault,
   setErrorValues,
 } = useErrorState();

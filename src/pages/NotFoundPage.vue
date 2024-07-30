@@ -1,10 +1,10 @@
 <template>
   <div class="not-found-page">
     <h1 class="not-found-page__headline">
-      The page with the specified URL was not found
+      {{ $t("errors.notFoundPageTitle") }}
     </h1>
     <router-link to="/" class="not-found-page__link-to-main">
-      Back to the main page
+      {{ $t("errors.backToMainPage") }}
     </router-link>
   </div>
 </template>

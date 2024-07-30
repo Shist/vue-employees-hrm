@@ -1,16 +1,18 @@
 <template>
   <div class="error-wrapper">
-    <h4 class="error-wrapper__message">❌ {{ errorMessage }}</h4>
+    <h4 class="error-wrapper__message">
+      ❌ {{ $t(`errors.${errorMessageKey}`) }}
+    </h4>
     <v-btn
       v-if="isNotFoundError"
       class="error-wrapper__back-to-main-btn"
       router
       :to="ROUTES.USERS.PATH"
     >
-      Back to the main page
+      {{ $t("errors.backToMainPage") }}
     </v-btn>
     <span v-if="!isNotFoundError" class="error-wrapper__try-to-reload-label">
-      Please try to reload the page
+      {{ $t("errors.reloadPage") }}
     </span>
   </div>
 </template>
@@ -18,19 +20,19 @@
 <script setup lang="ts">
 import { computed, defineComponent } from "vue";
 import { ROUTES } from "@/constants/router";
-import { NOT_FOUND_USER, NOT_FOUND_CV } from "@/constants/errorMessage";
 
 defineComponent({
   name: "AppErrorSection",
 });
 
 const props = defineProps<{
-  errorMessage: string;
+  errorMessageKey: string;
 }>();
 
 const isNotFoundError = computed(
   () =>
-    props.errorMessage === NOT_FOUND_USER || props.errorMessage === NOT_FOUND_CV
+    props.errorMessageKey === "NOT_FOUND_USER" ||
+    props.errorMessageKey === "NOT_FOUND_CV"
 );
 </script>
 

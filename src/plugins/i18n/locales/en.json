@@ -213,5 +213,32 @@
     "responsibilitiesAndAchievements": "Responsibilities & achievements",
     "noResponsibilitiesAndAchievements": "No responsibilities or achievements specified for this project",
     "period": "Period"
+  },
+  "errors": {
+    "backToMainPage": "Back to the main page",
+    "reloadPage": "Please try to reload the page",
+    "notFoundPageTitle": "The page with the specified URL was not found",
+    "EMAIL_REQUIRED_FIELD": "Email is required",
+    "EMAIL_TYPE_FIELD": "Please enter an e-mail in the format email{'@'}example.com",
+    "EMAIL_DUPLICATE_ERROR": "Email is invalid or already taken",
+    "PASSWORD_REQUIRED_FIELD": "Password is required",
+    "PASSWORD_MINLENGTH_FIELD": "Password should contain at least 6 characters",
+    "INVALID_CREDENTIALS": "Email or password is invalid",
+    "NO_NETWORK_CONNECTION": "No network connection",
+    "UNEXPECTED_ERROR": "Unexpected error, please try again",
+    "NOT_FOUND_USER": "The user with specified ID does not exist",
+    "NOT_FOUND_CV": "The CV with specified ID does not exist",
+    "BAD_INPUT_DATA": "The format of data that you provided is incorrect",
+    "TOO_LARGE_FILE": "The file you've attached has too large size (> 0.5 MB)",
+    "INVALID_FILE_TYPE": "The file you've attached has unacceptable type",
+    "UNAUTHORIZED_ERROR": "Unauthorized",
+    "FAILED_TO_LOAD_DEPARMENTS": "Failed to load all available departments",
+    "FAILED_TO_LOAD_POSITIONS": "Failed to load all available positions",
+    "FAILED_TO_LOAD_SKILLS": "Failed to load all available skills",
+    "FAILED_TO_LOAD_LANGUAGES": "Failed to load all available languages",
+    "FAILED_TO_LOAD_PROJECTS": "Failed to load all available projects",
+    "LANG_EN_LOADING_ERROR": "Failed to load english language resources",
+    "LANG_DE_LOADING_ERROR": "Failed to load german language resources",
+    "LANG_RU_LOADING_ERROR": "Failed to load russian language resources"
   }
 }

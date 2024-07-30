@@ -3,7 +3,7 @@
     <AppSpinner v-if="areUserSkillsLoading" />
     <AppErrorSection
       v-else-if="isUserSkillsError"
-      :errorMessage="userSkillsErrorMessage"
+      :errorMessageKey="userSkillsErrorMessage"
     />
     <div v-else class="user-skills__main-content-wrapper">
       <v-btn
@@ -74,6 +74,7 @@ import { ref, reactive, computed, watch, onMounted } from "vue";
 import { useRoute } from "vue-router";
 import { storeToRefs } from "pinia";
 import { useAuthStore } from "@/store/authStore";
+import { useI18n } from "vue-i18n";
 import SkillModal from "@/components/user/skills/SkillModal.vue";
 import SkillsCategory from "@/components/SkillsCategory.vue";
 import useToast from "@/composables/useToast";
@@ -86,7 +87,6 @@ import {
   updateUserSkill,
 } from "@/services/users/skills";
 import handleScrollPadding from "@/utils/handleScrollPadding";
-import { FAILED_TO_LOAD_SKILLS } from "@/constants/errorMessage";
 import {
   ISkill,
   ISkillCategoriesMap,
@@ -99,6 +99,8 @@ import {
 } from "@/types/pages/users/skills";
 
 const route = useRoute();
+
+const { t } = useI18n({ useScope: "global" });
 
 const userId = computed<string>(() => {
   // eslint-disable-next-line
@@ -115,7 +117,7 @@ const { setErrorToast } = useToast();
 const {
   isLoading: areUserSkillsLoading,
   isError: isUserSkillsError,
-  errorMessage: userSkillsErrorMessage,
+  errorMessageKey: userSkillsErrorMessage,
   setErrorValuesToDefault: setUserSkillsErrorValuesToDefault,
   setErrorValues: setUserSkillsErrorValues,
 } = useErrorState();
@@ -227,7 +229,7 @@ async function fetchAllSkills() {
   } catch (error: unknown) {
     setAllSkillsErrorValues(error);
 
-    setErrorToast(FAILED_TO_LOAD_SKILLS);
+    setErrorToast(t("errors.FAILED_TO_LOAD_SKILLS"));
   } finally {
     areAllSkillsLoading.value = false;
   }

@@ -1,7 +1,7 @@
 <template>
   <div class="cv-preview">
     <AppSpinner v-if="isLoading" />
-    <AppErrorSection v-else-if="isError" :errorMessage="errorMessage" />
+    <AppErrorSection v-else-if="isError" :errorMessageKey="errorMessageKey" />
     <div
       v-else
       ref="cvDocumentContent"
@@ -186,7 +186,7 @@ const cvId = computed<string>(() => {
 const {
   isLoading,
   isError,
-  errorMessage,
+  errorMessageKey,
   setErrorValuesToDefault,
   setErrorValues,
 } = useErrorState();
@@ -345,7 +345,7 @@ async function handleExportPDF() {
     downloadPDF(base64);
   } catch (error: unknown) {
     if (error instanceof Error) {
-      setErrorToast(error.message);
+      setErrorToast(t(`errors.${error.message}`));
     }
   } finally {
     isExportBtnBusy.value = false;

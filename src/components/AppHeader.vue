@@ -9,7 +9,7 @@
           :class="[
             isActive === ROUTES.SIGN_IN.NAME ? 'app-header__btn-active' : '',
           ]"
-          @click="handleIsActive"
+          @click="router.push({ name: ROUTES.SIGN_IN.NAME })"
         >
           {{ $t("appHeader.btnLogin") }}
         </v-btn>
@@ -19,7 +19,7 @@
           :class="[
             isActive === ROUTES.SIGN_UP.NAME ? 'app-header__btn-active' : '',
           ]"
-          @click="handleIsActive"
+          @click="router.push({ name: ROUTES.SIGN_UP.NAME })"
         >
           {{ $t("appHeader.btnSignup") }}
         </v-btn>
@@ -241,14 +241,6 @@ const isActive = computed(() => {
     ? ROUTES.SIGN_IN.NAME
     : ROUTES.SIGN_UP.NAME;
 });
-
-const handleIsActive = () => {
-  if (isActive.value === ROUTES.SIGN_IN.NAME) {
-    router.push({ name: ROUTES.SIGN_UP.NAME });
-  } else {
-    router.push({ name: ROUTES.SIGN_IN.NAME });
-  }
-};
 
 const handleNavigationShow = () => {
   drawer.value = !drawer.value;

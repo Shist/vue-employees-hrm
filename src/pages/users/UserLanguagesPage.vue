@@ -3,7 +3,7 @@
     <AppSpinner v-if="areUserLangsLoading" />
     <AppErrorSection
       v-else-if="isUserLangsError"
-      :errorMessage="userLangsErrorMessage"
+      :errorMessageKey="userLangsErrorMessage"
     />
     <div v-else class="user-languages__main-content-wrapper">
       <v-btn
@@ -121,6 +121,7 @@ import { ref, reactive, computed, watch, onMounted } from "vue";
 import { useRoute } from "vue-router";
 import { storeToRefs } from "pinia";
 import { useAuthStore } from "@/store/authStore";
+import { useI18n } from "vue-i18n";
 import LanguageModal from "@/components/user/languages/LanguageModal.vue";
 import useToast from "@/composables/useToast";
 import useErrorState from "@/composables/useErrorState";
@@ -132,7 +133,6 @@ import {
 } from "@/services/users/languages";
 import { getAllLanguagesNames } from "@/services/languages";
 import handleScrollPadding from "@/utils/handleScrollPadding";
-import { FAILED_TO_LOAD_LANGUAGES } from "@/constants/errorMessage";
 import { Proficiency } from "@/types/enums";
 import {
   ILanguagesNamesData,
@@ -140,6 +140,8 @@ import {
   IAddOrUpdateProfileLanguageInput,
   IDeleteProfileLanguageInput,
 } from "@/types/pages/users/languages";
+
+const { t } = useI18n({ useScope: "global" });
 
 const route = useRoute();
 
@@ -158,7 +160,7 @@ const { setErrorToast } = useToast();
 const {
   isLoading: areUserLangsLoading,
   isError: isUserLangsError,
-  errorMessage: userLangsErrorMessage,
+  errorMessageKey: userLangsErrorMessage,
   setErrorValuesToDefault: setUserLangsErrorValuesToDefault,
   setErrorValues: setUserLangsErrorValues,
 } = useErrorState();
@@ -237,7 +239,7 @@ async function fetchAllLanguagesNames() {
   } catch (error: unknown) {
     setAllLangsErrorValues(error);
 
-    setErrorToast(FAILED_TO_LOAD_LANGUAGES);
+    setErrorToast(t("errors.FAILED_TO_LOAD_LANGUAGES"));
   } finally {
     areAllLangsLoading.value = false;
   }

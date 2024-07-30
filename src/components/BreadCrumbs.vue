@@ -27,7 +27,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed, reactive, Reactive, watch } from "vue";
+import { reactive, Reactive, watch } from "vue";
 import { useRoute } from "vue-router";
 import { storeToRefs } from "pinia";
 import { useAuthStore } from "@/store/authStore";

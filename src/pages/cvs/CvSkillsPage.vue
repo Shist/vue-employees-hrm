@@ -3,7 +3,7 @@
     <AppSpinner v-if="areCvSkillsLoading" />
     <AppErrorSection
       v-else-if="isCvSkillsError"
-      :errorMessage="cvSkillsErrorMessage"
+      :errorMessageKey="cvSkillsErrorMessage"
     />
     <div v-else class="cv-skills__main-content-wrapper">
       <v-btn
@@ -74,6 +74,7 @@ import { ref, reactive, computed, watch, onMounted } from "vue";
 import { useRoute } from "vue-router";
 import { storeToRefs } from "pinia";
 import { useAuthStore } from "@/store/authStore";
+import { useI18n } from "vue-i18n";
 import SkillModal from "@/components/cv/skills/SkillModal.vue";
 import SkillsCategory from "@/components/SkillsCategory.vue";
 import useToast from "@/composables/useToast";
@@ -86,7 +87,6 @@ import {
   deleteCvSkills,
 } from "@/services/cvs/skills";
 import handleScrollPadding from "@/utils/handleScrollPadding";
-import { FAILED_TO_LOAD_SKILLS } from "@/constants/errorMessage";
 import {
   ISkill,
   ICvSkillsServerData,
@@ -98,6 +98,8 @@ import {
   IAddOrUpdateCvSkillInput,
   IDeleteCvSkillInput,
 } from "@/types/pages/cvs/skills";
+
+const { t } = useI18n({ useScope: "global" });
 
 const route = useRoute();
 
@@ -118,7 +120,7 @@ const { setErrorToast } = useToast();
 const {
   isLoading: areCvSkillsLoading,
   isError: isCvSkillsError,
-  errorMessage: cvSkillsErrorMessage,
+  errorMessageKey: cvSkillsErrorMessage,
   setErrorValuesToDefault: setCvSkillsErrorValuesToDefault,
   setErrorValues: setCvSkillsErrorValues,
 } = useErrorState();
@@ -234,7 +236,7 @@ async function fetchAllSkills() {
   } catch (error: unknown) {
     setAllSkillsErrorValues(error);
 
-    setErrorToast(FAILED_TO_LOAD_SKILLS);
+    setErrorToast(t("errors.FAILED_TO_LOAD_SKILLS"));
   } finally {
     areAllSkillsLoading.value = false;
   }

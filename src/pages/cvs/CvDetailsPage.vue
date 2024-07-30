@@ -1,7 +1,7 @@
 <template>
   <div class="cv-details">
     <AppSpinner v-if="isLoading" />
-    <AppErrorSection v-else-if="isError" :errorMessage="errorMessage" />
+    <AppErrorSection v-else-if="isError" :errorMessageKey="errorMessageKey" />
     <form v-else class="cv-details__main-content-wrapper">
       <v-text-field
         v-model="cvName"
@@ -63,7 +63,7 @@ const cvId = computed<string>(() => {
 const {
   isLoading,
   isError,
-  errorMessage,
+  errorMessageKey,
   setErrorValuesToDefault,
   setErrorValues,
 } = useErrorState();

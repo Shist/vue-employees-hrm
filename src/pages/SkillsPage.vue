@@ -2,7 +2,7 @@
   <div class="skills-page">
     <AppErrorSection
       v-if="isError"
-      :errorMessage="errorMessage"
+      :errorMessageKey="errorMessageKey"
       class="skills-page__error-wrapper"
     />
     <div v-else class="skills-page__main-content-wrapper">
@@ -85,7 +85,7 @@ const skillMenuItems = computed(() => {
 const {
   isLoading,
   isError,
-  errorMessage,
+  errorMessageKey,
   setErrorValuesToDefault,
   setErrorValues,
 } = useErrorState();

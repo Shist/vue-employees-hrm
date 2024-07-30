@@ -46,15 +46,12 @@ import useVuelidate from "@vuelidate/core";
 import { required, minLength, email, helpers } from "@vuelidate/validators";
 import { useRoute, useRouter } from "vue-router";
 import { useAuthStore } from "@/store/authStore";
+import { useI18n } from "vue-i18n";
 import { handleValidationErrors } from "@/utils/handleValidationErrors";
 import { ROUTES } from "@/constants/router";
-import {
-  EMAIL_REQUIRED_FIELD,
-  EMAIL_TYPE_FIELD,
-  PASSWORD_MINLENGTH_FIELD,
-  PASSWORD_REQUIRED_FIELD,
-} from "@/constants/errorMessage";
 import { IForm, IAuthForm } from "@/types/forms";
+
+const { t } = useI18n({ useScope: "global" });
 
 const authStore = useAuthStore();
 
@@ -81,23 +78,35 @@ const rules = computed(() => {
   return route.fullPath === ROUTES.SIGN_UP.PATH
     ? {
         email: {
-          required: helpers.withMessage(EMAIL_REQUIRED_FIELD, required),
-          email: helpers.withMessage(EMAIL_TYPE_FIELD, email),
+          required: helpers.withMessage(
+            t("errors.EMAIL_REQUIRED_FIELD"),
+            required
+          ),
+          email: helpers.withMessage(t("errors.EMAIL_TYPE_FIELD"), email),
         },
         password: {
-          required: helpers.withMessage(PASSWORD_REQUIRED_FIELD, required),
+          required: helpers.withMessage(
+            t("errors.PASSWORD_REQUIRED_FIELD"),
+            required
+          ),
           minLength: helpers.withMessage(
-            PASSWORD_MINLENGTH_FIELD,
+            t("errors.PASSWORD_MINLENGTH_FIELD"),
             minLength(6)
           ),
         },
       }
     : {
         email: {
-          required: helpers.withMessage(EMAIL_REQUIRED_FIELD, required),
+          required: helpers.withMessage(
+            t("errors.EMAIL_REQUIRED_FIELD"),
+            required
+          ),
         },
         password: {
-          required: helpers.withMessage(PASSWORD_REQUIRED_FIELD, required),
+          required: helpers.withMessage(
+            t("errors.PASSWORD_REQUIRED_FIELD"),
+            required
+          ),
         },
       };
 });
@@ -127,7 +136,7 @@ const submitForm = async (): Promise<void> => {
       router.push(ROUTES.MAIN.PATH);
     } catch (err: unknown) {
       if (err instanceof Error) {
-        serverError.value = err.message;
+        serverError.value = t(`errors.${err.message}`);
       }
     } finally {
       isLoading.value = false;

@@ -2,7 +2,7 @@
   <div class="user-cvs">
     <AppErrorSection
       v-if="isError"
-      :errorMessage="errorMessage"
+      :errorMessageKey="errorMessageKey"
       class="user-cvs__error-wrapper"
     />
     <div v-else class="user-cvs__main-content-wrapper">
@@ -141,7 +141,7 @@ const cvMenuItems = computed(() => {
 const {
   isLoading,
   isError,
-  errorMessage,
+  errorMessageKey,
   setErrorValuesToDefault,
   setErrorValues,
 } = useErrorState();

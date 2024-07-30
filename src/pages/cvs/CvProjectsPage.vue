@@ -2,7 +2,7 @@
   <div class="cv-projects">
     <AppErrorSection
       v-if="isCvProjectsError"
-      :errorMessage="cvProjectsErrorMessage"
+      :errorMessageKey="cvProjectsErrorMessage"
       class="cv-projects__error-wrapper"
     />
     <div v-else class="cv-projects__main-content-wrapper">
@@ -110,7 +110,6 @@ import {
 } from "@/services/cvs/projects";
 import { getAllProjectsData } from "@/services/projects";
 import handleScrollPadding from "@/utils/handleScrollPadding";
-import { FAILED_TO_LOAD_PROJECTS } from "@/constants/errorMessage";
 import {
   ICvProjectsTableData,
   ICvProjectsTableServerData,
@@ -173,7 +172,7 @@ const { setErrorToast } = useToast();
 const {
   isLoading: areCvProjectsLoading,
   isError: isCvProjectsError,
-  errorMessage: cvProjectsErrorMessage,
+  errorMessageKey: cvProjectsErrorMessage,
   setErrorValuesToDefault: setCvProjectsErrorValuesToDefault,
   setErrorValues: setCvProjectsErrorValues,
 } = useErrorState();
@@ -260,7 +259,7 @@ async function fetchAllProjectsCvData() {
   } catch (error: unknown) {
     setAllProjectsErrorValues(error);
 
-    setErrorToast(FAILED_TO_LOAD_PROJECTS);
+    setErrorToast(t("errors.FAILED_TO_LOAD_PROJECTS"));
   } finally {
     areAllProjectsLoading.value = false;
   }

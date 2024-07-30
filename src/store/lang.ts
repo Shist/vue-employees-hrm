@@ -2,11 +2,16 @@ import { computed, nextTick } from "vue";
 import { defineStore } from "pinia";
 import { useLocale } from "vuetify";
 import { useI18n } from "vue-i18n";
+import useToast from "@/composables/useToast";
+import { getDetailedError } from "@/utils/handleErrors";
+import { handleLangLoadErrorMessage } from "@/utils/handleNoLangMessage";
 
 export const useLangStore = defineStore("lang", () => {
-  const { locale, availableLocales, setLocaleMessage } = useI18n({
+  const { t, locale, availableLocales, setLocaleMessage } = useI18n({
     useScope: "global",
   });
+
+  const { setErrorToast } = useToast();
 
   const { current: vuetifyCurrentLocale } = useLocale();
 
@@ -20,15 +25,12 @@ export const useLangStore = defineStore("lang", () => {
       locale = "en";
     }
 
-    try {
-      if (!availableLocales.includes(locale)) {
-        const messages = await import(
-          /* webpackChunkName: "[request]" */ `@/plugins/i18n/locales/${locale}.json`
-        );
-        setLocaleMessage(locale, messages.default);
-      }
-    } catch (error: unknown) {
-      console.error("Error loading messages");
+    if (!availableLocales.includes(locale)) {
+      const messages = await import(
+        /* webpackChunkName: "[request]" */ `@/plugins/i18n/locales/${locale}.json`
+      );
+
+      setLocaleMessage(locale, messages.default);
     }
 
     return nextTick();
@@ -42,7 +44,9 @@ export const useLangStore = defineStore("lang", () => {
 
       setLocaleMessage(newLocale, messages.default);
     } catch (error: unknown) {
-      console.error("Error loading messages");
+      const toastMessage = handleLangLoadErrorMessage();
+
+      setErrorToast(toastMessage);
     }
 
     return nextTick();
@@ -59,21 +63,29 @@ export const useLangStore = defineStore("lang", () => {
   });
 
   const changeCurrLanguage = async (newLocale: string) => {
-    await loadLocaleMessages(newLocale);
-    if (newLocale === "Deutsch") {
-      locale.value = "de";
-      vuetifyCurrentLocale.value = "de";
-      localStorage.setItem("language", locale.value);
-    } else if (newLocale === "Русский") {
-      locale.value = "ru";
-      vuetifyCurrentLocale.value = "ru";
-      localStorage.setItem("language", locale.value);
-    } else {
-      locale.value = "en";
-      vuetifyCurrentLocale.value = "en";
-      localStorage.setItem("language", locale.value);
+    try {
+      await loadLocaleMessages(newLocale);
+      if (newLocale === "Deutsch") {
+        locale.value = "de";
+        vuetifyCurrentLocale.value = "de";
+        localStorage.setItem("language", locale.value);
+      } else if (newLocale === "Русский") {
+        locale.value = "ru";
+        vuetifyCurrentLocale.value = "ru";
+        localStorage.setItem("language", locale.value);
+      } else {
+        locale.value = "en";
+        vuetifyCurrentLocale.value = "en";
+        localStorage.setItem("language", locale.value);
+      }
+      document.querySelector("html")?.setAttribute("lang", locale.value);
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        const toastMessage = getDetailedError(error);
+
+        setErrorToast(t(`errors.${toastMessage.message}`));
+      }
     }
-    document.querySelector("html")?.setAttribute("lang", locale.value);
   };
 
   return {

@@ -2,7 +2,7 @@
   <div class="departments-page">
     <AppErrorSection
       v-if="isError"
-      :errorMessage="errorMessage"
+      :errorMessageKey="errorMessageKey"
       class="departments-page__error-wrapper"
     />
     <div v-else class="departments-page__main-content-wrapper">
@@ -85,7 +85,7 @@ const departmentMenuItems = computed(() => {
 const {
   isLoading,
   isError,
-  errorMessage,
+  errorMessageKey,
   setErrorValuesToDefault,
   setErrorValues,
 } = useErrorState();
