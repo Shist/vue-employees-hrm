@@ -83,11 +83,14 @@
 
 <script setup lang="ts">
 import { ref, computed, watch } from "vue";
+import { useI18n } from "vue-i18n";
 import AvatarDeleteModal from "@/components/user/profile/AvatarDeleteModal.vue";
 import useToast from "@/composables/useToast";
 import handleScrollPadding from "@/utils/handleScrollPadding";
 import fileToBase64 from "@/utils/fileToBase64";
 import { IUploadAvatarInput } from "@/types/pages/users/profile";
+
+const { t } = useI18n({ useScope: "global" });
 
 const props = defineProps<{
   isOwner: boolean;
@@ -145,12 +148,12 @@ function prepareAvatar(file: File) {
     file.type !== "image/jpeg" &&
     file.type !== "image/gif"
   ) {
-    setErrorToast("errors.INVALID_FILE_TYPE");
+    setErrorToast(t("errors.INVALID_FILE_TYPE"));
     return;
   }
 
   if (file.size > 524288) {
-    setErrorToast("errors.TOO_LARGE_FILE");
+    setErrorToast(t("errors.TOO_LARGE_FILE"));
     return;
   }
 
