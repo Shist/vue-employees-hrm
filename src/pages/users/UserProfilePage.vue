@@ -255,21 +255,6 @@ function submitUserData(
 function submitUserAvatar(avatarInputObj: IUploadAvatarInput) {
   if (!isOwner.value) return;
 
-  if (
-    avatarInputObj.type !== "image/png" &&
-    avatarInputObj.type !== "image/jpeg" &&
-    avatarInputObj.type !== "image/gif"
-  ) {
-    setErrorToast(t("errors.INVALID_FILE_TYPE"));
-    return;
-  }
-
-  if (avatarInputObj.size > 524288) {
-    setErrorToast(t("errors.TOO_LARGE_FILE"));
-
-    return;
-  }
-
   isUserLoading.value = true;
 
   updateUserAvatar(avatarInputObj)
