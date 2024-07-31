@@ -1,30 +1,26 @@
 <template>
-  <div class="delete-cv-modal">
+  <div class="delete-avatar-modal">
     <v-dialog
       v-model="modalState"
       max-width="600"
-      class="delete-cv-modal__dialog-wrapper"
+      class="delete-avatar-modal__dialog-wrapper"
       scrim="var(--color-modal-overlay)"
       opacity="100%"
     >
-      <v-card title="Delete CV" class="delete-cv-modal__card-wrapper">
+      <v-card title="Delete Avatar" class="delete-avatar-modal__card-wrapper">
         <v-btn
           icon="mdi-close"
-          class="delete-cv-modal__cross-btn"
+          class="delete-avatar-modal__cross-btn"
           @click.prevent="closeModal"
         />
-        <v-card-item class="delete-cv-modal__message-wrapper">
-          <span>
-            Are you sure you want to delete CV
-            <b>{{ cvName }}</b>
-            ?
-          </span>
+        <v-card-item class="delete-avatar-modal__message-wrapper">
+          <span> Are you sure you want to delete avatar? </span>
         </v-card-item>
         <v-card-actions>
           <v-btn
             variant="outlined"
             @click="closeModal"
-            class="delete-cv-modal__btn-cancel"
+            class="delete-avatar-modal__btn-cancel"
           >
             Cancel
           </v-btn>
@@ -32,7 +28,7 @@
             type="submit"
             variant="text"
             @click="makeDeleteOperation"
-            class="delete-cv-modal__btn-confirm"
+            class="delete-avatar-modal__btn-confirm"
           >
             Confirm
           </v-btn>
@@ -44,17 +40,14 @@
 
 <script setup lang="ts">
 import { computed } from "vue";
-import { IDeleteCvInput } from "@/types/cvsOperations";
 
 const props = defineProps<{
   isOpen: boolean;
-  cvId: string | null;
-  cvName: string | null;
 }>();
 
 const emit = defineEmits<{
+  (event: "confirmDeleteUserAvatar"): void;
   (event: "closeModal"): void;
-  (event: "onDeleteUserCv", cvInputObj: IDeleteCvInput): void;
 }>();
 
 const modalState = computed({
@@ -67,15 +60,7 @@ const modalState = computed({
 });
 
 function makeDeleteOperation() {
-  if (!props.cvId) return;
-
-  const cvInputObj: IDeleteCvInput = {
-    cvId: Number(props.cvId),
-  };
-
-  emit("onDeleteUserCv", cvInputObj);
-
-  emit("closeModal");
+  emit("confirmDeleteUserAvatar");
 }
 
 function closeModal() {
@@ -84,10 +69,10 @@ function closeModal() {
 </script>
 
 <style lang="scss" scoped>
-.delete-cv-modal {
+.delete-avatar-modal {
   &__card-wrapper {
     background-color: var(--color-wrapper-bg);
-    .delete-cv-modal__cross-btn {
+    .delete-avatar-modal__cross-btn {
       font-family: $font-roboto;
       position: absolute;
       width: 40px;
@@ -97,7 +82,7 @@ function closeModal() {
       background-color: var(--color-wrapper-bg);
       box-shadow: none;
     }
-    .delete-cv-modal__btn-cancel {
+    .delete-avatar-modal__btn-cancel {
       padding: 6px;
       max-width: 100px;
       width: 100%;
@@ -110,7 +95,7 @@ function closeModal() {
         border: 1px solid var(--color-btn-gray-text);
       }
     }
-    .delete-cv-modal__btn-confirm {
+    .delete-avatar-modal__btn-confirm {
       padding: 6px;
       max-width: 100px;
       width: 100%;
@@ -129,7 +114,7 @@ function closeModal() {
   }
 }
 
-:deep(.delete-cv-modal__message-wrapper .v-card-item__content) {
+:deep(.delete-avatar-modal__message-wrapper .v-card-item__content) {
   padding-block: 10px;
   display: flex;
   flex-direction: column;
