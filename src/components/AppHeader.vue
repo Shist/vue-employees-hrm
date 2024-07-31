@@ -9,9 +9,9 @@
           :class="[
             isActive === ROUTES.SIGN_IN.NAME ? 'app-header__btn-active' : '',
           ]"
-          @click="handleIsActive"
+          @click="router.push({ name: ROUTES.SIGN_IN.NAME })"
         >
-          LOGIN
+          {{ $t("appHeader.btnLogin") }}
         </v-btn>
         <v-btn
           variant="text"
@@ -19,9 +19,9 @@
           :class="[
             isActive === ROUTES.SIGN_UP.NAME ? 'app-header__btn-active' : '',
           ]"
-          @click="handleIsActive"
+          @click="router.push({ name: ROUTES.SIGN_UP.NAME })"
         >
-          SIGNUP
+          {{ $t("appHeader.btnSignup") }}
         </v-btn>
       </div>
     </v-toolbar>
@@ -51,7 +51,7 @@
               <v-icon style="color: #767676; margin-right: 5px">mdi-web</v-icon>
             </template>
             <template v-slot:item="{ props, item }">
-              <v-list-item v-bind="props" :title="item.raw.value" />
+              <v-list-item v-bind="props" :title="item.value" />
             </template>
           </v-select>
           <p v-if="user?.email" class="toolbar__email text-white">
@@ -63,7 +63,7 @@
             width="130px"
             color="var(--color-header-bg)"
           />
-          <v-menu max-width="150px" rounded>
+          <v-menu max-width="200px" rounded>
             <template v-slot:activator="{ props }">
               <v-btn icon v-bind="props">
                 <v-avatar color="var(--color-text-red)" size="default">
@@ -80,33 +80,30 @@
               </v-btn>
             </template>
             <v-card>
-              <v-card-text
-                v-if="user"
-                class="d-flex flex-lg-column flex-wrap align-start"
-              >
+              <v-card-text v-if="user" class="d-flex flex-column align-start">
                 <v-btn
                   v-for="item in profileMenu"
                   :key="item.title"
                   :prepend-icon="item.icon"
                   variant="text"
-                  class="mb-1 pl-2"
+                  class="mb-1 pl-2 w-100 justify-start"
                   router
                   :to="
-                    item.title === 'Profile'
+                    item.title === $t(`appHeader.btnProfile`)
                       ? `${item.link}/${user.id}`
                       : item.link
                   "
                 >
                   {{ item.title }}
                 </v-btn>
-                <v-divider class="my-3" />
+                <v-divider class="my-2 grey-lighten-1 w-100" />
                 <v-btn
                   @click="handleLogout"
                   prepend-icon="mdi-logout"
                   variant="text"
-                  class="pl-2"
+                  class="pl-2 w-100 justify-start"
                 >
-                  Logout
+                  {{ $t("appHeader.btnLogout") }}
                 </v-btn>
               </v-card-text>
             </v-card>
@@ -144,7 +141,7 @@
           :to="ROUTES.USERS.PATH"
         >
           <v-icon size="x-large" class="mr-8 ml-4">mdi-home-outline</v-icon>
-          Home
+          {{ $t("navigation.Home") }}
         </v-btn>
         <v-divider />
         <v-list class="pa-0">
@@ -167,7 +164,7 @@
               ]"
             >
               <v-icon size="x-large" class="mr-8 ml-4">{{ item.icon }}</v-icon>
-              {{ item.title }}
+              {{ $t(`navigation.${item.title}`) }}
             </v-btn>
           </v-list-item>
         </v-list>
@@ -181,7 +178,9 @@ import { computed, ref, watch } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import { storeToRefs } from "pinia";
 import { useAuthStore } from "@/store/authStore";
+import { useLangStore } from "@/store/lang";
 import { useScrollbarWidth } from "@/store/scrollbarWidth";
+import { useI18n } from "vue-i18n";
 import handleScrollPadding from "@/utils/handleScrollPadding";
 import { ROUTES } from "@/constants/router";
 import { NAVIGATION__ITEMS } from "@/constants/navigationItems";
@@ -193,6 +192,11 @@ const route = useRoute();
 const authStore = useAuthStore();
 const user = storeToRefs(authStore).user;
 
+const langStore = useLangStore();
+const currLang = storeToRefs(langStore).currLang;
+
+const { t, locale } = useI18n({ useScope: "global" });
+
 const { scrollbarWidth } = storeToRefs(useScrollbarWidth());
 
 const languages = ref([
@@ -201,12 +205,22 @@ const languages = ref([
   { title: "RU", value: "Русский" },
 ]);
 
-const profileMenu = [
-  { title: "Profile", link: ROUTES.USERS.PATH, icon: "mdi-account-circle" },
-  { title: "Settings", link: ROUTES.SETTINGS.PATH, icon: "mdi-cog" },
-];
+const profileMenu = computed(() => {
+  return [
+    {
+      title: t(`appHeader.btnProfile`),
+      link: ROUTES.USERS.PATH,
+      icon: "mdi-account-circle",
+    },
+    {
+      title: t(`appHeader.btnSettings`),
+      link: ROUTES.SETTINGS.PATH,
+      icon: "mdi-cog",
+    },
+  ];
+});
 
-const language = ref<string>("English");
+const language = ref<string>(currLang.value);
 
 const drawer = ref<boolean>(false);
 
@@ -230,14 +244,6 @@ const isActive = computed(() => {
     : ROUTES.SIGN_UP.NAME;
 });
 
-const handleIsActive = () => {
-  if (isActive.value === ROUTES.SIGN_IN.NAME) {
-    router.push({ name: ROUTES.SIGN_UP.NAME });
-  } else {
-    router.push({ name: ROUTES.SIGN_IN.NAME });
-  }
-};
-
 const handleNavigationShow = () => {
   drawer.value = !drawer.value;
 };
@@ -248,6 +254,16 @@ const handleLogout = (): void => {
 
 watch(drawer, (newValue) => {
   handleScrollPadding(newValue);
+});
+
+watch(language, async (newLocale) => {
+  await langStore.changeCurrLanguage(newLocale);
+});
+
+watch(locale, (newValue) => {
+  if (newValue) {
+    language.value = currLang.value;
+  }
 });
 </script>
 
@@ -332,7 +348,7 @@ watch(drawer, (newValue) => {
     white-space: nowrap;
     overflow: hidden;
     @media (max-width: $phone-l) {
-      max-width: 120px;
+      max-width: 100px;
       font-size: 14px;
     }
   }

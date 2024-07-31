@@ -2,14 +2,14 @@
   <div class="user-cvs">
     <AppErrorSection
       v-if="isError"
-      :errorMessage="errorMessage"
+      :errorMessageKey="errorMessageKey"
       class="user-cvs__error-wrapper"
     />
     <div v-else class="user-cvs__main-content-wrapper">
       <div class="user-cvs__search-create-controls-wrapper">
         <v-text-field
           v-model="search"
-          label="Search"
+          :placeholder="$t('placeholder.search')"
           prepend-inner-icon="mdi-magnify"
           variant="outlined"
           density="compact"
@@ -27,7 +27,7 @@
           @click="handleOpenCreateModal"
           :loading="isLoading"
         >
-          Create CV
+          {{ $t("cvsPage.createButton") }}
         </v-btn>
       </div>
       <v-skeleton-loader type="table" :loading="isLoading">
@@ -36,6 +36,7 @@
           :items="userCvs"
           :search="search"
           :class="{ 'user-cvs__data-table': true }"
+          :no-data-text="$t('cvsPage.noCvs')"
           :mobile="null"
           :mobile-breakpoint="750"
           hide-details
@@ -50,17 +51,14 @@
                 />
               </template>
               <v-list>
-                <v-list-item @click="() => openUserCv(item.id)">
-                  <v-list-item-title class="user-cvs__popup-menu-label">
-                    Details
-                  </v-list-item-title>
-                </v-list-item>
                 <v-list-item
-                  @click="() => handleOpenDeleteModal(item.id, item.name)"
-                  :disabled="!isOwner"
+                  v-for="cvItem in cvMenuItems"
+                  :key="cvItem.title"
+                  v-on:click="cvItem.click(item.id, item.name)"
+                  :disabled="checkOwner(cvItem.title, userId)"
                 >
-                  <v-list-item-title class="user-cvs__popup-menu-label">
-                    Delete CV
+                  <v-list-item-title class="cvs-page__popup-menu-label">
+                    {{ cvItem.title }}
                   </v-list-item-title>
                 </v-list-item>
               </v-list>
@@ -90,6 +88,7 @@ import { ref, reactive, computed, watch, onMounted } from "vue";
 import { useRouter, useRoute } from "vue-router";
 import { storeToRefs } from "pinia";
 import { useAuthStore } from "@/store/authStore";
+import { useI18n } from "vue-i18n";
 import CreateCvModal from "@/components/user/cvs/CreateCvModal.vue";
 import DeleteCvModal from "@/components/user/cvs/DeleteCvModal.vue";
 import useErrorState from "@/composables/useErrorState";
@@ -99,6 +98,8 @@ import handleScrollPadding from "@/utils/handleScrollPadding";
 import { ROUTES } from "@/constants/router";
 import { IUserCvNameData } from "@/types/pages/users/cvs";
 import { ICreateCvInput, IDeleteCvInput } from "@/types/cvsOperations";
+
+const { t } = useI18n({ useScope: "global" });
 
 const router = useRouter();
 const route = useRoute();
@@ -122,16 +123,25 @@ function openUserCv(cvId: string) {
 
 const search = ref("");
 
-const headers = [
-  { key: "name", title: "Name" },
-  { key: "description", title: "Description", sortable: false },
-  { key: "options", sortable: false },
-];
+const headers = computed(() => {
+  return [
+    { key: "name", title: t(`cvsPage.name`) },
+    { key: "description", title: t(`cvsPage.description`), sortable: false },
+    { key: "options", sortable: false },
+  ];
+});
+
+const cvMenuItems = computed(() => {
+  return [
+    { title: t(`cvsPage.details`), click: openUserCv },
+    { title: t(`cvsPage.deleteCv`), click: handleOpenDeleteModal },
+  ];
+});
 
 const {
   isLoading,
   isError,
-  errorMessage,
+  errorMessageKey,
   setErrorValuesToDefault,
   setErrorValues,
 } = useErrorState();
@@ -224,6 +234,11 @@ function handleOpenDeleteModal(cvId: string, cvName: string) {
 
 function handleCloseDeleteModal() {
   isDeleteModalOpen.value = false;
+}
+
+function checkOwner(cvItemTitle: string, cvUserId: string) {
+  if (cvItemTitle === t("cvsPage.details")) return false;
+  return Number(authStoreUser.value?.id) !== Number(cvUserId);
 }
 </script>
 

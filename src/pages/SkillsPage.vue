@@ -2,7 +2,7 @@
   <div class="skills-page">
     <AppErrorSection
       v-if="isError"
-      :errorMessage="errorMessage"
+      :errorMessageKey="errorMessageKey"
       class="skills-page__error-wrapper"
     />
     <div v-else class="skills-page__main-content-wrapper">
@@ -12,7 +12,7 @@
         variant="outlined"
         density="compact"
         single-line
-        placeholder="Search"
+        :placeholder="$t('placeholder.search')"
         class="skills-page__text-field-wrapper"
         hide-details
       />
@@ -22,10 +22,10 @@
           :items="skills"
           :search="search"
           :custom-filter="handleTableFilter"
-          item-key="id"
-          class="skills-page__data-table"
           :mobile="null"
           :mobile-breakpoint="550"
+          :no-data-text="$t('skillsPage.noSkills')"
+          class="skills-page__data-table"
           hide-details
         >
           <template v-slot:[`item.options`]>
@@ -57,28 +57,35 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted, reactive, ref } from "vue";
+import { computed, onMounted, reactive, ref } from "vue";
+import { useI18n } from "vue-i18n";
 import useErrorState from "@/composables/useErrorState";
 import { getAllSkills } from "@/services/skills";
 import { ISkillsTableData } from "@/types/pages/skillsTable";
 import { ISkillsFilterFunction } from "@/types/vuetifyDataTable";
 
+const { t } = useI18n({ useScope: "global" });
+
 const search = ref("");
 
 const skills = reactive<ISkillsTableData[]>([]);
 
-const headers = [
-  { key: "name", title: "Name" },
-  { key: "category", title: "Category" },
-  { key: "options", sortable: false },
-];
+const headers = computed(() => {
+  return [
+    { key: "name", title: t(`skillsPage.name`) },
+    { key: "category", title: t(`skillsPage.category`) },
+    { key: "options", sortable: false },
+  ];
+});
 
-const skillMenuItems = ["Update Skill", "Delete Skill"];
+const skillMenuItems = computed(() => {
+  return [t(`skillsPage.updateSkill`), t(`skillsPage.deleteSkill`)];
+});
 
 const {
   isLoading,
   isError,
-  errorMessage,
+  errorMessageKey,
   setErrorValuesToDefault,
   setErrorValues,
 } = useErrorState();

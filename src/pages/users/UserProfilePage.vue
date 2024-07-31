@@ -1,7 +1,10 @@
 <template>
   <div class="user-profile">
     <AppSpinner v-if="isUserLoading" />
-    <AppErrorSection v-else-if="isUserError" :errorMessage="userErrorMessage" />
+    <AppErrorSection
+      v-else-if="isUserError"
+      :errorMessageKey="userErrorMessage"
+    />
     <div v-else-if="user" class="user-profile__main-content-wrapper">
       <AvatarUpload
         :isOwner="isOwner"
@@ -33,6 +36,7 @@ import { useRoute } from "vue-router";
 import { storeToRefs } from "pinia";
 import { useAuthStore } from "@/store/authStore";
 import { useBreadCrumbsStore } from "@/store/breadCrumbs";
+import { useI18n } from "vue-i18n";
 import AvatarUpload from "@/components/user/profile/AvatarUpload.vue";
 import UserInfo from "@/components/user/profile/UserInfo.vue";
 import useToast from "@/composables/useToast";
@@ -46,10 +50,6 @@ import {
   updateUserData,
 } from "@/services/users/profile";
 import {
-  FAILED_TO_LOAD_DEPARMENTS,
-  FAILED_TO_LOAD_POSITIONS,
-} from "@/constants/errorMessage";
-import {
   IUserProfileData,
   IUserProfileServerData,
   IDepartmentNamesData,
@@ -58,6 +58,8 @@ import {
   IUpdateUserInput,
   IUpdateProfileInput,
 } from "@/types/pages/users/profile";
+
+const { t } = useI18n({ useScope: "global" });
 
 const route = useRoute();
 
@@ -76,7 +78,7 @@ const { newEnityName } = storeToRefs(useBreadCrumbsStore());
 const {
   isLoading: isUserLoading,
   isError: isUserError,
-  errorMessage: userErrorMessage,
+  errorMessageKey: userErrorMessage,
   setErrorValuesToDefault: setUserErrorValuesToDefault,
   setErrorValues: setUserErrorValues,
 } = useErrorState();
@@ -181,7 +183,7 @@ async function fetchDepartmentsNames() {
   } catch (error) {
     setDepartmentsErrorValues(error);
 
-    setErrorToast(FAILED_TO_LOAD_DEPARMENTS);
+    setErrorToast(t("errors.FAILED_TO_LOAD_DEPARMENTS"));
   } finally {
     areDepartmentsLoading.value = false;
   }
@@ -200,7 +202,7 @@ async function fetchPositionsNames() {
   } catch (error) {
     setPositionsErrorValues(error);
 
-    setErrorToast(FAILED_TO_LOAD_POSITIONS);
+    setErrorToast(t("errors.FAILED_TO_LOAD_POSITIONS"));
   } finally {
     arePositionsLoading.value = false;
   }

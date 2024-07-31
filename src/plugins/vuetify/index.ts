@@ -3,6 +3,7 @@ import { aliases, mdi } from "vuetify/iconsets/mdi";
 import { en, de, ru } from "vuetify/locale";
 import components from "@/plugins/vuetify/components";
 import { appTheme, getThemeValue } from "@/utils/theme";
+import getUserLocale from "@/utils/getUserLocale";
 import "vuetify/styles";
 
 export default createVuetify({
@@ -11,8 +12,8 @@ export default createVuetify({
     defaultTheme: getThemeValue(appTheme),
   },
   locale: {
-    locale: "en",
-    fallback: "en",
+    locale: getUserLocale(),
+    fallback: process.env.VUE_APP_FALLBACK_LOCALE,
     messages: { en, de, ru },
   },
   icons: {

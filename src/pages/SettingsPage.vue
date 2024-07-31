@@ -3,7 +3,7 @@
     <v-select
       v-model="selectTheme"
       :items="themeItems"
-      label="Appearance"
+      :label="$t('label.theme')"
       variant="outlined"
       class="settings-page__text-field-wrapper"
       hide-details
@@ -11,7 +11,7 @@
     <v-select
       v-model="selectLanguage"
       :items="languageItems"
-      label="Language"
+      :label="$t('label.language')"
       variant="outlined"
       class="settings-page__text-field-wrapper"
       hide-details
@@ -20,31 +20,45 @@
 </template>
 
 <script setup lang="ts">
-import { ref, watch } from "vue";
-import { useLocale } from "vuetify";
+import { computed, ref, watch } from "vue";
 import { storeToRefs } from "pinia";
 import { useThemeStore } from "@/store/theme";
+import { useLangStore } from "@/store/lang";
+import { useI18n } from "vue-i18n";
+
+const { t, locale } = useI18n({ useScope: "global" });
 
 const { currTheme } = storeToRefs(useThemeStore());
 
+const langStore = useLangStore();
+const currLang = storeToRefs(langStore).currLang;
+
 const selectTheme = ref(currTheme.value);
-const themeItems = ["Light", "Dark", "Device settings"];
+
+const themeItems = computed(() => {
+  return [
+    { title: t("theme.Light"), value: "Light" },
+    { title: t("theme.Dark"), value: "Dark" },
+    { title: t("theme.Device settings"), value: "Device settings" },
+  ];
+});
+
+const selectLanguage = ref(currLang.value);
+
+const languageItems = ["English", "Deutsch", "Русский"];
 
 watch(selectTheme, (newValue) => {
   currTheme.value = newValue;
 });
 
-const { current } = useLocale();
+watch(selectLanguage, async (newLocale) => {
+  await langStore.changeCurrLanguage(newLocale);
+});
 
-const selectLanguage = ref("English");
-const languageItems = [
-  { title: "English", value: "en" },
-  { title: "Deutsch", value: "de" },
-  { title: "Русский", value: "ru" },
-];
-
-watch(selectLanguage, (newValue) => {
-  current.value = newValue;
+watch(locale, (newValue) => {
+  if (newValue) {
+    selectLanguage.value = currLang.value;
+  }
 });
 </script>
 

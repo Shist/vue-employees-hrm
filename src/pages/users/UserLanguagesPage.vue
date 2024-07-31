@@ -3,7 +3,7 @@
     <AppSpinner v-if="areUserLangsLoading" />
     <AppErrorSection
       v-else-if="isUserLangsError"
-      :errorMessage="userLangsErrorMessage"
+      :errorMessageKey="userLangsErrorMessage"
     />
     <div v-else class="user-languages__main-content-wrapper">
       <v-btn
@@ -14,13 +14,13 @@
         @click="handleOpenCreateModal"
       >
         <v-icon class="user-languages__add-icon">mdi-plus</v-icon>
-        <span>Add language</span>
+        <span>{{ $t("userLanguagesPage.btnAdd") }}</span>
       </v-btn>
       <span
         v-if="!userLanguages?.length"
         class="user-languages__no-languages-label"
       >
-        No employee languages specified yet
+        {{ $t("userLanguagesPage.noLanguagesMsg") }}
       </span>
       <div class="user-languages__languages-wrapper">
         <div
@@ -61,7 +61,11 @@
               <span
                 class="user-languages__language-proficiency"
                 :class="getClassByProficiency(userLanguage.proficiency)"
-                >{{ userLanguage.proficiency }}</span
+                >{{
+                  $t(
+                    `userLanguagesPage.languageProficiency.${userLanguage.proficiency}`
+                  )
+                }}</span
               >
               <span class="user-languages__language-label">{{
                 userLanguage.name
@@ -82,7 +86,7 @@
             class="user-languages__cancel-deletion-btn"
             @click="clearUserDeletionLanguages"
           >
-            Cancel
+            {{ $t("button.cancelButton") }}
           </v-btn>
           <v-btn
             variant="text"
@@ -90,7 +94,9 @@
             class="user-languages__deletion-btn"
             @click="submitUserLanguagesDeletion"
           >
-            <span class="user-languages__deletion-btn-label">Delete</span>
+            <span class="user-languages__deletion-btn-label">{{
+              $t("button.deleteButton")
+            }}</span>
             <span class="user-languages__deletion-btn-num">
               {{ languagesForDeletionAmount }}
             </span>
@@ -119,6 +125,7 @@ import { useRoute } from "vue-router";
 import { storeToRefs } from "pinia";
 import { useAuthStore } from "@/store/authStore";
 import { useScrollbarWidth } from "@/store/scrollbarWidth";
+import { useI18n } from "vue-i18n";
 import LanguageModal from "@/components/user/languages/LanguageModal.vue";
 import useToast from "@/composables/useToast";
 import useErrorState from "@/composables/useErrorState";
@@ -130,7 +137,6 @@ import {
 } from "@/services/users/languages";
 import { getAllLanguagesNames } from "@/services/languages";
 import handleScrollPadding from "@/utils/handleScrollPadding";
-import { FAILED_TO_LOAD_LANGUAGES } from "@/constants/errorMessage";
 import { Proficiency } from "@/types/enums";
 import {
   ILanguagesNamesData,
@@ -139,6 +145,10 @@ import {
   IDeleteProfileLanguageInput,
 } from "@/types/pages/users/languages";
 
+const { t } = useI18n({ useScope: "global" });
+
+const { scrollbarWidth } = storeToRefs(useScrollbarWidth());
+
 const route = useRoute();
 
 const userId = computed<string>(() => {
@@ -146,8 +156,6 @@ const userId = computed<string>(() => {
   const [section, userId, tab] = route.fullPath.slice(1).split("/");
   return userId;
 });
-
-const { scrollbarWidth } = storeToRefs(useScrollbarWidth());
 
 const authStore = useAuthStore();
 const authStoreUser = storeToRefs(authStore).user;
@@ -158,7 +166,7 @@ const { setErrorToast } = useToast();
 const {
   isLoading: areUserLangsLoading,
   isError: isUserLangsError,
-  errorMessage: userLangsErrorMessage,
+  errorMessageKey: userLangsErrorMessage,
   setErrorValuesToDefault: setUserLangsErrorValuesToDefault,
   setErrorValues: setUserLangsErrorValues,
 } = useErrorState();
@@ -237,7 +245,7 @@ async function fetchAllLanguagesNames() {
   } catch (error: unknown) {
     setAllLangsErrorValues(error);
 
-    setErrorToast(FAILED_TO_LOAD_LANGUAGES);
+    setErrorToast(t("errors.FAILED_TO_LOAD_LANGUAGES"));
   } finally {
     areAllLangsLoading.value = false;
   }
@@ -488,7 +496,7 @@ function getClassByProficiency(value: Proficiency) {
         }
         .user-languages__cancel-deletion-btn {
           padding: 6px;
-          max-width: 100px;
+          max-width: 150px;
           width: 100%;
           color: var(--color-btn-gray-text);
           background-color: var(--color-wrapper-bg);
@@ -498,10 +506,13 @@ function getClassByProficiency(value: Proficiency) {
             background-color: rgba(var(--color-btn-gray-text-rgb), 0.08);
             border: 1px solid var(--color-btn-gray-text);
           }
+          @media (max-width: $phone-l) {
+            max-width: 100px;
+          }
         }
         .user-languages__deletion-btn {
           padding: 6px;
-          max-width: 120px;
+          max-width: 150px;
           width: 100%;
           background-color: var(--color-btn-bg);
           border-radius: 0;
@@ -514,8 +525,14 @@ function getClassByProficiency(value: Proficiency) {
           &:disabled {
             filter: grayscale(50%);
           }
+          @media (max-width: $phone-l) {
+            max-width: 100px;
+          }
           .user-languages__deletion-btn-label {
             color: var(--color-btn-text);
+            @media (max-width: $phone-l) {
+              font-size: 9px;
+            }
           }
           .user-languages__deletion-btn-num {
             display: flex;
@@ -538,6 +555,9 @@ function getClassByProficiency(value: Proficiency) {
 }
 :deep(.user-languages__deletion-btn .v-btn__content) {
   column-gap: 12px;
+  @media (max-width: $phone-l) {
+    column-gap: 8px;
+  }
 }
 :deep(.user-languages__language-card .v-card-item__content) {
   display: grid;
@@ -556,5 +576,10 @@ function getClassByProficiency(value: Proficiency) {
   text-overflow: ellipsis;
   white-space: nowrap;
   overflow: hidden;
+}
+:deep(.user-languages__cancel-deletion-btn .v-btn__content) {
+  @media (max-width: $phone-l) {
+    font-size: 9px;
+  }
 }
 </style>

@@ -1,5 +1,5 @@
 <template>
-  <div class="global-container">
+  <div class="global-container" v-if="!isLoading">
     <AppHeader />
     <AppSpinner v-if="isLogging" class="global-container__spinner" />
     <main v-else class="app-main" :style="{ paddingRight: scrollbarWidth }">
@@ -14,12 +14,14 @@
 
 <script setup lang="ts">
 import { watch, onMounted, onUnmounted, ref } from "vue";
-import { useTheme } from "vuetify";
-import { updateGlobalOptions } from "vue3-toastify";
 import { storeToRefs } from "pinia";
 import { useAuthStore } from "@/store/authStore";
 import { useScrollbarWidth } from "@/store/scrollbarWidth";
 import { useThemeStore } from "@/store/theme";
+import { useLangStore } from "@/store/lang";
+import { useTheme } from "vuetify";
+import { updateGlobalOptions } from "vue3-toastify";
+import { useI18n } from "vue-i18n";
 import AppHeader from "@/components/AppHeader.vue";
 import BreadCrumbs from "@/components/BreadCrumbs.vue";
 import AppTabs from "@/components/AppTabs.vue";
@@ -30,10 +32,15 @@ const { scrollbarWidth } = storeToRefs(useScrollbarWidth());
 const { currTheme } = storeToRefs(useThemeStore());
 
 const authStore = useAuthStore();
+const langStore = useLangStore();
 
 const vuetifyTheme = useTheme();
 
+const { locale } = useI18n({ useScope: "global" });
+
 const isLogging = ref(true);
+
+const isLoading = ref(true);
 
 function setCurrTheme() {
   localStorage.setItem("theme", currTheme.value);
@@ -56,6 +63,12 @@ function setCurrTheme() {
 
 setCurrTheme();
 
+function setCurrLang() {
+  document.querySelector("html")?.setAttribute("lang", locale.value);
+}
+
+setCurrLang();
+
 watch(currTheme, setCurrTheme);
 
 function onDeviceSettingsUpdate() {
@@ -64,7 +77,11 @@ function onDeviceSettingsUpdate() {
   }
 }
 
-onMounted(() => {
+onMounted(async () => {
+  await langStore.loadInitialLocale(locale.value).finally(() => {
+    isLoading.value = false;
+  });
+
   const mediaQuery = window.matchMedia("(prefers-color-scheme: dark)");
   mediaQuery.addEventListener("change", onDeviceSettingsUpdate);
 

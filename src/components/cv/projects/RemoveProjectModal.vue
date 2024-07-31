@@ -7,7 +7,10 @@
       scrim="var(--color-modal-overlay)"
       opacity="100%"
     >
-      <v-card title="Remove project" class="remove-project-modal__card-wrapper">
+      <v-card
+        :title="$t('cvsProjectsPage.removeProjectModalTitle')"
+        class="remove-project-modal__card-wrapper"
+      >
         <v-btn
           icon="mdi-close"
           class="remove-project-modal__cross-btn"
@@ -15,9 +18,11 @@
         ></v-btn>
         <v-card-item class="remove-project-modal__message-wrapper">
           <span>
-            Are you sure you want to remove project
-            <b>{{ projectName }}</b>
-            from CV?
+            {{
+              $t("cvsProjectsPage.removeProjectModalText", {
+                projectName: projectName,
+              })
+            }}
           </span>
         </v-card-item>
         <v-card-actions>
@@ -26,7 +31,7 @@
             @click="closeModal"
             class="remove-project-modal__btn-cancel"
           >
-            Cancel
+            {{ $t("button.cancelButton") }}
           </v-btn>
           <v-btn
             type="submit"
@@ -34,7 +39,7 @@
             @click="makeDeleteOperation"
             class="remove-project-modal__btn-confirm"
           >
-            Confirm
+            {{ $t("button.confirmButton") }}
           </v-btn>
         </v-card-actions>
       </v-card>
@@ -100,7 +105,7 @@ function closeModal() {
     }
     .remove-project-modal__btn-cancel {
       padding: 6px;
-      max-width: 100px;
+      max-width: 150px;
       width: 100%;
       color: var(--color-btn-gray-text);
       background-color: var(--color-wrapper-bg);
@@ -110,10 +115,13 @@ function closeModal() {
         background-color: rgba(var(--color-btn-gray-text-rgb), 0.08);
         border: 1px solid var(--color-btn-gray-text);
       }
+      @media (max-width: $phone-l) {
+        max-width: 100px;
+      }
     }
     .remove-project-modal__btn-confirm {
       padding: 6px;
-      max-width: 100px;
+      max-width: 150px;
       width: 100%;
       color: var(--color-btn-text);
       background-color: var(--color-btn-bg);
@@ -125,6 +133,9 @@ function closeModal() {
       }
       &:disabled {
         filter: grayscale(50%);
+      }
+      @media (max-width: $phone-l) {
+        max-width: 100px;
       }
     }
   }
@@ -138,5 +149,15 @@ function closeModal() {
 }
 :deep(.v-overlay-container .v-overlay .v-overlay__scrim) {
   display: none;
+}
+:deep(.remove-project-modal__btn-cancel .v-btn__content) {
+  @media (max-width: $phone-l) {
+    font-size: 10px;
+  }
+}
+:deep(.remove-project-modal__btn-confirm .v-btn__content) {
+  @media (max-width: $phone-l) {
+    font-size: 10px;
+  }
 }
 </style>

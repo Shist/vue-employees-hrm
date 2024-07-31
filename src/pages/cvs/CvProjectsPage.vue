@@ -2,14 +2,14 @@
   <div class="cv-projects">
     <AppErrorSection
       v-if="isCvProjectsError"
-      :errorMessage="cvProjectsErrorMessage"
+      :errorMessageKey="cvProjectsErrorMessage"
       class="cv-projects__error-wrapper"
     />
     <div v-else class="cv-projects__main-content-wrapper">
       <div class="cv-projects__search-create-controls-wrapper">
         <v-text-field
           v-model="search"
-          label="Search"
+          :placeholder="$t('placeholder.search')"
           prepend-inner-icon="mdi-magnify"
           variant="outlined"
           density="compact"
@@ -27,7 +27,7 @@
           @click="handleOpenCreateModal"
           :loading="areCvProjectsLoading"
         >
-          Add project to CV
+          {{ $t("cvsProjectsPage.btnAdd") }}
         </v-btn>
       </div>
       <v-skeleton-loader type="table" :loading="areCvProjectsLoading">
@@ -36,9 +36,10 @@
           :items="cvProjects"
           :search="search"
           :custom-filter="handleTableFilter"
-          class="cv-projects__data-table"
           :mobile="null"
           :mobile-breakpoint="1000"
+          :no-data-text="$t('projectsPage.noProjects')"
+          class="cv-projects__data-table"
           hide-details
         >
           <template v-slot:[`item.options`]="{ item }">
@@ -51,24 +52,18 @@
                 />
               </template>
               <v-list>
-                <v-list-item disabled>
-                  <v-list-item-title class="cv-projects__popup-menu-label">
-                    Project
-                  </v-list-item-title>
-                </v-list-item>
-                <v-list-item disabled>
-                  <v-list-item-title class="cv-projects__popup-menu-label">
-                    Update project
-                  </v-list-item-title>
-                </v-list-item>
                 <v-list-item
-                  @click="
-                    () => handleOpenDeleteModal(item.projectId, item.name)
+                  v-for="projectItem in projectMenuItems"
+                  :key="projectItem.title"
+                  :disabled="projectItem.disabled"
+                  v-on:click="
+                    projectItem.click
+                      ? projectItem.click(item.projectId, item.name)
+                      : null
                   "
-                  :disabled="!isOwner"
                 >
                   <v-list-item-title class="cv-projects__popup-menu-label">
-                    Remove project
+                    {{ projectItem.title }}
                   </v-list-item-title>
                 </v-list-item>
               </v-list>
@@ -103,6 +98,7 @@ import { ref, reactive, computed, watch, onMounted } from "vue";
 import { useRoute } from "vue-router";
 import { storeToRefs } from "pinia";
 import { useAuthStore } from "@/store/authStore";
+import { useI18n } from "vue-i18n";
 import AddProjectModal from "@/components/cv/projects/AddProjectModal.vue";
 import RemoveProjectModal from "@/components/cv/projects/RemoveProjectModal.vue";
 import useToast from "@/composables/useToast";
@@ -114,7 +110,6 @@ import {
 } from "@/services/cvs/projects";
 import { getAllProjectsData } from "@/services/projects";
 import handleScrollPadding from "@/utils/handleScrollPadding";
-import { FAILED_TO_LOAD_PROJECTS } from "@/constants/errorMessage";
 import {
   ICvProjectsTableData,
   ICvProjectsTableServerData,
@@ -123,6 +118,8 @@ import {
   IRemoveCvProjectInput,
 } from "@/types/pages/cvs/projects";
 import { ICvProjectsFilterFunction } from "@/types/vuetifyDataTable";
+
+const { t } = useI18n({ useScope: "global" });
 
 const route = useRoute();
 
@@ -143,21 +140,39 @@ const addingProjectName = ref<string | null>(null);
 
 const search = ref("");
 
-const headers = [
-  { key: "name", title: "Name" },
-  { key: "internalName", title: "Internal Name", sortable: false },
-  { key: "domain", title: "Domain", sortable: false },
-  { key: "startDate", title: "Start Date", sortable: false },
-  { key: "endDate", title: "End Date", sortable: false },
-  { key: "options", sortable: false },
-];
+const headers = computed(() => {
+  return [
+    { key: "name", title: t(`projectsPage.name`) },
+    {
+      key: "internalName",
+      title: t(`projectsPage.internalName`),
+      sortable: false,
+    },
+    { key: "domain", title: t(`projectsPage.domain`), sortable: false },
+    { key: "startDate", title: t(`projectsPage.startDate`), sortable: false },
+    { key: "endDate", title: t(`projectsPage.endDate`), sortable: false },
+    { key: "options", sortable: false },
+  ];
+});
+
+const projectMenuItems = computed(() => {
+  return [
+    { title: t(`projectsPage.project`), disabled: true },
+    { title: t(`projectsPage.updateProject`), disabled: true },
+    {
+      title: t(`projectsPage.removeProject`),
+      disabled: !isOwner.value,
+      click: handleOpenDeleteModal,
+    },
+  ];
+});
 
 const { setErrorToast } = useToast();
 
 const {
   isLoading: areCvProjectsLoading,
   isError: isCvProjectsError,
-  errorMessage: cvProjectsErrorMessage,
+  errorMessageKey: cvProjectsErrorMessage,
   setErrorValuesToDefault: setCvProjectsErrorValuesToDefault,
   setErrorValues: setCvProjectsErrorValues,
 } = useErrorState();
@@ -244,7 +259,7 @@ async function fetchAllProjectsCvData() {
   } catch (error: unknown) {
     setAllProjectsErrorValues(error);
 
-    setErrorToast(FAILED_TO_LOAD_PROJECTS);
+    setErrorToast(t("errors.FAILED_TO_LOAD_PROJECTS"));
   } finally {
     areAllProjectsLoading.value = false;
   }

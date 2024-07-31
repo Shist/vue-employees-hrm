@@ -1,6 +1,7 @@
 import { ref } from "vue";
 import { useRouter } from "vue-router";
 import { defineStore } from "pinia";
+import { useI18n } from "vue-i18n";
 import useCookies from "@/composables/useCookies";
 import useToast from "@/composables/useToast";
 import { login, register } from "@/services/auth";
@@ -16,6 +17,9 @@ import {
 } from "@/types/authData";
 
 export const useAuthStore = defineStore("authStore", () => {
+  const { t } = useI18n({
+    useScope: "global",
+  });
   const router = useRouter();
 
   const { getToken, setToken, removeToken } = useCookies();
@@ -55,7 +59,7 @@ export const useAuthStore = defineStore("authStore", () => {
           return;
         }
 
-        setErrorToast(error.message);
+        setErrorToast(t(`errors.${error.message}`));
       }
     }
   };

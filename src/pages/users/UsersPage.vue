@@ -2,7 +2,7 @@
   <div class="main-page">
     <AppErrorSection
       v-if="isError"
-      :errorMessage="errorMessage"
+      :errorMessageKey="errorMessageKey"
       class="main-page__error-wrapper"
     />
     <div v-else class="main-page__main-content-wrapper">
@@ -12,7 +12,7 @@
         variant="outlined"
         density="compact"
         single-line
-        placeholder="Search"
+        :placeholder="$t('placeholder.search')"
         class="main-page__text-field-wrapper"
         hide-details
       />
@@ -21,10 +21,11 @@
           :headers="headers"
           :items="users"
           :search="search"
-          class="main-page__data-table"
           :custom-filter="handleTableFilter"
+          :no-data-text="$t('usersPage.noUsers')"
           :mobile="null"
           :mobile-breakpoint="900"
+          class="main-page__data-table"
           hide-details
         >
           <template v-slot:[`item.avatar`]="{ item }">
@@ -66,8 +67,9 @@
 </template>
 
 <script setup lang="ts">
-import { ref, reactive, onMounted } from "vue";
+import { ref, reactive, onMounted, computed } from "vue";
 import { useRouter } from "vue-router";
+import { useI18n } from "vue-i18n";
 import useErrorState from "@/composables/useErrorState";
 import { getAllUsers } from "@/services/users/users";
 import { ROUTES } from "@/constants/router";
@@ -75,6 +77,7 @@ import { IUsersTableData } from "@/types/pages/users/table";
 import { IUsersFilterFunction } from "@/types/vuetifyDataTable";
 
 const router = useRouter();
+const { t } = useI18n({ useScope: "global" });
 
 function openUserProfile(userId: number) {
   router.push(`${ROUTES.USERS.PATH}/${userId}`);
@@ -84,26 +87,34 @@ const search = ref("");
 
 const users = reactive<IUsersTableData[]>([]);
 
-const headers = [
-  { key: "avatar", sortable: false },
-  { key: "firstName", title: "First Name" },
-  { key: "lastName", title: "Last Name" },
-  { key: "email", title: "Email" },
-  { key: "departmentName", title: "Department" },
-  { key: "positionName", title: "Position" },
-  { key: "options", sortable: false },
-];
+const headers = computed(() => {
+  return [
+    { key: "avatar", sortable: false },
+    { key: "firstName", title: t(`usersPage.firstName`) },
+    { key: "lastName", title: t(`usersPage.lastName`) },
+    { key: "email", title: t(`usersPage.email`) },
+    { key: "departmentName", title: t(`usersPage.departmentName`) },
+    { key: "positionName", title: t(`usersPage.positionName`) },
+    { key: "options", sortable: false },
+  ];
+});
 
-const projectMenuItems = [
-  { title: "Profile", click: openUserProfile, disabled: false },
-  { title: "Update user", disabled: true },
-  { title: "Delete user", disabled: true },
-];
+const projectMenuItems = computed(() => {
+  return [
+    {
+      title: t(`usersPage.profile`),
+      click: openUserProfile,
+      disabled: false,
+    },
+    { title: t("usersPage.updateUser"), disabled: true },
+    { title: t("usersPage.deleteUser"), disabled: true },
+  ];
+});
 
 const {
   isLoading,
   isError,
-  errorMessage,
+  errorMessageKey,
   setErrorValuesToDefault,
   setErrorValues,
 } = useErrorState();

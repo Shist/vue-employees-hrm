@@ -3,7 +3,7 @@
     <AppSpinner v-if="areUserSkillsLoading" />
     <AppErrorSection
       v-else-if="isUserSkillsError"
-      :errorMessage="userSkillsErrorMessage"
+      :errorMessageKey="userSkillsErrorMessage"
     />
     <div v-else class="user-skills__main-content-wrapper">
       <v-btn
@@ -14,10 +14,10 @@
         @click="handleOpenCreateModal"
       >
         <v-icon class="user-skills__add-icon">mdi-plus</v-icon>
-        <span>Add skill</span>
+        <span>{{ $t("userSkillsPage.btnAdd") }}</span>
       </v-btn>
       <span v-if="!userSkills?.length" class="user-skills__no-skills-label">
-        No employee skills specified yet
+        {{ $t("userSkillsPage.noSkillsMsg") }}
       </span>
       <SkillsCategory
         v-for="(aSkills, sCategory) in skillCategoriesMap"
@@ -39,7 +39,7 @@
             class="user-skills__cancel-deletion-btn"
             @click="clearUserDeletionSkills"
           >
-            Cancel
+            {{ $t("button.cancelButton") }}
           </v-btn>
           <v-btn
             variant="text"
@@ -47,7 +47,9 @@
             class="user-skills__deletion-btn"
             @click="submitUserSkillsDeletion"
           >
-            <span class="user-skills__deletion-btn-label">Delete</span>
+            <span class="user-skills__deletion-btn-label">{{
+              $t("button.deleteButton")
+            }}</span>
             <span class="user-skills__deletion-btn-num">
               {{ skillsForDeletionAmount }}
             </span>
@@ -76,6 +78,7 @@ import { useRoute } from "vue-router";
 import { storeToRefs } from "pinia";
 import { useAuthStore } from "@/store/authStore";
 import { useScrollbarWidth } from "@/store/scrollbarWidth";
+import { useI18n } from "vue-i18n";
 import SkillModal from "@/components/user/skills/SkillModal.vue";
 import SkillsCategory from "@/components/SkillsCategory.vue";
 import useToast from "@/composables/useToast";
@@ -88,7 +91,6 @@ import {
   updateUserSkill,
 } from "@/services/users/skills";
 import handleScrollPadding from "@/utils/handleScrollPadding";
-import { FAILED_TO_LOAD_SKILLS } from "@/constants/errorMessage";
 import {
   ISkill,
   ISkillCategoriesMap,
@@ -100,6 +102,10 @@ import {
   IDeleteProfileSkillInput,
 } from "@/types/pages/users/skills";
 
+const { t } = useI18n({ useScope: "global" });
+
+const { scrollbarWidth } = storeToRefs(useScrollbarWidth());
+
 const route = useRoute();
 
 const userId = computed<string>(() => {
@@ -107,8 +113,6 @@ const userId = computed<string>(() => {
   const [section, userId, tab] = route.fullPath.slice(1).split("/");
   return userId;
 });
-
-const { scrollbarWidth } = storeToRefs(useScrollbarWidth());
 
 const authStore = useAuthStore();
 const authStoreUser = storeToRefs(authStore).user;
@@ -119,7 +123,7 @@ const { setErrorToast } = useToast();
 const {
   isLoading: areUserSkillsLoading,
   isError: isUserSkillsError,
-  errorMessage: userSkillsErrorMessage,
+  errorMessageKey: userSkillsErrorMessage,
   setErrorValuesToDefault: setUserSkillsErrorValuesToDefault,
   setErrorValues: setUserSkillsErrorValues,
 } = useErrorState();
@@ -231,7 +235,7 @@ async function fetchAllSkills() {
   } catch (error: unknown) {
     setAllSkillsErrorValues(error);
 
-    setErrorToast(FAILED_TO_LOAD_SKILLS);
+    setErrorToast(t("errors.FAILED_TO_LOAD_SKILLS"));
   } finally {
     areAllSkillsLoading.value = false;
   }
@@ -436,7 +440,7 @@ function submitUserSkillsDeletion() {
         }
         .user-skills__cancel-deletion-btn {
           padding: 6px;
-          max-width: 100px;
+          max-width: 150px;
           width: 100%;
           color: var(--color-btn-gray-text);
           background-color: var(--color-wrapper-bg);
@@ -446,10 +450,13 @@ function submitUserSkillsDeletion() {
             background-color: rgba(var(--color-btn-gray-text-rgb), 0.08);
             border: 1px solid var(--color-btn-gray-text);
           }
+          @media (max-width: $phone-l) {
+            max-width: 100px;
+          }
         }
         .user-skills__deletion-btn {
           padding: 6px;
-          max-width: 120px;
+          max-width: 150px;
           width: 100%;
           background-color: var(--color-btn-bg);
           border-radius: 0;
@@ -462,8 +469,14 @@ function submitUserSkillsDeletion() {
           &:disabled {
             filter: grayscale(50%);
           }
+          @media (max-width: $phone-l) {
+            max-width: 100px;
+          }
           .user-skills__deletion-btn-label {
             color: var(--color-btn-text);
+            @media (max-width: $phone-l) {
+              font-size: 9px;
+            }
           }
           .user-skills__deletion-btn-num {
             display: flex;
@@ -486,5 +499,13 @@ function submitUserSkillsDeletion() {
 }
 :deep(.user-skills__deletion-btn .v-btn__content) {
   column-gap: 12px;
+  @media (max-width: $phone-l) {
+    column-gap: 8px;
+  }
+}
+:deep(.user-skills__cancel-deletion-btn .v-btn__content) {
+  @media (max-width: $phone-l) {
+    font-size: 9px;
+  }
 }
 </style>

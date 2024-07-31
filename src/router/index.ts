@@ -4,7 +4,7 @@ import useCookies from "@/composables/useCookies";
 import useToast from "@/composables/useToast";
 import { ROUTES } from "@/constants/router";
 import { TAB_NAMES } from "@/constants/tabs";
-import { UNAUTHORIZED_ERROR } from "@/constants/errorMessage";
+import { handleUnauthorizedMessage } from "@/utils/handleNoLangMessage";
 
 const routes: Array<RouteRecordRaw> = [
   {
@@ -192,8 +192,10 @@ router.beforeEach((to, from, next) => {
     next();
   } else if (to.meta.requiresAuth) {
     if (areAllTokensExpired) {
+      const toastMessage = handleUnauthorizedMessage();
+
       const { setErrorToast } = useToast();
-      setErrorToast(UNAUTHORIZED_ERROR);
+      setErrorToast(toastMessage);
 
       next(ROUTES.SIGN_IN.PATH);
     } else {

@@ -2,7 +2,7 @@
   <div class="departments-page">
     <AppErrorSection
       v-if="isError"
-      :errorMessage="errorMessage"
+      :errorMessageKey="errorMessageKey"
       class="departments-page__error-wrapper"
     />
     <div v-else class="departments-page__main-content-wrapper">
@@ -12,7 +12,7 @@
         variant="outlined"
         density="compact"
         single-line
-        placeholder="Search"
+        :placeholder="$t('placeholder.search')"
         class="departments-page__text-field-wrapper"
         hide-details
       />
@@ -22,7 +22,7 @@
           :items="departments"
           :search="search"
           :custom-filter="handleTableFilter"
-          item-key="id"
+          :no-data-text="$t('departmentsPage.noDepartments')"
           class="departments-page__data-table"
           hide-details
         >
@@ -55,27 +55,37 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted, reactive, ref } from "vue";
+import { computed, onMounted, reactive, ref } from "vue";
+import { useI18n } from "vue-i18n";
 import useErrorState from "@/composables/useErrorState";
 import { getAllDepartmentNames } from "@/services/departments";
 import { IDepartmentsTableData } from "@/types/pages/departmentsTable";
 import { IDepartmentsFilterFunction } from "@/types/vuetifyDataTable";
 
+const { t } = useI18n({ useScope: "global" });
+
 const search = ref("");
 
 const departments = reactive<IDepartmentsTableData[]>([]);
 
-const headers = [
-  { key: "name", title: "Name" },
-  { key: "options", sortable: false },
-];
+const headers = computed(() => {
+  return [
+    { key: "name", title: t(`departmentsPage.name`) },
+    { key: "options", sortable: false },
+  ];
+});
 
-const departmentMenuItems = ["Update Department", "Delete Department"];
+const departmentMenuItems = computed(() => {
+  return [
+    t(`departmentsPage.updateDepartment`),
+    t(`departmentsPage.deleteDepartment`),
+  ];
+});
 
 const {
   isLoading,
   isError,
-  errorMessage,
+  errorMessageKey,
   setErrorValuesToDefault,
   setErrorValues,
 } = useErrorState();

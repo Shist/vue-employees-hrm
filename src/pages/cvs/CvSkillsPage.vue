@@ -3,7 +3,7 @@
     <AppSpinner v-if="areCvSkillsLoading" />
     <AppErrorSection
       v-else-if="isCvSkillsError"
-      :errorMessage="cvSkillsErrorMessage"
+      :errorMessageKey="cvSkillsErrorMessage"
     />
     <div v-else class="cv-skills__main-content-wrapper">
       <v-btn
@@ -14,10 +14,10 @@
         @click="handleOpenCreateModal"
       >
         <v-icon class="cv-skills__add-icon">mdi-plus</v-icon>
-        <span>Add skill</span>
+        <span>{{ $t("userSkillsPage.btnAdd") }}</span>
       </v-btn>
       <span v-if="!cvSkills?.length" class="cv-skills__no-skills-label">
-        No CV skills specified yet
+        {{ $t("userSkillsPage.noSkillsMsg") }}
       </span>
       <SkillsCategory
         v-for="(aSkills, sCategory) in skillCategoriesMap"
@@ -39,7 +39,7 @@
             class="cv-skills__cancel-deletion-btn"
             @click="clearCvDeletionSkills"
           >
-            Cancel
+            {{ $t("button.cancelButton") }}
           </v-btn>
           <v-btn
             variant="text"
@@ -47,7 +47,9 @@
             class="cv-skills__deletion-btn"
             @click="submitCvSkillsDeletion"
           >
-            <span class="cv-skills__deletion-btn-label">Delete</span>
+            <span class="cv-skills__deletion-btn-label">{{
+              $t("button.deleteButton")
+            }}</span>
             <span class="cv-skills__deletion-btn-num">
               {{ skillsForDeletionAmount }}
             </span>
@@ -76,6 +78,7 @@ import { useRoute } from "vue-router";
 import { storeToRefs } from "pinia";
 import { useAuthStore } from "@/store/authStore";
 import { useScrollbarWidth } from "@/store/scrollbarWidth";
+import { useI18n } from "vue-i18n";
 import SkillModal from "@/components/cv/skills/SkillModal.vue";
 import SkillsCategory from "@/components/SkillsCategory.vue";
 import useToast from "@/composables/useToast";
@@ -88,7 +91,6 @@ import {
   deleteCvSkills,
 } from "@/services/cvs/skills";
 import handleScrollPadding from "@/utils/handleScrollPadding";
-import { FAILED_TO_LOAD_SKILLS } from "@/constants/errorMessage";
 import {
   ISkill,
   ICvSkillsServerData,
@@ -100,6 +102,8 @@ import {
   IAddOrUpdateCvSkillInput,
   IDeleteCvSkillInput,
 } from "@/types/pages/cvs/skills";
+
+const { t } = useI18n({ useScope: "global" });
 
 const { scrollbarWidth } = storeToRefs(useScrollbarWidth());
 
@@ -122,7 +126,7 @@ const { setErrorToast } = useToast();
 const {
   isLoading: areCvSkillsLoading,
   isError: isCvSkillsError,
-  errorMessage: cvSkillsErrorMessage,
+  errorMessageKey: cvSkillsErrorMessage,
   setErrorValuesToDefault: setCvSkillsErrorValuesToDefault,
   setErrorValues: setCvSkillsErrorValues,
 } = useErrorState();
@@ -238,7 +242,7 @@ async function fetchAllSkills() {
   } catch (error: unknown) {
     setAllSkillsErrorValues(error);
 
-    setErrorToast(FAILED_TO_LOAD_SKILLS);
+    setErrorToast(t("errors.FAILED_TO_LOAD_SKILLS"));
   } finally {
     areAllSkillsLoading.value = false;
   }
@@ -443,7 +447,7 @@ function submitCvSkillsDeletion() {
         }
         .cv-skills__cancel-deletion-btn {
           padding: 6px;
-          max-width: 100px;
+          max-width: 150px;
           width: 100%;
           color: var(--color-btn-gray-text);
           background-color: var(--color-wrapper-bg);
@@ -453,10 +457,13 @@ function submitCvSkillsDeletion() {
             background-color: rgba(var(--color-btn-gray-text-rgb), 0.08);
             border: 1px solid var(--color-btn-gray-text);
           }
+          @media (max-width: $phone-l) {
+            max-width: 100px;
+          }
         }
         .cv-skills__deletion-btn {
           padding: 6px;
-          max-width: 120px;
+          max-width: 150px;
           width: 100%;
           background-color: var(--color-btn-bg);
           border-radius: 0;
@@ -469,8 +476,14 @@ function submitCvSkillsDeletion() {
           &:disabled {
             filter: grayscale(50%);
           }
+          @media (max-width: $phone-l) {
+            max-width: 100px;
+          }
           .cv-skills__deletion-btn-label {
             color: var(--color-btn-text);
+            @media (max-width: $phone-l) {
+              font-size: 9px;
+            }
           }
           .cv-skills__deletion-btn-num {
             display: flex;
@@ -493,5 +506,13 @@ function submitCvSkillsDeletion() {
 }
 :deep(.cv-skills__deletion-btn .v-btn__content) {
   column-gap: 12px;
+  @media (max-width: $phone-l) {
+    column-gap: 8px;
+  }
+}
+:deep(.cv-skills__cancel-deletion-btn .v-btn__content) {
+  @media (max-width: $phone-l) {
+    font-size: 9px;
+  }
 }
 </style>

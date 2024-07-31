@@ -2,7 +2,7 @@
   <div class="projects-page">
     <AppErrorSection
       v-if="isError"
-      :errorMessage="errorMessage"
+      :errorMessageKey="errorMessageKey"
       class="projects-page__error-wrapper"
     />
     <div v-else class="projects-page__main-content-wrapper">
@@ -12,7 +12,7 @@
         variant="outlined"
         single-line
         density="compact"
-        placeholder="Search"
+        :placeholder="$t('placeholder.search')"
         class="projects-page__text-field-wrapper"
         hide-details
       />
@@ -21,10 +21,11 @@
           :headers="headers"
           :items="projects"
           :search="search"
-          class="projects-page__data-table"
           :custom-filter="handleTableFilter"
           :mobile="null"
-          :mobile-breakpoint="1050"
+          :mobile-breakpoint="1070"
+          :no-data-text="$t('projectsPage.noProjects')"
+          class="projects-page__data-table"
           hide-details
         >
           <template v-slot:[`item.options`]>
@@ -56,32 +57,43 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted, reactive, ref } from "vue";
+import { computed, onMounted, reactive, ref } from "vue";
+import { useI18n } from "vue-i18n";
 import useErrorState from "@/composables/useErrorState";
 import { getAllProjects } from "@/services/projects";
 import { IProjectsTableData } from "@/types/pages/projectsTable";
 import { IProjectsFilterFunction } from "@/types/vuetifyDataTable";
 
+const { t } = useI18n({ useScope: "global" });
+
 const search = ref("");
 
 const projects = reactive<IProjectsTableData[]>([]);
 
-const headers = [
-  { key: "name", title: "Name" },
-  { key: "internalName", title: "Internal Name" },
-  { key: "domain", title: "Domain" },
-  { key: "startDate", title: "Start Date" },
-  { key: "endDate", title: "End Date" },
-  { key: "teamSize", title: "Team Size" },
-  { key: "options", sortable: false },
-];
+const headers = computed(() => {
+  return [
+    { key: "name", title: t(`projectsPage.name`) },
+    { key: "internalName", title: t(`projectsPage.internalName`) },
+    { key: "domain", title: t(`projectsPage.domain`) },
+    { key: "startDate", title: t(`projectsPage.startDate`) },
+    { key: "endDate", title: t(`projectsPage.endDate`) },
+    { key: "teamSize", title: t(`projectsPage.teamSize`) },
+    { key: "options", sortable: false },
+  ];
+});
 
-const projectMenuItems = ["Project", "Update project", "Delete project"];
+const projectMenuItems = computed(() => {
+  return [
+    t(`projectsPage.project`),
+    t(`projectsPage.updateProject`),
+    t(`projectsPage.removeProject`),
+  ];
+});
 
 const {
   isLoading,
   isError,
-  errorMessage,
+  errorMessageKey,
   setErrorValuesToDefault,
   setErrorValues,
 } = useErrorState();
@@ -200,13 +212,13 @@ const handleTableFilter: IProjectsFilterFunction = (value, query, item) => {
 :deep(.v-table > .v-table__wrapper > table > tbody > tr > td:nth-child(2)),
 :deep(.v-table > .v-table__wrapper > table > tbody > tr > td:nth-child(3)) {
   max-width: 200px;
-  @media (max-width: 1049px) {
+  @media (max-width: 1069px) {
     max-width: none;
   }
 }
 :deep(.v-table > .v-table__wrapper > table > tbody > tr > td:last-child) {
   width: 80px;
-  @media (max-width: 1049px) {
+  @media (max-width: 1069px) {
     width: 100%;
   }
 }

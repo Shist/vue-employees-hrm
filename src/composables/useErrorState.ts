@@ -1,15 +1,17 @@
 import { ref } from "vue";
+import { useI18n } from "vue-i18n";
 import { handleLogout } from "@/utils/handleErrors";
-import { UNAUTHORIZED_ERROR, UNEXPECTED_ERROR } from "@/constants/errorMessage";
+import { UNAUTHORIZED_ERROR } from "@/constants/errorMessage";
 
 export default function useErrorState() {
+  const { t } = useI18n({ useScope: "global" });
   const isLoading = ref(true);
   const isError = ref(false);
-  const errorMessage = ref(UNEXPECTED_ERROR);
+  const errorMessageKey = ref("UNEXPECTED_ERROR");
 
   function setErrorValuesToDefault() {
     isError.value = false;
-    errorMessage.value = UNEXPECTED_ERROR;
+    errorMessageKey.value = t("errors.UNEXPECTED_ERROR");
   }
 
   function setErrorValues(error: unknown) {
@@ -21,14 +23,14 @@ export default function useErrorState() {
         return;
       }
 
-      errorMessage.value = error.message;
+      errorMessageKey.value = error.message;
     }
   }
 
   return {
     isLoading,
     isError,
-    errorMessage,
+    errorMessageKey,
     setErrorValuesToDefault,
     setErrorValues,
   };

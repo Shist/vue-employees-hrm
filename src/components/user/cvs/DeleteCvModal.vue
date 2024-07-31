@@ -7,7 +7,10 @@
       scrim="var(--color-modal-overlay)"
       opacity="100%"
     >
-      <v-card title="Delete CV" class="delete-cv-modal__card-wrapper">
+      <v-card
+        :title="$t('cvsPage.deleteModalTitle')"
+        class="delete-cv-modal__card-wrapper"
+      >
         <v-btn
           icon="mdi-close"
           class="delete-cv-modal__cross-btn"
@@ -15,9 +18,7 @@
         />
         <v-card-item class="delete-cv-modal__message-wrapper">
           <span>
-            Are you sure you want to delete CV
-            <b>{{ cvName }}</b>
-            ?
+            {{ $t("cvsPage.deleteModalText", { CV: cvName }) }}
           </span>
         </v-card-item>
         <v-card-actions>
@@ -26,7 +27,7 @@
             @click="closeModal"
             class="delete-cv-modal__btn-cancel"
           >
-            Cancel
+            {{ $t("button.cancelButton") }}
           </v-btn>
           <v-btn
             type="submit"
@@ -34,7 +35,7 @@
             @click="makeDeleteOperation"
             class="delete-cv-modal__btn-confirm"
           >
-            Confirm
+            {{ $t("button.confirmButton") }}
           </v-btn>
         </v-card-actions>
       </v-card>
@@ -99,7 +100,7 @@ function closeModal() {
     }
     .delete-cv-modal__btn-cancel {
       padding: 6px;
-      max-width: 100px;
+      max-width: 150px;
       width: 100%;
       color: var(--color-btn-gray-text);
       background-color: var(--color-wrapper-bg);
@@ -109,10 +110,13 @@ function closeModal() {
         background-color: rgba(var(--color-btn-gray-text-rgb), 0.08);
         border: 1px solid var(--color-btn-gray-text);
       }
+      @media (max-width: $phone-l) {
+        max-width: 100px;
+      }
     }
     .delete-cv-modal__btn-confirm {
       padding: 6px;
-      max-width: 100px;
+      max-width: 150px;
       width: 100%;
       color: var(--color-btn-text);
       background-color: var(--color-btn-bg);
@@ -124,6 +128,9 @@ function closeModal() {
       }
       &:disabled {
         filter: grayscale(50%);
+      }
+      @media (max-width: $phone-l) {
+        max-width: 100px;
       }
     }
   }
@@ -137,5 +144,15 @@ function closeModal() {
 }
 :deep(.v-overlay-container .v-overlay .v-overlay__scrim) {
   display: none;
+}
+:deep(.delete-cv-modal__btn-cancel .v-btn__content) {
+  @media (max-width: $phone-l) {
+    font-size: 10px;
+  }
+}
+:deep(.delete-cv-modal__btn-confirm .v-btn__content) {
+  @media (max-width: $phone-l) {
+    font-size: 10px;
+  }
 }
 </style>

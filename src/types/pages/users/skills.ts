@@ -4,7 +4,7 @@ export interface IAddOrUpdateProfileSkillInput {
   userId: number;
   name: string;
   category: string | null;
-  mastery: Mastery;
+  mastery: Mastery | string;
 }
 
 export interface IDeleteProfileSkillInput {

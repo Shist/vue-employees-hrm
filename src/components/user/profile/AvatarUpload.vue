@@ -38,22 +38,22 @@
           mdi-tray-arrow-up
         </v-icon>
         <h3 class="avatar-upload__prepare-avatar-headline">
-          Upload avatar image
+          {{ $t("userProfilePage.avatarHeadline") }}
         </h3>
       </div>
       <h4 class="avatar-upload__prepare-avatar-formats-label">
-        png, jpg or gif no more than 0.5MB
+        {{ $t("userProfilePage.avatarFormats") }}
       </h4>
     </label>
     <div v-else-if="isOwner" class="avatar-upload__upload-avatar-wrapper">
       <h3 class="avatar-upload__upload-avatar-headline">
-        Your file is ready for uploading
+        {{ $t("userProfilePage.avatarUploadHeadline") }}
       </h3>
       <span class="avatar-upload__upload-avatar-formats-label">
-        File name: {{ avatarFile?.name }}
+        {{ $t("userProfilePage.fileName") }} {{ avatarFile?.name }}
       </span>
       <span class="avatar-upload__upload-avatar-formats-label">
-        File size: {{ avatarSizeLabel }}
+        {{ $t("userProfilePage.fileSize") }} {{ avatarSizeLabel }}
       </span>
       <div class="avatar-upload__upload-btns-wrapper">
         <v-btn
@@ -61,7 +61,7 @@
           @click="cancelAvatarUpload"
           class="avatar-upload__btn-cancel-upload"
         >
-          Cancel
+          {{ $t("button.cancelButton") }}
         </v-btn>
         <v-btn
           type="submit"
@@ -69,7 +69,7 @@
           @click="confirmAvatarUpload"
           class="avatar-upload__btn-confirm-upload"
         >
-          Upload
+          {{ $t("button.uploadButton") }}
         </v-btn>
       </div>
     </div>
@@ -87,7 +87,6 @@ import AvatarDeleteModal from "@/components/user/profile/AvatarDeleteModal.vue";
 import useToast from "@/composables/useToast";
 import handleScrollPadding from "@/utils/handleScrollPadding";
 import fileToBase64 from "@/utils/fileToBase64";
-import { TOO_LARGE_FILE, INVALID_FILE_TYPE } from "@/constants/errorMessage";
 import { IUploadAvatarInput } from "@/types/pages/users/profile";
 
 const props = defineProps<{
@@ -130,6 +129,9 @@ async function confirmAvatarUpload() {
     size: avatarFile.value.size,
     type: avatarFile.value.type,
   });
+
+  avatarFile.value = null;
+  isAvatarFileReady.value = false;
 }
 
 function cancelAvatarUpload() {
@@ -143,12 +145,12 @@ function prepareAvatar(file: File) {
     file.type !== "image/jpeg" &&
     file.type !== "image/gif"
   ) {
-    setErrorToast(INVALID_FILE_TYPE);
+    setErrorToast("errors.INVALID_FILE_TYPE");
     return;
   }
 
   if (file.size > 524288) {
-    setErrorToast(TOO_LARGE_FILE);
+    setErrorToast("errors.TOO_LARGE_FILE");
     return;
   }
 
@@ -282,6 +284,7 @@ function handleCloseDeleteModal() {
       .avatar-upload__prepare-avatar-headline {
         @include default-headline(24px, 30px);
         color: var(--color-text);
+        text-align: center;
         @media (max-width: $phone-l) {
           font-size: 18px;
           line-height: 24px;
@@ -386,5 +389,15 @@ function handleCloseDeleteModal() {
   width: 100%;
   max-height: 100px;
   height: 100%;
+}
+:deep(.avatar-upload__btn-cancel-upload .v-btn__content) {
+  @media (max-width: $phone-l) {
+    font-size: 10px;
+  }
+}
+:deep(.avatar-upload__btn-confirm-upload .v-btn__content) {
+  @media (max-width: $phone-l) {
+    font-size: 10px;
+  }
 }
 </style>

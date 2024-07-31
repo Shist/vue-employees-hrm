@@ -1,11 +1,11 @@
 <template>
   <div class="cv-details">
     <AppSpinner v-if="isLoading" />
-    <AppErrorSection v-else-if="isError" :errorMessage="errorMessage" />
+    <AppErrorSection v-else-if="isError" :errorMessageKey="errorMessageKey" />
     <form v-else class="cv-details__main-content-wrapper">
       <v-text-field
         v-model="cvName"
-        label="Name"
+        :label="$t('label.name')"
         variant="outlined"
         class="cv-details__text-field-wrapper"
         :readonly="!isOwner"
@@ -13,7 +13,7 @@
       />
       <v-text-field
         v-model="cvEducation"
-        label="Education"
+        :label="$t('label.education')"
         variant="outlined"
         class="cv-details__text-field-wrapper"
         :readonly="!isOwner"
@@ -21,7 +21,7 @@
       />
       <v-textarea
         v-model="cvDescription"
-        label="Description"
+        :label="$t('label.description')"
         variant="outlined"
         class="cv-details__text-field-wrapper"
         :readonly="!isOwner"
@@ -35,7 +35,7 @@
         @click.prevent="submitCvDetailsUpdate"
         :disabled="isUpdateBtnDisabled"
       >
-        UPDATE
+        {{ $t("button.updateButton") }}
       </v-btn>
     </form>
   </div>
@@ -63,7 +63,7 @@ const cvId = computed<string>(() => {
 const {
   isLoading,
   isError,
-  errorMessage,
+  errorMessageKey,
   setErrorValuesToDefault,
   setErrorValues,
 } = useErrorState();

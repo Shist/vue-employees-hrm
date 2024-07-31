@@ -32,6 +32,7 @@ import { useRoute } from "vue-router";
 import { storeToRefs } from "pinia";
 import { useAuthStore } from "@/store/authStore";
 import { useBreadCrumbsStore } from "@/store/breadCrumbs";
+import { useI18n } from "vue-i18n";
 import { getUserNameDataById } from "@/services/users/users";
 import { getCvNameDataById } from "@/services/cvs/cvs";
 import { ROUTES } from "@/constants/router";
@@ -42,6 +43,8 @@ import {
 } from "@/constants/breadCrumbs";
 import { IBreadCrumbsItem } from "@/types/navigation";
 
+const { t, locale } = useI18n({ useScope: "global" });
+
 const breadcrumbsItems: Reactive<IBreadCrumbsItem[]> = reactive([]);
 
 const { user } = storeToRefs(useAuthStore());
@@ -49,6 +52,8 @@ const { user } = storeToRefs(useAuthStore());
 const route = useRoute();
 
 watch(route, updateBreadCrumbs);
+
+watch(locale, updateBreadCrumbs);
 
 const { newEnityName } = storeToRefs(useBreadCrumbsStore());
 
@@ -63,7 +68,7 @@ function updateBreadCrumbs() {
 
   breadcrumbsItems.push({
     crumbNum: 1,
-    title: SECTIONS_NAMES.HOME,
+    title: t("breadcrumbs.home"),
     disabled: false,
     to: {
       path: ROUTES.USERS.PATH,
@@ -74,7 +79,7 @@ function updateBreadCrumbs() {
   if (section) {
     breadcrumbsItems.push({
       crumbNum: 2,
-      title: SECTIONS_NAMES[section],
+      title: t(`breadcrumbs.${SECTIONS_NAMES[section]}`),
       disabled: id === undefined,
       to: {
         path: `/${section}`,
@@ -85,7 +90,7 @@ function updateBreadCrumbs() {
   if (id) {
     breadcrumbsItems.push({
       crumbNum: 3,
-      title: "Loading...",
+      title: t("breadcrumbs.loading"),
       disabled: tab === undefined,
       to: {
         path: `/${section}/${id}`,
@@ -110,7 +115,7 @@ function updateBreadCrumbs() {
                 : userData.email;
             })
             .catch(() => {
-              breadcrumbsItems[2].title = `❌ Loading Error`;
+              breadcrumbsItems[2].title = t("breadcrumbs.error");
             });
         }
         break;
@@ -121,7 +126,7 @@ function updateBreadCrumbs() {
             breadcrumbsItems[2].title = cvData.name;
           })
           .catch(() => {
-            breadcrumbsItems[2].title = `❌ Loading Error`;
+            breadcrumbsItems[2].title = t("breadcrumbs.error");
           });
         break;
     }
@@ -130,7 +135,7 @@ function updateBreadCrumbs() {
   if (tab) {
     breadcrumbsItems.push({
       crumbNum: 4,
-      title: TABS_NAMES[tab],
+      title: t(`breadcrumbs.${TABS_NAMES[tab]}`),
       disabled: true,
       to: {
         path: `/${section}/${id}`,
