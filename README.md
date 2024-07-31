@@ -29,6 +29,9 @@
 Here is exemplary view of your .env file:
 
 - `# VUE_APP_GRAPHQL_URL= your GraphQL URL`
+- `# VUE_APP_DEFAULT_LOCALE=en`
+- `# VUE_APP_FALLBACK_LOCALE=en`
+- `# VUE_APP_SUPPORTED_LOCALES=en,de,ru`
 
 ---
 
