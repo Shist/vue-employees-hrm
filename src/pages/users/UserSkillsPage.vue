@@ -28,30 +28,33 @@
         @setCardForDeletion="handleSetCardForDeletion"
       />
       <div
+        class="user-skills__delete-btns-footer"
         v-show="skillsForDeletionAmount > 0"
-        class="user-skills__delete-btns-wrapper"
+        :style="{ paddingRight: scrollbarWidth }"
       >
-        <v-btn
-          variant="text"
-          color="var(--color-btn-gray-text)"
-          class="user-skills__cancel-deletion-btn"
-          @click="clearUserDeletionSkills"
-        >
-          {{ $t("button.cancelButton") }}
-        </v-btn>
-        <v-btn
-          variant="text"
-          color="var(--color-btn-gray-text)"
-          class="user-skills__deletion-btn"
-          @click="submitUserSkillsDeletion"
-        >
-          <span class="user-skills__deletion-btn-label">{{
-            $t("button.deleteButton")
-          }}</span>
-          <span class="user-skills__deletion-btn-num">
-            {{ skillsForDeletionAmount }}
-          </span>
-        </v-btn>
+        <div class="user-skills__delete-btns-wrapper">
+          <v-btn
+            variant="text"
+            color="var(--color-btn-gray-text)"
+            class="user-skills__cancel-deletion-btn"
+            @click="clearUserDeletionSkills"
+          >
+            {{ $t("button.cancelButton") }}
+          </v-btn>
+          <v-btn
+            variant="text"
+            color="var(--color-btn-gray-text)"
+            class="user-skills__deletion-btn"
+            @click="submitUserSkillsDeletion"
+          >
+            <span class="user-skills__deletion-btn-label">{{
+              $t("button.deleteButton")
+            }}</span>
+            <span class="user-skills__deletion-btn-num">
+              {{ skillsForDeletionAmount }}
+            </span>
+          </v-btn>
+        </div>
       </div>
     </div>
   </div>
@@ -74,6 +77,7 @@ import { ref, reactive, computed, watch, onMounted } from "vue";
 import { useRoute } from "vue-router";
 import { storeToRefs } from "pinia";
 import { useAuthStore } from "@/store/authStore";
+import { useScrollbarWidth } from "@/store/scrollbarWidth";
 import { useI18n } from "vue-i18n";
 import SkillModal from "@/components/user/skills/SkillModal.vue";
 import SkillsCategory from "@/components/SkillsCategory.vue";
@@ -98,9 +102,11 @@ import {
   IDeleteProfileSkillInput,
 } from "@/types/pages/users/skills";
 
-const route = useRoute();
-
 const { t } = useI18n({ useScope: "global" });
+
+const { scrollbarWidth } = storeToRefs(useScrollbarWidth());
+
+const route = useRoute();
 
 const userId = computed<string>(() => {
   // eslint-disable-next-line
@@ -403,83 +409,85 @@ function submitUserSkillsDeletion() {
         line-height: 28px;
       }
     }
-    .user-skills__delete-btns-wrapper {
+    .user-skills__delete-btns-footer {
       padding-block: 32px;
-      margin: 0 auto;
       position: fixed;
       bottom: 0;
       left: 0;
       right: 0;
-      max-width: 810px;
-      width: 100%;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      column-gap: 10px;
-      @media (max-width: $laptop-m) {
-        max-width: none;
-        padding-inline: 70px;
-      }
-      @media (max-width: $tablet-l) {
-        padding-block: 28px;
-      }
-      @media (max-width: $phone-l) {
-        padding-inline: 30px;
-        padding-block: 24px;
-      }
       background: linear-gradient(
         rgba(255, 255, 255, 0) 0%,
         rgb(var(--color-wrapper-bg-rgb)) 40%
       );
-      .user-skills__cancel-deletion-btn {
-        padding: 6px;
-        max-width: 150px;
+      .user-skills__delete-btns-wrapper {
+        margin: 0 auto;
+        max-width: 810px;
         width: 100%;
-        color: var(--color-btn-gray-text);
-        background-color: var(--color-wrapper-bg);
-        border-radius: 0;
-        border: 1px solid rgba(var(--color-btn-gray-text-rgb), 0.5);
-        &:hover {
-          background-color: rgba(var(--color-btn-gray-text-rgb), 0.08);
-          border: 1px solid var(--color-btn-gray-text);
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        column-gap: 10px;
+        @media (max-width: $laptop-m) {
+          max-width: none;
+          padding-inline: 70px;
+        }
+        @media (max-width: $tablet-l) {
+          padding-block: 28px;
         }
         @media (max-width: $phone-l) {
-          max-width: 100px;
+          padding-inline: 30px;
+          padding-block: 24px;
         }
-      }
-      .user-skills__deletion-btn {
-        padding: 6px;
-        max-width: 150px;
-        width: 100%;
-        background-color: var(--color-btn-bg);
-        border-radius: 0;
-        box-shadow: rgba(0, 0, 0, 0.2) 0px 3px 1px -2px,
-          rgba(0, 0, 0, 0.14) 0px 2px 2px 0px,
-          rgba(0, 0, 0, 0.12) 0px 1px 5px 0px;
-        &:hover {
-          background-color: var(--color-btn-bg-hover);
-        }
-        &:disabled {
-          filter: grayscale(50%);
-        }
-        .user-skills__deletion-btn-label {
-          color: var(--color-btn-text);
+        .user-skills__cancel-deletion-btn {
+          padding: 6px;
+          max-width: 150px;
+          width: 100%;
+          color: var(--color-btn-gray-text);
+          background-color: var(--color-wrapper-bg);
+          border-radius: 0;
+          border: 1px solid rgba(var(--color-btn-gray-text-rgb), 0.5);
+          &:hover {
+            background-color: rgba(var(--color-btn-gray-text-rgb), 0.08);
+            border: 1px solid var(--color-btn-gray-text);
+          }
           @media (max-width: $phone-l) {
-            font-size: 9px;
+            max-width: 100px;
           }
         }
-        .user-skills__deletion-btn-num {
-          display: flex;
-          justify-content: center;
-          align-items: center;
-          width: 24px;
-          height: 24px;
-          border-radius: 50%;
-          background-color: var(--color-btn-text);
-          color: var(--color-btn-bg);
-        }
-        @media (max-width: $phone-l) {
-          max-width: 100px;
+        .user-skills__deletion-btn {
+          padding: 6px;
+          max-width: 150px;
+          width: 100%;
+          background-color: var(--color-btn-bg);
+          border-radius: 0;
+          box-shadow: rgba(0, 0, 0, 0.2) 0px 3px 1px -2px,
+            rgba(0, 0, 0, 0.14) 0px 2px 2px 0px,
+            rgba(0, 0, 0, 0.12) 0px 1px 5px 0px;
+          &:hover {
+            background-color: var(--color-btn-bg-hover);
+          }
+          &:disabled {
+            filter: grayscale(50%);
+          }
+          @media (max-width: $phone-l) {
+            max-width: 100px;
+          }
+          .user-skills__deletion-btn-label {
+            color: var(--color-btn-text);
+            @media (max-width: $phone-l) {
+              font-size: 9px;
+            }
+          }
+          .user-skills__deletion-btn-num {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            background-color: var(--color-btn-text);
+            color: var(--color-btn-bg);
+          }
         }
       }
     }
