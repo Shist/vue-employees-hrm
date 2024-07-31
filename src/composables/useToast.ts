@@ -1,6 +1,6 @@
 import { storeToRefs } from "pinia";
-import { toast } from "vue3-toastify";
 import { useToastStore } from "@/store/toast";
+import { toast } from "vue3-toastify";
 
 export default function useToast() {
   const { currToastId } = storeToRefs(useToastStore());

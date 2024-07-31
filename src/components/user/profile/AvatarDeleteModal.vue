@@ -7,14 +7,17 @@
       scrim="var(--color-modal-overlay)"
       opacity="100%"
     >
-      <v-card title="Delete Avatar" class="delete-avatar-modal__card-wrapper">
+      <v-card
+        :title="$t('userProfilePage.deleteModalTitle')"
+        class="delete-avatar-modal__card-wrapper"
+      >
         <v-btn
           icon="mdi-close"
           class="delete-avatar-modal__cross-btn"
           @click.prevent="closeModal"
         />
         <v-card-item class="delete-avatar-modal__message-wrapper">
-          <span> Are you sure you want to delete avatar? </span>
+          <span> {{ $t("userProfilePage.deleteModalText") }} </span>
         </v-card-item>
         <v-card-actions>
           <v-btn
@@ -22,7 +25,7 @@
             @click="closeModal"
             class="delete-avatar-modal__btn-cancel"
           >
-            Cancel
+            {{ $t("button.cancelButton") }}
           </v-btn>
           <v-btn
             type="submit"
@@ -30,7 +33,7 @@
             @click="makeDeleteOperation"
             class="delete-avatar-modal__btn-confirm"
           >
-            Confirm
+            {{ $t("button.confirmButton") }}
           </v-btn>
         </v-card-actions>
       </v-card>

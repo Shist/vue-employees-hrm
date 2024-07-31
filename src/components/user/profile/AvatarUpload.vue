@@ -47,13 +47,13 @@
     </label>
     <div v-else-if="isOwner" class="avatar-upload__upload-avatar-wrapper">
       <h3 class="avatar-upload__upload-avatar-headline">
-        Your file is ready for uploading
+        {{ $t("userProfilePage.avatarUploadHeadline") }}
       </h3>
       <span class="avatar-upload__upload-avatar-formats-label">
-        File name: {{ avatarFile?.name }}
+        {{ $t("userProfilePage.fileName") }} {{ avatarFile?.name }}
       </span>
       <span class="avatar-upload__upload-avatar-formats-label">
-        File size: {{ avatarSizeLabel }}
+        {{ $t("userProfilePage.fileSize") }} {{ avatarSizeLabel }}
       </span>
       <div class="avatar-upload__upload-btns-wrapper">
         <v-btn
@@ -61,7 +61,7 @@
           @click="cancelAvatarUpload"
           class="avatar-upload__btn-cancel-upload"
         >
-          Cancel
+          {{ $t("button.cancelButton") }}
         </v-btn>
         <v-btn
           type="submit"
@@ -69,7 +69,7 @@
           @click="confirmAvatarUpload"
           class="avatar-upload__btn-confirm-upload"
         >
-          Upload
+          {{ $t("button.uploadButton") }}
         </v-btn>
       </div>
     </div>

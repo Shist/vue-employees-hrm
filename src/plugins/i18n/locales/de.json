@@ -25,7 +25,8 @@
     "cancelButton": "stornieren",
     "confirmButton": "bestätigen",
     "deleteButton": "delete",
-    "updateButton": "aktualisieren"
+    "updateButton": "aktualisieren",
+    "uploadButton": "hochladen"
   },
   "appHeader": {
     "btnLogin": "einloggen",
@@ -149,11 +150,16 @@
   },
   "userProfilePage": {
     "avatarHeadline": "Avatarbild hochladen",
+    "avatarUploadHeadline": "Ihre Datei ist zum Hochladen bereit",
+    "fileName": "Dateiname:",
+    "fileSize": "Dateigröße:",
     "avatarFormats": "png, jpg oder gif nicht größer als 0,5 MB",
     "userDateCaption": "Seitdem Mitglied {targetDate}",
     "btnUpdate": "aktualisieren",
     "noDepartment": "Keine Abteilung",
-    "noPosition": "Keine Position"
+    "noPosition": "Keine Position",
+    "deleteModalTitle": "Avatar löschen",
+    "deleteModalText": "Sind Sie sicher, dass Sie den Avatar löschen möchten?"
   },
   "userSkillsPage": {
     "btnAdd": "Fertigkeit hinzufügen",

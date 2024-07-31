@@ -42,11 +42,11 @@
 
 <script setup lang="ts">
 import { computed, reactive, ref } from "vue";
-import useVuelidate from "@vuelidate/core";
-import { required, minLength, email, helpers } from "@vuelidate/validators";
 import { useRoute, useRouter } from "vue-router";
 import { useAuthStore } from "@/store/authStore";
 import { useI18n } from "vue-i18n";
+import useVuelidate from "@vuelidate/core";
+import { required, minLength, email, helpers } from "@vuelidate/validators";
 import { handleValidationErrors } from "@/utils/handleValidationErrors";
 import { ROUTES } from "@/constants/router";
 import { IForm, IAuthForm } from "@/types/forms";

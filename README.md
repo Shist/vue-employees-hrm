@@ -73,6 +73,8 @@ Here is exemplary view of your .env file:
     - The `cvs` folder stores all Vue components which represent CV pages
     - The `users` folder stores all Vue components which represent user pages
   - The `plugins` folder stores settings and configurations for all the app plugins
+    - The `i18n` folder stores settings and configurations for Vue I18n plugin
+      - The `locales` folder stores \*.json files with translations for all app languages
     - The `vuetify` folder stores settings and configurations for Vuetify plugin
   - The `router` folder stores the files with settings of routing of the app
     - The `pages` folder stores map of the needed imports for router (which consists of all app pages)
@@ -84,6 +86,9 @@ Here is exemplary view of your .env file:
     - The `pages` folder stores all the interfaces and types of all app pages
       - The `cvs` folder stores all the interfaces and types of all CVs pages
       - The `users` folder stores all the interfaces and types of all user pages
+  - The `utils` folder stores all the utility functions for the app
+- The `tests` folder stores all the tests for the app
+  -The `unit` folder stores all the unit tests for the app
 
 ---
 

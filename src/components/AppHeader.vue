@@ -177,10 +177,10 @@
 import { computed, ref, watch } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import { storeToRefs } from "pinia";
-import { useI18n } from "vue-i18n";
 import { useAuthStore } from "@/store/authStore";
 import { useLangStore } from "@/store/lang";
 import { useScrollbarWidth } from "@/store/scrollbarWidth";
+import { useI18n } from "vue-i18n";
 import handleScrollPadding from "@/utils/handleScrollPadding";
 import { ROUTES } from "@/constants/router";
 import { NAVIGATION__ITEMS } from "@/constants/navigationItems";

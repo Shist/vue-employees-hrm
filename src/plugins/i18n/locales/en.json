@@ -25,7 +25,8 @@
     "cancelButton": "cancel",
     "confirmButton": "confirm",
     "deleteButton": "delete",
-    "updateButton": "update"
+    "updateButton": "update",
+    "uploadButton": "upload"
   },
   "appHeader": {
     "btnLogin": "login",
@@ -149,11 +150,16 @@
   },
   "userProfilePage": {
     "avatarHeadline": "Upload avatar image",
+    "avatarUploadHeadline": "Your file is ready for uploading",
+    "fileName": "File name:",
+    "fileSize": "File size:",
     "avatarFormats": "png, jpg or gif no more than 0.5MB",
     "userDateCaption": "A member since {targetDate}",
     "btnUpdate": "update",
     "noDepartment": "No department",
-    "noPosition": "No position"
+    "noPosition": "No position",
+    "deleteModalTitle": "Delete Avatar",
+    "deleteModalText": "Are you sure you want to delete avatar?"
   },
   "userSkillsPage": {
     "btnAdd": "Add skill",

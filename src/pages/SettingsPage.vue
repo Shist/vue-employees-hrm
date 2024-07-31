@@ -22,16 +22,16 @@
 <script setup lang="ts">
 import { computed, ref, watch } from "vue";
 import { storeToRefs } from "pinia";
-import { useI18n } from "vue-i18n";
 import { useThemeStore } from "@/store/theme";
 import { useLangStore } from "@/store/lang";
+import { useI18n } from "vue-i18n";
+
+const { t, locale } = useI18n({ useScope: "global" });
 
 const { currTheme } = storeToRefs(useThemeStore());
 
 const langStore = useLangStore();
 const currLang = storeToRefs(langStore).currLang;
-
-const { t, locale } = useI18n({ useScope: "global" });
 
 const selectTheme = ref(currTheme.value);
 

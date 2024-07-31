@@ -1,6 +1,6 @@
 import { ref } from "vue";
-import { Id } from "vue3-toastify";
 import { defineStore } from "pinia";
+import { Id } from "vue3-toastify";
 
 export const useToastStore = defineStore("toast", () => {
   const currToastId = ref<Id | null>(null);

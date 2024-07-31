@@ -25,7 +25,8 @@
     "cancelButton": "отмена",
     "confirmButton": "подтвердить",
     "deleteButton": "удалить",
-    "updateButton": "обновить"
+    "updateButton": "обновить",
+    "uploadButton": "загрузить"
   },
   "appHeader": {
     "btnLogin": "войти",
@@ -149,11 +150,16 @@
   },
   "userProfilePage": {
     "avatarHeadline": "Загрузите изображение аватара",
+    "avatarUploadHeadline": "Ваш файл готов для загрузки",
+    "fileName": "Имя файла:",
+    "fileSize": "Размер файла:",
     "avatarFormats": "png, jpg or gif не больше 0.5МБ",
     "userDateCaption": "Аккаунт был создан {targetDate}",
     "btnUpdate": "обновить",
     "noDepartment": "Отдел не выбран",
-    "noPosition": "Должность не выбрана"
+    "noPosition": "Должность не выбрана",
+    "deleteModalTitle": "Удалить аватар",
+    "deleteModalText": "Вы уверены, что хотите удалить аватар?"
   },
   "userSkillsPage": {
     "btnAdd": "Добавить навык",

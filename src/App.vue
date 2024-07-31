@@ -14,14 +14,14 @@
 
 <script setup lang="ts">
 import { watch, onMounted, onUnmounted, ref } from "vue";
-import { useTheme } from "vuetify";
-import { updateGlobalOptions } from "vue3-toastify";
-import { useI18n } from "vue-i18n";
 import { storeToRefs } from "pinia";
 import { useAuthStore } from "@/store/authStore";
 import { useScrollbarWidth } from "@/store/scrollbarWidth";
 import { useThemeStore } from "@/store/theme";
-import { useLangStore } from "./store/lang";
+import { useLangStore } from "@/store/lang";
+import { useTheme } from "vuetify";
+import { updateGlobalOptions } from "vue3-toastify";
+import { useI18n } from "vue-i18n";
 import AppHeader from "@/components/AppHeader.vue";
 import BreadCrumbs from "@/components/BreadCrumbs.vue";
 import AppTabs from "@/components/AppTabs.vue";
