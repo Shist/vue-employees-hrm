@@ -561,7 +561,7 @@ function getClassByProficiency(value: Proficiency) {
 }
 :deep(.user-languages__language-card .v-card-item__content) {
   display: grid;
-  grid-template-columns: 0.5fr 1fr;
+  grid-template-columns: 1fr 1fr;
   align-items: center;
   gap: 16px;
   @media (max-width: $phone-l) {

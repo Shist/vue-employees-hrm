@@ -176,10 +176,10 @@
     "noCategoriesMsg": "Keine Fähigkeiten verfügbar",
     "skillCategories": {
       "Programming languages": "Programmiersprachen",
-      "Programming technologies": "Programmiertechnologien",
-      "Source control systems": "Quellcodeverwaltungssysteme",
+      "Programming technologies": "Programmier Technologien",
+      "Source control systems": "Quellcode Verwaltungssysteme",
       "Other skills": "Andere",
-      "Database management system": "Datenbankverwaltungssystem"
+      "Database management system": "Datenbank Management System"
     }
   },
   "userLanguagesPage": {

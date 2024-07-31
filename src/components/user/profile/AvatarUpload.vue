@@ -298,6 +298,7 @@ function handleCloseDeleteModal() {
     .avatar-upload__prepare-avatar-formats-label {
       @include default-headline(16px, 20px);
       color: var(--color-gray-label-text);
+      text-align: center;
       @media (max-width: $phone-l) {
         font-size: 14px;
         line-height: 18px;

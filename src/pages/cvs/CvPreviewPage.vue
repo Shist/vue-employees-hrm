@@ -404,6 +404,9 @@ function downloadPDF(base64: string) {
       @media (max-width: $tablet-l) {
         column-gap: 25px;
       }
+      @media (max-width: $phone-l) {
+        column-gap: 10px;
+      }
       .cv-preview__title-wrapper {
         display: flex;
         flex-direction: column;
@@ -712,6 +715,12 @@ function downloadPDF(base64: string) {
         }
       }
     }
+  }
+}
+
+:deep(.cv-preview__export-pdf-btn .v-btn__content) {
+  @media (max-width: $phone-l) {
+    font-size: 10px;
   }
 }
 </style>

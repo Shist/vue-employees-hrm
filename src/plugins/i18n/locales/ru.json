@@ -153,7 +153,7 @@
     "avatarUploadHeadline": "Ваш файл готов для загрузки",
     "fileName": "Имя файла:",
     "fileSize": "Размер файла:",
-    "avatarFormats": "png, jpg or gif не больше 0.5МБ",
+    "avatarFormats": "png, jpg или gif не больше 0.5МБ",
     "userDateCaption": "Аккаунт был создан {targetDate}",
     "btnUpdate": "обновить",
     "noDepartment": "Отдел не выбран",
