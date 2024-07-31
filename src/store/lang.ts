@@ -17,9 +17,9 @@ export const useLangStore = defineStore("lang", () => {
 
   async function loadLocaleMessages(newLocale: string) {
     let locale;
-    if (newLocale === "Deutsch" || newLocale === "de") {
+    if (newLocale === "Deutsch") {
       locale = "de";
-    } else if (newLocale === "Русский" || newLocale === "ru") {
+    } else if (newLocale === "Русский") {
       locale = "ru";
     } else {
       locale = "en";
@@ -91,7 +91,6 @@ export const useLangStore = defineStore("lang", () => {
   return {
     currLang,
     changeCurrLanguage,
-    loadLocaleMessages,
     loadInitialLocale,
   };
 });
