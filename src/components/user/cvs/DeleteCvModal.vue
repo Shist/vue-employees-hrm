@@ -17,9 +17,11 @@
           @click.prevent="closeModal"
         />
         <v-card-item class="delete-cv-modal__message-wrapper">
-          <span>
-            {{ $t("cvsPage.deleteModalText", { CV: cvName }) }}
-          </span>
+          <i18n-t scope="global" keypath="cvsPage.deleteModalText" tag="span">
+            <template v-slot:CV>
+              <b>{{ cvName }}</b>
+            </template>
+          </i18n-t>
         </v-card-item>
         <v-card-actions>
           <v-btn

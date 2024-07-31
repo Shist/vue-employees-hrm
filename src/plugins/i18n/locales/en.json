@@ -119,7 +119,7 @@
     "deleteCv": "Delete CV",
     "createModalTitle": "Create CV",
     "deleteModalTitle": "Delete CV",
-    "deleteModalText": "Are you sure you want to delete CV {CV} ?",
+    "deleteModalText": "Are you sure you want to delete CV {CV}?",
     "noCvs": "No CVs available"
   },
   "departmentsPage": {

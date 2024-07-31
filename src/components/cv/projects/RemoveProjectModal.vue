@@ -17,13 +17,15 @@
           @click.prevent="closeModal"
         ></v-btn>
         <v-card-item class="remove-project-modal__message-wrapper">
-          <span>
-            {{
-              $t("cvsProjectsPage.removeProjectModalText", {
-                projectName: projectName,
-              })
-            }}
-          </span>
+          <i18n-t
+            scope="global"
+            keypath="cvsProjectsPage.removeProjectModalText"
+            tag="span"
+          >
+            <template v-slot:projectName>
+              <b>{{ projectName }}</b>
+            </template>
+          </i18n-t>
         </v-card-item>
         <v-card-actions>
           <v-btn

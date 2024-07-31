@@ -119,7 +119,7 @@
     "deleteCv": "Удалить резюме",
     "createModalTitle": "Cоздать резюме",
     "deleteModalTitle": "Удалить резюме",
-    "deleteModalText": "Вы уверены, что хотите удалить резюме {CV} ?",
+    "deleteModalText": "Вы уверены, что хотите удалить резюме {CV}?",
     "noCvs": "Нет доступных резюме"
   },
   "departmentsPage": {
