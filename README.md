@@ -14,6 +14,12 @@
 
 ---
 
+## Video demo:
+
+https://github.com/user-attachments/assets/f226c0b5-0f4f-4b90-afd4-794b641b1901
+
+---
+
 ## Instruction for launching this project
 
 1. Go to the folder on your PC where you want to install the project:
