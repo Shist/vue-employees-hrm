@@ -1,0 +1,88 @@
+@import "@/assets/fonts/Roboto-Bold/font-roboto-bold.css";
+@import "@/assets/fonts/Roboto-Regular/font-roboto-regular.css";
+
+// Fonts
+$font-roboto: "Roboto", Helvetica, Arial, sans-serif;
+
+// Global variables of the app
+:root {
+  color-scheme: light;
+
+  // ====== Variables for light theme =====
+  --color-header-bg: #2e2e2e;
+
+  --color-wrapper-bg: #ffffff;
+  --color-wrapper-bg-rgb: 255, 255, 255;
+
+  --color-text: #2e2e2e;
+  --color-gray-label-text: #7e7e7e;
+
+  --color-active-borders: #000000;
+
+  --color-toast-bg: #e1e1e1;
+
+  --color-avatar-bg: #bdbdbd;
+  --color-avatar-initials: #f5f5f7;
+  // ========================================
+
+  // ====== Variables that are same for both themes =====
+  --color-btn-text: #ffffff;
+  --color-btn-gray-text: #767676;
+  --color-btn-gray-text-rgb: 117, 117, 117;
+  --color-btn-bg: #c62f31;
+  --color-btn-bg-hover: #8a2122;
+
+  --color-tab-btn-border: #414141;
+
+  --color-input-borders: #c63031;
+
+  --color-active-text: #c63031;
+
+  --color-header-text: #ffffff;
+
+  --color-wrapper-bg-dark-red-filter: 198, 48, 49;
+
+  --color-text-red: #c62f31;
+  --color-text-error: #cf6679;
+
+  --color-modal-overlay: rgba(0, 0, 0, 0.5);
+
+  --color-spinner: #c62f31;
+  // ========================================
+}
+
+// Class for dark theme colors
+.dark-theme {
+  color-scheme: dark;
+
+  // ====== Variables for dark theme =====
+  --color-header-bg: #272727;
+
+  --color-wrapper-bg: #353535;
+  --color-wrapper-bg-rgb: 53, 53, 53;
+
+  --color-text: #ffffff;
+  --color-gray-label-text: #9a9a9a;
+
+  --color-active-borders: #ffffff;
+
+  --color-toast-bg: #2e2e2e;
+
+  --color-avatar-bg: #757575;
+  --color-avatar-initials: #353535;
+  // ========================================
+}
+
+// Default checkpoints for adaptive
+$pc-l: 1440px;
+$pc-m: 1400px;
+$pc-s: 1280px;
+$laptop-l: 1024px;
+$laptop-m: 960px;
+$laptop-s: 864px;
+$tablet-l: 768px;
+$tablet-m: 640px;
+$tablet-s: 576px;
+$phone-l: 480px;
+$phone-m: 360px;
+$phone-s: 320px;

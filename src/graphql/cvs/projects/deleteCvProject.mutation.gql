@@ -1,0 +1,19 @@
+mutation DELETE_CV_PROJECT($project: RemoveCvProjectInput!) {
+  removeCvProject(project: $project) {
+    id
+    user {
+      id
+    }
+    projects {
+      id
+      project {
+        id
+      }
+      name
+      internal_name
+      domain
+      start_date
+      end_date
+    }
+  }
+}

@@ -1,0 +1,12 @@
+query GET_ALL_PROJECTS {
+  projects {
+    id
+    name
+    internal_name
+    domain
+    start_date
+    end_date
+    team_size
+    description
+  }
+}

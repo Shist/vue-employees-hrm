@@ -1,0 +1,19 @@
+query GET_CV_PROJECTS_BY_ID($cvId: ID!) {
+  cv(cvId: $cvId) {
+    id
+    user {
+      id
+    }
+    projects {
+      id
+      project {
+        id
+      }
+      name
+      internal_name
+      domain
+      start_date
+      end_date
+    }
+  }
+}

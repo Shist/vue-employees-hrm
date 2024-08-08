@@ -1,0 +1,250 @@
+{
+  "placeholder": {
+    "email": "Email",
+    "password": "Password",
+    "search": "Search"
+  },
+  "label": {
+    "name": "Name",
+    "education": "Education",
+    "description": "Description",
+    "theme": "Appearance",
+    "language": "Language",
+    "firstName": "First Name",
+    "lastName": "Last Name",
+    "department": "Department",
+    "position": "Position",
+    "skill": "Skill",
+    "category": "Category",
+    "skillMastery": "Skill mastery",
+    "languageProficiency": "Language proficiency",
+    "project": "Project"
+  },
+  "button": {
+    "createButton": "create",
+    "cancelButton": "cancel",
+    "confirmButton": "confirm",
+    "deleteButton": "delete",
+    "updateButton": "update",
+    "uploadButton": "upload"
+  },
+  "appHeader": {
+    "btnLogin": "login",
+    "btnSignup": "signup",
+    "btnLogout": "logout",
+    "btnProfile": "profile",
+    "btnSettings": "settings"
+  },
+  "signIn": {
+    "title": "Welcome Back",
+    "subtitleText": "Hello again! Sign in to continue.",
+    "buttonText": "sign in",
+    "linkText": "i don't have an account"
+  },
+  "signUp": {
+    "title": "Register Now",
+    "subtitleText": "Welcome! Sign up to continue.",
+    "buttonText": "sign up",
+    "linkText": "i have an account"
+  },
+  "navigation": {
+    "Home": "Home",
+    "Employees": "Employees",
+    "Projects": "Projects",
+    "CVs": "CVs",
+    "Departments": "Departments",
+    "Positions": "Positions",
+    "Skills": "Skills",
+    "Languages": "Languages"
+  },
+  "appTabs": {
+    "profile": "Profile",
+    "skills": "Skills",
+    "languages": "Languages",
+    "cvs": "CVs",
+    "details": "Details",
+    "projects": "Projects",
+    "preview": "Preview"
+  },
+  "breadcrumbs": {
+    "home": "Home",
+    "loading": "Loading...",
+    "error": "❌ Loading Error",
+    "Settings": "Settings",
+    "Employees": "Employees",
+    "Projects": "Projects",
+    "CVs": "CVs",
+    "Departments": "Departments",
+    "Positions": "Positions",
+    "Skills": "Skills",
+    "Languages": "Languages",
+    "Profile": "Profile",
+    "Details": "Details",
+    "Preview": "Preview"
+  },
+  "theme": {
+    "Light": "Light",
+    "Dark": "Dark",
+    "Device settings": "Device settings"
+  },
+  "usersPage": {
+    "firstName": "First Name",
+    "lastName": "Last Name",
+    "email": "Email",
+    "departmentName": "Department",
+    "positionName": "Position",
+    "profile": "Profile",
+    "updateUser": "Update user",
+    "deleteUser": "Delete user",
+    "noUsers": "No employees available"
+  },
+  "projectsPage": {
+    "name": "Name",
+    "internalName": "Internal Name",
+    "domain": "Domain",
+    "startDate": "Start Date",
+    "endDate": "End Date",
+    "teamSize": "Team Size",
+    "project": "Project",
+    "updateProject": "Update project",
+    "removeProject": "Remove project",
+    "noProjects": "No projects available"
+  },
+  "cvsPage": {
+    "createButton": "create cv",
+    "name": "Name",
+    "description": "Description",
+    "email": "Employee",
+    "details": "Details",
+    "deleteCv": "Delete CV",
+    "createModalTitle": "Create CV",
+    "deleteModalTitle": "Delete CV",
+    "deleteModalText": "Are you sure you want to delete CV {CV}?",
+    "noCvs": "No CVs available"
+  },
+  "departmentsPage": {
+    "name": "Name",
+    "updateDepartment": "Update department",
+    "deleteDepartment": "Delete department",
+    "noDepartments": "No departments available"
+  },
+  "positionsPage": {
+    "name": "Name",
+    "updatePosition": "Update position",
+    "deletePosition": "Delete position",
+    "noPositions": "No positions available"
+  },
+  "skillsPage": {
+    "name": "Name",
+    "category": "Category",
+    "updateSkill": "Update skill",
+    "deleteSkill": "Delete skill",
+    "noSkills": "No skills available"
+  },
+  "languagesPage": {
+    "name": "Name",
+    "nativeName": "Native Name",
+    "updateLanguage": "Update language",
+    "deleteLanguage": "Delete language",
+    "noLanguages": "No languages available"
+  },
+  "userProfilePage": {
+    "avatarHeadline": "Upload avatar image",
+    "avatarUploadHeadline": "Your file is ready for uploading",
+    "fileName": "File name:",
+    "fileSize": "File size:",
+    "avatarFormats": "png, jpg or gif no more than 0.5MB",
+    "userDateCaption": "A member since {targetDate}",
+    "btnUpdate": "update",
+    "noDepartment": "No department",
+    "noPosition": "No position",
+    "deleteModalTitle": "Delete Avatar",
+    "deleteModalText": "Are you sure you want to delete avatar?"
+  },
+  "userSkillsPage": {
+    "btnAdd": "Add skill",
+    "noSkillsMsg": "No employee skills specified yet",
+    "addModalTitle": "Add skill",
+    "updateModalTitle": "Update skill",
+    "skillMasteries": {
+      "Novice": "Novice",
+      "Advanced": "Advanced",
+      "Competent": "Competent",
+      "Proficient": "Proficient",
+      "Expert": "Expert"
+    },
+    "noCategoriesMsg": "No skills available",
+    "skillCategories": {
+      "Programming languages": "Programming languages",
+      "Programming technologies": "Programming technologies",
+      "Source control systems": "Source control systems",
+      "Other skills": "Other",
+      "Database management system": "Database management system"
+    }
+  },
+  "userLanguagesPage": {
+    "btnAdd": "Add language",
+    "noLanguagesMsg": "No employee languages specified yet",
+    "addModalTitle": "Add language",
+    "updateModalTitle": "Update language",
+    "languageProficiency": {
+      "A1": "A1",
+      "A2": "A2",
+      "B1": "B1",
+      "B2": "B2",
+      "C1": "C1",
+      "C2": "C2",
+      "Native": "Native"
+    },
+    "noLanguagesData": "No languages available"
+  },
+  "cvsProjectsPage": {
+    "btnAdd": "Add project to CV",
+    "addProjectModalTitle": "Add project to CV",
+    "removeProjectModalTitle": "Remove project",
+    "removeProjectModalText": "Are you sure you want to remove project {projectName} from CV?"
+  },
+  "cvsPreviewPage": {
+    "btnExport": "Export PDF",
+    "education": "Education",
+    "noEducationMsg": "Education is not specified",
+    "noPositionMsg": "Position is not specified",
+    "languageProficiency": "Language proficiency",
+    "noLanguagesMsg": "No languages specified",
+    "noSkillsMsg": "No skills specified",
+    "projects": "Projects",
+    "noProjectsMsg": "No projects specified",
+    "projectRoles": "Project roles",
+    "noProjectRolesMsg": "No roles specified for this project",
+    "responsibilitiesAndAchievements": "Responsibilities & achievements",
+    "noResponsibilitiesAndAchievements": "No responsibilities or achievements specified for this project",
+    "period": "Period"
+  },
+  "errors": {
+    "backToMainPage": "Back to the main page",
+    "reloadPage": "Please try to reload the page",
+    "notFoundPageTitle": "The page with the specified URL was not found",
+    "EMAIL_REQUIRED_FIELD": "Email is required",
+    "EMAIL_TYPE_FIELD": "Please enter an e-mail in the format email{'@'}example.com",
+    "EMAIL_DUPLICATE_ERROR": "Email is invalid or already taken",
+    "PASSWORD_REQUIRED_FIELD": "Password is required",
+    "PASSWORD_MINLENGTH_FIELD": "Password should contain at least 6 characters",
+    "INVALID_CREDENTIALS": "Email or password is invalid",
+    "NO_NETWORK_CONNECTION": "No network connection",
+    "UNEXPECTED_ERROR": "Unexpected error, please try again",
+    "NOT_FOUND_USER": "The user with specified ID does not exist",
+    "NOT_FOUND_CV": "The CV with specified ID does not exist",
+    "BAD_INPUT_DATA": "The format of data that you provided is incorrect",
+    "TOO_LARGE_FILE": "The file you've attached has too large size (> 0.5 MB)",
+    "INVALID_FILE_TYPE": "The file you've attached has unacceptable type",
+    "UNAUTHORIZED_ERROR": "Unauthorized",
+    "FAILED_TO_LOAD_DEPARMENTS": "Failed to load all available departments",
+    "FAILED_TO_LOAD_POSITIONS": "Failed to load all available positions",
+    "FAILED_TO_LOAD_SKILLS": "Failed to load all available skills",
+    "FAILED_TO_LOAD_LANGUAGES": "Failed to load all available languages",
+    "FAILED_TO_LOAD_PROJECTS": "Failed to load all available projects",
+    "LANG_EN_LOADING_ERROR": "Failed to load english language resources",
+    "LANG_DE_LOADING_ERROR": "Failed to load german language resources",
+    "LANG_RU_LOADING_ERROR": "Failed to load russian language resources"
+  }
+}

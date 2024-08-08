@@ -1,0 +1,13 @@
+query GET_CV_SKILLS_BY_ID($cvId: ID!) {
+  cv(cvId: $cvId) {
+    id
+    skills {
+      name
+      category
+      mastery
+    }
+    user {
+      id
+    }
+  }
+}

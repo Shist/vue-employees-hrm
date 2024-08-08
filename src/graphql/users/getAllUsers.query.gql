@@ -1,0 +1,14 @@
+query GET_ALL_USERS {
+  users {
+    id
+    email
+    profile {
+      id
+      first_name
+      last_name
+      avatar
+    }
+    department_name
+    position_name
+  }
+}

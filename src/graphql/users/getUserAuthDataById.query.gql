@@ -1,0 +1,13 @@
+query GET_USER_AUTH_DATA_BY_ID($userId: ID!) {
+  user(userId: $userId) {
+    id
+    email
+    profile {
+      id
+      full_name
+      first_name
+      last_name
+      avatar
+    }
+  }
+}

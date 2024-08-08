@@ -1,0 +1,16 @@
+mutation SIGN_UP($auth: AuthInput!) {
+  signup(auth: $auth) {
+    user {
+      id
+      email
+      profile {
+        first_name
+        last_name
+        full_name
+        avatar
+      }
+    }
+    access_token
+    refresh_token
+  }
+}

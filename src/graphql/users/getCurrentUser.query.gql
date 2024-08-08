@@ -1,0 +1,8 @@
+query GET_CURRENT_USER($id: ID!) {
+  user(id: $id) {
+    user {
+      id
+      email
+    }
+  }
+}

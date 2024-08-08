@@ -1,5 +1,7 @@
 {
+  "files": ["graphql.d.ts"],
   "compilerOptions": {
+    "resolveJsonModule": true,
     "target": "esnext",
     "module": "esnext",
     "strict": true,
@@ -22,6 +24,7 @@
     "src/**/*.ts",
     "src/**/*.tsx",
     "src/**/*.vue",
+    "src/**/*.gql",
     "tests/**/*.ts",
     "tests/**/*.tsx"
   ],

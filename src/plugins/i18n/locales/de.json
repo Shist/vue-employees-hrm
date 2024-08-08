@@ -1,0 +1,250 @@
+{
+  "placeholder": {
+    "email": "Email",
+    "password": "Passwort",
+    "search": "Suchen"
+  },
+  "label": {
+    "name": "Name",
+    "education": "Ausbildung",
+    "description": "Beschreibung",
+    "theme": "Aussehen",
+    "language": "Sprache",
+    "firstName": "Vorname",
+    "lastName": "Nachname",
+    "department": "Abteilung",
+    "position": "Position",
+    "skill": "Fähigkeit",
+    "category": "Kategorie",
+    "skillMastery": "Fertigkeitsbeherrschung",
+    "languageProficiency": "Sprachkompetenz",
+    "project": "Projekte"
+  },
+  "button": {
+    "createButton": "erstellen",
+    "cancelButton": "stornieren",
+    "confirmButton": "bestätigen",
+    "deleteButton": "delete",
+    "updateButton": "aktualisieren",
+    "uploadButton": "hochladen"
+  },
+  "appHeader": {
+    "btnLogin": "einloggen",
+    "btnSignup": "anmelden",
+    "btnLogout": "ausloggen",
+    "btnProfile": "profil",
+    "btnSettings": "einstellungen"
+  },
+  "signIn": {
+    "title": "Willkommen zurück",
+    "subtitleText": "Hallo nochmal! Melden Sie sich an, um fortzufahren.",
+    "buttonText": "anmelden",
+    "linkText": "ich habe kein konto"
+  },
+  "signUp": {
+    "title": "Jetzt registrieren",
+    "subtitleText": "Willkommen! Melden Sie sich an, um fortzufahren.",
+    "buttonText": "registrieren",
+    "linkText": "ich habe ein konto"
+  },
+  "navigation": {
+    "Home": "Startseite",
+    "Employees": "Mitarbeiter",
+    "Projects": "Projekte",
+    "CVs": "Lebensläufe",
+    "Departments": "Abteilungen",
+    "Positions": "Positionen",
+    "Skills": "Fähigkeiten",
+    "Languages": "Sprachen"
+  },
+  "appTabs": {
+    "profile": "Profil",
+    "skills": "Fähigkeiten",
+    "languages": "Sprachen",
+    "cvs": "Lebensläufe",
+    "details": "Einzelheiten",
+    "projects": "Projekte",
+    "preview": "Vorschau"
+  },
+  "breadcrumbs": {
+    "home": "Startseite",
+    "loading": "Laden...",
+    "error": "❌ Ladefehler",
+    "Settings": "Einstellungen",
+    "Employees": "Mitarbeiter",
+    "Projects": "Projekte",
+    "CVs": "Lebensläufe",
+    "Departments": "Abteilungen",
+    "Positions": "Positionen",
+    "Skills": "Fähigkeiten",
+    "Languages": "Sprachen",
+    "Profile": "Profil",
+    "Details": "Einzelheiten",
+    "Preview": "Vorschau"
+  },
+  "theme": {
+    "Light": "Licht",
+    "Dark": "Dunkel",
+    "Device settings": "Geräteeinstellungen"
+  },
+  "usersPage": {
+    "firstName": "Vorname",
+    "lastName": "Nachname",
+    "email": "Email",
+    "departmentName": "Abteilung",
+    "positionName": "Position",
+    "profile": "Profil",
+    "updateUser": "Profil aktualisieren",
+    "deleteUser": "Profil löschen",
+    "noUsers": "Keine Mitarbeiter verfügbar"
+  },
+  "projectsPage": {
+    "name": "Name",
+    "internalName": "Interner Name",
+    "domain": "Domain",
+    "startDate": "Startdatum",
+    "endDate": "Endtermin",
+    "teamSize": "Teamgröße",
+    "project": "Projekt",
+    "updateProject": "Projekt aktualisieren",
+    "removeProject": "Projekt löschen",
+    "noProjects": "Keine Projekte verfügbar"
+  },
+  "cvsPage": {
+    "createButton": "lebenslauf erstellen",
+    "name": "Name",
+    "description": "Beschreibung",
+    "email": "Mitarbeiter",
+    "details": "Einzelheiten",
+    "deleteCv": "Lebenslauf löschen",
+    "createModalTitle": "Lebenslauf erstellen",
+    "deleteModalTitle": "Lebenslauf löschen",
+    "deleteModalText": "Sind Sie sicher, dass Sie CV {CV} löschen möchten?",
+    "noCvs": "Keine Lebensläufe verfügbar"
+  },
+  "departmentsPage": {
+    "name": "Name",
+    "updateDepartment": "Abteilung aktualiziren",
+    "deleteDepartment": "Abteilung löschen",
+    "noDepartments": "Keine Abteilungen verfügbar"
+  },
+  "positionsPage": {
+    "name": "Name",
+    "updatePosition": "Position aktualisieren",
+    "deletePosition": "Position löschen",
+    "noPositions": "Keine Stellen verfügbar"
+  },
+  "skillsPage": {
+    "name": "Name",
+    "category": "Kategorie",
+    "updateSkill": "Fertigkeit aktualisieren",
+    "deleteSkill": "Fertigkeit löschen",
+    "noSkills": "Keine Fähigkeiten verfügbar"
+  },
+  "languagesPage": {
+    "name": "Name",
+    "nativeName": "Einheimischer Name",
+    "updateLanguage": "Sprache aktualisieren",
+    "deleteLanguage": "Sprache löschen",
+    "noLanguages": "Keine Sprachen verfügbar"
+  },
+  "userProfilePage": {
+    "avatarHeadline": "Avatarbild hochladen",
+    "avatarUploadHeadline": "Ihre Datei ist zum Hochladen bereit",
+    "fileName": "Dateiname:",
+    "fileSize": "Dateigröße:",
+    "avatarFormats": "png, jpg oder gif nicht größer als 0,5 MB",
+    "userDateCaption": "Seitdem Mitglied {targetDate}",
+    "btnUpdate": "aktualisieren",
+    "noDepartment": "Keine Abteilung",
+    "noPosition": "Keine Position",
+    "deleteModalTitle": "Avatar löschen",
+    "deleteModalText": "Sind Sie sicher, dass Sie den Avatar löschen möchten?"
+  },
+  "userSkillsPage": {
+    "btnAdd": "Fertigkeit hinzufügen",
+    "noSkillsMsg": "Noch keine Mitarbeiterfähigkeiten angegeben",
+    "addModalTitle": "Fertigkeit hinzufügen",
+    "updateModalTitle": "Fertigkeit aktualisieren",
+    "skillMasteries": {
+      "Novice": "Anfänger",
+      "Advanced": "Fortschrittlich",
+      "Competent": "Kompetent",
+      "Proficient": "Erfahren",
+      "Expert": "Experte"
+    },
+    "noCategoriesMsg": "Keine Fähigkeiten verfügbar",
+    "skillCategories": {
+      "Programming languages": "Programmiersprachen",
+      "Programming technologies": "Programmier Technologien",
+      "Source control systems": "Quellcode Verwaltungssysteme",
+      "Other skills": "Andere",
+      "Database management system": "Datenbank Management System"
+    }
+  },
+  "userLanguagesPage": {
+    "btnAdd": "Sprache hinzufügen",
+    "noLanguagesMsg": "Noch keine Mitarbeitersprachen angegeben",
+    "addModalTitle": "Sprache hinzufügen",
+    "updateModalTitle": "Sprache aktualisieren",
+    "languageProficiency": {
+      "A1": "A1",
+      "A2": "A2",
+      "B1": "B1",
+      "B2": "B2",
+      "C1": "C1",
+      "C2": "C2",
+      "Native": "Muttersprache"
+    },
+    "noLanguagesData": "Keine Sprachen verfügbar"
+  },
+  "cvsProjectsPage": {
+    "btnAdd": "Projekt hinzufügen",
+    "addProjectModalTitle": "Projekt hinzufügen",
+    "removeProjectModalTitle": "Projekt löschen",
+    "removeProjectModalText": "Sind Sie sicher, dass Sie das Projekt {projectName} löschen möchten?"
+  },
+  "cvsPreviewPage": {
+    "btnExport": "PDF exportieren",
+    "education": "Ausbildung",
+    "noEducationMsg": "Ausbildung ist nicht angegeben",
+    "noPositionMsg": "Die Position ist nicht angegeben",
+    "languageProficiency": "Sprachkompetenz",
+    "noLanguagesMsg": "Noch keine Mitarbeitersprachen angegeben",
+    "noSkillsMsg": "Noch keine Mitarbeiterfähigkeiten angegeben",
+    "projects": "Projekte",
+    "noProjectsMsg": "Keine Projekte angegeben",
+    "projectRoles": "Projektrollen",
+    "noProjectRolesMsg": "Für dieses Projekt sind keine Rollen angegeben",
+    "responsibilitiesAndAchievements": "Verantwortlichkeiten und Erfolge",
+    "noResponsibilitiesAndAchievements": "Für dieses Projekt sind keine Verantwortlichkeiten oder Erfolge angegeben",
+    "period": "Zeitraum"
+  },
+  "errors": {
+    "backToMainPage": "Zurück zur Startseite",
+    "reloadPage": "Bitte versuchen Sie, die Seite neu zu laden",
+    "notFoundPageTitle": "Die Seite mit der angegebenen URL wurde nicht gefunden",
+    "EMAIL_REQUIRED_FIELD": "E-Mail ist erforderlich",
+    "EMAIL_TYPE_FIELD": "Bitte geben Sie eine E-Mail im Format email{'@'}example.com ein",
+    "EMAIL_DUPLICATE_ERROR": "E-Mail ist ungültig oder bereits vergeben",
+    "PASSWORD_REQUIRED_FIELD": "Passwort ist erforderlich",
+    "PASSWORD_MINLENGTH_FIELD": "Das Passwort sollte mindestens 6 Zeichen enthalten",
+    "INVALID_CREDENTIALS": "E-Mail oder Passwort ist ungültig",
+    "NO_NETWORK_CONNECTION": "Keine Netzwerkverbindung",
+    "UNEXPECTED_ERROR": "Unerwarteter Fehler, bitte versuchen Sie es erneut",
+    "NOT_FOUND_USER": "Der Benutzer mit der angegebenen ID existiert nicht",
+    "NOT_FOUND_CV": "Das Lebenslauf mit der angegebenen ID existiert nicht",
+    "BAD_INPUT_DATA": "Das Format der bereitgestellten Daten ist inkorrekt",
+    "TOO_LARGE_FILE": "Die von Ihnen angehängte Datei ist zu groß (> 0,5 MB)",
+    "INVALID_FILE_TYPE": "Die von Ihnen angehängte Datei hat einen unzulässigen Typ",
+    "UNAUTHORIZED_ERROR": "Nicht autorisiert",
+    "FAILED_TO_LOAD_DEPARMENTS": "Fehler beim Laden aller verfügbaren Abteilungen",
+    "FAILED_TO_LOAD_POSITIONS": "Fehler beim Laden aller verfügbaren Positionen",
+    "FAILED_TO_LOAD_SKILLS": "Fehler beim Laden aller verfügbaren Fähigkeiten",
+    "FAILED_TO_LOAD_LANGUAGES": "Fehler beim Laden aller verfügbaren Sprachen",
+    "FAILED_TO_LOAD_PROJECTS": "Fehler beim Laden aller verfügbaren Projekte",
+    "LANG_EN_LOADING_ERROR": "Fehler beim Laden der englischsprachigen Ressourcen",
+    "LANG_DE_LOADING_ERROR": "Fehler beim Laden der deutschsprachigen Ressourcen",
+    "LANG_RU_LOADING_ERROR": "Fehler beim Laden der russischsprachigen Ressourcen"
+  }
+}

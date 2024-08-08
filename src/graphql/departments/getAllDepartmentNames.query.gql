@@ -1,0 +1,6 @@
+query GET_ALL_DEPARTMENT_NAMES {
+  departments {
+    id
+    name
+  }
+}

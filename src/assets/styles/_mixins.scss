@@ -1,0 +1,16 @@
+@import "@/assets/styles/vars";
+
+// Default settings of headlines, you only need to choose font size and line height
+@mixin default-headline($font-size, $line-height) {
+  font-family: $font-roboto;
+  font-weight: 700;
+  font-size: $font-size;
+  line-height: $line-height;
+}
+
+// Default settings of paragraphs and spans, you only need to choose font size and line height
+@mixin default-text($font-size, $line-height) {
+  font-family: $font-roboto;
+  font-size: $font-size;
+  line-height: $line-height;
+}

@@ -1,0 +1,250 @@
+{
+  "placeholder": {
+    "email": "Почта",
+    "password": "Пароль",
+    "search": "Поиск"
+  },
+  "label": {
+    "name": "Имя",
+    "education": "Образование",
+    "description": "Описание",
+    "theme": "Внешний вид",
+    "language": "Язык",
+    "firstName": "Имя",
+    "lastName": "Фамилия",
+    "department": "Отдел",
+    "position": "Должность",
+    "skill": "Навык",
+    "category": "Категория",
+    "skillMastery": "Уровень владения",
+    "languageProficiency": "Владение языком",
+    "project": "Проект"
+  },
+  "button": {
+    "createButton": "cоздать",
+    "cancelButton": "отмена",
+    "confirmButton": "подтвердить",
+    "deleteButton": "удалить",
+    "updateButton": "обновить",
+    "uploadButton": "загрузить"
+  },
+  "appHeader": {
+    "btnLogin": "войти",
+    "btnSignup": "создать",
+    "btnLogout": "выйти",
+    "btnProfile": "профиль",
+    "btnSettings": "настройки"
+  },
+  "signIn": {
+    "title": "С Возвращением",
+    "subtitleText": "Привет! Войдите, чтобы продолжить.",
+    "buttonText": "войти",
+    "linkText": "у меня нет аккаунта"
+  },
+  "signUp": {
+    "title": "Зарегистрируйтесь Сейчас",
+    "subtitleText": "Привет! Создайте аккаунт, чтобы продолжить.",
+    "buttonText": "создать аккаунт",
+    "linkText": "у меня есть аккаунт"
+  },
+  "navigation": {
+    "Home": "Главная",
+    "Employees": "Сотрудники",
+    "Projects": "Проекты",
+    "CVs": "Резюме",
+    "Departments": "Отделы",
+    "Positions": "Должности",
+    "Skills": "Навыки",
+    "Languages": "Языки"
+  },
+  "appTabs": {
+    "profile": "Профиль",
+    "skills": "Навыки",
+    "languages": "Языки",
+    "cvs": "Резюме",
+    "details": "Подробности",
+    "projects": "Проекты",
+    "preview": "Просмотр"
+  },
+  "breadcrumbs": {
+    "home": "Главная",
+    "loading": "Загрузка...",
+    "error": "❌ Ошибка загрузки",
+    "Settings": "Настройки",
+    "Employees": "Сотрудники",
+    "Projects": "Проекты",
+    "CVs": "Резюме",
+    "Departments": "Отделы",
+    "Positions": "Должности",
+    "Skills": "Навыки",
+    "Languages": "Языки",
+    "Profile": "Профиль",
+    "Details": "Подробности",
+    "Preview": "Просмотр"
+  },
+  "theme": {
+    "Light": "Светлая",
+    "Dark": "Тёмная",
+    "Device settings": "Настройки устройства"
+  },
+  "usersPage": {
+    "firstName": "Имя",
+    "lastName": "Фамилия",
+    "email": "Почта",
+    "departmentName": "Отдел",
+    "positionName": "Должность",
+    "profile": "Профиль",
+    "updateUser": "Обновить профиль",
+    "deleteUser": "Удалить профиль",
+    "noUsers": "Нет доступных сотрудников"
+  },
+  "projectsPage": {
+    "name": "Имя",
+    "internalName": "Внутреннее имя",
+    "domain": "Домен",
+    "startDate": "Дата начала",
+    "endDate": "Дата окончания",
+    "teamSize": "Размер Команды",
+    "project": "Детали проекта",
+    "updateProject": "Обновить проект",
+    "removeProject": "Удалить проект",
+    "noProjects": "Нет доступных проектов"
+  },
+  "cvsPage": {
+    "createButton": "cоздать резюме",
+    "name": "Имя",
+    "description": "Описание",
+    "email": "Сотрудник",
+    "details": "Подробности",
+    "deleteCv": "Удалить резюме",
+    "createModalTitle": "Cоздать резюме",
+    "deleteModalTitle": "Удалить резюме",
+    "deleteModalText": "Вы уверены, что хотите удалить резюме {CV}?",
+    "noCvs": "Нет доступных резюме"
+  },
+  "departmentsPage": {
+    "name": "Имя",
+    "updateDepartment": "Обновить отдел",
+    "deleteDepartment": "Удалить отдел",
+    "noDepartments": "Нет доступных отделов"
+  },
+  "positionsPage": {
+    "name": "Имя",
+    "updatePosition": "Обновить должность",
+    "deletePosition": "Удалить должность",
+    "noPositions": "Нет доступных должностей"
+  },
+  "skillsPage": {
+    "name": "Имя",
+    "category": "Категория",
+    "updateSkill": "Обновить навык",
+    "deleteSkill": "Удалить навык",
+    "noSkills": "Нет доступных навыков"
+  },
+  "languagesPage": {
+    "name": "Имя",
+    "nativeName": "Родное Имя",
+    "updateLanguage": "Обновить язык",
+    "deleteLanguage": "Удалить язык",
+    "noLanguages": "Нет доступных языков"
+  },
+  "userProfilePage": {
+    "avatarHeadline": "Загрузите изображение аватара",
+    "avatarUploadHeadline": "Ваш файл готов для загрузки",
+    "fileName": "Имя файла:",
+    "fileSize": "Размер файла:",
+    "avatarFormats": "png, jpg или gif не больше 0.5МБ",
+    "userDateCaption": "Аккаунт был создан {targetDate}",
+    "btnUpdate": "обновить",
+    "noDepartment": "Отдел не выбран",
+    "noPosition": "Должность не выбрана",
+    "deleteModalTitle": "Удалить аватар",
+    "deleteModalText": "Вы уверены, что хотите удалить аватар?"
+  },
+  "userSkillsPage": {
+    "btnAdd": "Добавить навык",
+    "noSkillsMsg": "Квалификации сотрудника не указаны",
+    "addModalTitle": "Добавить навык",
+    "updateModalTitle": "Обновить навык",
+    "skillMasteries": {
+      "Novice": "Новичок",
+      "Advanced": "Продвинутый",
+      "Competent": "Компетентный",
+      "Proficient": "Опытный",
+      "Expert": "Эксперт"
+    },
+    "noCategoriesMsg": "Нет доступных навыков",
+    "skillCategories": {
+      "Programming languages": "Языки программирования",
+      "Programming technologies": "Технологии разработки",
+      "Source control systems": "Системы контроля версий",
+      "Other skills": "Другое",
+      "Database management system": "Система управления базами данных"
+    }
+  },
+  "userLanguagesPage": {
+    "btnAdd": "Добавить язык",
+    "noLanguagesMsg": "Языки сотрудника не указаны",
+    "addModalTitle": "Добавить язык",
+    "updateModalTitle": "Обновить язык",
+    "languageProficiency": {
+      "A1": "A1",
+      "A2": "A2",
+      "B1": "B1",
+      "B2": "B2",
+      "C1": "C1",
+      "C2": "C2",
+      "Native": "Родной"
+    },
+    "noLanguagesData": "Нет доступных языков"
+  },
+  "cvsProjectsPage": {
+    "btnAdd": "Добавить проект",
+    "addProjectModalTitle": "Добавить проект",
+    "removeProjectModalTitle": "Удалить проект",
+    "removeProjectModalText": "Вы уверены, что хотите удалить проект {projectName}?"
+  },
+  "cvsPreviewPage": {
+    "btnExport": "Экспорт PDF",
+    "education": "Образование",
+    "noEducationMsg": "Образование сотрудника не указано",
+    "noPositionMsg": "Должность сотрудника не указана",
+    "languageProficiency": "Владение языком",
+    "noLanguagesMsg": "Языки сотрудника не указаны",
+    "noSkillsMsg": "Навыки сотрудника не указаны",
+    "projects": "Проекты",
+    "noProjectsMsg": "Проекты сотрудника не указаны",
+    "projectRoles": "Должность на проекте",
+    "noProjectRolesMsg": "Должность сотрудника на проекте не указана",
+    "responsibilitiesAndAchievements": "Обязанности и достижения",
+    "noResponsibilitiesAndAchievements": "Обязанности и достижения сотрудника на проекте не указаны",
+    "period": "Период"
+  },
+  "errors": {
+    "backToMainPage": "Вернуться на главную страницу",
+    "reloadPage": "Пожалуйста, попробуйте перезагрузить страницу",
+    "notFoundPageTitle": "Страница с указанным URL не найдена",
+    "EMAIL_REQUIRED_FIELD": "Требуется адрес электронной почты",
+    "EMAIL_TYPE_FIELD": "Пожалуйста, введите адрес электронной почты в формате email{'@'}example.com",
+    "EMAIL_DUPLICATE_ERROR": "Адрес электронной почты недействителен или уже занят",
+    "PASSWORD_REQUIRED_FIELD": "Требуется пароль",
+    "PASSWORD_MINLENGTH_FIELD": "Пароль должен содержать не менее 6 символов",
+    "INVALID_CREDENTIALS": "Адрес электронной почты или пароль недействительны",
+    "NO_NETWORK_CONNECTION": "Нет сетевого подключения",
+    "UNEXPECTED_ERROR": "Неожиданная ошибка, пожалуйста, попробуйте снова",
+    "NOT_FOUND_USER": "Пользователь с указанным идентификатором не существует",
+    "NOT_FOUND_CV": "Резюме с указанным идентификатором не существует",
+    "BAD_INPUT_DATA": "Неверный формат предоставленных данных",
+    "TOO_LARGE_FILE": "Файл, который вы прикрепили, слишком большой (> 0,5 МБ)",
+    "INVALID_FILE_TYPE": "Файл, который вы прикрепили, имеет недопустимый тип",
+    "UNAUTHORIZED_ERROR": "Неавторизованный доступ",
+    "FAILED_TO_LOAD_DEPARMENTS": "Не удалось загрузить все доступные отделы",
+    "FAILED_TO_LOAD_POSITIONS": "Не удалось загрузить все доступные должности",
+    "FAILED_TO_LOAD_SKILLS": "Не удалось загрузить все доступные навыки",
+    "FAILED_TO_LOAD_LANGUAGES": "Не удалось загрузить все доступные языки",
+    "FAILED_TO_LOAD_PROJECTS": "Не удалось загрузить все доступные проекты",
+    "LANG_EN_LOADING_ERROR": "Не удалось загрузить англоязычные ресурсы",
+    "LANG_DE_LOADING_ERROR": "Не удалось загрузить немецкоязычные ресурсы",
+    "LANG_RU_LOADING_ERROR": "Не удалось загрузить русскоязычные ресурсы"
+  }
+}

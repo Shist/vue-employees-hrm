@@ -1,0 +1,10 @@
+query GET_USER_CVS_NAMES_BY_ID($userId: ID!) {
+  user(userId: $userId) {
+    id
+    cvs {
+      id
+      name
+      description
+    }
+  }
+}
