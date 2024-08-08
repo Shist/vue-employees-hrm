@@ -8,7 +8,9 @@
 
 ---
 
-### This project will probably be hosted somewhere in future...
+### This project is hosted using the Vecel.com platform, you can see how it works here:
+
+## https://vue-employees-hrm.vercel.app/
 
 ---
 
