@@ -2,6 +2,10 @@
 @import "@/assets/styles/mixins";
 @import "@/assets/styles/toastify-overrides";
 
+body {
+  font-family: $font-roboto;
+}
+
 // Class which is needed to disable links while loading anything
 .disabled-link {
   pointer-events: none;
