@@ -133,6 +133,9 @@ const submitForm = async (): Promise<void> => {
       } else {
         await authStore.registerUser(formData.email, formData.password);
       }
+
+      localStorage.setItem("wasAuthorized", "true");
+
       router.push(ROUTES.MAIN.PATH);
     } catch (err: unknown) {
       if (err instanceof Error) {

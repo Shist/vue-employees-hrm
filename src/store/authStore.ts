@@ -104,6 +104,7 @@ export const useAuthStore = defineStore("authStore", () => {
     user.value = null;
     removeToken("accessToken");
     removeToken("refreshToken");
+    localStorage.removeItem("wasAuthorized");
     router.push(ROUTES.SIGN_IN.PATH);
   };
 

@@ -192,10 +192,14 @@ router.beforeEach((to, from, next) => {
     next();
   } else if (to.meta.requiresAuth) {
     if (areAllTokensExpired) {
-      const toastMessage = handleUnauthorizedMessage();
+      if (localStorage.getItem("wasAuthorized")) {
+        const toastMessage = handleUnauthorizedMessage();
 
-      const { setErrorToast } = useToast();
-      setErrorToast(toastMessage);
+        const { setErrorToast } = useToast();
+        setErrorToast(toastMessage);
+
+        localStorage.removeItem("wasAuthorized");
+      }
 
       next(ROUTES.SIGN_IN.PATH);
     } else {
