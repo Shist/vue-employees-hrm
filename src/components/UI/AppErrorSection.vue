@@ -3,6 +3,9 @@
     <h4 class="error-wrapper__message">
       ❌ {{ $t(`errors.${errorMessageKey}`) }}
     </h4>
+    <h3 v-if="isAdditionalMsgNeeded" class="error-wrapper__additional-message">
+      {{ $t("errors.UNEXPECTED_ERROR_ADDITIONAL_INFO") }}
+    </h3>
     <v-btn
       v-if="isNotFoundError"
       class="error-wrapper__back-to-main-btn"
@@ -29,6 +32,10 @@ const props = defineProps<{
   errorMessageKey: string;
 }>();
 
+const isAdditionalMsgNeeded = computed(
+  () => props.errorMessageKey === "UNEXPECTED_ERROR"
+);
+
 const isNotFoundError = computed(
   () =>
     props.errorMessageKey === "NOT_FOUND_USER" ||
@@ -50,6 +57,15 @@ const isNotFoundError = computed(
     @media (max-width: $phone-l) {
       font-size: 22px;
       line-height: 28px;
+    }
+  }
+  &__additional-message {
+    @include default-text(24px, 30px);
+    color: var(--color-text);
+    text-align: center;
+    @media (max-width: $phone-l) {
+      font-size: 20px;
+      line-height: 26px;
     }
   }
   &__back-to-main-btn {

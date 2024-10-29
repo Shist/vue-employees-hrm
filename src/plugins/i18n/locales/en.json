@@ -232,6 +232,7 @@
     "INVALID_CREDENTIALS": "Email or password is invalid",
     "NO_NETWORK_CONNECTION": "No network connection",
     "UNEXPECTED_ERROR": "Unexpected error, please try again",
+    "UNEXPECTED_ERROR_ADDITIONAL_INFO": "Maybe the data structure on the server has been changed",
     "NOT_FOUND_USER": "The user with specified ID does not exist",
     "NOT_FOUND_CV": "The CV with specified ID does not exist",
     "BAD_INPUT_DATA": "The format of data that you provided is incorrect",
